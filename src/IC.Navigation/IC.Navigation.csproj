@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+      <TargetFramework>netstandard2.0</TargetFramework>
+      <LangVersion>7.3</LangVersion>
+      <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+      <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
+      <Description>System to automate navigation mainly through user interfaces.</Description>
+      <PackageProjectUrl>https://github.com/aurnoi1/IC-UITesting-Framework</PackageProjectUrl>
+      <PackageTags>IC-UI-TestingFramework IC.Navigation Test IC</PackageTags>
+      <PackageLicenseUrl>https://opensource.org/licenses/BSD-3-Clause</PackageLicenseUrl>
+      <Version>1.0.0-beta4</Version>
+      <Authors>Aurelien Noisette</Authors>
+      <Company>Aurelien Noisette</Company>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+   </PropertyGroup>
+</Project>
