@@ -17,7 +17,7 @@
       <tags>IC.Navigation.Extensions IC.Navigation Test IC</tags>
 	  <dependencies>
 		<group targetFramework=".NETStandard2.0">
-        <dependency id="IC.Navigation" version="1.0.0-beta3" />
+        <dependency id="IC.Navigation" version="1.0.0-beta5" />
       </group>
     </dependencies>
    </metadata>
