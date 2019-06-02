@@ -7,8 +7,11 @@
 
   <ItemGroup>
     <PackageReference Include="Appium.WebDriver" Version="4.0.0.5-beta" />
-    <PackageReference Include="IC.Navigation" Version="1.0.0-beta4" />
-    <PackageReference Include="IC.Navigation.Extensions" Version="1.0.0-beta3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\IC.Navigation.Extensions\IC.Navigation.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\IC.Navigation\IC.Navigation.csproj" />
   </ItemGroup>
 
 </Project>
