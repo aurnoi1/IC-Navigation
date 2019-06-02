@@ -1,0 +1,16 @@
+{
+    "cucumberautocomplete.steps": [
+        "Specflow/Steps/*.cs"
+    ],
+    "cucumberautocomplete.syncfeatures":"Specflow/Features/*.feature",
+    "cucumberautocomplete.customParameters": [
+        {
+            "parameter": "\"\"",
+            "value": "\\\""
+        }
+    ],
+    "cucumberautocomplete.onTypeFormat": true,
+    "cucumberautocomplete.smartSnippets": true,
+    "dotnet-test-explorer.autoExpandTree": true,
+    "dotnet-test-explorer.enableTelemetry": false,
+}

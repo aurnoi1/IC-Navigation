@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <RuntimeFrameworkVersion>2.1.0</RuntimeFrameworkVersion>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DefineConstants>DEBUG</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Appium.WebDriver" Version="4.0.0.6-beta" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
+        <PackageReference Include="SpecFlow" Version="3.0.213" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.213" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.0.213" />
+        <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+        <PackageReference Include="xunit" Version="2.4.1" />
+        <PackageReference Include="xunit.runner.console" Version="2.4.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\IC.Tests.App.UIAccessibility\IC.Tests.App.UIAccessibility.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Update="Specflow\Features\ViewBlue.feature.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ViewBlue.feature</DependentUpon>
+        </Compile>
+        <Compile Update="Specflow\Features\ViewMenu.feature.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ViewMenu.feature</DependentUpon>
+        </Compile>
+        <Compile Update="Specflow\Features\ViewRed.feature.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>ViewRed.feature</DependentUpon>
+        </Compile>
+    </ItemGroup>
+    <Target Name="AfterUpdateFeatureFilesInProject">
+        <!-- include any generated SpecFlow files in the compilation of the project if not included yet -->
+        <ItemGroup>
+            <Compile Include="**\*.feature.cs" Exclude="@(Compile)" />
+        </ItemGroup>
+    </Target>
+</Project>

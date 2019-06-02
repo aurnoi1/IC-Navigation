@@ -1,0 +1,1 @@
+﻿- Install SpecFlow for Visual Studio 2017 extension to have intellisense and binding between features and steps.

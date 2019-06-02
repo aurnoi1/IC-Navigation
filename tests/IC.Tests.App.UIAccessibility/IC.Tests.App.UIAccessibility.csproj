@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Appium.WebDriver" Version="4.0.0.5-beta" />
+    <PackageReference Include="IC.Navigation" Version="1.0.0-beta4" />
+    <PackageReference Include="IC.Navigation.Extensions" Version="1.0.0-beta3" />
+  </ItemGroup>
+
+</Project>

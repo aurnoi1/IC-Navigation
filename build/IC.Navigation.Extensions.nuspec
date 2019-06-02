@@ -2,11 +2,11 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
    <metadata>  
       <id>IC.Navigation.Extensions</id>
-      <version>1.0.0-beta3</version>
+      <version>1.0.0-beta4</version>
       <title>IC.Navigation.Extensions</title>
       <authors>Aurelien Noisette</authors>
       <owners>Aurelien Noisette</owners>
-      <projectUrl>https://github.com/aurnoi1/IC-UITesting-Framework</projectUrl>
+      <projectUrl>https://github.com/aurnoi1/IC.Navigation</projectUrl>
 	  <license type="expression">BSD-3-Clause</license>
       <requireLicenseAcceptance>false</requireLicenseAcceptance>
       <description>
@@ -14,7 +14,7 @@
       </description>
       <summary>IC.Navigation.Extensions</summary>
       <copyright>@Copyright 2019 Aurelien Noisette</copyright>
-      <tags>IC-UI-TestingFramework IC.Navigation.Extensions IC.Navigation Test IC</tags>
+      <tags>IC.Navigation.Extensions IC.Navigation Test IC</tags>
 	  <dependencies>
 		<group targetFramework=".NETStandard2.0">
         <dependency id="IC.Navigation" version="1.0.0-beta3" />
