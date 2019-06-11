@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace IC.Navigation.Interfaces
 {
-    public interface ISession : INavigables, INavigator
+    public interface ISession : INavigator
     {
         /// <summary>
         /// The INavigables to be expected as entry points when the application start.
