@@ -33,27 +33,4 @@
         <ProjectReference Include="..\IC.Tests.App.UIAccessibility\IC.Tests.App.UIAccessibility.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Compile Update="Specflow\Features\ViewBlue.feature.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>ViewBlue.feature</DependentUpon>
-        </Compile>
-        <Compile Update="Specflow\Features\ViewMenu.feature.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>ViewMenu.feature</DependentUpon>
-        </Compile>
-        <Compile Update="Specflow\Features\ViewRed.feature.cs">
-            <DesignTime>True</DesignTime>
-            <AutoGen>True</AutoGen>
-            <DependentUpon>ViewRed.feature</DependentUpon>
-        </Compile>
-    </ItemGroup>
-    <Target Name="AfterUpdateFeatureFilesInProject">
-        <!-- include any generated SpecFlow files in the compilation of the project if not included yet -->
-        <ItemGroup>
-            <Compile Include="**\*.feature.cs" Exclude="@(Compile)" />
-        </ItemGroup>
-    </Target>
 </Project>
