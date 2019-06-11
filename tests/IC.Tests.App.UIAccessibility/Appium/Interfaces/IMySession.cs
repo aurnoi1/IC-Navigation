@@ -5,7 +5,7 @@ using System;
 
 namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
 {
-    public interface IMySession : ISession, IMyNavigables, IWindowsDriverSession
+    public interface IMySession : IMyNavigables, IWindowsDriverSession
     {
 
         /// <summary>
