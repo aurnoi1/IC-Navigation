@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
    <metadata>  
       <id>IC.Navigation</id>
-      <version>1.0.0-beta6</version>
+      <version>1.0.0-beta7</version>
       <title>IC.Navigation</title>
       <authors>Aurelien Noisette</authors>
       <owners>Aurelien Noisette</owners>
