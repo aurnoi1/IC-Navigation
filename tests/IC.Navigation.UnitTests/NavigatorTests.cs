@@ -1,5 +1,5 @@
 ﻿using Autofac.Extras.Moq;
-using IC.Navigation.Extension;
+using IC.Navigation.Chain;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;

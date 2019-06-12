@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using IC.Navigation.Extension;
+using IC.Navigation.Chain;
 
 namespace IC.Navigation
 {

@@ -1,9 +1,9 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
 
-namespace IC.Navigation.Extension
+namespace IC.Navigation.Chain
 {
-    public static class Chain
+    public static class INavigableEx
     {
         /// <summary>
         /// Executes the action passed in parameter.
