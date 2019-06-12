@@ -1,6 +1,6 @@
 ﻿using IC.Navigation.Interfaces;
 using IC.Tests.App.UIAccessibility.Appium.Interfaces;
-using IC.Navigation.Chain;
+using IC.Navigation.Extension;
 using System;
 using System.Collections.Generic;
 using System.Text;
