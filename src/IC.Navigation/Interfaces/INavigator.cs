@@ -9,7 +9,7 @@ namespace IC.Navigation.Interfaces
     public interface INavigator : ILog
     {
         /// <summary>
-        /// Get the Graph that was initialized in Navigator.
+        /// Get the Graph containing the INavigables.
         /// </summary>
         IGraph Graph { get; }
 

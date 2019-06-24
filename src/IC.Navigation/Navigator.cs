@@ -21,6 +21,10 @@ namespace IC.Navigation
         /// </summary>
         private INavigable gotoDestination;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Navigator"/> class.
+        /// </summary>
+        /// <remarks>Override <see cref="Graph"/> when using this constructor.</remarks>
         protected Navigator()
         {
         }
@@ -37,9 +41,9 @@ namespace IC.Navigation
         private readonly object historicLock = new object();
 
         /// <summary>
-        /// Get the Graph that was initialized in Navigator.
+        /// Get the Graph containing the INavigables.
         /// </summary>
-        public IGraph Graph { get; protected set; }
+        public virtual IGraph Graph { get; protected set; }
 
         /// <summary>
         /// Executes the UI action passed in parameter.

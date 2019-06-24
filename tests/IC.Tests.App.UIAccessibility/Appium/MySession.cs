@@ -80,6 +80,12 @@ namespace IC.Tests.App.UIAccessibility.Appium
 
         #region Public
 
+        public override IGraph Graph
+        {
+            get => base.Graph;
+            protected set => base.Graph = value;
+        }
+
         /// <summary>
         /// Multiplicator to adjust the timeout to the environment when waiting for the controls.
         /// </summary>
