@@ -80,12 +80,6 @@ namespace IC.Tests.App.UIAccessibility.Appium
 
         #region Public
 
-        public override IGraph Graph
-        {
-            get => base.Graph;
-            protected set => base.Graph = value;
-        }
-
         /// <summary>
         /// Multiplicator to adjust the timeout to the environment when waiting for the controls.
         /// </summary>
@@ -126,6 +120,8 @@ namespace IC.Tests.App.UIAccessibility.Appium
         /// Otherwise <c>null</c> if nothing found at the time.
         /// </summary>
         public INavigable EntryPoint => Historic.FirstOrDefault();
+
+        public override IGraph Graph { get; }
 
         #endregion Public
 

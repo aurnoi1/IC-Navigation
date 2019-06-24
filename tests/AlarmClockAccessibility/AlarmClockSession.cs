@@ -25,6 +25,7 @@ namespace AlarmClockAccessibility
             EntryPoints = new HashSet<INavigable>() { PageAlarm };
         }
 
+
         /// <summary>
         /// All the INavigable nodes contains in the Graph of this Navigable.
         /// </summary>
@@ -68,6 +69,8 @@ namespace AlarmClockAccessibility
         public INavigable EntryPoint => Historic.FirstOrDefault();
 
         public uint ThinkTime { get; set; }
+
+        public override IGraph Graph { get; }
 
         public TimeSpan AdjustTimeout(TimeSpan timeout)
         {
