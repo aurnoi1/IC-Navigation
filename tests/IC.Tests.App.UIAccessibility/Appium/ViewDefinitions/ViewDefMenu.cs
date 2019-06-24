@@ -8,9 +8,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
 {
     public abstract class ViewDefMenu : IViewDefMenu
     {
-        protected ViewDefMenu(in IMySession session) => this.session = session;
+        protected ViewDefMenu(in IUIAccess session) => this.session = session;
 
-        private IMySession session;
+        private IUIAccess session;
         
         /// <summary>
         /// A control NOT IMPLEMENTED only use for negative test.

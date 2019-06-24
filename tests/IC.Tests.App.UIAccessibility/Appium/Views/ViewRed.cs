@@ -10,9 +10,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtefact("red view")]
     public class ViewRed : ViewFeatRed, INavigable, IViewRed
     {
-        public ViewRed(in IMySession session) : base(session) => this.session = session;
+        public ViewRed(in IUIAccess session) : base(session) => this.session = session;
 
-        private IMySession session;
+        private IUIAccess session;
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.

@@ -10,9 +10,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtefact("blue view")]
     public class ViewBlue : ViewFeatBlue, INavigable, IViewBlue
     {
-        private IMySession session;
+        private IUIAccess session;
 
-        public ViewBlue(in IMySession session) : base(session) => this.session = session;
+        public ViewBlue(in IUIAccess session) : base(session) => this.session = session;
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.

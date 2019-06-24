@@ -23,7 +23,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private IMySession sut;
+        private IUIAccess sut;
 
         #endregion Private
 

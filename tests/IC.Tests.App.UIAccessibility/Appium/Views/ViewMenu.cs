@@ -10,9 +10,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtefact("menu view")]
     public class ViewMenu : ViewFeatMenu, INavigable, IViewMenu
     {
-        private IMySession session;
+        private IUIAccess session;
 
-        public ViewMenu(in IMySession session) : base(session) => this.session = session;
+        public ViewMenu(in IUIAccess session) : base(session) => this.session = session;
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.

@@ -10,9 +10,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtefact("yellow view")]
     public class ViewYellow : ViewFeatYellow, INavigable, IViewYellow
     {
-        private IMySession session;
+        private IUIAccess session;
 
-        public ViewYellow(in IMySession session) : base(session) => this.session = session;
+        public ViewYellow(in IUIAccess session) : base(session) => this.session = session;
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.

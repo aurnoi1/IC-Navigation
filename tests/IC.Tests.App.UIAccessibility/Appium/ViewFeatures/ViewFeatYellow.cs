@@ -10,9 +10,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewFeatures
 {
     public abstract class ViewFeatYellow : ViewDefYellow, IViewFeatYellow
     {
-        public ViewFeatYellow(in Interfaces.IMySession session) : base(session) => this.session = session;
+        public ViewFeatYellow(in Interfaces.IUIAccess session) : base(session) => this.session = session;
 
-        private Interfaces.IMySession session;
+        private Interfaces.IUIAccess session;
 
         #region Methods
 

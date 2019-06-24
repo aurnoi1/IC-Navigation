@@ -8,9 +8,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
 {
     public abstract class ViewDefBlue : IViewDefBlue
     {
-        protected ViewDefBlue(in IMySession session) => this.session = session;
+        protected ViewDefBlue(in IUIAccess session) => this.session = session;
 
-        private IMySession session;
+        private IUIAccess session;
 
         /// <summary>
         /// The tile of this view.
