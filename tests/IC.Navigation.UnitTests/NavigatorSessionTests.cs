@@ -8,7 +8,7 @@ using Xunit;
 
 namespace IC.Navigation.UnitTests
 {
-    public class NavigatorTests
+    public class NavigatorSessionTests
     {
         [Theory]
         [ClassData(typeof(StraightPathData))]

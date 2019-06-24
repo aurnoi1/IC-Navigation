@@ -31,27 +31,6 @@ namespace IC.Navigation
         private readonly object historicLock = new object();
 
         /// <summary>
-        /// Get the nodes formed by instances of INavigables from the specified assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly containing the INavigables.</param>
-        /// <returns>Intances of INavigables forming the nodes.</returns>
-        public virtual HashSet<INavigable> GetNodesByReflection(Assembly assembly)
-        {
-            var navigables = new HashSet<INavigable>();
-            var iNavigables = assembly.GetTypes()
-                .Where(x => typeof(INavigable).IsAssignableFrom(x) && !x.IsInterface)
-                .ToList();
-
-            foreach (var iNavigable in iNavigables)
-            {
-                var instance = Activator.CreateInstance(iNavigable, this) as INavigable;
-                navigables.Add(instance);
-            }
-
-            return navigables;
-        }
-
-        /// <summary>
         /// Get the Graph containing the INavigables.
         /// </summary>
         public abstract IGraph Graph { get; }
@@ -72,11 +51,81 @@ namespace IC.Navigation
         /// </summary>
         public virtual uint ThinkTime { get; set; }
 
+        /// <summary>
+        /// Last known INavigable.
+        /// </summary>
+        public virtual INavigable Last
+        {
+            get
+            {
+                lock (historicLock)
+                {
+                    return Historic.LastOrDefault();
+                }
+            }
+
+            private set
+            {
+                lock (historicLock)
+                {
+                    if (value != null && value != Historic.LastOrDefault())
+                    {
+                        Historic.Add(value);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Previous accessed INavigable before the last known INavigable.
+        /// </summary>
+        public virtual INavigable Previous
+        {
+            get
+            {
+                lock (historicLock)
+                {
+                    return Historic.Count > 1 ? Historic[Historic.Count - 2] : null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The historic of previsous existing INavigable.
+        /// </summary>
+        public virtual List<INavigable> Historic { get; private set; } = new List<INavigable>();
+
+        /// <summary>
+        /// Event raised when the last known existing INavigable has changed.
+        /// </summary>
+        public virtual event EventHandler<INavigableEventArgs> ViewChanged;
+
         #endregion Properties
 
         #region Methods
 
         #region Public
+
+        /// <summary>
+        /// Get the nodes formed by instances of INavigables from the specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly containing the INavigables.</param>
+        /// <returns>Intances of INavigables forming the nodes.</returns>
+        public virtual HashSet<INavigable> GetNodesByReflection(Assembly assembly)
+        {
+            var navigables = new HashSet<INavigable>();
+            var iNavigables = assembly.GetTypes()
+                .Where(x => typeof(INavigable).IsAssignableFrom(x) && !x.IsInterface)
+                .ToList();
+
+            foreach (var iNavigable in iNavigables)
+            {
+                var instance = Activator.CreateInstance(iNavigable, this) as INavigable;
+                navigables.Add(instance);
+            }
+
+            return navigables;
+        }
 
         /// <summary>
         /// Adjust the timeout to the environment when waiting for the controls depending the <see cref="ThinkTime"/> value.
@@ -326,50 +375,6 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Last known INavigable.
-        /// </summary>
-        public virtual INavigable Last
-        {
-            get
-            {
-                lock (historicLock)
-                {
-                    return Historic.LastOrDefault();
-                }
-            }
-
-            private set
-            {
-                lock (historicLock)
-                {
-                    if (value != null && value != Historic.LastOrDefault())
-                    {
-                        Historic.Add(value);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Previous accessed INavigable before the last known INavigable.
-        /// </summary>
-        public virtual INavigable Previous
-        {
-            get
-            {
-                lock (historicLock)
-                {
-                    return Historic.Count > 1 ? Historic[Historic.Count - 2] : null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The historic of previsous existing INavigable.
-        /// </summary>
-        public virtual List<INavigable> Historic { get; set; } = new List<INavigable>();
-
-        /// <summary>
         /// Set the last known INavigable is exists.
         /// </summary>
         /// <param name="iNavigable">The INavigable.</param>
@@ -387,11 +392,6 @@ namespace IC.Navigation
                 }
             }
         }
-
-        /// <summary>
-        /// Event raised when the last known existing INavigable has changed.
-        /// </summary>
-        public virtual event EventHandler<INavigableEventArgs> ViewChanged;
 
         #endregion Public
 
