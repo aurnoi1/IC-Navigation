@@ -19,7 +19,7 @@ namespace IC.Navigation.UnitTests
                 var expectedToList = expected.Select(x => x.Object).ToList();
                 Mock<IGraph> iGraph = mock.Mock<IGraph>();
                 iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
-                var iut = mock.Mock<Navigator>(); // Navigator is abstract so it need to be mocked.
+                var iut = mock.Mock<NavigatorSession>(); // Navigator is abstract so it need to be mocked.
                 iut.SetupGet(x => x.Graph).Returns(iGraph.Object); // Set mockedNavigator.Graph
                 iut.CallBase = true; // Ensure to call default implementation of virtual members.
                 var actual = iut.Object.GetShortestPath(origin.Object, destination.Object);
@@ -37,7 +37,7 @@ namespace IC.Navigation.UnitTests
                 var expectedToList = expected.Select(x => x.Object).ToList();
                 Mock<IGraph> iGraph = mock.Mock<IGraph>();
                 iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
-                var iut = mock.Mock<Navigator>();
+                var iut = mock.Mock<NavigatorSession>();
                 iut.SetupGet(x => x.Graph).Returns(iGraph.Object);
                 iut.CallBase = true;
                 Mock<ISession> session = mock.Mock<ISession>();
