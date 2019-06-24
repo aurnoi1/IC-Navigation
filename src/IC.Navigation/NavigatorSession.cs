@@ -16,8 +16,6 @@ namespace IC.Navigation
     {
         #region Fields
 
-        private List<INavigable> historic;
-
         /// <summary>
         /// A temporary field to backup the final destination in GoTo() and used in Resolve().
         /// </summary>
@@ -369,23 +367,7 @@ namespace IC.Navigation
         /// <summary>
         /// The historic of previsous existing INavigable.
         /// </summary>
-        public virtual List<INavigable> Historic
-        {
-            get
-            {
-                if (historic == null)
-                {
-                    historic = new List<INavigable>();
-                }
-
-                return historic;
-            }
-
-            set
-            {
-                historic = value;
-            }
-        }
+        public virtual List<INavigable> Historic { get; set; } = new List<INavigable>();
 
         /// <summary>
         /// Set the last known INavigable is exists.
