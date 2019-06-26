@@ -7,12 +7,12 @@ namespace IC.Navigation.UITests.Specflow.Contexts
 {
     internal class AppiumContext
     {
-        private IMySession sut;
+        private IUIAccess sut;
 
         /// <summary>
         /// An instance of the SUT's IMySession.
         /// </summary>
-        internal IMySession SUT
+        internal IUIAccess SUT
         {
             get
             {
@@ -30,11 +30,11 @@ namespace IC.Navigation.UITests.Specflow.Contexts
 
         private object _lock = new object();
 
-        private IMySession Create()
+        private IUIAccess Create()
         {
             ISUTAppiumConfig config = new SUTAppiumConfig();
             IAppiumSession session = new SUTAppiumSession(config);
-            var sut = new MySession(session);
+            var sut = new UIAccess(session);
             sut.WaitForEntryPoints();
             return sut;
         }

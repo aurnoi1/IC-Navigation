@@ -2,7 +2,7 @@
 
 namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
 {
-    public interface IMyNavigables
+    public interface INavigables
     {
         IViewBlue ViewBlue { get; }
         IViewMenu ViewMenu { get; }

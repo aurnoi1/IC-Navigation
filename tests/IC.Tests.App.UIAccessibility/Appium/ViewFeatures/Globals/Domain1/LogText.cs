@@ -20,7 +20,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewFeatures.Globals.Domain1
         /// <returns>The IVewMenu where the log was enter.</returns>
         public static IViewMenu Log(this INavigable origin, string text)
         {
-            IMySession mySession = origin.Session as IMySession;
+            IUIAccess mySession = origin.Session as IUIAccess;
             IViewMenu viewMenu = mySession.ViewMenu;
             origin.GoTo(viewMenu)
                 .Do(() =>

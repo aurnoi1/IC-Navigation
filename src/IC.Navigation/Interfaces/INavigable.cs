@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace IC.Navigation.Interfaces
 {
     /// <summary>
-    /// Defines a INavigable.
+    /// Defines an INavigable.
     /// </summary>
     public interface INavigable
     {
@@ -14,7 +14,7 @@ namespace IC.Navigation.Interfaces
         ISession Session { get; }
 
         /// <summary>
-        /// Waits for the current INavigable to be fully loaded.
+        /// Waits for the current INavigable to exists.
         /// </summary>
         bool WaitForExists();
 

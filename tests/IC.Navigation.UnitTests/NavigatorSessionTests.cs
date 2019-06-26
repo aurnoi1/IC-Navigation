@@ -1,5 +1,4 @@
 ﻿using Autofac.Extras.Moq;
-using IC.Navigation.Chain;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;
@@ -9,7 +8,7 @@ using Xunit;
 
 namespace IC.Navigation.UnitTests
 {
-    public class NavigatorTests
+    public class NavigatorSessionTests
     {
         [Theory]
         [ClassData(typeof(StraightPathData))]
@@ -20,8 +19,10 @@ namespace IC.Navigation.UnitTests
                 var expectedToList = expected.Select(x => x.Object).ToList();
                 Mock<IGraph> iGraph = mock.Mock<IGraph>();
                 iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
-                INavigator iut = mock.Create<Navigator>();
-                var actual = iut.GetShortestPath(origin.Object, destination.Object);
+                var iut = mock.Mock<NavigatorSession>(); // Navigator is abstract so it need to be mocked.
+                iut.SetupGet(x => x.Graph).Returns(iGraph.Object); // Set mockedNavigator.Graph
+                iut.CallBase = true; // Ensure to call default implementation of virtual members.
+                var actual = iut.Object.GetShortestPath(origin.Object, destination.Object);
                 Assert.Equal(expectedToList, actual);
                 iGraph.Verify(x => x.GetShortestPath(origin.Object, destination.Object), Times.Exactly(1));
             }
@@ -36,7 +37,9 @@ namespace IC.Navigation.UnitTests
                 var expectedToList = expected.Select(x => x.Object).ToList();
                 Mock<IGraph> iGraph = mock.Mock<IGraph>();
                 iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
-                INavigator iut = mock.Create<Navigator>();
+                var iut = mock.Mock<NavigatorSession>();
+                iut.SetupGet(x => x.Graph).Returns(iGraph.Object);
+                iut.CallBase = true;
                 Mock<ISession> session = mock.Mock<ISession>();
                 foreach (var node in expected)
                 {
@@ -44,8 +47,7 @@ namespace IC.Navigation.UnitTests
                     node.Setup(n => n.WaitForExists()).Returns(true);
                 }
 
-                
-                var actual = iut.GoTo(origin.Object, destination.Object);
+                var actual = iut.Object.GoTo(origin.Object, destination.Object);
                 Assert.Equal(expected.Last().Object, actual);
                 iGraph.Verify(x => x.GetShortestPath(origin.Object, destination.Object), Times.Exactly(1));
             }

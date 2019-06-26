@@ -1,45 +1,162 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Chain;
+using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using IC.Navigation.Chain;
 
 namespace IC.Navigation
 {
     /// <summary>
-    /// Defines a Navigator to navigate through Graph.
+    /// An abstract implementation of INavigator and ISession.
     /// </summary>
-    public class Navigator : INavigator
+    public abstract class NavigatorSession : ISession
     {
-        private List<INavigable> historic;
+        #region Fields
 
         /// <summary>
         /// A temporary field to backup the final destination in GoTo() and used in Resolve().
         /// </summary>
         private INavigable gotoDestination;
 
-        protected Navigator()
-        {
-        }
+        #endregion Fields
+
+        #region Properties
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Navigator"/> class.
+        /// Lock to queue historic entries.
         /// </summary>
-        /// <param name="graph">The Graph to use for the navigation.</param>
-        public Navigator(IGraph graph)
-        {
-            Graph = graph;
-        }
-
         private readonly object historicLock = new object();
 
         /// <summary>
-        /// Get the Graph that was initialized in Navigator.
+        /// Get the Graph containing the INavigables.
         /// </summary>
-        public IGraph Graph { get; protected set; }
+        public abstract IGraph Graph { get; }
+
+        /// <summary>
+        /// The INavigables to be expected as entry points when the application start.
+        /// </summary>
+        public virtual HashSet<INavigable> EntryPoints { get; protected set; }
+
+        /// <summary>
+        /// The INavigable EntryPoint that is found at the beginning of the navigation.
+        /// Otherwise <c>null</c> if nothing found at the time.
+        /// </summary>
+        public virtual INavigable EntryPoint => Historic.FirstOrDefault();
+
+        /// <summary>
+        /// Multiplicator to adjust the timeouts when waiting for UI objects.
+        /// </summary>
+        public virtual uint ThinkTime { get; set; }
+
+        /// <summary>
+        /// Last known INavigable.
+        /// </summary>
+        public virtual INavigable Last
+        {
+            get
+            {
+                lock (historicLock)
+                {
+                    return Historic.LastOrDefault();
+                }
+            }
+
+            private set
+            {
+                lock (historicLock)
+                {
+                    if (value != null && value != Historic.LastOrDefault())
+                    {
+                        Historic.Add(value);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Previous accessed INavigable before the last known INavigable.
+        /// </summary>
+        public virtual INavigable Previous
+        {
+            get
+            {
+                lock (historicLock)
+                {
+                    return Historic.Count > 1 ? Historic[Historic.Count - 2] : null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// The historic of previsous existing INavigable.
+        /// </summary>
+        public virtual List<INavigable> Historic { get; private set; } = new List<INavigable>();
+
+        /// <summary>
+        /// Event raised when the last known existing INavigable has changed.
+        /// </summary>
+        public virtual event EventHandler<INavigableEventArgs> ViewChanged;
+
+        #endregion Properties
+
+        #region Methods
+
+        #region Public
+
+        /// <summary>
+        /// Get the nodes formed by instances of INavigables from the specified assembly.
+        /// </summary>
+        /// <param name="assembly">The assembly containing the INavigables.</param>
+        /// <returns>Intances of INavigables forming the nodes.</returns>
+        public virtual HashSet<INavigable> GetNodesByReflection(Assembly assembly)
+        {
+            var navigables = new HashSet<INavigable>();
+            var iNavigables = assembly.GetTypes()
+                .Where(x => typeof(INavigable).IsAssignableFrom(x) && !x.IsInterface)
+                .ToList();
+
+            foreach (var iNavigable in iNavigables)
+            {
+                var instance = Activator.CreateInstance(iNavigable, this) as INavigable;
+                navigables.Add(instance);
+            }
+
+            return navigables;
+        }
+
+        /// <summary>
+        /// Adjust the timeout when waiting for the UI objects depending the <see cref="ThinkTime"/> value.
+        /// </summary>
+        /// <param name="timeout">The timeout.</param>
+        /// <returns>The adjusted timeout.</returns>
+        public virtual TimeSpan AdjustTimeout(TimeSpan timeout)
+        {
+            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * ThinkTime);
+            return adjTimeout;
+        }
+
+        /// <summary>
+        /// Wait for any EntryPoints to exists.
+        /// The amount of time to wait is defined by each INavigable.WaitForExists().
+        /// </summary>
+        /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
+        public virtual INavigable WaitForEntryPoints()
+        {
+            INavigable entryPoint = null;
+            Parallel.ForEach(EntryPoints, (iNavigable, state) =>
+            {
+                if (!state.IsStopped && iNavigable.WaitForExists())
+                {
+                    entryPoint = iNavigable;
+                    state.Stop();
+                }
+            });
+
+            return entryPoint;
+        }
 
         /// <summary>
         /// Executes the UI action passed in parameter.
@@ -47,7 +164,7 @@ namespace IC.Navigation
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="uIAction">The UI action to execute.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        public INavigable Do(INavigable origin, Action uIAction)
+        public virtual INavigable Do(INavigable origin, Action uIAction)
         {
             if (!origin.WaitForExists())
             {
@@ -71,7 +188,7 @@ namespace IC.Navigation
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
         /// <returns>The INavigable returns by the Function.</returns>
-        public INavigable Do<T>(INavigable origin, Func<INavigable> function) where T : INavigable
+        public virtual INavigable Do<T>(INavigable origin, Func<INavigable> function) where T : INavigable
         {
             ValidateINavigableExists(origin, "origin");
             INavigable retINavigable = function.Invoke();
@@ -95,7 +212,7 @@ namespace IC.Navigation
         /// <returns>The next INavigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
-        public INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
+        public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
         {
             var navigableAndAction = actionToNextINavigable.Where(x => x.Key.CompareTypeName(nextNavigable)).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
@@ -123,7 +240,7 @@ namespace IC.Navigation
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The destination.</returns>
-        public INavigable GoTo(INavigable origin, INavigable destination)
+        public virtual INavigable GoTo(INavigable origin, INavigable destination)
         {
             if (Graph == null) { throw new Exception($"The \"Graph\" is not initialized."); }
 
@@ -165,7 +282,7 @@ namespace IC.Navigation
         /// Back to the previous INavigable.
         /// </summary>
         /// <returns>The previous INavigable.</returns>
-        public INavigable Back()
+        public virtual INavigable Back()
         {
             return Last.GoTo(Previous);
         }
@@ -176,7 +293,7 @@ namespace IC.Navigation
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The HashSet of INavigable from the origin to the destination.</returns>
-        public List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
+        public virtual List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
             return Graph.GetShortestPath(origin, destination);
         }
@@ -189,7 +306,7 @@ namespace IC.Navigation
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <returns>The destination.</returns>
-        public INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives)
+        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives)
         {
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
             return newOrigin.GoTo(gotoDestination);
@@ -204,7 +321,7 @@ namespace IC.Navigation
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
         /// <returns>The destination.</returns>
-        public INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
+        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
         {
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
             return newOrigin.GoTo(waypoint).GoTo(gotoDestination);
@@ -216,7 +333,7 @@ namespace IC.Navigation
         /// <param name="origin">The origin.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives)
+        public virtual INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives)
         {
             ValidateINavigableExists(origin, "origin");
             INavigable match = null;
@@ -230,7 +347,7 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="usageName">The expected usage name.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public INavigable GetINavigableByUsageName(string usageName)
+        public virtual INavigable GetINavigableByUsageName(string usageName)
         {
             INavigable iNavigable = null;
             foreach (var node in Graph.Nodes)
@@ -251,72 +368,10 @@ namespace IC.Navigation
         /// <param name="first">First INavigable.</param>
         /// <param name="second">Second INavigable.</param>
         /// <returns><c>true</c> if same. Otherwise <c>false</c>.</returns>
-        public bool CompareTypeNames(INavigable first, INavigable second)
+        public virtual bool CompareTypeNames(INavigable first, INavigable second)
         {
             bool equal = first.GetType().Name == second.GetType().Name;
             return equal;
-        }
-
-        #region ILog implementation
-
-        /// <summary>
-        /// Last known INavigable.
-        /// </summary>
-        public INavigable Last
-        {
-            get
-            {
-                lock (historicLock)
-                {
-                    return Historic.LastOrDefault();
-                }
-            }
-
-            private set
-            {
-                lock (historicLock)
-                {
-                    if (value != null && value != Historic.LastOrDefault())
-                    {
-                        Historic.Add(value);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Previous accessed INavigable before the last known INavigable.
-        /// </summary>
-        public INavigable Previous
-        {
-            get
-            {
-                lock (historicLock)
-                {
-                    return Historic.Count > 1 ? Historic[Historic.Count - 2] : null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// The historic of previsous existing INavigable.
-        /// </summary>
-        public List<INavigable> Historic
-        {
-            get
-            {
-                if (historic == null)
-                {
-                    historic = new List<INavigable>();
-                }
-
-                return historic;
-            }
-
-            set
-            {
-                historic = value;
-            }
         }
 
         /// <summary>
@@ -324,7 +379,7 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="iNavigable">The INavigable.</param>
         /// <param name="exists">The result.</param>
-        public void SetLast(INavigable iNavigable, bool exists)
+        public virtual void SetLast(INavigable iNavigable, bool exists)
         {
             if (exists)
             {
@@ -338,12 +393,7 @@ namespace IC.Navigation
             }
         }
 
-        /// <summary>
-        /// Event raised when the last known existing INavigable has changed.
-        /// </summary>
-        public event EventHandler<INavigableEventArgs> ViewChanged;
-
-        #endregion ILog implementation
+        #endregion Public
 
         #region Private
 
@@ -414,5 +464,7 @@ namespace IC.Navigation
         }
 
         #endregion Private
+
+        #endregion Methods
     }
 }
