@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
    <metadata>  
       <id>IC.Navigation.Extensions</id>
-      <version>1.0.0-beta7</version>
+      <version>1.0.0-beta8</version>
       <title>IC.Navigation.Extensions</title>
       <authors>Aurelien Noisette</authors>
       <owners>Aurelien Noisette</owners>
@@ -17,7 +17,7 @@
       <tags>IC.Navigation.Extensions IC.Navigation Test IC</tags>
 	  <dependencies>
 		<group targetFramework=".NETStandard2.0">
-        <dependency id="IC.Navigation" version="1.0.0-beta7" />
+        <dependency id="IC.Navigation" version="1.0.0-beta8" />
       </group>
     </dependencies>
    </metadata>
