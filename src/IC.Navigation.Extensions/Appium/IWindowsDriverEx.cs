@@ -19,7 +19,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The WindowsElement if found, otherwise <c>null</c>.</returns>
         public static WindowsElement FindElement(this WindowsDriver<WindowsElement> windowsDriver, Func<WindowsElement> searchMethod, TimeSpan timeout)
         {
-            WebDriverWait wait = new WebDriverWait(windowsDriver, TimeSpan.FromSeconds(3));
+            WebDriverWait wait = new WebDriverWait(windowsDriver, timeout);
             try
             {
                 return wait.Until(dr => searchMethod());
