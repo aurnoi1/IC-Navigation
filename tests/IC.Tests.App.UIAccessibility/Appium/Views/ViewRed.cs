@@ -12,7 +12,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     {
         public ViewRed(in IUIAccess session) : base(session) => this.session = session;
 
-        private IUIAccess session;
+        private readonly IUIAccess session;
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
@@ -20,7 +20,6 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         public bool WaitForExists()
         {
             bool isDisplayed = UITitle != null;
-            session.SetLast(this, isDisplayed);
             return isDisplayed;
         }
 

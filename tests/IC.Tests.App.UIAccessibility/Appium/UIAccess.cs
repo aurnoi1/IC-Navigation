@@ -66,6 +66,11 @@ namespace IC.Tests.App.UIAccessibility.Appium
         /// </summary>
         public override HashSet<INavigable> EntryPoints { get; protected set; }
 
+        /// <summary>
+        /// Multiplicator to adjust the timeouts when waiting for UI objects.
+        /// </summary>
+        public override uint ThinkTime { get; set; }
+
         #endregion Public
 
         #endregion Properties

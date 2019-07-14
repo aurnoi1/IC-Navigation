@@ -10,7 +10,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtefact("yellow view")]
     public class ViewYellow : ViewFeatYellow, INavigable, IViewYellow
     {
-        private IUIAccess session;
+        private readonly IUIAccess session;
 
         public ViewYellow(in IUIAccess session) : base(session) => this.session = session;
 
@@ -20,7 +20,6 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         public bool WaitForExists()
         {
             bool isDisplayed = UITitle != null;
-            session.SetLast(this, isDisplayed);
             return isDisplayed;
         }
 

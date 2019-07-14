@@ -148,7 +148,7 @@ namespace IC.Navigation
             INavigable entryPoint = null;
             Parallel.ForEach(EntryPoints, (iNavigable, state) =>
             {
-                if (!state.IsStopped && iNavigable.WaitForExists())
+                if (!state.IsStopped && SetLastOnExist(iNavigable))
                 {
                     entryPoint = iNavigable;
                     state.Stop();
@@ -166,13 +166,13 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(INavigable origin, Action uIAction)
         {
-            if (!origin.WaitForExists())
+            if (!SetLastOnExist(origin))
             {
                 throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
             }
 
             uIAction.Invoke();
-            if (!origin.WaitForExists())
+            if (!SetLastOnExist(origin))
             {
                 throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
                     $" If it was expected, used \"Do<T>\" instead.");
@@ -374,13 +374,20 @@ namespace IC.Navigation
             return equal;
         }
 
+
+
+        #endregion Public
+
+        #region Private
+
         /// <summary>
         /// Set the last known INavigable is exists.
         /// </summary>
         /// <param name="iNavigable">The INavigable.</param>
-        /// <param name="exists">The result.</param>
-        public virtual void SetLast(INavigable iNavigable, bool exists)
+        /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
+        private bool SetLastOnExist(INavigable iNavigable)
         {
+            bool exists = SetLastOnExist(iNavigable);
             if (exists)
             {
                 if (Last == null || !iNavigable.CompareTypeName(Last))
@@ -391,11 +398,9 @@ namespace IC.Navigation
                         new NavigableEventArgs { Exists = exists, Type = Last.GetType() });
                 }
             }
+
+            return exists;
         }
-
-        #endregion Public
-
-        #region Private
 
         private async Task<INavigable> GetFirstINavigableExisting(List<INavigable> iNavigables)
         {
@@ -444,16 +449,18 @@ namespace IC.Navigation
             return match;
         }
 
+
         private INavigable WaitForExists(INavigable navigable)
         {
-            return navigable.WaitForExists() ? navigable : null;
+            bool exists = SetLastOnExist(navigable);
+            return exists ? navigable : null;
         }
 
-        private void ValidateINavigableExists(INavigable iNavigagble, string definition)
+        private void ValidateINavigableExists(INavigable iNavigable, string definition)
         {
-            if (!iNavigagble.WaitForExists())
+            if (!SetLastOnExist(iNavigable))
             {
-                throw new Exception($"The {definition} \"{iNavigagble.ToString()}\" was not found.");
+                throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
             }
         }
 

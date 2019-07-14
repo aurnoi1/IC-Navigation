@@ -24,13 +24,6 @@ namespace IC.Navigation.Interfaces
         List<INavigable> Historic { get; }
 
         /// <summary>
-        /// Set the last known INavigable is exists.
-        /// </summary>
-        /// <param name="iNavigable">The INavigable.</param>
-        /// <param name="exists">The result.</param>
-        void SetLast(INavigable iNavigable, bool exists);
-
-        /// <summary>
         /// Event raised when the last known existing INavigable has changed.
         /// </summary>
         event EventHandler<INavigableEventArgs> ViewChanged;
