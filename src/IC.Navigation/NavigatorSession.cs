@@ -41,15 +41,15 @@ namespace IC.Navigation
         public abstract HashSet<INavigable> EntryPoints { get; protected set; }
 
         /// <summary>
+        /// Multiplicator to adjust the timeouts when waiting for UI objects.
+        /// </summary>
+        public abstract uint ThinkTime { get; set; }
+
+        /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
         /// Otherwise <c>null</c> if nothing found at the time.
         /// </summary>
         public virtual INavigable EntryPoint => Historic.FirstOrDefault();
-
-        /// <summary>
-        /// Multiplicator to adjust the timeouts when waiting for UI objects.
-        /// </summary>
-        public virtual uint ThinkTime { get; set; }
 
         /// <summary>
         /// Last known INavigable.

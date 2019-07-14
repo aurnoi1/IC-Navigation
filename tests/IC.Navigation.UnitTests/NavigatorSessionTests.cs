@@ -12,7 +12,7 @@ namespace IC.Navigation.UnitTests
     {
         [Theory]
         [ClassData(typeof(StraightPathData))]
-        public void WhenStraightPathsGraphShouldGetShortestPath(HashSet<INavigable> nodes, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
+        public void WhenStraightPathsGraphShouldGetShortestPath(HashSet<INavigable> _, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
         {
             using (var mock = AutoMock.GetLoose())
             {
@@ -30,7 +30,7 @@ namespace IC.Navigation.UnitTests
 
         [Theory]
         [ClassData(typeof(StraightPathData))]
-        public void GoToShouldResolvePathToDestination(HashSet<INavigable> nodes, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
+        public void GoToShouldResolvePathToDestination(HashSet<INavigable> _, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
         {
             using (var mock = AutoMock.GetLoose())
             {
