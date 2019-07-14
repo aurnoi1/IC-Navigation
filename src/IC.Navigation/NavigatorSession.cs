@@ -38,7 +38,7 @@ namespace IC.Navigation
         /// <summary>
         /// The INavigables to be expected as entry points when the application start.
         /// </summary>
-        public virtual HashSet<INavigable> EntryPoints { get; protected set; }
+        public abstract HashSet<INavigable> EntryPoints { get; protected set; }
 
         /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
