@@ -50,7 +50,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         public void ThenTheShouldBeOpened(string viewUsageName)
         {
             var expectedView = sut.GetINavigableByUsageName(viewUsageName);
-            Assert.True(expectedView.NotifyExistsStatus());
+            Assert.True(expectedView.WaitForExists());
         }
 
         [Then(@"The control ""(.*)"" should not be displayed")]

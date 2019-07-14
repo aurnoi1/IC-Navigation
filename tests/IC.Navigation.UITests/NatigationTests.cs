@@ -56,7 +56,7 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.ViewRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
                 .GoTo(sut.EntryPoint); // The entry point.
 
-            Assert.True(sut.Historic.ElementAt(0).NotifyExistsStatus());
+            Assert.True(sut.Historic.ElementAt(0).WaitForExists());
         }
 
         [Fact]
@@ -69,7 +69,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindMenuViewByNavigation()
         {
-            Assert.True(sut.ViewMenu.NotifyExistsStatus());
+            Assert.True(sut.ViewMenu.WaitForExists());
         }
 
         [Fact]
@@ -79,7 +79,7 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.ViewYellow)
                 .Do<ViewMenu>(() => sut.ViewYellow.OpenViewMenuByMenuBtn());
 
-            Assert.True(sut.ViewMenu.NotifyExistsStatus());
+            Assert.True(sut.ViewMenu.WaitForExists());
         }
 
         [Fact]
@@ -94,7 +94,7 @@ namespace IC.Navigation.UITests
         public void ShouldGoToBlueView()
         {
             sut.ViewMenu.GoTo(sut.ViewBlue);
-            Assert.True(sut.ViewBlue.NotifyExistsStatus());
+            Assert.True(sut.ViewBlue.WaitForExists());
         }
 
         [Fact]
