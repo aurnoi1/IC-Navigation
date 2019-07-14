@@ -25,7 +25,8 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         public bool WaitForExists()
         {
             bool isDisplayed = UITitle != null;
-            if (isDisplayed) { NotifyUpdateHistoric(this); }
+            INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
+            NotifyObservers(this, args);
             return isDisplayed;
         }
 
@@ -57,11 +58,12 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
             observers.Remove(weakObserver);
         }
 
+
         /// <summary>
         /// Notify the observers.
         /// </summary>
         /// <param name="navigable"></param>
-        public void NotifyUpdateHistoric(INavigable navigable)
+        public void NotifyObservers(INavigable navigable, INavigableEventArgs args)
         {
             observers.ForEach(x =>
             {
@@ -72,7 +74,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
                 }
                 else
                 {
-                    obs.UpdateHistoric(navigable);
+                    obs.Update(navigable, args);
                 }
             });
         }

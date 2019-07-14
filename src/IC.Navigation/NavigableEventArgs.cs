@@ -20,11 +20,6 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// The INavigable.
-        /// </summary>
-        public INavigable Navigable { get; set; }
-
-        /// <summary>
         /// <c>true</c> if the INavigable exists, otherwise <c>false</c>.
         /// </summary>
         public bool Exists { get; set; }

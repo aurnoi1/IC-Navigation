@@ -8,6 +8,6 @@ namespace IC.Navigation.Interfaces
     {
         WeakReference<INavigableObserver> RegisterObserver(INavigableObserver observer);
         void UnregisterObserver(WeakReference<INavigableObserver> weakObserver);
-        void NotifyUpdateHistoric(INavigable navigable);
+        void NotifyObservers(INavigable navigable, INavigableEventArgs args);
     }
 }

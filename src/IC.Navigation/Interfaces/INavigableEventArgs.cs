@@ -11,10 +11,5 @@ namespace IC.Navigation.Interfaces
         /// <c>true</c> if the INavigable exists, otherwise <c>false</c>.
         /// </summary>
         bool Exists { get; set; }
-
-        /// <summary>
-        /// The INavigable.
-        /// </summary>
-        INavigable Navigable { get; set; }
     }
 }

@@ -374,9 +374,12 @@ namespace IC.Navigation
             return equal;
         }
 
-        public void UpdateHistoric(INavigable navigable)
+        public void Update(INavigable navigable, INavigableEventArgs args)
         {
-            SetLast(navigable);
+            if (args.Exists)
+            {
+                SetLast(navigable);
+            }
         }
 
         #endregion Public
@@ -393,7 +396,7 @@ namespace IC.Navigation
             if (Last == null || !navigable.CompareTypeName(Last))
             {
                 Last = navigable;
-                var eventArgs = new NavigableEventArgs() { Navigable = navigable, Exists = true };
+                var eventArgs = new NavigableEventArgs() { Exists = true };
                 OnHistoricChanged(navigable, eventArgs);
             }
         }

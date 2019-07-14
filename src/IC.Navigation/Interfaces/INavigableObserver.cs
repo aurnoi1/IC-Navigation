@@ -6,6 +6,6 @@ namespace IC.Navigation.Interfaces
 {
     public interface INavigableObserver
     {
-        void UpdateHistoric(INavigable navigable);
+        void Update(INavigable navigable, INavigableEventArgs args);
     }
 }
