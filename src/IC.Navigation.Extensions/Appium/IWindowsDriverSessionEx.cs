@@ -8,7 +8,7 @@ namespace IC.Navigation.Extensions.Appium
     public static class IWindowsDriverSessionEx
     {
         /// <summary>
-        /// Find a WindowsElement in the last known INavigable, based on its attribute UIArtefact.UsageName, on the last known view.
+        /// Find a WindowsElement in the last known INavigable, based on its attribute UIArtifact.UsageName, on the last known view.
         /// </summary>
         /// <param name="winDriverSession">This IWindowsDriverSession.</param>
         /// <param name="usageName">The matching usage name.</param>
@@ -26,20 +26,20 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the properties and the associated UIArtefact attribute, of last known INavigable.
+        /// Get the properties and the associated UIArtifact attribute, of last known INavigable.
         /// </summary>
         /// <param name="winDriverSession">This IWindowsDriverSession.</param>
-        /// <returns>The properties and the associated UIArtefact attribute, of last INavigable.</returns>
-        public static Dictionary<UIArtefact, PropertyInfo> GetLastINavigableUIArtefactAndProperties(this IWindowsDriverSession winDriverSession)
+        /// <returns>The properties and the associated UIArtifact attribute, of last INavigable.</returns>
+        public static Dictionary<UIArtifact, PropertyInfo> GetLastINavigableUIArtefactAndProperties(this IWindowsDriverSession winDriverSession)
         {
-            Dictionary<UIArtefact, PropertyInfo> propertyInfos = new Dictionary<UIArtefact, PropertyInfo>();
+            Dictionary<UIArtifact, PropertyInfo> propertyInfos = new Dictionary<UIArtifact, PropertyInfo>();
             var properties = winDriverSession.Last.GetType().GetProperties();
             foreach (PropertyInfo prop in properties)
             {
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    if (attr is UIArtefact uIArtefact && prop.PropertyType.Equals(typeof(WindowsElement)))
+                    if (attr is UIArtifact uIArtefact && prop.PropertyType.Equals(typeof(WindowsElement)))
                     {
                         propertyInfos.Add(uIArtefact, prop);
                     }

@@ -15,7 +15,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
         /// <summary>
         /// The tile of this view.
         /// </summary>
-        [UIArtefact("title")] // explicitly same than other views for test.
+        [UIArtifact("title")] // explicitly same than other views for test.
         public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
             "TitleBlue", 
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -23,7 +23,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
         /// <summary>
         /// A control to open the previous view.
         /// </summary>
-        [UIArtefact("button to go back to the previous view")]
+        [UIArtifact("button to go back to the previous view")]
         public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnBack", 
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -31,7 +31,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
         /// <summary>
         /// A control to open the yellow view.
         /// </summary>
-        [UIArtefact("button to open the yellow view")]
+        [UIArtifact("button to open the yellow view")]
         public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenYellowView", 
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));

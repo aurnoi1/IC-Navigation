@@ -7,8 +7,8 @@ using System.Collections.Generic;
 
 namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
 {
-    [UIArtefact("red view")]
-    public class ViewRed : ViewFeatRed, INavigable, IViewRed
+    [UIArtifact("red view")]
+    public class ViewRed : ViewFeatRed, IViewRed
     {
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
         private readonly IUIAccess session;
@@ -26,7 +26,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         {
             bool isDisplayed = UITitle != null;
             INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
-            NotifyObservers(this, args);
+            NotifyObservers(args);
             return isDisplayed;
         }
 
@@ -43,7 +43,11 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
             };
         }
 
-
+        /// <summary>
+        /// Register the INavigableObserver as a WeakReference.
+        /// </summary>
+        /// <param name="observer">The INavigableObserver.</param>
+        /// <returns>The INavigableObserver as a WeakReference.</returns>
         public WeakReference<INavigableObserver> RegisterObserver(INavigableObserver observer)
         {
             var weakObserver = new WeakReference<INavigableObserver>(observer);
@@ -51,17 +55,20 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
             return weakObserver;
         }
 
+        /// <summary>
+        /// Unregister the INavigableObserver.
+        /// </summary>
+        /// <param name="weakObserver">The INavigableObserver as a WeakReference.</param>
         public void UnregisterObserver(WeakReference<INavigableObserver> weakObserver)
         {
             observers.Remove(weakObserver);
         }
 
-
         /// <summary>
-        /// Notify the observers.
+        /// Notify all observers.
         /// </summary>
-        /// <param name="navigable"></param>
-        public void NotifyObservers(INavigable navigable, INavigableEventArgs args)
+        /// <param name="args">The INavigableEventArgs.</param>
+        public void NotifyObservers(INavigableEventArgs args)
         {
             observers.ForEach(x =>
             {
@@ -72,10 +79,11 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
                 }
                 else
                 {
-                    obs.Update(navigable, args);
+                    obs.Update(this, args);
                 }
             });
         }
+
         /// <summary>
         /// The navigation session.
         /// </summary>

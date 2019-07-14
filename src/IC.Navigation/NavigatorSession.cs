@@ -343,7 +343,7 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Get INavigable by their attribute UIArtefact.UsageName.
+        /// Get INavigable by their attribute UIArtifact.UsageName.
         /// </summary>
         /// <param name="usageName">The expected usage name.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
@@ -352,7 +352,7 @@ namespace IC.Navigation
             INavigable iNavigable = null;
             foreach (var node in Graph.Nodes)
             {
-                var uIArtefact = node.GetType().GetCustomAttribute<UIArtefact>(true);
+                var uIArtefact = node.GetType().GetCustomAttribute<UIArtifact>(true);
                 if (uIArtefact != null && usageName == uIArtefact.UsageName)
                 {
                     iNavigable = node;

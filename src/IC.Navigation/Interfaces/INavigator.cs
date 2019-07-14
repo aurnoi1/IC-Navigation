@@ -39,7 +39,7 @@ namespace IC.Navigation.Interfaces
         INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives);
 
         /// <summary>
-        /// Get INavigable by their attribute UIArtefact.UsageName.
+        /// Get INavigable by their attribute UIArtifact.UsageName.
         /// </summary>
         /// <param name="usageName">The expected usage name.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>

@@ -3,9 +3,9 @@
 namespace IC.Navigation
 {
     /// <summary>
-    /// Represents the attribute of an UIArtefact.
+    /// Represents the attribute of an UIArtifact.
     /// </summary>
-    public class UIArtefact : Attribute
+    public class UIArtifact : Attribute
     {
         /// <summary>
         /// The usage name.
@@ -13,17 +13,17 @@ namespace IC.Navigation
         public string UsageName;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UIArtefact"/> class.
+        /// Initializes a new instance of the <see cref="UIArtifact"/> class.
         /// </summary>
-        public UIArtefact()
+        public UIArtifact()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UIArtefact"/> class.
+        /// Initializes a new instance of the <see cref="UIArtifact"/> class.
         /// </summary>
         /// <param name="usageName">The usage name.</param>
-        public UIArtefact(string usageName)
+        public UIArtifact(string usageName)
         {
             UsageName = usageName;
         }
