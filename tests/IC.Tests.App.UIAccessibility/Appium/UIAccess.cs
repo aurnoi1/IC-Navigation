@@ -61,6 +61,11 @@ namespace IC.Tests.App.UIAccessibility.Appium
         /// </summary>
         public override IGraph Graph { get; }
 
+        /// <summary>
+        /// The INavigables to be expected as entry points when the application start.
+        /// </summary>
+        public override HashSet<INavigable> EntryPoints { get; protected set; }
+
         #endregion Public
 
         #endregion Properties
