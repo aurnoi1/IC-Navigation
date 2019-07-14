@@ -14,9 +14,10 @@ namespace IC.Navigation.Interfaces
         ISession Session { get; }
 
         /// <summary>
-        /// Waits for the current INavigable to exists.
+        /// Notify observers of the current <see cref="INavigableEventArgs.Exists"/> status.
         /// </summary>
-        bool WaitForExists();
+        /// <returns>The current <see cref="INavigableEventArgs.Exists"/> status.</returns>
+        bool NotifyExistsStatus();
 
         /// <summary>
         /// Gets a Dictionary of action to go to the next INavigable.

@@ -44,7 +44,7 @@ namespace IC.Navigation.UnitTests
                 foreach (var node in expected)
                 {
                     node.SetupGet(n => n.Session).Returns(session.Object);
-                    node.Setup(n => n.WaitForExists()).Returns(true);
+                    node.Setup(n => n.NotifyExistsStatus()).Returns(true);
                 }
 
                 var actual = iut.Object.GoTo(origin.Object, destination.Object);

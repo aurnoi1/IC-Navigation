@@ -1,7 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
 
-namespace IC.Navigation.Chain
+namespace IC.Navigation.CoreExtensions
 {
     public static class INavigableEx
     {
@@ -70,6 +70,40 @@ namespace IC.Navigation.Chain
         public static INavigable Back(this INavigable source)
         {
             return source.Session.Back();
+        }
+
+        /// <summary>
+        /// Wait for INavigable to exists with the default <see cref="ISession.ThinkTime"/>.
+        /// </summary>
+        /// <param name="source">This INavigable instance.</param>
+        /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
+        public static bool WaitForExists(this INavigable source)
+        {
+            return source.NotifyExistsStatus();
+        }
+
+        /// <summary>
+        /// Wait for INavigable to exists with a specified <see cref="ISession.ThinkTime"/>.
+        /// </summary>
+        /// <param name="source">This INavigable instance.</param>
+        /// <param name="ephemeralThinkTime">An ephemeral ThinkTime set for this action only.</param>
+        /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
+        public static bool WaitForExists(this INavigable source, uint ephemeralThinkTime)
+        {
+            uint actualThinkTime = source.Session.ThinkTime;
+            try
+            {
+                source.Session.ThinkTime = ephemeralThinkTime;
+                return source.NotifyExistsStatus();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                source.Session.ThinkTime = actualThinkTime;
+            }
         }
     }
 }

@@ -13,7 +13,6 @@ namespace IC.Tests.App.UIAccessibility.Appium
     {
         public UIAccess(IAppiumSession appiumSession)
         {
-            ThinkTime = 1;
             WindowsDriver = appiumSession.WindowsDriver;
             EntryPoints = new HashSet<INavigable>() { ViewMenu };
             Graph = new Graph(GetNodesByReflection(Assembly.GetExecutingAssembly()));
@@ -69,7 +68,7 @@ namespace IC.Tests.App.UIAccessibility.Appium
         /// <summary>
         /// Multiplicator to adjust the timeouts when waiting for UI objects.
         /// </summary>
-        public override uint ThinkTime { get; set; }
+        public override uint ThinkTime { get; set; } = 1;
 
         #endregion Public
 

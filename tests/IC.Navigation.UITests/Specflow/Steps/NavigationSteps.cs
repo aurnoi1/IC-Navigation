@@ -1,4 +1,4 @@
-﻿using IC.Navigation.Chain;
+﻿using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.UIAccessibility.Appium.Interfaces;
@@ -50,7 +50,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         public void ThenTheShouldBeOpened(string viewUsageName)
         {
             var expectedView = sut.GetINavigableByUsageName(viewUsageName);
-            Assert.True(expectedView.WaitForExists());
+            Assert.True(expectedView.NotifyExistsStatus());
         }
 
         [Then(@"The control ""(.*)"" should not be displayed")]
