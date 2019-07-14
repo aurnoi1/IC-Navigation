@@ -10,7 +10,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
     {
         protected ViewDefMenu(in IUIAccess session) => this.session = session;
 
-        private IUIAccess session;
+        private readonly IUIAccess session;
         
         /// <summary>
         /// A control NOT IMPLEMENTED only use for negative test.

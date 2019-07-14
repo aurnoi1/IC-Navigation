@@ -39,8 +39,7 @@ namespace IC.Navigation.Extensions.Appium
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    UIArtefact uIArtefact = attr as UIArtefact;
-                    if (uIArtefact != null && prop.PropertyType.Equals(typeof(WindowsElement)))
+                    if (attr is UIArtefact uIArtefact && prop.PropertyType.Equals(typeof(WindowsElement)))
                     {
                         propertyInfos.Add(uIArtefact, prop);
                     }

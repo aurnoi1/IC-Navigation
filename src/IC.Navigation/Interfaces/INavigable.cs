@@ -6,7 +6,7 @@ namespace IC.Navigation.Interfaces
     /// <summary>
     /// Defines an INavigable.
     /// </summary>
-    public interface INavigable
+    public interface INavigable : INavigableObservable
     {
         /// <summary>
         /// The navigation session.

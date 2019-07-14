@@ -5,14 +5,14 @@ using IC.Tests.App.UIAccessibility.Appium.Interfaces;
 
 namespace IC.Navigation.UITests.Specflow.Contexts
 {
-    internal class AppiumContext
+    public class AppiumContext
     {
         private IUIAccess sut;
 
         /// <summary>
         /// An instance of the SUT's IMySession.
         /// </summary>
-        internal IUIAccess SUT
+        public IUIAccess SUT
         {
             get
             {
@@ -28,7 +28,7 @@ namespace IC.Navigation.UITests.Specflow.Contexts
             }
         }
 
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
         private IUIAccess Create()
         {

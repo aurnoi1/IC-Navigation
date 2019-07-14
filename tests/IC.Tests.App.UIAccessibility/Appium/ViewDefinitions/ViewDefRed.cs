@@ -10,7 +10,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
     {
         protected ViewDefRed(in IUIAccess session) => this.session = session;
 
-        private IUIAccess session;
+        private readonly IUIAccess session;
 
         /// <summary>
         /// The tile of this view.

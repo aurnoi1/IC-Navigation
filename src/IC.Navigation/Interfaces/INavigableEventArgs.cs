@@ -13,8 +13,8 @@ namespace IC.Navigation.Interfaces
         bool Exists { get; set; }
 
         /// <summary>
-        /// The type of the INavigable.
+        /// The INavigable.
         /// </summary>
-        Type Type { get; set; }
+        INavigable Navigable { get; set; }
     }
 }

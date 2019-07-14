@@ -13,9 +13,9 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class NavigationSteps : IDisposable
     {
-        private IUIAccess sut;
+        private readonly IUIAccess sut;
 
-        private NavigationSteps(AppiumContext appiumContext)
+        public NavigationSteps(AppiumContext appiumContext)
         {
             this.sut = appiumContext.SUT;
         }

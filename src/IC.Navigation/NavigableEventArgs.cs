@@ -20,9 +20,9 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// The type of the INavigable.
+        /// The INavigable.
         /// </summary>
-        public Type Type { get; set; }
+        public INavigable Navigable { get; set; }
 
         /// <summary>
         /// <c>true</c> if the INavigable exists, otherwise <c>false</c>.

@@ -96,9 +96,9 @@ namespace IC.Navigation
         public virtual List<INavigable> Historic { get; private set; } = new List<INavigable>();
 
         /// <summary>
-        /// Event raised when the last known existing INavigable has changed.
+        /// Event raised when the last known existing INavigable has changed in Historic.
         /// </summary>
-        public virtual event EventHandler<INavigableEventArgs> ViewChanged;
+        public virtual event EventHandler<INavigableEventArgs> HistoricChanged;
 
         #endregion Properties
 
@@ -148,7 +148,7 @@ namespace IC.Navigation
             INavigable entryPoint = null;
             Parallel.ForEach(EntryPoints, (iNavigable, state) =>
             {
-                if (!state.IsStopped && SetLastOnExist(iNavigable))
+                if (!state.IsStopped && iNavigable.WaitForExists())
                 {
                     entryPoint = iNavigable;
                     state.Stop();
@@ -166,13 +166,13 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(INavigable origin, Action uIAction)
         {
-            if (!SetLastOnExist(origin))
+            if (!origin.WaitForExists())
             {
                 throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
             }
 
             uIAction.Invoke();
-            if (!SetLastOnExist(origin))
+            if (!origin.WaitForExists())
             {
                 throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
                     $" If it was expected, used \"Do<T>\" instead.");
@@ -374,7 +374,10 @@ namespace IC.Navigation
             return equal;
         }
 
-
+        public void UpdateHistoric(INavigable navigable)
+        {
+            SetLast(navigable);
+        }
 
         #endregion Public
 
@@ -383,23 +386,16 @@ namespace IC.Navigation
         /// <summary>
         /// Set the last known INavigable is exists.
         /// </summary>
-        /// <param name="iNavigable">The INavigable.</param>
+        /// <param name="navigable">The INavigable.</param>
         /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
-        private bool SetLastOnExist(INavigable iNavigable)
+        private void SetLast(INavigable navigable)
         {
-            bool exists = SetLastOnExist(iNavigable);
-            if (exists)
+            if (Last == null || !navigable.CompareTypeName(Last))
             {
-                if (Last == null || !iNavigable.CompareTypeName(Last))
-                {
-                    Last = iNavigable;
-                    OnLastExistingINavigableChanged(
-                        Last,
-                        new NavigableEventArgs { Exists = exists, Type = Last.GetType() });
-                }
+                Last = navigable;
+                var eventArgs = new NavigableEventArgs() { Navigable = navigable, Exists = true };
+                OnHistoricChanged(navigable, eventArgs);
             }
-
-            return exists;
         }
 
         private async Task<INavigable> GetFirstINavigableExisting(List<INavigable> iNavigables)
@@ -449,24 +445,23 @@ namespace IC.Navigation
             return match;
         }
 
-
         private INavigable WaitForExists(INavigable navigable)
         {
-            bool exists = SetLastOnExist(navigable);
+            bool exists = navigable.WaitForExists();
             return exists ? navigable : null;
         }
 
         private void ValidateINavigableExists(INavigable iNavigable, string definition)
         {
-            if (!SetLastOnExist(iNavigable))
+            if (!iNavigable.WaitForExists())
             {
                 throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
             }
         }
 
-        private void OnLastExistingINavigableChanged(INavigable inavigable, INavigableEventArgs e)
+        private void OnHistoricChanged(INavigable inavigable, INavigableEventArgs e)
         {
-            EventHandler<INavigableEventArgs> handler = ViewChanged;
+            EventHandler<INavigableEventArgs> handler = HistoricChanged;
             handler?.Invoke(inavigable, e);
         }
 

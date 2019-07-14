@@ -6,7 +6,7 @@ namespace IC.Navigation.Interfaces
     /// <summary>
     /// Represents the implementation of ILog.
     /// </summary>
-    public interface ILog
+    public interface ILog : INavigableObserver
     {
         /// <summary>
         /// Last known existing INavigable.
@@ -26,6 +26,6 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// Event raised when the last known existing INavigable has changed.
         /// </summary>
-        event EventHandler<INavigableEventArgs> ViewChanged;
+        event EventHandler<INavigableEventArgs> HistoricChanged;
     }
 }
