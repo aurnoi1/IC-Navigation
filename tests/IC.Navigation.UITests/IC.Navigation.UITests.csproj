@@ -13,10 +13,10 @@
 
     <ItemGroup>
         <PackageReference Include="Appium.WebDriver" Version="4.0.0.6-beta" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
-        <PackageReference Include="SpecFlow" Version="3.0.213" />
-        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.213" />
-        <PackageReference Include="SpecFlow.xUnit" Version="3.0.213" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+        <PackageReference Include="SpecFlow" Version="3.0.225" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.0.225" />
         <PackageReference Include="System.ValueTuple" Version="4.5.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.console" Version="2.4.1">
@@ -31,6 +31,21 @@
 
     <ItemGroup>
         <ProjectReference Include="..\IC.Tests.App.UIAccessibility\IC.Tests.App.UIAccessibility.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <SpecFlowFeatureFiles Update="Specflow\Features\Navigation.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+      </SpecFlowFeatureFiles>
+      <SpecFlowFeatureFiles Update="Specflow\Features\ViewBlue.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+      </SpecFlowFeatureFiles>
+      <SpecFlowFeatureFiles Update="Specflow\Features\ViewMenu.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+      </SpecFlowFeatureFiles>
+      <SpecFlowFeatureFiles Update="Specflow\Features\ViewRed.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+      </SpecFlowFeatureFiles>
     </ItemGroup>
 
 </Project>
