@@ -22,7 +22,7 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
         /// </summary>
-        public bool NotifyExistsStatus()
+        public bool PublishExistsStatus()
         {
             bool isDisplayed = UITitle != null;
             INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };

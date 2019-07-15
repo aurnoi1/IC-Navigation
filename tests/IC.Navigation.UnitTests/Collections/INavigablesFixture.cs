@@ -16,7 +16,7 @@ namespace IC.Navigation.UnitTests.Collections
             Mock<INavigable> n4 = new Mock<INavigable>();
             Mock<INavigable> n5 = new Mock<INavigable>();
 
-            n1.Setup(x => x.NotifyExistsStatus()).Returns(true);
+            n1.Setup(x => x.PublishExistsStatus()).Returns(true);
             n1.Setup(x => x.GetActionToNext())
                 .Returns(new Dictionary<INavigable, Action>()
                 {

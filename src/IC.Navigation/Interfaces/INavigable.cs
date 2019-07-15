@@ -17,7 +17,7 @@ namespace IC.Navigation.Interfaces
         /// Notify observers of the current <see cref="INavigableEventArgs.Exists"/> status.
         /// </summary>
         /// <returns>The current <see cref="INavigableEventArgs.Exists"/> status.</returns>
-        bool NotifyExistsStatus();
+        bool PublishExistsStatus();
 
         /// <summary>
         /// Gets a Dictionary of action to go to the next INavigable.

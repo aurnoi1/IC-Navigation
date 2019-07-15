@@ -79,7 +79,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
         public static bool WaitForExists(this INavigable source)
         {
-            return source.NotifyExistsStatus();
+            return source.PublishExistsStatus();
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace IC.Navigation.CoreExtensions
             try
             {
                 source.Session.ThinkTime = ephemeralThinkTime;
-                return source.NotifyExistsStatus();
+                return source.PublishExistsStatus();
             }
             catch (Exception)
             {

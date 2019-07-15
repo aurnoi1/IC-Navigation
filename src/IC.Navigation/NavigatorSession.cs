@@ -148,7 +148,7 @@ namespace IC.Navigation
             INavigable entryPoint = null;
             Parallel.ForEach(EntryPoints, (iNavigable, state) =>
             {
-                if (!state.IsStopped && iNavigable.NotifyExistsStatus())
+                if (!state.IsStopped && iNavigable.PublishExistsStatus())
                 {
                     entryPoint = iNavigable;
                     state.Stop();
@@ -166,13 +166,13 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(INavigable origin, Action uIAction)
         {
-            if (!origin.NotifyExistsStatus())
+            if (!origin.PublishExistsStatus())
             {
                 throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
             }
 
             uIAction.Invoke();
-            if (!origin.NotifyExistsStatus())
+            if (!origin.PublishExistsStatus())
             {
                 throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
                     $" If it was expected, used \"Do<T>\" instead.");
@@ -450,13 +450,13 @@ namespace IC.Navigation
 
         private INavigable WaitForExists(INavigable navigable)
         {
-            bool exists = navigable.NotifyExistsStatus();
+            bool exists = navigable.PublishExistsStatus();
             return exists ? navigable : null;
         }
 
         private void ValidateINavigableExists(INavigable iNavigable, string definition)
         {
-            if (!iNavigable.NotifyExistsStatus())
+            if (!iNavigable.PublishExistsStatus())
             {
                 throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
             }
