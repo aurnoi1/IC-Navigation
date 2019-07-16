@@ -1,5 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace IC.Navigation.Chain
 {
@@ -48,7 +50,22 @@ namespace IC.Navigation.Chain
         /// <param name="destination">The opened INavigable.</param>
         public static INavigable StepToNext(this INavigable source, INavigable destination)
         {
-            return source.Session.StepToNext(source.GetActionToNext(), destination);
+            var navigableAndAction = source.GetActionToNext().Where(x => x.Key.CompareTypeName(destination)).SingleOrDefault();
+            INavigable nextNavigableRef = navigableAndAction.Key;
+            Action actionToOpen = navigableAndAction.Value;
+            if (nextNavigableRef == null)
+            {
+                throw new ArgumentException($"The INavigable \"{destination}\" is not available in \"{MethodBase.GetCurrentMethod().DeclaringType}\".");
+            }
+
+            actionToOpen.Invoke();
+            destination.WaitForExists();
+            if (!destination.Session.Last.CompareTypeName(destination))
+            {
+                throw new Exception($"{destination.ToString()} is not opened.");
+            }
+
+            return destination.Session.Last;
         }
 
         /// <summary>
