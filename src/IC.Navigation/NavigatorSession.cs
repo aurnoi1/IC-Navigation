@@ -1,5 +1,4 @@
-﻿using IC.Navigation.Chain;
-using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -214,7 +213,7 @@ namespace IC.Navigation
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
         {
-            var navigableAndAction = actionToNextINavigable.Where(x => x.Key.CompareTypeName(nextNavigable)).SingleOrDefault();
+            var navigableAndAction = actionToNextINavigable.Where(x => CompareTypeNames(x.Key, nextNavigable)).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
             Action actionToOpen = navigableAndAction.Value;
             if (nextNavigableRef == null)
@@ -262,7 +261,7 @@ namespace IC.Navigation
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    currentNode.StepToNext(nextNode);
+                    StepToNext(currentNode.GetActionToNext(), nextNode);
                 }
                 else
                 {
@@ -284,7 +283,7 @@ namespace IC.Navigation
         /// <returns>The previous INavigable.</returns>
         public virtual INavigable Back()
         {
-            return Last.GoTo(Previous);
+            return GoTo(Last, Previous);
         }
 
         /// <summary>
@@ -309,7 +308,7 @@ namespace IC.Navigation
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives)
         {
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
-            return newOrigin.GoTo(gotoDestination);
+            return GoTo(newOrigin, gotoDestination);
         }
 
         /// <summary>
@@ -324,7 +323,10 @@ namespace IC.Navigation
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
         {
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
-            return newOrigin.GoTo(waypoint).GoTo(gotoDestination);
+
+            // Force to pass by waypoint.
+            GoTo(newOrigin, waypoint);
+            return GoTo(waypoint, gotoDestination);
         }
 
         /// <summary>
@@ -383,7 +385,7 @@ namespace IC.Navigation
         {
             if (exists)
             {
-                if (Last == null || !iNavigable.CompareTypeName(Last))
+                if (Last == null || !CompareTypeNames(iNavigable, Last))
                 {
                     Last = iNavigable;
                     OnLastExistingINavigableChanged(

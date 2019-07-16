@@ -39,6 +39,12 @@ namespace IC.Navigation.UnitTests
                 iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
                 var iut = mock.Mock<NavigatorSession>();
                 iut.SetupGet(x => x.Graph).Returns(iGraph.Object);
+                iut.Setup(n => n.CompareTypeNames(It.IsAny<INavigable>(), It.IsAny<INavigable>()))
+                    .Returns((INavigable x, INavigable y) =>
+                    {
+                        return new INavigablesFixture().CompareNames(x, y);
+                    });
+
                 iut.CallBase = true;
                 Mock<ISession> session = mock.Mock<ISession>();
                 foreach (var node in expected)
