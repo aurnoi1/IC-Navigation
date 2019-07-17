@@ -42,33 +42,6 @@ namespace IC.Navigation.Chain
         }
 
         /// <summary>
-        /// Performs action to step to the next INavigable.
-        /// The next INavigable must be consecutive to the current INavigable.
-        /// </summary>
-        /// <param name="destination">The opened INavigable.</param>
-        /// <param name="source">This INavigable instance.</param>
-        /// <param name="destination">The opened INavigable.</param>
-        public static INavigable StepToNext(this INavigable source, INavigable destination)
-        {
-            var navigableAndAction = source.GetActionToNext().Where(x => x.Key.CompareTypeName(destination)).SingleOrDefault();
-            INavigable nextNavigableRef = navigableAndAction.Key;
-            Action actionToOpen = navigableAndAction.Value;
-            if (nextNavigableRef == null)
-            {
-                throw new ArgumentException($"The INavigable \"{destination}\" is not available in \"{MethodBase.GetCurrentMethod().DeclaringType}\".");
-            }
-
-            actionToOpen.Invoke();
-            destination.WaitForExists();
-            if (!destination.Session.Last.CompareTypeName(destination))
-            {
-                throw new Exception($"{destination.ToString()} is not opened.");
-            }
-
-            return destination.Session.Last;
-        }
-
-        /// <summary>
         /// Compares the Type name of this INavigable to another one.
         /// </summary>
         /// <param name="source">This INavigable instance.</param>

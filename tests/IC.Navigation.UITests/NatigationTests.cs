@@ -58,7 +58,7 @@ namespace IC.Navigation.UITests
 
             Assert.True(sut.Historic.ElementAt(0).WaitForExists());
         }
-
+        
         [Fact]
         public void ShouldFindBtnBlueViewByUsageNameInViewMenu()
         {

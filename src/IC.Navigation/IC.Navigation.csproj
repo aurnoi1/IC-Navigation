@@ -12,7 +12,7 @@
       <Authors>Aurelien Noisette</Authors>
       <Company>Aurelien Noisette</Company>
       <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-      <PackageReleaseNotes>[BUG FIX] StepToNext did not update History when Resolve() was called.
+      <PackageReleaseNotes>[Refactor] Remove StepToNext that was hidding a GoTo.
 [Refactor] Remove dependency to INavigableEx from NavigatorSession.</PackageReleaseNotes>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
