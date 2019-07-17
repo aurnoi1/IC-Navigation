@@ -5,7 +5,7 @@
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
       <Description>System to automate navigation mainly through user interfaces.</Description>
-      <PackageProjectUrl>https://github.com/aurnoi1/IC-UITesting-Framework</PackageProjectUrl>
+      <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
       <PackageTags>IC.Navigation Test automation</PackageTags>
       <PackageLicenseUrl></PackageLicenseUrl>
       <Version>1.0.0-beta9</Version>

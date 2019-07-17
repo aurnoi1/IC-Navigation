@@ -6,7 +6,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
         <Description>Provide extension features for IC.Navigation.</Description>
-        <PackageProjectUrl>https://github.com/aurnoi1/IC-UITesting-Framework</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
         <PackageTags>IC.Navigation Test automation IC.Navigation.Extensions</PackageTags>
         <PackageLicenseUrl></PackageLicenseUrl>
         <Version>1.0.0-beta9</Version>
