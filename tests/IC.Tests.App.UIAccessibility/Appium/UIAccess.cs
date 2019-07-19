@@ -44,10 +44,10 @@ namespace IC.Tests.App.UIAccessibility.Appium
 
         #region Views
 
-        public IViewRed ViewRed => new ViewRed(this);
-        public IViewBlue ViewBlue => new ViewBlue(this);
-        public IViewMenu ViewMenu => new ViewMenu(this);
-        public IViewYellow ViewYellow => new ViewYellow(this);
+        public IViewRed ViewRed => GetINavigableInstance<ViewRed>(typeof(ViewRed));
+        public IViewBlue ViewBlue => GetINavigableInstance<ViewBlue>(typeof(ViewBlue));
+        public IViewMenu ViewMenu => GetINavigableInstance<ViewMenu>(typeof(ViewMenu));
+        public IViewYellow ViewYellow => GetINavigableInstance<ViewYellow>(typeof(ViewYellow));
 
         #endregion Views
 

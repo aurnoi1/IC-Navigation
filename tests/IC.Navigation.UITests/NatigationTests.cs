@@ -58,7 +58,16 @@ namespace IC.Navigation.UITests
 
             Assert.True(sut.Historic.ElementAt(0).WaitForExists());
         }
-        
+
+        [Fact]
+        public void ShouldReturnsSameInstance()
+        {
+            var instance1 = sut.ViewMenu;
+            var instance2 = sut.ViewMenu;
+            Assert.NotNull(instance1);
+            Assert.Same(instance1, instance2);
+        }
+
         [Fact]
         public void ShouldFindBtnBlueViewByUsageNameInViewMenu()
         {

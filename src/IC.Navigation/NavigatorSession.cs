@@ -106,6 +106,25 @@ namespace IC.Navigation
         #region Public
 
         /// <summary>
+        /// Get the instance of INavigable if living in the Graph, otherwise creates a new one.
+        /// </summary>
+        /// <typeparam name="T">The returned instance type.</typeparam>
+        /// <param name="type">The type requested.</param>
+        /// <returns>The instance of the requested INavigable.</returns>
+        public virtual T GetINavigableInstance<T>(Type type) where T : INavigable
+        {
+            var match = Graph?.Nodes.Where(n => n.GetType() == type).SingleOrDefault();
+            if (match != null)
+            {
+                return (T)match;
+            }
+            else
+            {
+                return (T)Activator.CreateInstance(type, this);
+            }
+        }
+
+        /// <summary>
         /// Get the nodes formed by instances of INavigables from the specified assembly.
         /// </summary>
         /// <param name="assembly">The assembly containing the INavigables.</param>
