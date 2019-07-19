@@ -9,11 +9,11 @@
         <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
         <PackageTags>IC.Navigation Test automation IC.Navigation.Extensions</PackageTags>
         <PackageLicenseUrl></PackageLicenseUrl>
-        <Version>1.0.0-beta9</Version>
+        <Version>1.0.0-beta10</Version>
         <Authors>Aurelien Noisette</Authors>
         <Company>Aurelien Noisette</Company>
         <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-        <PackageReleaseNotes>[BUG FIX] Ensure to use timeout in FindElement.</PackageReleaseNotes>
+        <PackageReleaseNotes></PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

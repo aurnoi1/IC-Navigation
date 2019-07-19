@@ -8,12 +8,11 @@
       <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
       <PackageTags>IC.Navigation Test automation</PackageTags>
       <PackageLicenseUrl></PackageLicenseUrl>
-      <Version>1.0.0-beta9</Version>
+      <Version>1.0.0-beta10</Version>
       <Authors>Aurelien Noisette</Authors>
       <Company>Aurelien Noisette</Company>
       <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-      <PackageReleaseNotes>[Refactor] Remove StepToNext that was hidding a GoTo.
-[Refactor] Remove dependency to INavigableEx from NavigatorSession.</PackageReleaseNotes>
+      <PackageReleaseNotes>[BUG FIX] Resolve with waypoint was resetting the final destination.</PackageReleaseNotes>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
    </PropertyGroup>
