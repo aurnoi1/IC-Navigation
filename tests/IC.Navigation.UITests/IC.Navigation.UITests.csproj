@@ -13,6 +13,7 @@
 
     <ItemGroup>
         <PackageReference Include="Appium.WebDriver" Version="4.0.0.6-beta" />
+        <PackageReference Include="AutoFixture.AutoMoq" Version="4.11.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
         <PackageReference Include="SpecFlow" Version="3.0.225" />
         <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
