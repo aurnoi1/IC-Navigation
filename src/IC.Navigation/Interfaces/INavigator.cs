@@ -99,11 +99,19 @@ namespace IC.Navigation.Interfaces
         INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint);
 
         /// <summary>
+        /// Get the instance of INavigable if living in the Graph, otherwise creates a new one.
+        /// </summary>
+        /// <typeparam name="T">The returned instance type.</typeparam>
+        /// <param name="type">The type requested.</param>
+        /// <returns>The instance of the requested INavigable.</returns>
+        T GetINavigableInstance<T>(Type type) where T : INavigable;
+
+        /// <summary>
         /// Compares the Type names of two INavigables.
         /// </summary>
         /// <param name="first">The first INavigable.</param>
         /// <param name="second">The second INavigable.</param>
         /// <returns><c>true</c> if same, otherwise <c>false</c>.</returns>
-        bool CompareTypeNames(INavigable first, INavigable second);
+        bool AreEqual(INavigable first, INavigable second);
     }
 }

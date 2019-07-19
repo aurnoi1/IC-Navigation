@@ -1,5 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
+using System.Linq;
+using System.Reflection;
 
 namespace IC.Navigation.CoreExtensions
 {
@@ -39,27 +41,16 @@ namespace IC.Navigation.CoreExtensions
             return source.Session.GoTo(source, destination);
         }
 
-        /// <summary>
-        /// Performs action to step to the next INavigable.
-        /// The next INavigable must be consecutive to the current INavigable.
-        /// </summary>
-        /// <param name="destination">The opened INavigable.</param>
-        /// <param name="source">This INavigable instance.</param>
-        /// <param name="destination">The opened INavigable.</param>
-        public static INavigable StepToNext(this INavigable source, INavigable destination)
-        {
-            return source.Session.StepToNext(source.GetActionToNext(), destination);
-        }
 
         /// <summary>
-        /// Compares the Type name of this INavigable to another one.
+        /// Check the equality between INavigables.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This INavigable.</param>
         /// <param name="other">The other INavigable.</param>
-        /// <returns><c>true</c> if same, otherwise <c>false</c>.</returns>
-        public static bool CompareTypeName(this INavigable source, INavigable other)
+        /// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
+        public static bool AreEqual(this INavigable source, INavigable other)
         {
-            return source.Session.CompareTypeNames(source, other);
+            return source.Session.AreEqual(source, other);
         }
 
         /// <summary>

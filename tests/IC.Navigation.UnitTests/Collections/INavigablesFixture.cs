@@ -59,6 +59,19 @@ namespace IC.Navigation.UnitTests.Collections
             N5 = n5;
         }
 
+        /// <summary>
+        /// A Mock of the <see cref="NavigatorSession.AreEqual(INavigable, INavigable)"/>.
+        /// Need to replace the comparison of GetType().Name by GetHashCode() 
+        /// when the INavigable are mocked (since they all will be a INavigableProxy).
+        /// </summary>
+        /// <param name="first">First INavigable.</param>
+        /// <param name="second">Second INavigable.</param>
+        /// <returns><c>true</c> if same. Otherwise <c>false</c>.</returns>
+        public bool AreEqual(INavigable first, INavigable second)
+        {
+            return first.GetHashCode() == second.GetHashCode();
+        }
+
         public HashSet<INavigable> Nodes { get; private set; }
         public Mock<INavigable> N1;
         public Mock<INavigable> N2;

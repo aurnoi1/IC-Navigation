@@ -107,6 +107,25 @@ namespace IC.Navigation
         #region Public
 
         /// <summary>
+        /// Get the instance of INavigable if living in the Graph, otherwise creates a new one.
+        /// </summary>
+        /// <typeparam name="T">The returned instance type.</typeparam>
+        /// <param name="type">The type requested.</param>
+        /// <returns>The instance of the requested INavigable.</returns>
+        public virtual T GetINavigableInstance<T>(Type type) where T : INavigable
+        {
+            var match = Graph?.Nodes.Where(n => n.GetType() == type).SingleOrDefault();
+            if (match != null)
+            {
+                return (T)match;
+            }
+            else
+            {
+                return (T)Activator.CreateInstance(type, this);
+            }
+        }
+
+        /// <summary>
         /// Get the nodes formed by instances of INavigables from the specified assembly.
         /// </summary>
         /// <param name="assembly">The assembly containing the INavigables.</param>
@@ -214,7 +233,7 @@ namespace IC.Navigation
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
         {
-            var navigableAndAction = actionToNextINavigable.Where(x => x.Key.CompareTypeName(nextNavigable)).SingleOrDefault();
+            var navigableAndAction = actionToNextINavigable.Where(x => AreEqual(x.Key, nextNavigable)).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
             Action actionToOpen = navigableAndAction.Value;
             if (nextNavigableRef == null)
@@ -262,7 +281,7 @@ namespace IC.Navigation
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    currentNode.StepToNext(nextNode);
+                    StepToNext(currentNode.GetActionToNext(), nextNode);
                 }
                 else
                 {
@@ -284,7 +303,7 @@ namespace IC.Navigation
         /// <returns>The previous INavigable.</returns>
         public virtual INavigable Back()
         {
-            return Last.GoTo(Previous);
+            return GoTo(Last, Previous);
         }
 
         /// <summary>
@@ -309,7 +328,7 @@ namespace IC.Navigation
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives)
         {
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
-            return newOrigin.GoTo(gotoDestination);
+            return GoTo(newOrigin, gotoDestination);
         }
 
         /// <summary>
@@ -319,12 +338,24 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
-        /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
+        /// <param name="waypoint">An INavigable waypoint to cross if the expected INavigable is not cross during the resolution.</param>
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
         {
-            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
-            return newOrigin.GoTo(waypoint).GoTo(gotoDestination);
+            // gotoDestination will be reset with the first call to GoTo().
+            var finalDestination = gotoDestination;
+            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
+            if (AreEqual(navigableAfterAction, finalDestination))
+            {
+                return navigableAfterAction;
+            }
+            else
+            {
+
+                // Force to pass by waypoint.
+                GoTo(navigableAfterAction, waypoint);
+                return GoTo(waypoint, finalDestination);
+            }
         }
 
         /// <summary>
@@ -363,12 +394,12 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Comapre two INavigables.
+        /// Check the equality between INavigables.
         /// </summary>
         /// <param name="first">First INavigable.</param>
         /// <param name="second">Second INavigable.</param>
-        /// <returns><c>true</c> if same. Otherwise <c>false</c>.</returns>
-        public virtual bool CompareTypeNames(INavigable first, INavigable second)
+        /// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
+        public virtual bool AreEqual(INavigable first, INavigable second)
         {
             bool equal = first.GetType().Name == second.GetType().Name;
             return equal;

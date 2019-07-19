@@ -3,15 +3,17 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>7.3</LangVersion>
-        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
         <Description>Provide extension features for IC.Navigation.</Description>
-        <PackageProjectUrl>https://github.com/aurnoi1/IC-UITesting-Framework</PackageProjectUrl>
-        <PackageTags>IC-UI-TestingFramework IC.Navigation IC.Navigation.Extensions Test IC</PackageTags>
-        <PackageLicenseUrl>https://opensource.org/licenses/BSD-3-Clause</PackageLicenseUrl>
-        <Version>1.0.0-beta8</Version>
+        <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
+        <PackageTags>IC.Navigation Test automation IC.Navigation.Extensions</PackageTags>
+        <PackageLicenseUrl></PackageLicenseUrl>
+        <Version>1.0.0-beta10</Version>
         <Authors>Aurelien Noisette</Authors>
         <Company>Aurelien Noisette</Company>
+        <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+        <PackageReleaseNotes></PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>

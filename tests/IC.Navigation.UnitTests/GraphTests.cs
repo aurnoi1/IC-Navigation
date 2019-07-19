@@ -40,5 +40,6 @@ namespace IC.Navigation.UnitTests
             var actual = iut.GetShortestPath(origin, destination);
             Assert.Equal(expected, actual);
         }
+
     }
 }
