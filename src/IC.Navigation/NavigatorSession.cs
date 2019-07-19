@@ -318,15 +318,24 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
-        /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
+        /// <param name="waypoint">An INavigable waypoint to cross if the expected INavigable is not cross during the resolution.</param>
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
         {
-            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
+            // gotoDestination will be reset with the first call to GoTo().
+            var finalDestination = gotoDestination;
+            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
+            if (CompareTypeNames(navigableAfterAction, finalDestination))
+            {
+                return navigableAfterAction;
+            }
+            else
+            {
 
-            // Force to pass by waypoint.
-            GoTo(newOrigin, waypoint);
-            return GoTo(waypoint, gotoDestination);
+                // Force to pass by waypoint.
+                GoTo(navigableAfterAction, waypoint);
+                return GoTo(waypoint, finalDestination);
+            }
         }
 
         /// <summary>
