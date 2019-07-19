@@ -232,7 +232,7 @@ namespace IC.Navigation
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
         {
-            var navigableAndAction = actionToNextINavigable.Where(x => CompareTypeNames(x.Key, nextNavigable)).SingleOrDefault();
+            var navigableAndAction = actionToNextINavigable.Where(x => AreEqual(x.Key, nextNavigable)).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
             Action actionToOpen = navigableAndAction.Value;
             if (nextNavigableRef == null)
@@ -344,7 +344,7 @@ namespace IC.Navigation
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
             var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
-            if (CompareTypeNames(navigableAfterAction, finalDestination))
+            if (AreEqual(navigableAfterAction, finalDestination))
             {
                 return navigableAfterAction;
             }
@@ -393,12 +393,12 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Comapre two INavigables.
+        /// Check the equality between INavigables.
         /// </summary>
         /// <param name="first">First INavigable.</param>
         /// <param name="second">Second INavigable.</param>
-        /// <returns><c>true</c> if same. Otherwise <c>false</c>.</returns>
-        public virtual bool CompareTypeNames(INavigable first, INavigable second)
+        /// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
+        public virtual bool AreEqual(INavigable first, INavigable second)
         {
             bool equal = first.GetType().Name == second.GetType().Name;
             return equal;
@@ -413,7 +413,7 @@ namespace IC.Navigation
         {
             if (exists)
             {
-                if (Last == null || !CompareTypeNames(iNavigable, Last))
+                if (Last == null || !AreEqual(iNavigable, Last))
                 {
                     Last = iNavigable;
                     OnLastExistingINavigableChanged(

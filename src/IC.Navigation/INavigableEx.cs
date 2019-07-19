@@ -41,15 +41,16 @@ namespace IC.Navigation.Chain
             return source.Session.GoTo(source, destination);
         }
 
+
         /// <summary>
-        /// Compares the Type name of this INavigable to another one.
+        /// Check the equality between INavigables.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This INavigable.</param>
         /// <param name="other">The other INavigable.</param>
-        /// <returns><c>true</c> if same, otherwise <c>false</c>.</returns>
-        public static bool CompareTypeName(this INavigable source, INavigable other)
+        /// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
+        public static bool AreEqual(this INavigable source, INavigable other)
         {
-            return source.Session.CompareTypeNames(source, other);
+            return source.Session.AreEqual(source, other);
         }
 
         /// <summary>

@@ -112,6 +112,6 @@ namespace IC.Navigation.Interfaces
         /// <param name="first">The first INavigable.</param>
         /// <param name="second">The second INavigable.</param>
         /// <returns><c>true</c> if same, otherwise <c>false</c>.</returns>
-        bool CompareTypeNames(INavigable first, INavigable second);
+        bool AreEqual(INavigable first, INavigable second);
     }
 }
