@@ -1,5 +1,4 @@
-﻿using IC.Navigation.CoreExtensions;
-using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -351,7 +350,6 @@ namespace IC.Navigation
             }
             else
             {
-
                 // Force to pass by waypoint.
                 GoTo(navigableAfterAction, waypoint);
                 return GoTo(waypoint, finalDestination);
@@ -424,7 +422,7 @@ namespace IC.Navigation
         /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
         private void SetLast(INavigable navigable)
         {
-            if (Last == null || !navigable.CompareTypeName(Last))
+            if (Last == null || !Equals(navigable, Last))
             {
                 Last = navigable;
                 var eventArgs = new NavigableEventArgs() { Exists = true };
