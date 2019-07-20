@@ -69,7 +69,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
         public static bool WaitForExists(this INavigable source, uint ephemeralThinkTime)
         {
-            uint actualThinkTime = source.Session.ThinkTime;
+            var actualThinkTime = source.Session.ThinkTime;
             try
             {
                 source.Session.ThinkTime = ephemeralThinkTime;

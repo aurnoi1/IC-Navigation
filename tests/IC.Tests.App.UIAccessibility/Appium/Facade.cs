@@ -19,12 +19,12 @@ namespace IC.Tests.App.UIAccessibility.Appium
             EntryPoints = new HashSet<INavigable>() { ViewMenu };
         }
 
-        public Facade(IAppiumSession appiumSession, uint thinkTime) : this(appiumSession)
+        public Facade(IAppiumSession appiumSession, double thinkTime) : this(appiumSession)
         {
             ThinkTime = thinkTime;
         }
 
-        public Facade(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, uint thinkTime)
+        public Facade(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, double thinkTime)
         {
             ThinkTime = thinkTime;
             Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
@@ -40,7 +40,7 @@ namespace IC.Tests.App.UIAccessibility.Appium
         private bool disposed = false;
 
         #endregion Private
-        
+
         #region Public
 
         #region Views
@@ -72,10 +72,28 @@ namespace IC.Tests.App.UIAccessibility.Appium
         /// </summary>
         public override HashSet<INavigable> EntryPoints { get; protected set; }
 
+        private double thinkTime = 1;
+
         /// <summary>
-        /// Multiplicator to adjust the timeouts when waiting for UI objects.
+        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
+        /// The default value is 1.
         /// </summary>
-        public override uint ThinkTime { get; set; } = 1;
+        public override double ThinkTime
+        {
+            get
+            {
+                return thinkTime;
+            }
+            set
+            {
+                if (value < 0)
+                {
+                    throw new Exception($"The value of {nameof(ThinkTime)} must be positive.");
+                }
+
+                thinkTime = value;
+            }
+        }
 
         #endregion Public
 

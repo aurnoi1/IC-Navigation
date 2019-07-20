@@ -45,9 +45,9 @@ namespace IC.Navigation
         public abstract HashSet<INavigable> EntryPoints { get; protected set; }
 
         /// <summary>
-        /// Multiplicator to adjust the timeouts when waiting for UI objects.
+        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
         /// </summary>
-        public abstract uint ThinkTime { get; set; }
+        public abstract double ThinkTime { get; set; }
 
         /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
@@ -157,7 +157,7 @@ namespace IC.Navigation
         /// <returns>The adjusted timeout.</returns>
         public virtual TimeSpan AdjustTimeout(TimeSpan timeout)
         {
-            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * ThinkTime);
+            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(ThinkTime));
             return adjTimeout;
         }
 
@@ -375,18 +375,6 @@ namespace IC.Navigation
             match = GetFirstINavigableExisting(onActionAlternatives.INavigables).Result;
             return match;
         }
-
-        ///// <summary>
-        ///// Check the equality between INavigables.
-        ///// </summary>
-        ///// <param name="first">First INavigable.</param>
-        ///// <param name="second">Second INavigable.</param>
-        ///// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
-        //public virtual bool AreEqual(INavigable first, INavigable second)
-        //{
-        //    bool equal = first.GetType().Name == second.GetType().Name;
-        //    return equal;
-        //}
 
         public void Update(INavigable navigable, INavigableEventArgs args)
         {

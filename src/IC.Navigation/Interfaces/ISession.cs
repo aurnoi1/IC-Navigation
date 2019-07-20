@@ -24,9 +24,9 @@ namespace IC.Navigation.Interfaces
         INavigable EntryPoint { get; }
 
         /// <summary>
-        /// Multiplicator to adjust the timeouts when waiting for UI objects.
+        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
         /// </summary>
-        uint ThinkTime { get; set; }
+        double ThinkTime { get; set; }
 
         /// <summary>
         /// Adjust the timeout when waiting for the UI objects depending the <see cref="ThinkTime"/> value.

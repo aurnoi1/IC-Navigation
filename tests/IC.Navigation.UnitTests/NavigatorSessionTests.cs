@@ -1,4 +1,5 @@
 ﻿using Autofac.Extras.Moq;
+using AutoFixture.Xunit2;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;
@@ -54,6 +55,19 @@ namespace IC.Navigation.UnitTests
                 Assert.Equal(expected.Last().Object, actual);
                 iGraph.Verify(x => x.GetShortestPath(origin.Object, destination.Object), Times.Exactly(1));
             }
+        }
+
+        [Theory, AutoData]
+        public void ThinkTime_Should_Adjust_Timeout(double thinkTime, TimeSpan timeout)
+        {
+            var mock = AutoMock.GetLoose();
+            var iut = mock.Mock<NavigatorSession>().Object;
+            iut.ThinkTime = Math.Abs(thinkTime);
+            var expected = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(iut.ThinkTime));
+
+            var actual = iut.AdjustTimeout(timeout);
+
+            Assert.Equal(expected, actual);
         }
     }
 }
