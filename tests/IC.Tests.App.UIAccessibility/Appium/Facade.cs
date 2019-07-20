@@ -13,9 +13,10 @@ namespace IC.Tests.App.UIAccessibility.Appium
     {
         public Facade(IAppiumSession appiumSession)
         {
+            Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
+            Graph = new Graph(Nodes);
             WindowsDriver = appiumSession.WindowsDriver;
             EntryPoints = new HashSet<INavigable>() { ViewMenu };
-            Graph = new Graph(GetNodesByReflection(Assembly.GetExecutingAssembly()));
         }
 
         public Facade(IAppiumSession appiumSession, uint thinkTime) : this(appiumSession)
@@ -26,8 +27,9 @@ namespace IC.Tests.App.UIAccessibility.Appium
         public Facade(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, uint thinkTime)
         {
             ThinkTime = thinkTime;
+            Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
+            Graph = new Graph(Nodes);
             WindowsDriver = winDriver;
-            Graph = new Graph(GetNodesByReflection(Assembly.GetExecutingAssembly()));
             EntryPoints = entryPoints;
         }
 
@@ -38,7 +40,7 @@ namespace IC.Tests.App.UIAccessibility.Appium
         private bool disposed = false;
 
         #endregion Private
-
+        
         #region Public
 
         #region Views
@@ -49,6 +51,11 @@ namespace IC.Tests.App.UIAccessibility.Appium
         public ViewYellow ViewYellow => GetINavigableInstance<ViewYellow>(typeof(ViewYellow));
 
         #endregion Views
+
+        /// <summary>
+        /// The nodes of INavigables forming the Graph.
+        /// </summary>
+        public override HashSet<INavigable> Nodes { get; }
 
         /// <summary>
         /// The WindowsDriver used to connect to the application.
@@ -77,6 +84,26 @@ namespace IC.Tests.App.UIAccessibility.Appium
         #region Methods
 
         #region Public
+
+        /// <summary>
+        /// Get INavigable by their attribute UIArtifact.UsageName.
+        /// </summary>
+        /// <param name="usageName">The expected usage name.</param>
+        /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
+        public INavigable GetINavigableByUsageName(string usageName)
+        {
+            INavigable iNavigable = null;
+            foreach (var node in Graph.Nodes)
+            {
+                var uIArtefact = node.GetType().GetCustomAttribute<UIArtifact>(true);
+                if (uIArtefact != null && usageName == uIArtefact.UsageName)
+                {
+                    iNavigable = node;
+                }
+            }
+
+            return iNavigable;
+        }
 
         /// <summary>
         /// Dispose this Instance.

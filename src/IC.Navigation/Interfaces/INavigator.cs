@@ -14,6 +14,11 @@ namespace IC.Navigation.Interfaces
         IGraph Graph { get; }
 
         /// <summary>
+        /// The nodes of INavigables forming the Graph.
+        /// </summary>
+        HashSet<INavigable> Nodes { get; }
+
+        /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
@@ -37,13 +42,6 @@ namespace IC.Navigation.Interfaces
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
         INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives);
-
-        /// <summary>
-        /// Get INavigable by their attribute UIArtifact.UsageName.
-        /// </summary>
-        /// <param name="usageName">The expected usage name.</param>
-        /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        INavigable GetINavigableByUsageName(string usageName);
 
         /// <summary>
         /// Get the shortest path from the origin to the destination.
@@ -97,14 +95,6 @@ namespace IC.Navigation.Interfaces
         /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
         /// <returns>The destination.</returns>
         INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint);
-
-        /// <summary>
-        /// Get the instance of INavigable if living in the Graph, otherwise creates a new one.
-        /// </summary>
-        /// <typeparam name="T">The returned instance type.</typeparam>
-        /// <param name="type">The type requested.</param>
-        /// <returns>The instance of the requested INavigable.</returns>
-        T GetINavigableInstance<T>(Type type) where T : INavigable;
 
         /// <summary>
         /// Compares the Type names of two INavigables.

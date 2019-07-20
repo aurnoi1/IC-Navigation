@@ -11,7 +11,7 @@ namespace IC.Navigation
     /// <summary>
     /// An abstract implementation of INavigator and ISession.
     /// </summary>
-    public abstract class NavigatorSession : ISession
+    public abstract class NavigatorSession : INavigatorSession
     {
         #region Fields
 
@@ -33,6 +33,11 @@ namespace IC.Navigation
         /// Get the Graph containing the INavigables.
         /// </summary>
         public abstract IGraph Graph { get; }
+
+        /// <summary>
+        /// The nodes of INavigables forming the Graph.
+        /// </summary>
+        public abstract HashSet<INavigable> Nodes { get; }
 
         /// <summary>
         /// The INavigables to be expected as entry points when the application start.
@@ -113,14 +118,14 @@ namespace IC.Navigation
         /// <returns>The instance of the requested INavigable.</returns>
         public virtual T GetINavigableInstance<T>(Type type) where T : INavigable
         {
-            var match = Graph?.Nodes.Where(n => n.GetType() == type).SingleOrDefault();
+            var match = Nodes.Where(n => n.GetType() == type).SingleOrDefault();
             if (match != null)
             {
                 return (T)match;
             }
             else
             {
-                return (T)Activator.CreateInstance(type, this);
+                throw new Exception($"\"{type}\" is not part of the Nodes.");
             }
         }
 
@@ -369,26 +374,6 @@ namespace IC.Navigation
             onActionAlternatives.UIAction.Invoke();
             match = GetFirstINavigableExisting(onActionAlternatives.INavigables).Result;
             return match;
-        }
-
-        /// <summary>
-        /// Get INavigable by their attribute UIArtifact.UsageName.
-        /// </summary>
-        /// <param name="usageName">The expected usage name.</param>
-        /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public virtual INavigable GetINavigableByUsageName(string usageName)
-        {
-            INavigable iNavigable = null;
-            foreach (var node in Graph.Nodes)
-            {
-                var uIArtefact = node.GetType().GetCustomAttribute<UIArtifact>(true);
-                if (uIArtefact != null && usageName == uIArtefact.UsageName)
-                {
-                    iNavigable = node;
-                }
-            }
-
-            return iNavigable;
         }
 
         /// <summary>
