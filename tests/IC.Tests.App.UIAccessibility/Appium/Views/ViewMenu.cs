@@ -10,10 +10,10 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtifact("menu view")]
     public class ViewMenu : ViewFeatMenu, IViewMenu
     {
-        private readonly IUIAccess session;
+        private readonly IFacade session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        public ViewMenu(in IUIAccess session) : base(session)
+        public ViewMenu(in IFacade session) : base(session)
         {
             this.session = session;
             RegisterObserver(session);

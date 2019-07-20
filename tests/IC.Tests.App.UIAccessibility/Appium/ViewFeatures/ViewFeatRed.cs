@@ -5,8 +5,8 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewFeatures
 {
     public abstract class ViewFeatRed : ViewDefRed
     {
-        public ViewFeatRed(in IUIAccess session) : base(session) => this.session = session;
+        public ViewFeatRed(in IFacade session) : base(session) => this.session = session;
 
-        private IUIAccess session;
+        private IFacade session;
     }
 }

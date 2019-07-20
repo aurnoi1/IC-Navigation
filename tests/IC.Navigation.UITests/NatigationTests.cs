@@ -29,7 +29,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private IUIAccess sut;
+        private IFacade sut;
         private IFixture fixture;
 
         #endregion Private

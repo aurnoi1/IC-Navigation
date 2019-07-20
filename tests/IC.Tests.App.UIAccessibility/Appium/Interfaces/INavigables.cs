@@ -1,12 +1,13 @@
 ﻿using IC.Navigation.Interfaces;
+using IC.Tests.App.UIAccessibility.Appium.ViewNavigables;
 
 namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
 {
     public interface INavigables
     {
-        IViewBlue ViewBlue { get; }
-        IViewMenu ViewMenu { get; }
-        IViewRed ViewRed { get; }
-        IViewYellow ViewYellow { get; }
+        ViewBlue ViewBlue { get; }
+        ViewMenu ViewMenu { get; }
+        ViewRed ViewRed { get; }
+        ViewYellow ViewYellow { get; }
     }
 }

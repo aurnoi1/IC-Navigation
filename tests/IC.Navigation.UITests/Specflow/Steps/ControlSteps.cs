@@ -13,7 +13,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class ControlSteps : IDisposable
     {
-        private IUIAccess sut;
+        private IFacade sut;
 
         private ControlSteps(AppiumContext appiumContext)
         {

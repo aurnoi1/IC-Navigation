@@ -6,7 +6,7 @@ using System;
 
 namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
 {
-    public interface IUIAccess : INavigables, IWindowsDriverSession
+    public interface IFacade : INavigables, IWindowsDriverSession
     {
     }
 }

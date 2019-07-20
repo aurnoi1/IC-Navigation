@@ -8,9 +8,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewDefinitions
 {
     public abstract class ViewDefRed : IViewDefRed
     {
-        protected ViewDefRed(in IUIAccess session) => this.session = session;
+        protected ViewDefRed(in IFacade session) => this.session = session;
 
-        private readonly IUIAccess session;
+        private readonly IFacade session;
 
         /// <summary>
         /// The tile of this view.

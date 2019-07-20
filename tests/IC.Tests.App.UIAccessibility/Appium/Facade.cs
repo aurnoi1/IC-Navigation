@@ -9,21 +9,21 @@ using System.Reflection;
 
 namespace IC.Tests.App.UIAccessibility.Appium
 {
-    public class UIAccess : NavigatorSession, IUIAccess
+    public class Facade : NavigatorSession, IFacade
     {
-        public UIAccess(IAppiumSession appiumSession)
+        public Facade(IAppiumSession appiumSession)
         {
             WindowsDriver = appiumSession.WindowsDriver;
             EntryPoints = new HashSet<INavigable>() { ViewMenu };
             Graph = new Graph(GetNodesByReflection(Assembly.GetExecutingAssembly()));
         }
 
-        public UIAccess(IAppiumSession appiumSession, uint thinkTime) : this(appiumSession)
+        public Facade(IAppiumSession appiumSession, uint thinkTime) : this(appiumSession)
         {
             ThinkTime = thinkTime;
         }
 
-        public UIAccess(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, uint thinkTime)
+        public Facade(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, uint thinkTime)
         {
             ThinkTime = thinkTime;
             WindowsDriver = winDriver;
@@ -43,10 +43,10 @@ namespace IC.Tests.App.UIAccessibility.Appium
 
         #region Views
 
-        public IViewRed ViewRed => GetINavigableInstance<ViewRed>(typeof(ViewRed));
-        public IViewBlue ViewBlue => GetINavigableInstance<ViewBlue>(typeof(ViewBlue));
-        public IViewMenu ViewMenu => GetINavigableInstance<ViewMenu>(typeof(ViewMenu));
-        public IViewYellow ViewYellow => GetINavigableInstance<ViewYellow>(typeof(ViewYellow));
+        public ViewRed ViewRed => GetINavigableInstance<ViewRed>(typeof(ViewRed));
+        public ViewBlue ViewBlue => GetINavigableInstance<ViewBlue>(typeof(ViewBlue));
+        public ViewMenu ViewMenu => GetINavigableInstance<ViewMenu>(typeof(ViewMenu));
+        public ViewYellow ViewYellow => GetINavigableInstance<ViewYellow>(typeof(ViewYellow));
 
         #endregion Views
 

@@ -5,8 +5,8 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewFeatures
 {
     public abstract class ViewFeatBlue : ViewDefBlue, IViewFeatBlue
     {
-        public ViewFeatBlue(in IUIAccess session) : base(session) => this.session = session;
+        public ViewFeatBlue(in IFacade session) : base(session) => this.session = session;
 
-        private IUIAccess session;
+        private IFacade session;
     }
 }

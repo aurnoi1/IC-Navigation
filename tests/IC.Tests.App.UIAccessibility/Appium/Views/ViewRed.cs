@@ -11,9 +11,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     public class ViewRed : ViewFeatRed, IViewRed
     {
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
-        private readonly IUIAccess session;
+        private readonly IFacade session;
 
-        public ViewRed(in IUIAccess session) : base(session)
+        public ViewRed(in IFacade session) : base(session)
         {
             this.session = session;
             RegisterObserver(session);

@@ -5,9 +5,9 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewFeatures
 {
     public abstract class ViewFeatMenu : ViewDefMenu, IViewFeatMenu
     {
-        public ViewFeatMenu(in IUIAccess session) : base(session) => this.session = session;
+        public ViewFeatMenu(in IFacade session) : base(session) => this.session = session;
 
-        private IUIAccess session;
+        private IFacade session;
 
         /// <summary>
         /// Enter a text in the UITxtBoxImportantMessage.

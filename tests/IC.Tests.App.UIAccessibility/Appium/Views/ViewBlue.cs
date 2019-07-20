@@ -10,10 +10,10 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
     [UIArtifact("blue view")]
     public class ViewBlue : ViewFeatBlue, IViewBlue
     {
-        private readonly IUIAccess session;
+        private readonly IFacade session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        public ViewBlue(in IUIAccess session) : base(session)
+        public ViewBlue(in IFacade session) : base(session)
         {
             this.session = session;
             RegisterObserver(session);
