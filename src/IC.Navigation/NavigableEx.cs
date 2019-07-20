@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace IC.Navigation.CoreExtensions
 {
-    public static class INavigableEx
+    public static class NavigableEx
     {
         /// <summary>
         /// Executes the action passed in parameter.
