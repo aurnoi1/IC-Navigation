@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace IC.Navigation.UnitTests.Collections
 {
-    public class NoPathData : INavigablesFixture, IEnumerable<object[]>
+    public class NoPathData : NavigablesFixture, IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
         {

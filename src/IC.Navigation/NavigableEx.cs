@@ -41,18 +41,6 @@ namespace IC.Navigation.CoreExtensions
             return source.Session.GoTo(source, destination);
         }
 
-
-        /// <summary>
-        /// Check the equality between INavigables.
-        /// </summary>
-        /// <param name="source">This INavigable.</param>
-        /// <param name="other">The other INavigable.</param>
-        /// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
-        public static bool AreEqual(this INavigable source, INavigable other)
-        {
-            return source.Session.AreEqual(source, other);
-        }
-
         /// <summary>
         /// Go to the previous INavigable.
         /// </summary>

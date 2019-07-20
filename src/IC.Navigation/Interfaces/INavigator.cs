@@ -95,13 +95,5 @@ namespace IC.Navigation.Interfaces
         /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
         /// <returns>The destination.</returns>
         INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint);
-
-        /// <summary>
-        /// Compares the Type names of two INavigables.
-        /// </summary>
-        /// <param name="first">The first INavigable.</param>
-        /// <param name="second">The second INavigable.</param>
-        /// <returns><c>true</c> if same, otherwise <c>false</c>.</returns>
-        bool AreEqual(INavigable first, INavigable second);
     }
 }

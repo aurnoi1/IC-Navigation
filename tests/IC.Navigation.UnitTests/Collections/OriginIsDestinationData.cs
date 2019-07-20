@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace IC.Navigation.UnitTests.Collections
 {
-    public class OriginIsDestinationData : INavigablesFixture, IEnumerable<object[]>
+    public class OriginIsDestinationData : NavigablesFixture, IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
         {

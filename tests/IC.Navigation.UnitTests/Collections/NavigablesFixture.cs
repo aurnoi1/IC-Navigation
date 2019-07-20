@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace IC.Navigation.UnitTests.Collections
 {
-    public class INavigablesFixture
+    public class NavigablesFixture
     {
-        public INavigablesFixture()
+        public NavigablesFixture()
         {
             Mock<Action> action = new Mock<Action>();
             Mock<INavigable> n1 = new Mock<INavigable>();
@@ -57,19 +57,6 @@ namespace IC.Navigation.UnitTests.Collections
             N3 = n3;
             N4 = n4;
             N5 = n5;
-        }
-
-        /// <summary>
-        /// A Mock of the <see cref="NavigatorSession.AreEqual(INavigable, INavigable)"/>.
-        /// Need to replace the comparison of GetType().Name by GetHashCode() 
-        /// when the INavigable are mocked (since they all will be a INavigableProxy).
-        /// </summary>
-        /// <param name="first">First INavigable.</param>
-        /// <param name="second">Second INavigable.</param>
-        /// <returns><c>true</c> if same. Otherwise <c>false</c>.</returns>
-        public bool AreEqual(INavigable first, INavigable second)
-        {
-            return first.GetHashCode() == second.GetHashCode();
         }
 
         public HashSet<INavigable> Nodes { get; private set; }

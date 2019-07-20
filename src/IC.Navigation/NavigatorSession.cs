@@ -237,7 +237,7 @@ namespace IC.Navigation
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
         {
-            var navigableAndAction = actionToNextINavigable.Where(x => AreEqual(x.Key, nextNavigable)).SingleOrDefault();
+            var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
             Action actionToOpen = navigableAndAction.Value;
             if (nextNavigableRef == null)
@@ -349,7 +349,7 @@ namespace IC.Navigation
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
             var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
-            if (AreEqual(navigableAfterAction, finalDestination))
+            if (navigableAfterAction == finalDestination)
             {
                 return navigableAfterAction;
             }
@@ -376,17 +376,17 @@ namespace IC.Navigation
             return match;
         }
 
-        /// <summary>
-        /// Check the equality between INavigables.
-        /// </summary>
-        /// <param name="first">First INavigable.</param>
-        /// <param name="second">Second INavigable.</param>
-        /// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
-        public virtual bool AreEqual(INavigable first, INavigable second)
-        {
-            bool equal = first.GetType().Name == second.GetType().Name;
-            return equal;
-        }
+        ///// <summary>
+        ///// Check the equality between INavigables.
+        ///// </summary>
+        ///// <param name="first">First INavigable.</param>
+        ///// <param name="second">Second INavigable.</param>
+        ///// <returns><c>true</c> if equal. Otherwise <c>false</c>.</returns>
+        //public virtual bool AreEqual(INavigable first, INavigable second)
+        //{
+        //    bool equal = first.GetType().Name == second.GetType().Name;
+        //    return equal;
+        //}
 
         public void Update(INavigable navigable, INavigableEventArgs args)
         {

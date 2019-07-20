@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace IC.Navigation.UnitTests.Collections
 {
-    public class StraightPathData : INavigablesFixture, IEnumerable<object[]>
+    public class StraightPathData : NavigablesFixture, IEnumerable<object[]>
     {
         public IEnumerator<object[]> GetEnumerator()
         {
