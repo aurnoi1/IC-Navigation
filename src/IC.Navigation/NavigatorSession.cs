@@ -111,7 +111,7 @@ namespace IC.Navigation
         #region Public
 
         /// <summary>
-        /// Get the instance of INavigable if living in the Graph, otherwise creates a new one.
+        /// Get the instance of INavigable from the Nodes.
         /// </summary>
         /// <typeparam name="T">The returned instance type.</typeparam>
         /// <param name="type">The type requested.</param>
