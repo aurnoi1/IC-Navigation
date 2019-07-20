@@ -18,8 +18,8 @@ namespace IC.Navigation.UnitTests
         [ClassData(typeof(StraightPathData))]
         public void WhenStraightPathsGraphShouldGetShortestPath(HashSet<INavigable> nodes, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
         {
-            IGraph iut = new Graph(nodes);
-            var actual = iut.GetShortestPath(origin.Object, destination.Object);
+            IGraph sut = new Graph(nodes);
+            var actual = sut.GetShortestPath(origin.Object, destination.Object);
             Assert.Equal(expected.Select(x => x.Object).ToList(), actual);
         }
 
@@ -27,8 +27,8 @@ namespace IC.Navigation.UnitTests
         [ClassData(typeof(NoPathData))]
         public void WhenNoPathGraphShouldNoPath(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
         {
-            IGraph iut = new Graph(nodes);
-            var actual = iut.GetShortestPath(origin, destination);
+            IGraph sut = new Graph(nodes);
+            var actual = sut.GetShortestPath(origin, destination);
             Assert.Equal(expected, actual);
         }
 
@@ -36,8 +36,8 @@ namespace IC.Navigation.UnitTests
         [ClassData(typeof(OriginIsDestinationData))]
         public void WhenOriIsDestinationGraphShouldGetNoPath(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
         {
-            IGraph iut = new Graph(nodes);
-            var actual = iut.GetShortestPath(origin, destination);
+            IGraph sut = new Graph(nodes);
+            var actual = sut.GetShortestPath(origin, destination);
             Assert.Equal(expected, actual);
         }
 
