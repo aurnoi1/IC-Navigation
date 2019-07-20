@@ -11,6 +11,7 @@ namespace IC.Navigation.UnitTests
 {
     public class NavigatorSessionTests
     {
+#pragma warning disable xUnit1026
         [Theory]
         [ClassData(typeof(StraightPathData))]
         public void WhenStraightPathsGraphShouldGetShortestPath(HashSet<INavigable> _, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
@@ -29,6 +30,7 @@ namespace IC.Navigation.UnitTests
             }
         }
 
+#pragma warning disable xUnit1026
         [Theory]
         [ClassData(typeof(StraightPathData))]
         public void GoToShouldResolvePathToDestination(HashSet<INavigable> _, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
