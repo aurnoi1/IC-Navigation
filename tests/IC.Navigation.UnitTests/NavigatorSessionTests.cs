@@ -56,17 +56,5 @@ namespace IC.Navigation.UnitTests
             Assert.Equal(expected.Last().Object, actual);
             iGraph.Verify(x => x.GetShortestPath(origin.Object, destination.Object), Times.Exactly(1));
         }
-
-        [Theory, AutoData]
-        public void ThinkTime_Should_Adjust_Timeout(double thinkTime, TimeSpan timeout)
-        {
-            var sut = new Mock<NavigatorSession>().Object;
-            sut.ThinkTime = Math.Abs(thinkTime);
-            var expected = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(sut.ThinkTime));
-
-            var actual = sut.AdjustTimeout(timeout);
-
-            Assert.Equal(expected, actual);
-        }
     }
 }

@@ -1,5 +1,6 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
+using AutoFixture.Xunit2;
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Interfaces;
@@ -157,6 +158,20 @@ namespace IC.Navigation.UITests
         {
             sut.ViewMenu.GoTo(sut.ViewBlue);
             Assert.Equal(typeof(ViewBlue), sut.Historic.Last().GetType());
+        }
+
+
+
+        [Theory, AutoData]
+        [InlineAutoData(0)]
+        public void ThinkTime_Should_Adjust_Timeout(double thinkTime, TimeSpan timeout)
+        {
+            sut.ThinkTime = Math.Abs(thinkTime);
+            var expected = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(sut.ThinkTime));
+
+            var actual = sut.AdjustTimeout(timeout);
+
+            Assert.Equal(expected, actual);
         }
 
         public void Dispose()
