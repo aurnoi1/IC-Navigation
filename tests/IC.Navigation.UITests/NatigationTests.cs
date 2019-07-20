@@ -1,3 +1,5 @@
+using AutoFixture;
+using AutoFixture.AutoMoq;
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Interfaces;
@@ -20,6 +22,7 @@ namespace IC.Navigation.UITests
         public NatigationTests()
         {
             sut = new AppiumContext().SUT;
+            fixture = new Fixture().Customize(new AutoMoqCustomization());
         }
 
         #region Properties
@@ -27,6 +30,7 @@ namespace IC.Navigation.UITests
         #region Private
 
         private IUIAccess sut;
+        private IFixture fixture;
 
         #endregion Private
 
@@ -64,52 +68,38 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void ShouldRegisterManyObservers()
+        public void RegisterObserver_Should_Register_Many_Observers()
         {
-            List<Mock<INavigableObserver>> tt = new List<Mock<INavigableObserver>>()
+            // Arrange
+            var observerMocks = fixture.CreateMany<INavigableObserver>();
+            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableEventArgs args)>();
+            foreach (var mock in observerMocks)
             {
-                new Mock<INavigableObserver>(),
-                new Mock<INavigableObserver>()
-            };
+                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
+                    .Callback<INavigable, INavigableEventArgs>((x, y) => callbackResults.Add((mock, x, y)));
 
-            //var observer1 = new Mock<INavigableObserver>();
-            //var observer2 = new Mock<INavigableObserver>();
-
-            List<(INavigableObserver observer, INavigable observable, INavigableEventArgs args)> results = new List<(INavigableObserver observer, INavigable observable, INavigableEventArgs args)>();
-            //observer1.Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
-            //    .Callback<INavigable, INavigableEventArgs>((x, y) => results.Add((observer1.Object, x, y)));
-
-            //observer2.Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
-            //    .Callback<INavigable, INavigableEventArgs>((x, y) => results.Add((observer2.Object, x, y)));
-
-            foreach (var item in tt)
-            {
-                item.Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
-                .Callback<INavigable, INavigableEventArgs>((x, y) => results.Add((item.Object, x, y)));
-                sut.ViewMenu.RegisterObserver(item.Object);
+                sut.ViewMenu.RegisterObserver(mock);
             }
 
-            var expected = tt.Select(x => x.Object).ToList();
-
-
+            // Act
             sut.ViewMenu.WaitForExists();
 
-            Assert.NotEmpty(results);
-            //Assert.True(results.Where(x => expected.Any(y => y == x.observer)).Any());
-            //foreach (var result in results)
-            //{
-                
-            //    //if (result.observer)
-            //    //{
-            //    //    Assert.False(true, "Expected observers not present.");
-            //    //}
+            // Assert
+            Assert.NotEmpty(callbackResults);
 
-            //    Assert.Same(sut.ViewMenu, result.observable);
-            //}
+            // Validate all observers are register.
+            var resultObs = callbackResults.Select(x => x.observer).ToList();
+            Assert.Equal(observerMocks, resultObs);
+
+            // Validate all observers received the same INavigableEventArgs on WaitForExists().
+            callbackResults.ForEach(r => Assert.Same(callbackResults[0].args, r.args));
+
+            // Validate all observers received the same instance of ViewMenu on WaitForExists().
+            callbackResults.ForEach(r => Assert.Same(sut.ViewMenu, r.observable));
         }
 
         [Fact]
-        public void ShouldReturnsSameInstance()
+        public void GetView_Should_Returns_Same_Instance()
         {
             var instance1 = sut.ViewMenu;
             var instance2 = sut.ViewMenu;
