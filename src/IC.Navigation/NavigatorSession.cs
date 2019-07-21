@@ -114,10 +114,10 @@ namespace IC.Navigation
         /// Get the instance of INavigable from the Nodes.
         /// </summary>
         /// <typeparam name="T">The returned instance type.</typeparam>
-        /// <param name="type">The type requested.</param>
         /// <returns>The instance of the requested INavigable.</returns>
-        public virtual T GetNavigable<T>(Type type) where T : INavigable
+        public virtual T GetNavigable<T>() where T : INavigable
         {
+            Type type = typeof(T);
             var match = Nodes.Where(n => n.GetType() == type).SingleOrDefault();
             if (match != null)
             {
