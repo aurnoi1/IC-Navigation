@@ -12,13 +12,8 @@
       <Authors>Aurelien Noisette</Authors>
       <Company>Aurelien Noisette</Company>
       <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-      <PackageReleaseNotes>pre-release v1.0.0-beta901
-IC.Navigation:
-[BUG FIX] Catch OperationCanceledException when an EntryPoint has been discovered.
-
-pre-release v1.0.0-beta10
-IC.Navigation:
-[BUG FIX] Resolve with waypoint was resetting the final destination.</PackageReleaseNotes>
+      <PackageReleaseNotes>IC.Navigation:
+[BUG FIX] Catch OperationCanceledException when an EntryPoint has been discovered.</PackageReleaseNotes>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
    </PropertyGroup>
