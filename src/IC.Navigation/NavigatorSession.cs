@@ -160,17 +160,6 @@ namespace IC.Navigation
             {
                 // Do nothing. Operation is canceled.
             }
-            catch (AggregateException ae)
-            {
-                if (ae.Flatten().InnerExceptions.FirstOrDefault() is OperationCanceledException)
-                {
-                    // Do nothing. Operation is canceled.
-                }
-                else
-                {
-                    throw;
-                }
-            }
 
             return entryPoint;
         }
