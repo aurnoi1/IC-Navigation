@@ -145,14 +145,32 @@ namespace IC.Navigation
         public virtual INavigable WaitForEntryPoints()
         {
             INavigable entryPoint = null;
-            Parallel.ForEach(EntryPoints, (iNavigable, state) =>
+            try
             {
-                if (!state.IsStopped && iNavigable.WaitForExists())
+                Parallel.ForEach(EntryPoints, (iNavigable, state) =>
                 {
-                    entryPoint = iNavigable;
-                    state.Stop();
+                    if (!state.IsStopped && iNavigable.WaitForExists())
+                    {
+                        entryPoint = iNavigable;
+                        state.Stop();
+                    }
+                });
+            }
+            catch (OperationCanceledException)
+            {
+                // Do nothing. Operation is canceled.
+            }
+            catch (AggregateException ae)
+            {
+                if (ae.Flatten().InnerExceptions.FirstOrDefault() is OperationCanceledException)
+                {
+                    // Do nothing. Operation is canceled.
                 }
-            });
+                else
+                {
+                    throw;
+                }
+            }
 
             return entryPoint;
         }
