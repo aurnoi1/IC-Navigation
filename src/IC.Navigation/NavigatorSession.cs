@@ -144,24 +144,7 @@ namespace IC.Navigation
         /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
         public virtual INavigable WaitForEntryPoints()
         {
-            INavigable entryPoint = null;
-            try
-            {
-                Parallel.ForEach(EntryPoints, (iNavigable, state) =>
-                {
-                    if (!state.IsStopped && iNavigable.WaitForExists())
-                    {
-                        entryPoint = iNavigable;
-                        state.Stop();
-                    }
-                });
-            }
-            catch (OperationCanceledException)
-            {
-                // Do nothing. Operation is canceled.
-            }
-
-            return entryPoint;
+            return GetFirstINavigableExisting(EntryPoints);
         }
 
         /// <summary>
@@ -356,7 +339,7 @@ namespace IC.Navigation
             ValidateINavigableExists(origin, "origin");
             INavigable match = null;
             onActionAlternatives.UIAction.Invoke();
-            match = GetFirstINavigableExisting(onActionAlternatives.INavigables).Result;
+            match = GetFirstINavigableExisting(onActionAlternatives.INavigables);
             return match;
         }
 
@@ -415,7 +398,7 @@ namespace IC.Navigation
 
         #region Private
 
-        private async Task<INavigable> GetFirstINavigableExisting(List<INavigable> iNavigables)
+        private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables)
         {
             INavigable match = null;
             int counter = iNavigables.Count();
@@ -439,24 +422,25 @@ namespace IC.Navigation
                             tasksStarted = true;
                         }
 
-                        Task<INavigable> completed = await Task.WhenAny(tasks.ToArray());
+                        Task<INavigable> completed = Task.WhenAny(tasks.ToArray()).GetAwaiter().GetResult();
                         if (completed.Status == TaskStatus.RanToCompletion && completed.Result != null)
                         {
-                            return match = completed.Result;
+                            match = completed.Result;
+                            counter = 0;
+                            source.Cancel();
+                            break;
                         }
                         else
                         {
                             counter--;
                         }
                     }
-
-                    // Cancel tasks.
-                    token.ThrowIfCancellationRequested();
                 }
                 catch (OperationCanceledException)
                 {
                     // Do nothing.
                 }
+
             }
 
             return match;
