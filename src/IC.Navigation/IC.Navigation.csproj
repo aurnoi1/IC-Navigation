@@ -12,8 +12,7 @@
       <Authors>Aurelien Noisette</Authors>
       <Company>Aurelien Noisette</Company>
       <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-      <PackageReleaseNotes>IC.Navigation:
-[BUG FIX] Catch OperationCanceledException when an EntryPoint has been discovered.</PackageReleaseNotes>
+      <PackageReleaseNotes>IC.Navigation:</PackageReleaseNotes>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
    </PropertyGroup>

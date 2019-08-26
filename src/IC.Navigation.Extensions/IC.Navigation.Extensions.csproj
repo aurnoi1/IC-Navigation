@@ -14,7 +14,7 @@
         <Company>Aurelien Noisette</Company>
         <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
         <PackageReleaseNotes>IC.Navigation:
-[BUG FIX] Catch OperationCanceledException when an EntryPoint has been discovered.</PackageReleaseNotes>
+</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
