@@ -32,5 +32,4 @@
     <ItemGroup>
         <ProjectReference Include="..\IC.Tests.App.UIAccessibility\IC.Tests.App.UIAccessibility.csproj" />
     </ItemGroup>
-
 </Project>
