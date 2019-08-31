@@ -6,20 +6,21 @@ using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 
-namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
+namespace IC.Tests.App.UIAccessibility.Appium.POMs
 {
     [UIArtifact("menu view")]
-    public class ViewMenu : INavigable
+    public class PomMenu : INavigable
     {
         private readonly IFacade session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        public ViewMenu(in IFacade session)
+        public PomMenu(in IFacade session)
         {
             this.session = session;
             RegisterObserver(session);
         }
 
+        #region Controls
 
         /// <summary>
         /// A control NOT IMPLEMENTED only use for negative test.
@@ -68,6 +69,8 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         public WindowsElement UITxtBoxImportantMessage => session.WindowsDriver.FindElementByAccessibilityId(
             "TxtBoxImportantMessage",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+
+        #endregion Controls
 
         /// <summary>
         /// Enter a text in the UITxtBoxImportantMessage.

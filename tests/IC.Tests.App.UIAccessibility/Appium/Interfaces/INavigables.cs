@@ -1,13 +1,12 @@
-﻿using IC.Navigation.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.ViewNavigables;
+﻿using IC.Tests.App.UIAccessibility.Appium.POMs;
 
 namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
 {
     public interface INavigables
     {
-        ViewBlue ViewBlue { get; }
-        ViewMenu ViewMenu { get; }
-        ViewRed ViewRed { get; }
-        ViewYellow ViewYellow { get; }
+        PomBlue ViewBlue { get; }
+        PomMenu ViewMenu { get; }
+        PomRed ViewRed { get; }
+        PomYellow ViewYellow { get; }
     }
 }

@@ -6,7 +6,7 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.UIAccessibility.Appium.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.ViewNavigables;
+using IC.Tests.App.UIAccessibility.Appium.POMs;
 using Moq;
 using OpenQA.Selenium.Appium.Windows;
 using System;
@@ -45,13 +45,13 @@ namespace IC.Navigation.UITests
         {
             sut.Last
                 .GoTo(sut.ViewYellow)
-                .Do<ViewMenu>(() =>
+                .Do<PomMenu>(() =>
                 {
-                    return sut.ViewYellow.OpenViewMenuByMenuBtn();
-                }) // Could be inline: .DoThenFrom<ViewMenu>(() => sut.ViewYellow.OpenViewMenuByMenuBtn());
-                .GoTo(sut.ViewBlue) // Force the path to ViewBlue then ViewYellow...
-                .GoTo(sut.ViewYellow) //... to test ViewYellowFeat.ActionToOpenViewMenu().
-                .GoTo(sut.ViewMenu) // Since last was ViewBlue, ViewYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
+                    return sut.ViewYellow.OpenMenuByMenuBtn();
+                }) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
+                .GoTo(sut.ViewBlue) // Force the path to PomBlue then PomYellow...
+                .GoTo(sut.ViewYellow) //... to test PomYellowFeat.ActionToOpenViewMenu().
+                .GoTo(sut.ViewMenu) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
                 .Do(() =>
                 {
                     sut.ViewMenu.EnterText("This is a test");
@@ -124,7 +124,7 @@ namespace IC.Navigation.UITests
         {
             sut.Last
                 .GoTo(sut.ViewYellow)
-                .Do<ViewMenu>(() => sut.ViewYellow.OpenViewMenuByMenuBtn());
+                .Do<PomMenu>(() => sut.ViewYellow.OpenMenuByMenuBtn());
 
             Assert.True(sut.ViewMenu.WaitForExists());
         }
@@ -148,14 +148,14 @@ namespace IC.Navigation.UITests
         public void ShouldHaveViewMenuAsFirstInHistoric()
         {
             sut.ViewMenu.GoTo(sut.ViewBlue);
-            Assert.Equal(typeof(ViewMenu), sut.Historic.First().GetType());
+            Assert.Equal(typeof(PomMenu), sut.Historic.First().GetType());
         }
 
         [Fact]
         public void ShouldHaveViewBlueAsLastInHistoric()
         {
             sut.ViewMenu.GoTo(sut.ViewBlue);
-            Assert.Equal(typeof(ViewBlue), sut.Historic.Last().GetType());
+            Assert.Equal(typeof(PomBlue), sut.Historic.Last().GetType());
         }
 
 

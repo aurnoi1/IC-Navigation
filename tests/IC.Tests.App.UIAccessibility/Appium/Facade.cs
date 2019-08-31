@@ -1,7 +1,7 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.UIAccessibility.Appium.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.ViewNavigables;
+using IC.Tests.App.UIAccessibility.Appium.POMs;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
@@ -45,10 +45,10 @@ namespace IC.Tests.App.UIAccessibility.Appium
 
         #region Views
 
-        public ViewRed ViewRed => GetNavigable<ViewRed>();
-        public ViewBlue ViewBlue => GetNavigable<ViewBlue>();
-        public ViewMenu ViewMenu => GetNavigable<ViewMenu>();
-        public ViewYellow ViewYellow => GetNavigable<ViewYellow>();
+        public PomRed ViewRed => GetNavigable<PomRed>();
+        public PomBlue ViewBlue => GetNavigable<PomBlue>();
+        public PomMenu ViewMenu => GetNavigable<PomMenu>();
+        public PomYellow ViewYellow => GetNavigable<PomYellow>();
 
         #endregion Views
 

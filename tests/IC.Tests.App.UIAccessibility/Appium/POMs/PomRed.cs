@@ -6,20 +6,21 @@ using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 
-namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
+namespace IC.Tests.App.UIAccessibility.Appium.POMs
 {
     [UIArtifact("red view")]
-    public class ViewRed : INavigable
+    public class PomRed : INavigable
     {
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
         private readonly IFacade session;
 
-        public ViewRed(in IFacade session)
+        public PomRed(in IFacade session)
         {
             this.session = session;
             RegisterObserver(session);
         }
 
+        #region Controls
 
         /// <summary>
         /// The tile of this view.
@@ -44,6 +45,8 @@ namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
         public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenYellowView",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+
+        #endregion Controls
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
