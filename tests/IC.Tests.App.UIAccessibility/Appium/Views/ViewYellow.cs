@@ -1,23 +1,98 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.UIAccessibility.Appium.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.ViewFeatures;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 
 namespace IC.Tests.App.UIAccessibility.Appium.ViewNavigables
 {
     [UIArtifact("yellow view")]
-    public class ViewYellow : ViewFeatYellow, IViewYellow
+    public class ViewYellow : INavigable
     {
         private readonly IFacade session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        public ViewYellow(in IFacade session) : base(session)
+        public ViewYellow(in IFacade session)
         {
             this.session = session;
             RegisterObserver(session);
         }
+
+
+        /// <summary>
+        /// The tile of this view.
+        /// </summary>
+        [UIArtifact("title")] // explicitly same than other views for test.
+        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
+            "TitleYellow",
+            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+
+        /// <summary>
+        /// A control to open the previous page.
+        /// </summary>
+        [UIArtifact("button to go back to the previous view")]
+        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
+            "BtnBack",
+            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+
+        /// <summary>
+        /// A control to open the previous page.
+        /// </summary>
+        [UIArtifact("button to open menu view")]
+        public WindowsElement UIBtnOpenMenuView => session.WindowsDriver.FindElementByAccessibilityId(
+            "BtnOpenMenuView",
+            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+
+
+        /// <summary>
+        /// Open the View Menu by clicking on UIBtnOpenMenuView.
+        /// </summary>
+        /// <returns>The ViewMenu.</returns>
+        public ViewMenu OpenViewMenuByMenuBtn()
+        {
+            UIBtnOpenMenuView.Click();
+            return session.ViewMenu;
+        }
+
+
+        /// <summary>
+        /// Determines the action to open the ViewMenu by UIBtnBack depending the Navigation context.
+        /// </summary>
+        /// <returns>The action to open the ViewMenu.</returns>
+        private void ActionToOpenViewMenu()
+        {
+            if (session.Previous == session.ViewMenu)
+            {
+                UIBtnBack.Click();
+            }
+            else
+            {
+                UIBtnOpenMenuView.Click();
+            }
+        }
+
+        /// <summary>
+        /// Resolve the navigation when the UIBackBtn is clicked.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        private void ResolveBackBtnClick(INavigable source)
+        {
+            List<INavigable> alternatives = new List<INavigable>()
+            {
+                session.ViewBlue,
+                session.ViewRed,
+                session.ViewMenu
+            };
+
+            IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
+                () => UIBtnBack.Click(),
+                alternatives);
+
+            session.Resolve(source, onActionAlternatives);
+        }
+
 
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.

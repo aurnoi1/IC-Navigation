@@ -6,7 +6,6 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.UIAccessibility.Appium.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.ViewFeatures.Globals.Domain1;
 using IC.Tests.App.UIAccessibility.Appium.ViewNavigables;
 using Moq;
 using OpenQA.Selenium.Appium.Windows;
@@ -58,7 +57,6 @@ namespace IC.Navigation.UITests
                     sut.ViewMenu.EnterText("This is a test");
                 })
                 .GoTo(sut.ViewBlue)
-                .Log(" of something!") // Domain feature, accessible from any INavigable with path.
                 .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
                 .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
                 .GoTo(sut.ViewRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
