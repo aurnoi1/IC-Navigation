@@ -1,6 +1,6 @@
-﻿using IC.Tests.App.UIAccessibility.Appium.POMs;
+﻿using IC.Tests.App.Poms.Appium.POMs;
 
-namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
+namespace IC.Tests.App.Poms.Appium.Interfaces
 {
     public interface INavigables
     {

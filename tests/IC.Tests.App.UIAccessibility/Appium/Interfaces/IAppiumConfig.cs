@@ -1,7 +1,7 @@
 ﻿using OpenQA.Selenium.Appium;
 using System;
 
-namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
+namespace IC.Tests.App.Poms.Appium.Interfaces
 {
     public interface IAppiumConfig
     {

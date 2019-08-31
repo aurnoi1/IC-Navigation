@@ -4,7 +4,7 @@ using IC.Navigation.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 
-namespace IC.Tests.App.UIAccessibility.Appium.Interfaces
+namespace IC.Tests.App.Poms.Appium.Interfaces
 {
     public interface IFacade : INavigatorSession, INavigables, IWindowsDriverSession
     {

@@ -1,13 +1,13 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.POMs;
+using IC.Tests.App.Poms.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium.POMs;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace IC.Tests.App.UIAccessibility.Appium
+namespace IC.Tests.App.Poms.Appium
 {
     public class Facade : NavigatorSession, IFacade
     {

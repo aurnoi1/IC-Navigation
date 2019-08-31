@@ -1,7 +1,7 @@
 ﻿using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
-using IC.Tests.App.UIAccessibility.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using TechTalk.SpecFlow;

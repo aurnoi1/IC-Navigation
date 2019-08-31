@@ -1,12 +1,12 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 
-namespace IC.Tests.App.UIAccessibility.Appium.POMs
+namespace IC.Tests.App.Poms.Appium.POMs
 {
     [UIArtifact("menu view")]
     public class PomMenu : INavigable
