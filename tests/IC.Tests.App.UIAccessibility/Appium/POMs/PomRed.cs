@@ -55,7 +55,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             bool isDisplayed = UITitle != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
-            INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
+            INavigableEventArgs args = new NavigableEventArgs() { NavigableStatus = status };
             NotifyObservers(args);
             return status;
         }

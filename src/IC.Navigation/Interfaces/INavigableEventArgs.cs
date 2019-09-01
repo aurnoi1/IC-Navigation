@@ -8,8 +8,8 @@ namespace IC.Navigation.Interfaces
     public interface INavigableEventArgs
     {
         /// <summary>
-        /// <c>true</c> if the INavigable exists, otherwise <c>false</c>.
+        /// The NavigableStatus.
         /// </summary>
-        bool Exists { get; set; }
+        INavigableStatus NavigableStatus { get; set; }
     }
 }

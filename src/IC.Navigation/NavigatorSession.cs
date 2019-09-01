@@ -372,9 +372,9 @@ namespace IC.Navigation
 
         public void Update(INavigable navigable, INavigableEventArgs args)
         {
-            if (args.Exists)
+            if (args.NavigableStatus.Exists)
             {
-                SetLast(navigable);
+                SetLast(navigable, args);
             }
         }
 
@@ -387,13 +387,12 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="navigable">The INavigable.</param>
         /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
-        private void SetLast(INavigable navigable)
+        private void SetLast(INavigable navigable, INavigableEventArgs args)
         {
             if (Last == null || !Equals(navigable, Last))
             {
                 Last = navigable;
-                var eventArgs = new NavigableEventArgs() { Exists = true };
-                OnHistoricChanged(navigable, eventArgs);
+                OnHistoricChanged(navigable, args);
             }
         }
 
