@@ -138,8 +138,12 @@ namespace IC.Navigation
         {
             var navigables = new HashSet<INavigable>();
             var iNavigables = assembly.GetTypes()
-                .Where(x => typeof(INavigable).IsAssignableFrom(x) && !x.IsInterface)
-                .ToList();
+                .Where(x =>
+                    typeof(INavigable).IsAssignableFrom(x)
+                    && !x.IsInterface
+                    && x.IsPublic
+                    && !x.IsAbstract
+                ).ToList();
 
             foreach (var iNavigable in iNavigables)
             {
@@ -435,7 +439,6 @@ namespace IC.Navigation
                 {
                     // Do nothing.
                 }
-
             }
 
             return match;
