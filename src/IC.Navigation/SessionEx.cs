@@ -9,17 +9,17 @@ namespace IC.Navigation.CoreExtensions
     public static class SessionEx
     {
         /// <summary>
-        /// Get INavigable by their attribute UIArtifact.UsageName.
+        /// Get INavigable by their attribute Aliases.
         /// </summary>
-        /// <param name="usageName">The expected usage name.</param>
+        /// <param name="alias">The expected alias.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public static INavigable GetINavigableByUsageName(this ISession navigatorSession, string usageName)
+        public static INavigable GetINavigableByUsageName(this ISession navigatorSession, string alias)
         {
             INavigable iNavigable = null;
             foreach (var node in navigatorSession.Graph.Nodes)
             {
-                var uIArtefact = node.GetType().GetCustomAttribute<UIArtifact>(true);
-                if (uIArtefact != null && usageName == uIArtefact.UsageName)
+                var aliases = node.GetType().GetCustomAttribute<Aliases>(true);
+                if (aliases != null && aliases.Values.Contains(alias))
                 {
                     iNavigable = node;
                 }

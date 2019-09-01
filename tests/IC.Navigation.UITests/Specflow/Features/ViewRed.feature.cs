@@ -80,7 +80,7 @@ namespace IC.Navigation.UITests.Specflow.Features
 #line 6
     testRunner.Given("The application under test has been started", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
-    testRunner.And("The \"red view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("The \"red page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -89,13 +89,13 @@ namespace IC.Navigation.UITests.Specflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="The controls should be displayed in \"red view\"")]
+        [Xunit.FactAttribute(DisplayName="The controls should be displayed in \"red page\"")]
         [Xunit.TraitAttribute("FeatureTitle", "ViewRed")]
-        [Xunit.TraitAttribute("Description", "The controls should be displayed in \"red view\"")]
+        [Xunit.TraitAttribute("Description", "The controls should be displayed in \"red page\"")]
         [Xunit.TraitAttribute("Category", "view_menu")]
-        public virtual void TheControlsShouldBeDisplayedInRedView()
+        public virtual void TheControlsShouldBeDisplayedInRedPage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The controls should be displayed in \"red view\"", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The controls should be displayed in \"red page\"", null, new string[] {
                         "view_menu"});
 #line 10
 this.ScenarioInitialize(scenarioInfo);
@@ -108,11 +108,11 @@ this.FeatureBackground();
             table3.AddRow(new string[] {
                         "title"});
             table3.AddRow(new string[] {
-                        "button to go back to the previous view"});
+                        "button to go back to the previous page"});
             table3.AddRow(new string[] {
-                        "button to open the yellow view"});
+                        "button to open the yellow page"});
 #line 11
-    testRunner.Then("The following controls should be displayed in the current view:", ((string)(null)), table3, "Then ");
+    testRunner.Then("The following controls should be displayed in the current page:", ((string)(null)), table3, "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

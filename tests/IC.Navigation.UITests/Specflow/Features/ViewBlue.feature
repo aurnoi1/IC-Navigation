@@ -4,12 +4,12 @@ Feature: ViewBlue
 
 Background: 
     Given The application under test has been started
-    And The "blue view" has been opened
+    And The "blue page" has been opened
 
 @view_menu
-Scenario: The controls should be displayed in "blue view"
-    Then The following controls should be displayed in the current view:
+Scenario: The controls should be displayed in "blue page"
+    Then The following controls should be displayed in the current page:
     | usage_name                             |
     | title                                  |
-    | button to go back to the previous view |
-    | button to open the yellow view         |
+    | button to go back to the previous page |
+    | button to open the yellow page         |

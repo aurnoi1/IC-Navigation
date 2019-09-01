@@ -37,17 +37,44 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Specflow\Features\Navigation.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Navigation.feature</DependentUpon>
+      </Compile>
+      <Compile Update="Specflow\Features\ViewBlue.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ViewBlue.feature</DependentUpon>
+      </Compile>
+      <Compile Update="Specflow\Features\ViewMenu.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ViewMenu.feature</DependentUpon>
+      </Compile>
+      <Compile Update="Specflow\Features\ViewRed.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ViewRed.feature</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
       <SpecFlowFeatureFiles Update="Specflow\Features\Navigation.feature">
         <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>Navigation.feature.cs</LastGenOutput>
       </SpecFlowFeatureFiles>
       <SpecFlowFeatureFiles Update="Specflow\Features\ViewBlue.feature">
         <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>ViewBlue.feature.cs</LastGenOutput>
       </SpecFlowFeatureFiles>
       <SpecFlowFeatureFiles Update="Specflow\Features\ViewMenu.feature">
         <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>ViewMenu.feature.cs</LastGenOutput>
       </SpecFlowFeatureFiles>
       <SpecFlowFeatureFiles Update="Specflow\Features\ViewRed.feature">
         <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>ViewRed.feature.cs</LastGenOutput>
       </SpecFlowFeatureFiles>
     </ItemGroup>
 

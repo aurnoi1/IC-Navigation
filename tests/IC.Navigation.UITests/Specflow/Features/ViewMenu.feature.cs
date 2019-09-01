@@ -80,7 +80,7 @@ namespace IC.Navigation.UITests.Specflow.Features
 #line 6
     testRunner.Given("The application under test has been started", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 7
-    testRunner.And("The \"menu view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("The \"menu page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
         }
         
@@ -89,13 +89,13 @@ namespace IC.Navigation.UITests.Specflow.Features
             this.ScenarioTearDown();
         }
         
-        [Xunit.FactAttribute(DisplayName="The controls should be displayed in \"menu view\"")]
+        [Xunit.FactAttribute(DisplayName="The controls should be displayed in \"menu page\"")]
         [Xunit.TraitAttribute("FeatureTitle", "ViewMenu")]
-        [Xunit.TraitAttribute("Description", "The controls should be displayed in \"menu view\"")]
+        [Xunit.TraitAttribute("Description", "The controls should be displayed in \"menu page\"")]
         [Xunit.TraitAttribute("Category", "view_menu")]
-        public virtual void TheControlsShouldBeDisplayedInMenuView()
+        public virtual void TheControlsShouldBeDisplayedInMenuPage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The controls should be displayed in \"menu view\"", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The controls should be displayed in \"menu page\"", null, new string[] {
                         "view_menu"});
 #line 10
 this.ScenarioInitialize(scenarioInfo);
@@ -108,11 +108,11 @@ this.FeatureBackground();
             table2.AddRow(new string[] {
                         "title"});
             table2.AddRow(new string[] {
-                        "button to open the blue view"});
+                        "button to open the blue page"});
             table2.AddRow(new string[] {
-                        "button to open the red view"});
+                        "button to open the red page"});
 #line 11
-    testRunner.Then("The following controls should be displayed in the current view:", ((string)(null)), table2, "Then ");
+    testRunner.Then("The following controls should be displayed in the current page:", ((string)(null)), table2, "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -131,7 +131,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
 this.FeatureBackground();
 #line 20
-   testRunner.Then("The control \"not implemented\" should not be displayed in the current view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+   testRunner.Then("The control \"not implemented\" should not be displayed in the current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }

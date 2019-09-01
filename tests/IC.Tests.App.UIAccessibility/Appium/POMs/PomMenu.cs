@@ -8,13 +8,12 @@ using System.Collections.Generic;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
-    [UIArtifact("menu view")]
-    public class PomMenu : INavigable
+    [Aliases("menu page")]
+    public class PomMenu : PomBase
     {
         private readonly IFacade session;
-        private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        public PomMenu(in IFacade session)
+        public PomMenu(in IFacade session) : base(session)
         {
             this.session = session;
             RegisterObserver(session);
@@ -25,15 +24,15 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control NOT IMPLEMENTED only use for negative test.
         /// </summary>
-        [UIArtifact("not implemented")]
+        [Aliases("not implemented")]
         public WindowsElement UIBtnNotImplemented => session.WindowsDriver.FindElementByAccessibilityId(
             "NotImplemented",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
 
         /// <summary>
-        /// The tile of this view.
+        /// The tile of this page.
         /// </summary>
-        [UIArtifact("title")] // explicitly same than other views for test.
+        [Aliases("title")] // explicitly same than other pages for test.
         public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
             "TitleMenu",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -41,7 +40,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control to open the BlueView.
         /// </summary>
-        [UIArtifact("button to open the blue view")]
+        [Aliases("button to open the blue page")]
         public WindowsElement UIBtnOpenBlueView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenBlueView",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -49,7 +48,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control to open the RedView.
         /// </summary>
-        [UIArtifact("button to open the red view")]
+        [Aliases("button to open the red page")]
         public WindowsElement UIBtnOpenRedView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenRedView",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -57,7 +56,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control to open the RedView.
         /// </summary>
-        [UIArtifact("button to open the yellow view")]
+        [Aliases("button to open the yellow page")]
         public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenYellowView",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -65,7 +64,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control where text can be enter.
         /// </summary>
-        [UIArtifact("box where enter text")]
+        [Aliases("box where enter text")]
         public WindowsElement UITxtBoxImportantMessage => session.WindowsDriver.FindElementByAccessibilityId(
             "TxtBoxImportantMessage",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -73,18 +72,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #endregion Controls
 
         /// <summary>
-        /// Enter a text in the UITxtBoxImportantMessage.
-        /// </summary>
-        /// <param name="text">The text to enter.</param>
-        public void EnterText(string text)
-        {
-            UITxtBoxImportantMessage.SendKeys(text);
-        }
-
-        /// <summary>
         /// Waits for the current INavigable to be fully loaded.
         /// </summary>
-        public bool PublishExistsStatus()
+        public override bool PublishExistsStatus()
         {
             bool isDisplayed = UITitle != null;
             INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
@@ -96,7 +86,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        public Dictionary<INavigable, Action> GetActionToNext()
+        public override Dictionary<INavigable, Action> GetActionToNext()
         {
             return new Dictionary<INavigable, Action>()
             {
@@ -107,49 +97,12 @@ namespace IC.Tests.App.Poms.Appium.POMs
         }
 
         /// <summary>
-        /// Register the INavigableObserver as a WeakReference.
+        /// Enter a text in the UITxtBoxImportantMessage.
         /// </summary>
-        /// <param name="observer">The INavigableObserver.</param>
-        /// <returns>The INavigableObserver as a WeakReference.</returns>
-        public WeakReference<INavigableObserver> RegisterObserver(INavigableObserver observer)
+        /// <param name="text">The text to enter.</param>
+        public void EnterText(string text)
         {
-            var weakObserver = new WeakReference<INavigableObserver>(observer);
-            observers.Add(weakObserver);
-            return weakObserver;
+            UITxtBoxImportantMessage.SendKeys(text);
         }
-
-        /// <summary>
-        /// Unregister the INavigableObserver.
-        /// </summary>
-        /// <param name="weakObserver">The INavigableObserver as a WeakReference.</param>
-        public void UnregisterObserver(WeakReference<INavigableObserver> weakObserver)
-        {
-            observers.Remove(weakObserver);
-        }
-
-        /// <summary>
-        /// Notify all observers.
-        /// </summary>
-        /// <param name="args">The INavigableEventArgs.</param>
-        public void NotifyObservers(INavigableEventArgs args)
-        {
-            observers.ForEach(x =>
-            {
-                x.TryGetTarget(out INavigableObserver obs);
-                if (obs == null)
-                {
-                    UnregisterObserver(x);
-                }
-                else
-                {
-                    obs.Update(this, args);
-                }
-            });
-        }
-
-        /// <summary>
-        /// The navigation session.
-        /// </summary>
-        ISession INavigable.Session => session;
     }
 }

@@ -39,10 +39,10 @@ namespace IC.Navigation.UITests.Specflow.Steps
             GivenTheViewHasBeenOpened(usageName);
         }
 
-        [When(@"The ""(.*)"" is pressed in current view")]
+        [When(@"The ""(.*)"" is pressed in current page")]
         public void WhenIsPressedInCurrentView(string usageName)
         {
-            WindowsElement match = sut.FindElementByUsageNameInLastINavigable(usageName);
+            WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
             match.Click();
         }
 
@@ -56,7 +56,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         [Then(@"The control ""(.*)"" should not be displayed")]
         public void ThenTheControlShouldNotBeDisplayed(string usageName)
         {
-            var control = sut.FindElementByUsageNameInLastINavigable(usageName);
+            var control = sut.FindElementByAliasesInLastINavigable(usageName);
             Assert.Null(control);
         }
 

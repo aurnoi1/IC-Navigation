@@ -8,13 +8,12 @@ using System.Collections.Generic;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
-    [UIArtifact("yellow view")]
-    public class PomYellow : INavigable
+    [Aliases("yellow page")]
+    public class PomYellow : PomBase
     {
         private readonly IFacade session;
-        private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        public PomYellow(in IFacade session)
+        public PomYellow(in IFacade session) : base(session)
         {
             this.session = session;
             RegisterObserver(session);
@@ -23,9 +22,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// The tile of this view.
+        /// The tile of this page.
         /// </summary>
-        [UIArtifact("title")] // explicitly same than other views for test.
+        [Aliases("title")] // explicitly same than other pages for test.
         public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
             "TitleYellow",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -33,7 +32,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
-        [UIArtifact("button to go back to the previous view")]
+        [Aliases("button to go back to the previous page")]
         public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnBack",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
@@ -41,12 +40,41 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
-        [UIArtifact("button to open menu view")]
-        public WindowsElement UIBtnOpenMenuView => session.WindowsDriver.FindElementByAccessibilityId(
+        [Aliases("button to open menu page")]
+        public WindowsElement UIBtnOpenMenuPage => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenMenuView",
             session.AdjustTimeout(TimeSpan.FromSeconds(3)));
 
         #endregion Controls
+
+        #region Methods
+
+        /// <summary>
+        /// Waits for the current INavigable to be fully loaded.
+        /// </summary>
+        public override bool PublishExistsStatus()
+        {
+            bool isDisplayed = UITitle != null;
+            INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
+            NotifyObservers(args);
+            return isDisplayed;
+        }
+
+        /// <summary>
+        /// Gets a Dictionary of action to go to the next INavigable.
+        /// </summary>
+        /// <returns>A Dictionary of action to go to the next INavigable.</returns>
+        public override Dictionary<INavigable, Action> GetActionToNext()
+        {
+            return new Dictionary<INavigable, Action>()
+            {
+                { session.PomMenu, () => ActionToOpenMenuPage() }, // Resolve two actions opening the same page.
+
+                // Resolve one action can open many pages (3 when conting ViewMenu).
+                { session.PomBlue, () => ResolveBackBtnClick(this) },
+                { session.PomRed, () => ResolveBackBtnClick(this) },
+            };
+        }
 
         /// <summary>
         /// Open the View Menu by clicking on UIBtnOpenMenuView.
@@ -54,15 +82,17 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The ViewMenu.</returns>
         public PomMenu OpenMenuByMenuBtn()
         {
-            UIBtnOpenMenuView.Click();
+            UIBtnOpenMenuPage.Click();
             return session.PomMenu;
         }
+
+        #region Private
 
         /// <summary>
         /// Determines the action to open the ViewMenu by UIBtnBack depending the Navigation context.
         /// </summary>
         /// <returns>The action to open the ViewMenu.</returns>
-        private void ActionToOpenViewMenu()
+        private void ActionToOpenMenuPage()
         {
             if (session.Previous == session.PomMenu)
             {
@@ -70,7 +100,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             }
             else
             {
-                UIBtnOpenMenuView.Click();
+                UIBtnOpenMenuPage.Click();
             }
         }
 
@@ -94,77 +124,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
             session.Resolve(source, onActionAlternatives);
         }
 
-        /// <summary>
-        /// Waits for the current INavigable to be fully loaded.
-        /// </summary>
-        public bool PublishExistsStatus()
-        {
-            bool isDisplayed = UITitle != null;
-            INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
-            NotifyObservers(args);
-            return isDisplayed;
-        }
+        #endregion Private
 
-        /// <summary>
-        /// Gets a Dictionary of action to go to the next INavigable.
-        /// </summary>
-        /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        public Dictionary<INavigable, Action> GetActionToNext()
-        {
-            return new Dictionary<INavigable, Action>()
-            {
-                { session.PomMenu, () => ActionToOpenViewMenu() }, // Resolve two actions opening the same view.
-
-                // Resolve one action can open many views (3 when conting ViewMenu).
-                { session.PomBlue, () => ResolveBackBtnClick(this) },
-                { session.PomRed, () => ResolveBackBtnClick(this) },
-            };
-        }
-
-        /// <summary>
-        /// Register the INavigableObserver as a WeakReference.
-        /// </summary>
-        /// <param name="observer">The INavigableObserver.</param>
-        /// <returns>The INavigableObserver as a WeakReference.</returns>
-        public WeakReference<INavigableObserver> RegisterObserver(INavigableObserver observer)
-        {
-            var weakObserver = new WeakReference<INavigableObserver>(observer);
-            observers.Add(weakObserver);
-            return weakObserver;
-        }
-
-        /// <summary>
-        /// Unregister the INavigableObserver.
-        /// </summary>
-        /// <param name="weakObserver">The INavigableObserver as a WeakReference.</param>
-        public void UnregisterObserver(WeakReference<INavigableObserver> weakObserver)
-        {
-            observers.Remove(weakObserver);
-        }
-
-        /// <summary>
-        /// Notify all observers.
-        /// </summary>
-        /// <param name="args">The INavigableEventArgs.</param>
-        public void NotifyObservers(INavigableEventArgs args)
-        {
-            observers.ForEach(x =>
-            {
-                x.TryGetTarget(out INavigableObserver obs);
-                if (obs == null)
-                {
-                    UnregisterObserver(x);
-                }
-                else
-                {
-                    obs.Update(this, args);
-                }
-            });
-        }
-
-        /// <summary>
-        /// The navigation session.
-        /// </summary>
-        ISession INavigable.Session => session;
+        #endregion Methods
     }
 }

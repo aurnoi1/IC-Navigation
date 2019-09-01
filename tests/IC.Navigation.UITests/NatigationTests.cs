@@ -109,7 +109,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueViewByUsageNameInViewMenu()
         {
-            WindowsElement match = sut.FindElementByUsageNameInLastINavigable("button to open the blue view");
+            WindowsElement match = sut.FindElementByAliasesInLastINavigable("button to open the blue page");
             Assert.Equal("BtnOpenBlueView", match.GetAttribute("AutomationId"));
         }
 
