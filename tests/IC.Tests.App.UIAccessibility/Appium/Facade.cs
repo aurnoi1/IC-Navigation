@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium
             Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             WindowsDriver = appiumSession.WindowsDriver;
-            EntryPoints = new HashSet<INavigable>() { ViewMenu };
+            EntryPoints = new HashSet<INavigable>() { PomMenu };
         }
 
         public Facade(IAppiumSession appiumSession, double thinkTime) : this(appiumSession)
@@ -45,10 +45,10 @@ namespace IC.Tests.App.Poms.Appium
 
         #region Views
 
-        public PomRed ViewRed => GetNavigable<PomRed>();
-        public PomBlue ViewBlue => GetNavigable<PomBlue>();
-        public PomMenu ViewMenu => GetNavigable<PomMenu>();
-        public PomYellow ViewYellow => GetNavigable<PomYellow>();
+        public PomRed PomRed => GetNavigable<PomRed>();
+        public PomBlue PomBlue => GetNavigable<PomBlue>();
+        public PomMenu PomMenu => GetNavigable<PomMenu>();
+        public PomYellow PomYellow => GetNavigable<PomYellow>();
 
         #endregion Views
 

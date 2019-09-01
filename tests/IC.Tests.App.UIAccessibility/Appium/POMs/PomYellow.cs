@@ -55,7 +55,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public PomMenu OpenMenuByMenuBtn()
         {
             UIBtnOpenMenuView.Click();
-            return session.ViewMenu;
+            return session.PomMenu;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The action to open the ViewMenu.</returns>
         private void ActionToOpenViewMenu()
         {
-            if (session.Previous == session.ViewMenu)
+            if (session.Previous == session.PomMenu)
             {
                 UIBtnBack.Click();
             }
@@ -82,9 +82,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             List<INavigable> alternatives = new List<INavigable>()
             {
-                session.ViewBlue,
-                session.ViewRed,
-                session.ViewMenu
+                session.PomBlue,
+                session.PomRed,
+                session.PomMenu
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
@@ -113,11 +113,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.ViewMenu, () => ActionToOpenViewMenu() }, // Resolve two actions opening the same view.
+                { session.PomMenu, () => ActionToOpenViewMenu() }, // Resolve two actions opening the same view.
 
                 // Resolve one action can open many views (3 when conting ViewMenu).
-                { session.ViewBlue, () => ResolveBackBtnClick(this) },
-                { session.ViewRed, () => ResolveBackBtnClick(this) },
+                { session.PomBlue, () => ResolveBackBtnClick(this) },
+                { session.PomRed, () => ResolveBackBtnClick(this) },
             };
         }
 

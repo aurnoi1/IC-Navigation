@@ -44,22 +44,22 @@ namespace IC.Navigation.UITests
         public void FullExample()
         {
             sut.Last
-                .GoTo(sut.ViewYellow)
+                .GoTo(sut.PomYellow)
                 .Do<PomMenu>(() =>
                 {
-                    return sut.ViewYellow.OpenMenuByMenuBtn();
+                    return sut.PomYellow.OpenMenuByMenuBtn();
                 }) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
-                .GoTo(sut.ViewBlue) // Force the path to PomBlue then PomYellow...
-                .GoTo(sut.ViewYellow) //... to test PomYellowFeat.ActionToOpenViewMenu().
-                .GoTo(sut.ViewMenu) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
+                .GoTo(sut.PomBlue) // Force the path to PomBlue then PomYellow...
+                .GoTo(sut.PomYellow) //... to test PomYellowFeat.ActionToOpenViewMenu().
+                .GoTo(sut.PomMenu) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
                 .Do(() =>
                 {
-                    sut.ViewMenu.EnterText("This is a test");
+                    sut.PomMenu.EnterText("This is a test");
                 })
-                .GoTo(sut.ViewBlue)
+                .GoTo(sut.PomBlue)
                 .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
                 .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
-                .GoTo(sut.ViewRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
+                .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
                 .GoTo(sut.EntryPoint) // The entry point.
                 .WaitForExists(ephemeralThinkTime: 5);
 
@@ -77,11 +77,11 @@ namespace IC.Navigation.UITests
                 Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
                     .Callback<INavigable, INavigableEventArgs>((x, y) => callbackResults.Add((mock, x, y)));
 
-                sut.ViewMenu.RegisterObserver(mock);
+                sut.PomMenu.RegisterObserver(mock);
             }
 
             // Act
-            sut.ViewMenu.WaitForExists();
+            sut.PomMenu.WaitForExists();
 
             // Assert
             Assert.NotEmpty(callbackResults);
@@ -94,14 +94,14 @@ namespace IC.Navigation.UITests
             callbackResults.ForEach(r => Assert.Same(callbackResults[0].args, r.args));
 
             // Validate all observers received the same instance of ViewMenu on WaitForExists().
-            callbackResults.ForEach(r => Assert.Same(sut.ViewMenu, r.observable));
+            callbackResults.ForEach(r => Assert.Same(sut.PomMenu, r.observable));
         }
 
         [Fact]
         public void GetView_Should_Returns_Same_Instance()
         {
-            var instance1 = sut.ViewMenu;
-            var instance2 = sut.ViewMenu;
+            var instance1 = sut.PomMenu;
+            var instance2 = sut.PomMenu;
             Assert.NotNull(instance1);
             Assert.Same(instance1, instance2);
         }
@@ -116,45 +116,45 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindMenuViewByNavigation()
         {
-            Assert.True(sut.ViewMenu.WaitForExists());
+            Assert.True(sut.PomMenu.WaitForExists());
         }
 
         [Fact]
         public void ShouldOpenViewMenuFromYellowViewByOpenViewMenuDirectly()
         {
             sut.Last
-                .GoTo(sut.ViewYellow)
-                .Do<PomMenu>(() => sut.ViewYellow.OpenMenuByMenuBtn());
+                .GoTo(sut.PomYellow)
+                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn());
 
-            Assert.True(sut.ViewMenu.WaitForExists());
+            Assert.True(sut.PomMenu.WaitForExists());
         }
 
         [Fact]
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.ViewMenu.Do(() => sut.ViewMenu.UITxtBoxImportantMessage.SendKeys(expected));
-            Assert.Equal(expected, sut.ViewMenu.UITxtBoxImportantMessage.Text);
+            sut.PomMenu.Do(() => sut.PomMenu.UITxtBoxImportantMessage.SendKeys(expected));
+            Assert.Equal(expected, sut.PomMenu.UITxtBoxImportantMessage.Text);
         }
 
         [Fact]
         public void ShouldGoToBlueView()
         {
-            sut.ViewMenu.GoTo(sut.ViewBlue);
-            Assert.True(sut.ViewBlue.WaitForExists());
+            sut.PomMenu.GoTo(sut.PomBlue);
+            Assert.True(sut.PomBlue.WaitForExists());
         }
 
         [Fact]
         public void ShouldHaveViewMenuAsFirstInHistoric()
         {
-            sut.ViewMenu.GoTo(sut.ViewBlue);
+            sut.PomMenu.GoTo(sut.PomBlue);
             Assert.Equal(typeof(PomMenu), sut.Historic.First().GetType());
         }
 
         [Fact]
         public void ShouldHaveViewBlueAsLastInHistoric()
         {
-            sut.ViewMenu.GoTo(sut.ViewBlue);
+            sut.PomMenu.GoTo(sut.PomBlue);
             Assert.Equal(typeof(PomBlue), sut.Historic.Last().GetType());
         }
 

@@ -100,9 +100,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.ViewBlue, () => UIBtnOpenBlueView.Click() },
-                { session.ViewRed, () => UIBtnOpenRedView.Click() },
-                { session.ViewYellow, () => UIBtnOpenYellowView.Click() },
+                { session.PomBlue, () => UIBtnOpenBlueView.Click() },
+                { session.PomRed, () => UIBtnOpenRedView.Click() },
+                { session.PomYellow, () => UIBtnOpenYellowView.Click() },
             };
         }
 
