@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace IC.Navigation.Extensions.Appium
 {
-    public static class IWindowsDriverEx
+    public static class WindowsDriverEx
     {
         /// <summary>
         /// Wait for a WindowsElement to be found using the specified search method.
