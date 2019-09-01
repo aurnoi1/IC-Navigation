@@ -2,6 +2,7 @@
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
@@ -46,10 +47,20 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Unregister the INavigableObserver.
         /// </summary>
-        /// <param name="weakObserver">The INavigableObserver as a WeakReference.</param>
-        public void UnregisterObserver(WeakReference<INavigableObserver> weakObserver)
+        /// <param name="observer">The INavigableObserver.</param>
+        public void UnregisterObserver(INavigableObserver observer)
         {
-            observers.Remove(weakObserver);
+            var obs = observers.Where(x =>
+                {
+                    x.TryGetTarget(out INavigableObserver target);
+                    return target.Equals(observer);
+                })
+                .SingleOrDefault();
+
+            if (obs != null)
+            {
+                observers.Remove(obs);
+            }
         }
 
         /// <summary>
@@ -63,7 +74,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 x.TryGetTarget(out INavigableObserver obs);
                 if (obs == null)
                 {
-                    UnregisterObserver(x);
+                    UnregisterObserver(obs);
                 }
                 else
                 {

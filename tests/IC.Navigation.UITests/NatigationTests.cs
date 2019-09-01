@@ -98,6 +98,37 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
+        public void RemoveObserver_Should_Remove_One_Observer()
+        {
+            // Arrange
+            var observerMocks = fixture.CreateMany<INavigableObserver>(5);
+            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableEventArgs args)>();
+            foreach (var mock in observerMocks)
+            {
+                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
+                    .Callback<INavigable, INavigableEventArgs>((x, y) => callbackResults.Add((mock, x, y)));
+
+                sut.PomMenu.RegisterObserver(mock);
+            }
+
+            var expected = observerMocks.ElementAt(2);
+
+            // Act
+            sut.PomMenu.UnregisterObserver(expected);
+            sut.PomMenu.WaitForExists();
+            var registeredObservers = callbackResults.Select(x => x.observer).ToList();
+
+            // Assert
+            Assert.NotEmpty(registeredObservers);
+
+            // Only one observer was removed from original list.
+            Assert.Single(observerMocks.Except(registeredObservers));
+
+            // Validate all observers are register.
+            Assert.DoesNotContain(expected, registeredObservers);
+        }
+
+        [Fact]
         public void GetView_Should_Returns_Same_Instance()
         {
             var instance1 = sut.PomMenu;

@@ -35,8 +35,8 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// Unregister the INavigableObserver.
         /// </summary>
-        /// <param name="weakObserver">The INavigableObserver as a WeakReference.</param>
-        void UnregisterObserver(WeakReference<INavigableObserver> weakObserver);
+        /// <param name="weakObserver">The INavigableObserver.</param>
+        void UnregisterObserver(INavigableObserver observer);
 
         /// <summary>
         /// Notify all observers.
