@@ -49,7 +49,7 @@ namespace IC.Navigation.UnitTests
             foreach (var node in expected)
             {
                 node.SetupGet(n => n.Session).Returns(session.Object);
-                node.Setup(n => n.PublishExistsStatus()).Returns(true);
+                node.Setup(n => n.PublishStatus().Exists).Returns(true);
             }
 
             var actual = sut.Object.GoTo(origin.Object, destination.Object);

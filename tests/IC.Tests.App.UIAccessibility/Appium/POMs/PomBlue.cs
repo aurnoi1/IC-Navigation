@@ -50,12 +50,14 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
         /// </summary>
-        public override bool PublishExistsStatus()
+        public override INavigableStatus PublishStatus()
         {
             bool isDisplayed = UITitle != null;
+            NavigableStatus status = new NavigableStatus();
+            status.Exists = isDisplayed;
             INavigableEventArgs args = new NavigableEventArgs() { Exists = isDisplayed };
             NotifyObservers(args);
-            return isDisplayed;
+            return status;
         }
 
         /// <summary>

@@ -183,13 +183,13 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(INavigable origin, Action uIAction)
         {
-            if (!origin.PublishExistsStatus())
+            if (!origin.PublishStatus().Exists)
             {
                 throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
             }
 
             uIAction.Invoke();
-            if (!origin.PublishExistsStatus())
+            if (!origin.PublishStatus().Exists)
             {
                 throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
                     $" If it was expected, used \"Do<T>\" instead.");
@@ -446,13 +446,13 @@ namespace IC.Navigation
 
         private INavigable WaitForExists(INavigable navigable)
         {
-            bool exists = navigable.PublishExistsStatus();
+            bool exists = navigable.PublishStatus().Exists;
             return exists ? navigable : null;
         }
 
         private void ValidateINavigableExists(INavigable iNavigable, string definition)
         {
-            if (!iNavigable.PublishExistsStatus())
+            if (!iNavigable.PublishStatus().Exists)
             {
                 throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
             }

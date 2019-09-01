@@ -64,14 +64,14 @@ namespace IC.Navigation
 
         #endregion Private
 
-        #region Internal
+        #region Public
 
         /// <summary>
         /// The nodes of INavigables forming the Graph.
         /// </summary>
         public HashSet<INavigable> Nodes { get; private set; }
 
-        #endregion Internal
+        #endregion Public
 
         #endregion Propeties
 

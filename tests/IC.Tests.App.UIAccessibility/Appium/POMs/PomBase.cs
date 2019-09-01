@@ -23,7 +23,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
         /// </summary>
-        abstract public bool PublishExistsStatus();
+        abstract public INavigableStatus PublishStatus();
 
         /// <summary>
         /// Gets a Dictionary of action to go to the next INavigable.

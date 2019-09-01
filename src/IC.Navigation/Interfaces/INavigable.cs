@@ -14,10 +14,10 @@ namespace IC.Navigation.Interfaces
         ISession Session { get; }
 
         /// <summary>
-        /// Notify observers of the current <see cref="INavigableEventArgs.Exists"/> status.
+        /// Notify observers of the current INavigable status.
         /// </summary>
-        /// <returns>The current <see cref="INavigableEventArgs.Exists"/> status.</returns>
-        bool PublishExistsStatus();
+        /// <returns>The published current INavigable status.</returns>
+        INavigableStatus PublishStatus();
 
         /// <summary>
         /// Gets a Dictionary of action to go to the next INavigable.
