@@ -1,10 +1,7 @@
-﻿using OpenQA.Selenium;
-using OpenQA.Selenium.Appium.Windows;
-using OpenQA.Selenium.Support.UI;
+﻿using OpenQA.Selenium.Appium.Windows;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 
 namespace IC.Navigation.Extensions.Appium
 {
@@ -19,15 +16,16 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The WindowsElement if found, otherwise <c>null</c>.</returns>
         public static WindowsElement FindElement(this WindowsDriver<WindowsElement> windowsDriver, Func<WindowsElement> searchMethod, TimeSpan timeout)
         {
-            WebDriverWait wait = new WebDriverWait(windowsDriver, timeout);
-            try
+            Stopwatch timer = Stopwatch.StartNew();
+            do
             {
-                return wait.Until(dr => searchMethod());
-            }
-            catch (WebDriverTimeoutException)
-            {
-                // The WindowsElement was not found.
-            }
+                var match = searchMethod();
+                if (match != null)
+                {
+                    timer.Stop();
+                    return match;
+                }
+            } while (timer.Elapsed < timeout);
 
             return null;
         }
