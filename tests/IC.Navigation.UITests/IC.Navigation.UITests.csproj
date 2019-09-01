@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\IC.Tests.App.UIAccessibility\IC.Tests.App.Poms.csproj" />
+      <ProjectReference Include="..\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj" />
     </ItemGroup>
 
     <ItemGroup>
