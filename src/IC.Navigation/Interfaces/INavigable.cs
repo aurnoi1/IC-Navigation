@@ -41,8 +41,8 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// Notify all observers.
         /// </summary>
-        /// <param name="args">The INavigableEventArgs.</param>
-        void NotifyObservers(INavigableEventArgs args);
+        /// <param name="status">The NavigableStatus.</param>
+        void NotifyObservers(INavigableStatus status);
 
     }
 }

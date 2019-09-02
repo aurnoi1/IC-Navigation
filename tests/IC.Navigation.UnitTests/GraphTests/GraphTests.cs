@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 using System.Linq;
+using AutoFixture.Xunit2;
+using AutoFixture.AutoMoq;
+using AutoFixture;
 
 namespace IC.Navigation.UnitTests
 {
@@ -16,7 +19,7 @@ namespace IC.Navigation.UnitTests
 
         [Theory]
         [ClassData(typeof(StraightPathData))]
-        public void WhenStraightPathsGraphShouldGetShortestPath(HashSet<INavigable> nodes, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
+        public void GetShortestPath_Should_Returns_Shortest_Path_Of_Straight_Paths(HashSet<INavigable> nodes, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
         {
             IGraph sut = new Graph(nodes);
             var actual = sut.GetShortestPath(origin.Object, destination.Object);
@@ -25,7 +28,7 @@ namespace IC.Navigation.UnitTests
 
         [Theory]
         [ClassData(typeof(NoPathData))]
-        public void WhenNoPathGraphShouldNoPath(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
+        public void GetShortestPath_Should_Return_No_Path(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
         {
             IGraph sut = new Graph(nodes);
             var actual = sut.GetShortestPath(origin, destination);
@@ -34,12 +37,11 @@ namespace IC.Navigation.UnitTests
 
         [Theory]
         [ClassData(typeof(OriginIsDestinationData))]
-        public void WhenOriIsDestinationGraphShouldGetNoPath(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
+        public void GetShortestPath_Should_Returns_No_Path_When_Origin_Is_Destination(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
         {
             IGraph sut = new Graph(nodes);
             var actual = sut.GetShortestPath(origin, destination);
             Assert.Equal(expected, actual);
         }
-
     }
 }

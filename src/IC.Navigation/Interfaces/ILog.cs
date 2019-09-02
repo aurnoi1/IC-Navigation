@@ -24,8 +24,28 @@ namespace IC.Navigation.Interfaces
         List<INavigable> Historic { get; }
 
         /// <summary>
-        /// Event raised when the last known existing INavigable has changed.
+        /// Publish the historic.
         /// </summary>
-        event EventHandler<INavigableEventArgs> HistoricChanged;
+        /// <param name="historic">The historic to publish</param>
+        void PublishHistoric(List<INavigable> historic);
+
+        /// <summary>
+        /// Register HistoricObserver as WeakReference.
+        /// </summary>
+        /// <param name="observer">The HistoricObserver.</param>
+        /// <returns>The WeakReference to the HistoricObserver.</returns>
+        WeakReference<IHistoricObserver> RegisterObserver(IHistoricObserver observer);
+
+        /// <summary>
+        /// Unregister an HistoricObserver.
+        /// </summary>
+        /// <param name="observer">The HistoricObserver to unregister.</param>
+        void UnregisterObserver(IHistoricObserver observer);
+
+        /// <summary>
+        /// Notify HistoricObservers of an update on historic.
+        /// </summary>
+        /// <param name="historic">The updated historic</param>
+        void NotifyHistoricObservers(List<INavigable> historic);
     }
 }

@@ -66,8 +66,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Notify all observers.
         /// </summary>
-        /// <param name="args">The INavigableEventArgs.</param>
-        public void NotifyObservers(INavigableEventArgs args)
+        /// <param name="status">The NavigableStatus.</param>
+        public void NotifyObservers(INavigableStatus status)
         {
             observers.ForEach(x =>
             {
@@ -78,7 +78,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 }
                 else
                 {
-                    obs.Update(this, args);
+                    obs.Update(this, status);
                 }
             });
         }

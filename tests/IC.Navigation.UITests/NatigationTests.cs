@@ -71,11 +71,11 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var observerMocks = fixture.CreateMany<INavigableObserver>();
-            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableEventArgs args)>();
+            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableStatus args)>();
             foreach (var mock in observerMocks)
             {
-                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
-                    .Callback<INavigable, INavigableEventArgs>((x, y) => callbackResults.Add((mock, x, y)));
+                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableStatus>()))
+                    .Callback<INavigable, INavigableStatus>((x, y) => callbackResults.Add((mock, x, y)));
 
                 sut.PomMenu.RegisterObserver(mock);
             }
@@ -98,15 +98,15 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void RemoveObserver_Should_Remove_One_Observer()
+        public void UnregisterObserver_Should_Unregister_One_Observer()
         {
             // Arrange
             var observerMocks = fixture.CreateMany<INavigableObserver>(5);
-            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableEventArgs args)>();
+            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableStatus args)>();
             foreach (var mock in observerMocks)
             {
-                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableEventArgs>()))
-                    .Callback<INavigable, INavigableEventArgs>((x, y) => callbackResults.Add((mock, x, y)));
+                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableStatus>()))
+                    .Callback<INavigable, INavigableStatus>((x, y) => callbackResults.Add((mock, x, y)));
 
                 sut.PomMenu.RegisterObserver(mock);
             }

@@ -20,6 +20,11 @@ namespace IC.Navigation
         /// </summary>
         private INavigable gotoDestination;
 
+        /// <summary>
+        /// The WeakReferences to HistoricObservers.
+        /// </summary>
+        private readonly List<WeakReference<IHistoricObserver>> observers = new List<WeakReference<IHistoricObserver>>();
+
         #endregion Fields
 
         #region Properties
@@ -94,15 +99,9 @@ namespace IC.Navigation
             }
         }
 
-        /// <summary>
         /// The historic of previsous existing INavigable.
         /// </summary>
         public virtual List<INavigable> Historic { get; private set; } = new List<INavigable>();
-
-        /// <summary>
-        /// Event raised when the last known existing INavigable has changed in Historic.
-        /// </summary>
-        public virtual event EventHandler<INavigableEventArgs> HistoricChanged;
 
         #endregion Properties
 
@@ -370,12 +369,76 @@ namespace IC.Navigation
             return match;
         }
 
-        public void Update(INavigable navigable, INavigableEventArgs args)
+        /// <summary>
+        /// Update the observer with this Navigable.
+        /// </summary>
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="status">The NavigableStatus.</param>
+        public virtual void Update(INavigable navigable, INavigableStatus status)
         {
-            if (args.NavigableStatus.Exists)
+            if (status.Exists)
             {
-                SetLast(navigable, args);
+                SetLast(navigable, status);
             }
+        }
+
+        /// <summary>
+        /// Publish the historic.
+        /// </summary>
+        /// <param name="historic">The historic to publish</param>
+        public virtual void PublishHistoric(List<INavigable> historic)
+        {
+            NotifyHistoricObservers(historic);
+        }
+
+        /// <summary>
+        /// Register HistoricObserver as WeakReference.
+        /// </summary>
+        /// <param name="observer">The HistoricObserver.</param>
+        /// <returns>The WeakReference to the HistoricObserver.</returns>
+        public virtual WeakReference<IHistoricObserver> RegisterObserver(IHistoricObserver observer)
+        {
+            var weakObserver = new WeakReference<IHistoricObserver>(observer);
+            observers.Add(weakObserver);
+            return weakObserver;
+        }
+
+        /// <summary>
+        /// Unregister an HistoricObserver.
+        /// </summary>
+        /// <param name="observer">The HistoricObserver to unregister.</param>
+        public virtual void UnregisterObserver(IHistoricObserver observer)
+        {
+            var obs = observers.Where(x =>
+            {
+                x.TryGetTarget(out IHistoricObserver target);
+                return target.Equals(observer);
+            }).SingleOrDefault();
+
+            if (obs != null)
+            {
+                observers.Remove(obs);
+            }
+        }
+
+        /// <summary>
+        /// Notify HistoricObservers of an update on historic.
+        /// </summary>
+        /// <param name="historic">The updated historic</param>
+        public virtual void NotifyHistoricObservers(List<INavigable> historic)
+        {
+            observers.ForEach(x =>
+            {
+                x.TryGetTarget(out IHistoricObserver obs);
+                if (obs == null)
+                {
+                    UnregisterObserver(obs);
+                }
+                else
+                {
+                    obs.Update(historic);
+                }
+            });
         }
 
         #endregion Public
@@ -386,13 +449,14 @@ namespace IC.Navigation
         /// Set the last known INavigable is exists.
         /// </summary>
         /// <param name="navigable">The INavigable.</param>
+        /// <param name="status">The NavigableStatus of the last INavigable.</param>
         /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
-        private void SetLast(INavigable navigable, INavigableEventArgs args)
+        private void SetLast(INavigable navigable, INavigableStatus status)
         {
             if (Last == null || !Equals(navigable, Last))
             {
                 Last = navigable;
-                OnHistoricChanged(navigable, args);
+                PublishHistoric(Historic);
             }
         }
 
@@ -455,12 +519,6 @@ namespace IC.Navigation
             {
                 throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
             }
-        }
-
-        private void OnHistoricChanged(INavigable inavigable, INavigableEventArgs e)
-        {
-            EventHandler<INavigableEventArgs> handler = HistoricChanged;
-            handler?.Invoke(inavigable, e);
         }
 
         #endregion Private
