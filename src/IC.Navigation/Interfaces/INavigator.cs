@@ -14,6 +14,11 @@ namespace IC.Navigation.Interfaces
         IGraph Graph { get; }
 
         /// <summary>
+        /// The nodes of INavigables forming the Graph.
+        /// </summary>
+        HashSet<INavigable> Nodes { get; }
+
+        /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
@@ -37,13 +42,6 @@ namespace IC.Navigation.Interfaces
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
         INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives);
-
-        /// <summary>
-        /// Get INavigable by their attribute UIArtefact.UsageName.
-        /// </summary>
-        /// <param name="usageName">The expected usage name.</param>
-        /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        INavigable GetINavigableByUsageName(string usageName);
 
         /// <summary>
         /// Get the shortest path from the origin to the destination.
@@ -97,13 +95,5 @@ namespace IC.Navigation.Interfaces
         /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
         /// <returns>The destination.</returns>
         INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint);
-
-        /// <summary>
-        /// Compares the Type names of two INavigables.
-        /// </summary>
-        /// <param name="first">The first INavigable.</param>
-        /// <param name="second">The second INavigable.</param>
-        /// <returns><c>true</c> if same, otherwise <c>false</c>.</returns>
-        bool CompareTypeNames(INavigable first, INavigable second);
     }
 }

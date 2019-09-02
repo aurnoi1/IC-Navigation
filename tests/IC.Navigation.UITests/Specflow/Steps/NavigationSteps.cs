@@ -1,7 +1,7 @@
-﻿using IC.Navigation.Chain;
+﻿using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
-using IC.Tests.App.UIAccessibility.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using TechTalk.SpecFlow;
@@ -13,9 +13,9 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class NavigationSteps : IDisposable
     {
-        private IUIAccess sut;
+        private readonly IFacade sut;
 
-        private NavigationSteps(AppiumContext appiumContext)
+        public NavigationSteps(AppiumContext appiumContext)
         {
             this.sut = appiumContext.SUT;
         }
@@ -39,10 +39,10 @@ namespace IC.Navigation.UITests.Specflow.Steps
             GivenTheViewHasBeenOpened(usageName);
         }
 
-        [When(@"The ""(.*)"" is pressed in current view")]
+        [When(@"The ""(.*)"" is pressed in current page")]
         public void WhenIsPressedInCurrentView(string usageName)
         {
-            WindowsElement match = sut.FindElementByUsageNameInLastINavigable(usageName);
+            WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
             match.Click();
         }
 
@@ -56,7 +56,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         [Then(@"The control ""(.*)"" should not be displayed")]
         public void ThenTheControlShouldNotBeDisplayed(string usageName)
         {
-            var control = sut.FindElementByUsageNameInLastINavigable(usageName);
+            var control = sut.FindElementByAliasesInLastINavigable(usageName);
             Assert.Null(control);
         }
 

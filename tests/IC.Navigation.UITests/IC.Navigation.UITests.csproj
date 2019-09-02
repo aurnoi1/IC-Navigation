@@ -13,10 +13,13 @@
 
     <ItemGroup>
         <PackageReference Include="Appium.WebDriver" Version="4.0.0.6-beta" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
-        <PackageReference Include="SpecFlow" Version="3.0.213" />
-        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.213" />
-        <PackageReference Include="SpecFlow.xUnit" Version="3.0.213" />
+        <PackageReference Include="AutoFixture.AutoMoq" Version="4.11.0" />
+        <PackageReference Include="AutoFixture.Xunit2" Version="4.11.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+        <PackageReference Include="Moq" Version="4.12.0" />
+        <PackageReference Include="SpecFlow" Version="3.0.225" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.0.225" />
         <PackageReference Include="System.ValueTuple" Version="4.5.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.console" Version="2.4.1">
@@ -30,6 +33,48 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\IC.Tests.App.UIAccessibility\IC.Tests.App.UIAccessibility.csproj" />
+      <ProjectReference Include="..\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Specflow\Features\Navigation.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Navigation.feature</DependentUpon>
+      </Compile>
+      <Compile Update="Specflow\Features\ViewBlue.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ViewBlue.feature</DependentUpon>
+      </Compile>
+      <Compile Update="Specflow\Features\ViewMenu.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ViewMenu.feature</DependentUpon>
+      </Compile>
+      <Compile Update="Specflow\Features\ViewRed.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>ViewRed.feature</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <SpecFlowFeatureFiles Update="Specflow\Features\Navigation.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>Navigation.feature.cs</LastGenOutput>
+      </SpecFlowFeatureFiles>
+      <SpecFlowFeatureFiles Update="Specflow\Features\ViewBlue.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>ViewBlue.feature.cs</LastGenOutput>
+      </SpecFlowFeatureFiles>
+      <SpecFlowFeatureFiles Update="Specflow\Features\ViewMenu.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>ViewMenu.feature.cs</LastGenOutput>
+      </SpecFlowFeatureFiles>
+      <SpecFlowFeatureFiles Update="Specflow\Features\ViewRed.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>ViewRed.feature.cs</LastGenOutput>
+      </SpecFlowFeatureFiles>
     </ItemGroup>
 </Project>

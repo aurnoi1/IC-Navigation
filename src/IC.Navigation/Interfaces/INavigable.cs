@@ -14,14 +14,35 @@ namespace IC.Navigation.Interfaces
         ISession Session { get; }
 
         /// <summary>
-        /// Waits for the current INavigable to exists.
+        /// Notify observers of the current INavigable status.
         /// </summary>
-        bool WaitForExists();
+        /// <returns>The published current INavigable status.</returns>
+        INavigableStatus PublishStatus();
 
         /// <summary>
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
         Dictionary<INavigable, Action> GetActionToNext();
+
+        /// <summary>
+        /// Register the INavigableObserver as a WeakReference.
+        /// </summary>
+        /// <param name="observer">The INavigableObserver.</param>
+        /// <returns>The INavigableObserver as a WeakReference.</returns>
+        WeakReference<INavigableObserver> RegisterObserver(INavigableObserver observer);
+
+        /// <summary>
+        /// Unregister the INavigableObserver.
+        /// </summary>
+        /// <param name="weakObserver">The INavigableObserver.</param>
+        void UnregisterObserver(INavigableObserver observer);
+
+        /// <summary>
+        /// Notify all observers.
+        /// </summary>
+        /// <param name="status">The NavigableStatus.</param>
+        void NotifyObservers(INavigableStatus status);
+
     }
 }

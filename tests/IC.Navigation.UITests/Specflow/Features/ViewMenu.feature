@@ -4,17 +4,17 @@ Feature: ViewMenu
 
 Background: 
     Given The application under test has been started
-    And The "menu view" has been opened
+    And The "menu page" has been opened
 
 @view_menu
-Scenario: The controls should be displayed in "menu view"
-    Then The following controls should be displayed in the current view:
+Scenario: The controls should be displayed in "menu page"
+    Then The following controls should be displayed in the current page:
     | usage_name                     |
     | title                        |
-    | button to open the blue view |
-    | button to open the red view  |
+    | button to open the blue page |
+    | button to open the red page  |
 
 
 @view_menu
 Scenario: The "Not Implemented" should be not displayed
-   Then The control "not implemented" should not be displayed in the current view
+   Then The control "not implemented" should not be displayed in the current page

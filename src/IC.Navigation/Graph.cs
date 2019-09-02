@@ -23,10 +23,10 @@ namespace IC.Navigation
         /// <summary>
         /// Initializes a new instance of the <see cref="Graph"/> class.
         /// </summary>
-        /// <param name="Navigables">The Navigables to add to this Graph.</param>
-        public Graph(HashSet<INavigable> Navigables)
+        /// <param name="navigables">The Navigables to add to this Graph.</param>
+        public Graph(HashSet<INavigable> navigables)
         {
-            Nodes = Navigables;
+            Nodes = navigables;
             AddNodesReferences();
         }
 
@@ -64,14 +64,14 @@ namespace IC.Navigation
 
         #endregion Private
 
-        #region Internal
+        #region Public
 
         /// <summary>
-        /// The nodes of INavigable forming the Graph.
+        /// The nodes of INavigables forming the Graph.
         /// </summary>
         public HashSet<INavigable> Nodes { get; private set; }
 
-        #endregion Internal
+        #endregion Public
 
         #endregion Propeties
 
@@ -79,62 +79,6 @@ namespace IC.Navigation
 
         #region Public
 
-        /// <summary>
-        /// Add Nodes references to the Graph.
-        /// </summary>
-        private void AddNodesReferences()
-        {
-            foreach (var node in Nodes)
-            {
-                var destinations = node.GetActionToNext().Select(x => x.Key).ToList();
-                if (destinations.Count == 0)
-                {
-                    AddVertex(node.ToString(), node.ToString());
-                }
-                else
-                {
-                    var destinantionsNames = destinations.Select(x => x.ToString()).ToList();
-                    AddVertices(node.ToString(), destinantionsNames);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Add a Vertex to the Graph's Vertices list.
-        /// </summary>
-        /// <param name="origin">The origin.</param>
-        /// <param name="destination">The destination.</param>
-        private void AddVertex(string origin, string destination)
-        {
-            Dictionary<string, int> edges = new Dictionary<string, int>();
-            if (Vertices.ContainsKey(origin))
-            {
-                // Add value to an existing entry.
-                var currentEdges = Vertices[origin];
-                currentEdges.Add(destination, EdgeCounter);
-                edges = currentEdges;
-            }
-            else
-            {
-                edges.Add(destination, EdgeCounter);
-            }
-
-            Vertices[origin] = edges;
-        }
-
-        /// <summary>
-        /// Add Vertices to the Graph's Vertices list.
-        /// </summary>
-        /// <param name="origin">the origin.</param>
-        /// <param name="destinations">The list of destinations.</param>
-        private void AddVertices(string origin, List<string> destinations)
-        {
-            Dictionary<string, int> edges = new Dictionary<string, int>();
-            foreach (var destination in destinations)
-            {
-                AddVertex(origin, destination);
-            }
-        }
 
         /// <summary>
         /// Get the shortest path from an origin to a destination.
@@ -146,8 +90,7 @@ namespace IC.Navigation
         {
             if (Vertices.Count == 0)
             {
-                throw new Exception($"The \"Vertices\" is empty. Add vertex using {nameof(AddVertex)} or {nameof(AddVertices)}" +
-                    $" before to call this method.");
+                throw new Exception($"The \"Graph\" is empty.");
             }
 
             string originName = origin.ToString();
@@ -226,6 +169,64 @@ namespace IC.Navigation
         #endregion Public
 
         #region Private
+
+
+        /// <summary>
+        /// Add Nodes references to the Graph.
+        /// </summary>
+        private void AddNodesReferences()
+        {
+            foreach (var node in Nodes)
+            {
+                var destinations = node.GetActionToNext().Select(x => x.Key).ToList();
+                if (destinations.Count == 0)
+                {
+                    AddVertex(node.ToString(), node.ToString());
+                }
+                else
+                {
+                    var destinantionsNames = destinations.Select(x => x.ToString()).ToList();
+                    AddVertices(node.ToString(), destinantionsNames);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add a Vertex to the Graph's Vertices list.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="destination">The destination.</param>
+        private void AddVertex(string origin, string destination)
+        {
+            Dictionary<string, int> edges = new Dictionary<string, int>();
+            if (Vertices.ContainsKey(origin))
+            {
+                // Add value to an existing entry.
+                var currentEdges = Vertices[origin];
+                currentEdges.Add(destination, EdgeCounter);
+                edges = currentEdges;
+            }
+            else
+            {
+                edges.Add(destination, EdgeCounter);
+            }
+
+            Vertices[origin] = edges;
+        }
+
+        /// <summary>
+        /// Add Vertices to the Graph's Vertices list.
+        /// </summary>
+        /// <param name="origin">the origin.</param>
+        /// <param name="destinations">The list of destinations.</param>
+        private void AddVertices(string origin, List<string> destinations)
+        {
+            Dictionary<string, int> edges = new Dictionary<string, int>();
+            foreach (var destination in destinations)
+            {
+                AddVertex(origin, destination);
+            }
+        }
 
         private List<INavigable> GetNavigablesByName(List<string> names)
         {

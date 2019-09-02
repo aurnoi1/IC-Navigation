@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation.UITests", "te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC.Tests.App", "tests\IC.Tests.App\IC.Tests.App.csproj", "{412CA4A0-0876-4522-BBC4-98BEBBAC2556}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Tests.App.UIAccessibility", "tests\IC.Tests.App.UIAccessibility\IC.Tests.App.UIAccessibility.csproj", "{38E50D56-EE60-4BC9-926E-A8500BBE0C0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Tests.App.Poms", "tests\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj", "{38E50D56-EE60-4BC9-926E-A8500BBE0C0A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

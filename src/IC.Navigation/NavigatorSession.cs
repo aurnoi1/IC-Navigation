@@ -11,7 +11,7 @@ namespace IC.Navigation
     /// <summary>
     /// An abstract implementation of INavigator and ISession.
     /// </summary>
-    public abstract class NavigatorSession : ISession
+    public abstract class NavigatorSession : INavigatorSession
     {
         #region Fields
 
@@ -19,6 +19,11 @@ namespace IC.Navigation
         /// A temporary field to backup the final destination in GoTo() and used in Resolve().
         /// </summary>
         private INavigable gotoDestination;
+
+        /// <summary>
+        /// The WeakReferences to HistoricObservers.
+        /// </summary>
+        private readonly List<WeakReference<IHistoricObserver>> observers = new List<WeakReference<IHistoricObserver>>();
 
         #endregion Fields
 
@@ -35,20 +40,25 @@ namespace IC.Navigation
         public abstract IGraph Graph { get; }
 
         /// <summary>
+        /// The nodes of INavigables forming the Graph.
+        /// </summary>
+        public abstract HashSet<INavigable> Nodes { get; }
+
+        /// <summary>
         /// The INavigables to be expected as entry points when the application start.
         /// </summary>
-        public virtual HashSet<INavigable> EntryPoints { get; protected set; }
+        public abstract HashSet<INavigable> EntryPoints { get; protected set; }
+
+        /// <summary>
+        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
+        /// </summary>
+        public abstract double ThinkTime { get; set; }
 
         /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
         /// Otherwise <c>null</c> if nothing found at the time.
         /// </summary>
         public virtual INavigable EntryPoint => Historic.FirstOrDefault();
-
-        /// <summary>
-        /// Multiplicator to adjust the timeouts when waiting for UI objects.
-        /// </summary>
-        public virtual uint ThinkTime { get; set; }
 
         /// <summary>
         /// Last known INavigable.
@@ -89,21 +99,34 @@ namespace IC.Navigation
             }
         }
 
-        /// <summary>
         /// The historic of previsous existing INavigable.
         /// </summary>
         public virtual List<INavigable> Historic { get; private set; } = new List<INavigable>();
-
-        /// <summary>
-        /// Event raised when the last known existing INavigable has changed.
-        /// </summary>
-        public virtual event EventHandler<INavigableEventArgs> ViewChanged;
 
         #endregion Properties
 
         #region Methods
 
         #region Public
+
+        /// <summary>
+        /// Get the instance of INavigable from the Nodes.
+        /// </summary>
+        /// <typeparam name="T">The returned instance type.</typeparam>
+        /// <returns>The instance of the requested INavigable.</returns>
+        public virtual T GetNavigable<T>() where T : INavigable
+        {
+            Type type = typeof(T);
+            var match = Nodes.Where(n => n.GetType() == type).SingleOrDefault();
+            if (match != null)
+            {
+                return (T)match;
+            }
+            else
+            {
+                throw new Exception($"\"{type}\" is not part of the Nodes.");
+            }
+        }
 
         /// <summary>
         /// Get the nodes formed by instances of INavigables from the specified assembly.
@@ -114,8 +137,12 @@ namespace IC.Navigation
         {
             var navigables = new HashSet<INavigable>();
             var iNavigables = assembly.GetTypes()
-                .Where(x => typeof(INavigable).IsAssignableFrom(x) && !x.IsInterface)
-                .ToList();
+                .Where(x =>
+                    typeof(INavigable).IsAssignableFrom(x)
+                    && !x.IsInterface
+                    && x.IsPublic
+                    && !x.IsAbstract
+                ).ToList();
 
             foreach (var iNavigable in iNavigables)
             {
@@ -133,7 +160,7 @@ namespace IC.Navigation
         /// <returns>The adjusted timeout.</returns>
         public virtual TimeSpan AdjustTimeout(TimeSpan timeout)
         {
-            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * ThinkTime);
+            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(ThinkTime));
             return adjTimeout;
         }
 
@@ -144,7 +171,7 @@ namespace IC.Navigation
         /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
         public virtual INavigable WaitForEntryPoints()
         {
-            return GetFirstINavigableExisting(EntryPoints);
+            return GetFirstINavigableExisting(EntryPoints.ToList());
         }
 
         /// <summary>
@@ -155,13 +182,13 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(INavigable origin, Action uIAction)
         {
-            if (!origin.WaitForExists())
+            if (!origin.PublishStatus().Exists)
             {
                 throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
             }
 
             uIAction.Invoke();
-            if (!origin.WaitForExists())
+            if (!origin.PublishStatus().Exists)
             {
                 throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
                     $" If it was expected, used \"Do<T>\" instead.");
@@ -203,7 +230,7 @@ namespace IC.Navigation
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
         {
-            var navigableAndAction = actionToNextINavigable.Where(x => CompareTypeNames(x.Key, nextNavigable)).SingleOrDefault();
+            var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
             Action actionToOpen = navigableAndAction.Value;
             if (nextNavigableRef == null)
@@ -315,13 +342,12 @@ namespace IC.Navigation
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
             var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
-            if (CompareTypeNames(navigableAfterAction, finalDestination))
+            if (navigableAfterAction == finalDestination)
             {
                 return navigableAfterAction;
             }
             else
             {
-
                 // Force to pass by waypoint.
                 GoTo(navigableAfterAction, waypoint);
                 return GoTo(waypoint, finalDestination);
@@ -344,59 +370,95 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Get INavigable by their attribute UIArtefact.UsageName.
+        /// Update the observer with this Navigable.
         /// </summary>
-        /// <param name="usageName">The expected usage name.</param>
-        /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public virtual INavigable GetINavigableByUsageName(string usageName)
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="status">The NavigableStatus.</param>
+        public virtual void Update(INavigable navigable, INavigableStatus status)
         {
-            INavigable iNavigable = null;
-            foreach (var node in Graph.Nodes)
+            if (status.Exists)
             {
-                var uIArtefact = node.GetType().GetCustomAttribute<UIArtefact>(true);
-                if (uIArtefact != null && usageName == uIArtefact.UsageName)
-                {
-                    iNavigable = node;
-                }
+                SetLast(navigable, status);
             }
-
-            return iNavigable;
         }
 
         /// <summary>
-        /// Comapre two INavigables.
+        /// Publish the historic.
         /// </summary>
-        /// <param name="first">First INavigable.</param>
-        /// <param name="second">Second INavigable.</param>
-        /// <returns><c>true</c> if same. Otherwise <c>false</c>.</returns>
-        public virtual bool CompareTypeNames(INavigable first, INavigable second)
+        /// <param name="historic">The historic to publish</param>
+        public virtual void PublishHistoric(List<INavigable> historic)
         {
-            bool equal = first.GetType().Name == second.GetType().Name;
-            return equal;
+            NotifyHistoricObservers(historic);
         }
 
         /// <summary>
-        /// Set the last known INavigable is exists.
+        /// Register HistoricObserver as WeakReference.
         /// </summary>
-        /// <param name="iNavigable">The INavigable.</param>
-        /// <param name="exists">The result.</param>
-        public virtual void SetLast(INavigable iNavigable, bool exists)
+        /// <param name="observer">The HistoricObserver.</param>
+        /// <returns>The WeakReference to the HistoricObserver.</returns>
+        public virtual WeakReference<IHistoricObserver> RegisterObserver(IHistoricObserver observer)
         {
-            if (exists)
+            var weakObserver = new WeakReference<IHistoricObserver>(observer);
+            observers.Add(weakObserver);
+            return weakObserver;
+        }
+
+        /// <summary>
+        /// Unregister an HistoricObserver.
+        /// </summary>
+        /// <param name="observer">The HistoricObserver to unregister.</param>
+        public virtual void UnregisterObserver(IHistoricObserver observer)
+        {
+            var obs = observers.Where(x =>
             {
-                if (Last == null || !CompareTypeNames(iNavigable, Last))
-                {
-                    Last = iNavigable;
-                    OnLastExistingINavigableChanged(
-                        Last,
-                        new NavigableEventArgs { Exists = exists, Type = Last.GetType() });
-                }
+                x.TryGetTarget(out IHistoricObserver target);
+                return target.Equals(observer);
+            }).SingleOrDefault();
+
+            if (obs != null)
+            {
+                observers.Remove(obs);
             }
+        }
+
+        /// <summary>
+        /// Notify HistoricObservers of an update on historic.
+        /// </summary>
+        /// <param name="historic">The updated historic</param>
+        public virtual void NotifyHistoricObservers(List<INavigable> historic)
+        {
+            observers.ForEach(x =>
+            {
+                x.TryGetTarget(out IHistoricObserver obs);
+                if (obs == null)
+                {
+                    UnregisterObserver(obs);
+                }
+                else
+                {
+                    obs.Update(historic);
+                }
+            });
         }
 
         #endregion Public
 
         #region Private
+
+        /// <summary>
+        /// Set the last known INavigable is exists.
+        /// </summary>
+        /// <param name="navigable">The INavigable.</param>
+        /// <param name="status">The NavigableStatus of the last INavigable.</param>
+        /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
+        private void SetLast(INavigable navigable, INavigableStatus status)
+        {
+            if (Last == null || !Equals(navigable, Last))
+            {
+                Last = navigable;
+                PublishHistoric(Historic);
+            }
+        }
 
         private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables)
         {
@@ -440,7 +502,6 @@ namespace IC.Navigation
                 {
                     // Do nothing.
                 }
-
             }
 
             return match;
@@ -448,21 +509,16 @@ namespace IC.Navigation
 
         private INavigable WaitForExists(INavigable navigable)
         {
-            return navigable.WaitForExists() ? navigable : null;
+            bool exists = navigable.PublishStatus().Exists;
+            return exists ? navigable : null;
         }
 
-        private void ValidateINavigableExists(INavigable iNavigagble, string definition)
+        private void ValidateINavigableExists(INavigable iNavigable, string definition)
         {
-            if (!iNavigagble.WaitForExists())
+            if (!iNavigable.PublishStatus().Exists)
             {
-                throw new Exception($"The {definition} \"{iNavigagble.ToString()}\" was not found.");
+                throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
             }
-        }
-
-        private void OnLastExistingINavigableChanged(INavigable inavigable, INavigableEventArgs e)
-        {
-            EventHandler<INavigableEventArgs> handler = ViewChanged;
-            handler?.Invoke(inavigable, e);
         }
 
         #endregion Private

@@ -1,18 +1,18 @@
 ﻿using IC.Navigation.UITests.Configs;
 using IC.Navigation.UITests.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium;
-using IC.Tests.App.UIAccessibility.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium;
+using IC.Tests.App.Poms.Appium.Interfaces;
 
 namespace IC.Navigation.UITests.Specflow.Contexts
 {
-    internal class AppiumContext
+    public class AppiumContext
     {
-        private IUIAccess sut;
+        private IFacade sut;
 
         /// <summary>
         /// An instance of the SUT's IMySession.
         /// </summary>
-        internal IUIAccess SUT
+        public IFacade SUT
         {
             get
             {
@@ -28,13 +28,13 @@ namespace IC.Navigation.UITests.Specflow.Contexts
             }
         }
 
-        private object _lock = new object();
+        private readonly object _lock = new object();
 
-        private IUIAccess Create()
+        private IFacade Create()
         {
             ISUTAppiumConfig config = new SUTAppiumConfig();
             IAppiumSession session = new SUTAppiumSession(config);
-            var sut = new UIAccess(session);
+            var sut = new Facade(session, thinkTime: 1);
             sut.WaitForEntryPoints();
             return sut;
         }

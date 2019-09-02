@@ -1,5 +1,5 @@
 ﻿using IC.Navigation.UITests.Interfaces;
-using IC.Tests.App.UIAccessibility.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 

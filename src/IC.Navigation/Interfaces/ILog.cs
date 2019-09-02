@@ -6,7 +6,7 @@ namespace IC.Navigation.Interfaces
     /// <summary>
     /// Represents the implementation of ILog.
     /// </summary>
-    public interface ILog
+    public interface ILog : INavigableObserver
     {
         /// <summary>
         /// Last known existing INavigable.
@@ -24,15 +24,28 @@ namespace IC.Navigation.Interfaces
         List<INavigable> Historic { get; }
 
         /// <summary>
-        /// Set the last known INavigable is exists.
+        /// Publish the historic.
         /// </summary>
-        /// <param name="iNavigable">The INavigable.</param>
-        /// <param name="exists">The result.</param>
-        void SetLast(INavigable iNavigable, bool exists);
+        /// <param name="historic">The historic to publish</param>
+        void PublishHistoric(List<INavigable> historic);
 
         /// <summary>
-        /// Event raised when the last known existing INavigable has changed.
+        /// Register HistoricObserver as WeakReference.
         /// </summary>
-        event EventHandler<INavigableEventArgs> ViewChanged;
+        /// <param name="observer">The HistoricObserver.</param>
+        /// <returns>The WeakReference to the HistoricObserver.</returns>
+        WeakReference<IHistoricObserver> RegisterObserver(IHistoricObserver observer);
+
+        /// <summary>
+        /// Unregister an HistoricObserver.
+        /// </summary>
+        /// <param name="observer">The HistoricObserver to unregister.</param>
+        void UnregisterObserver(IHistoricObserver observer);
+
+        /// <summary>
+        /// Notify HistoricObservers of an update on historic.
+        /// </summary>
+        /// <param name="historic">The updated historic</param>
+        void NotifyHistoricObservers(List<INavigable> historic);
     }
 }

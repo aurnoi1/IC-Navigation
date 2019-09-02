@@ -102,32 +102,32 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 13
-    testRunner.And("The \"menu view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("The \"menu page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 14
-    testRunner.Then("The control \"button to open the red view\" should be displayed in the current view" +
+    testRunner.Then("The control \"button to open the red page\" should be displayed in the current page" +
                     "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 15
-    testRunner.Given("The \"blue view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("The \"blue page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 16
-    testRunner.When("I navigate to \"menu view\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("I navigate to \"menu page\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 17
-    testRunner.Then("The \"menu view\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+    testRunner.Then("The \"menu page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 18
-    testRunner.And("The control \"button to open the red view\" should be displayed in the current view" +
+    testRunner.And("The control \"button to open the red page\" should be displayed in the current page" +
                     "", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 19
-    testRunner.And("The control \"fake name\" should not be displayed in the current view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("The control \"fake name\" should not be displayed in the current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.FactAttribute(DisplayName="Navigate from the \"menu view\" to \"blue view\"")]
+        [Xunit.FactAttribute(DisplayName="Navigate from the \"menu page\" to \"blue page\"")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "Navigate from the \"menu view\" to \"blue view\"")]
+        [Xunit.TraitAttribute("Description", "Navigate from the \"menu page\" to \"blue page\"")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void NavigateFromTheMenuViewToBlueView()
+        public virtual void NavigateFromTheMenuPageToBluePage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate from the \"menu view\" to \"blue view\"", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate from the \"menu page\" to \"blue page\"", null, new string[] {
                         "mytag"});
 #line 22
 this.ScenarioInitialize(scenarioInfo);
@@ -135,22 +135,22 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 23
- testRunner.Given("The \"menu view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("The \"menu page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 24
- testRunner.When("The \"button to open the blue view\" is pressed in current view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("The \"button to open the blue page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
- testRunner.Then("The \"blue view\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("The \"blue page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.FactAttribute(DisplayName="Navigate back to the \"menu view\" from \"blue view\"")]
+        [Xunit.FactAttribute(DisplayName="Navigate back to the \"menu page\" from \"blue page\"")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "Navigate back to the \"menu view\" from \"blue view\"")]
+        [Xunit.TraitAttribute("Description", "Navigate back to the \"menu page\" from \"blue page\"")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void NavigateBackToTheMenuViewFromBlueView()
+        public virtual void NavigateBackToTheMenuPageFromBluePage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate back to the \"menu view\" from \"blue view\"", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate back to the \"menu page\" from \"blue page\"", null, new string[] {
                         "mytag"});
 #line 28
 this.ScenarioInitialize(scenarioInfo);
@@ -158,22 +158,22 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 29
- testRunner.Given("The \"blue view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("The \"blue page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 30
- testRunner.When("The \"button to go back to the previous view\" is pressed in current view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("The \"button to go back to the previous page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 31
- testRunner.Then("The \"menu view\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("The \"menu page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.FactAttribute(DisplayName="Navigate to the \"yellow view\" from \"blue view\"")]
+        [Xunit.FactAttribute(DisplayName="Navigate to the \"yellow page\" from \"blue page\"")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "Navigate to the \"yellow view\" from \"blue view\"")]
+        [Xunit.TraitAttribute("Description", "Navigate to the \"yellow page\" from \"blue page\"")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void NavigateToTheYellowViewFromBlueView()
+        public virtual void NavigateToTheYellowPageFromBluePage()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to the \"yellow view\" from \"blue view\"", null, new string[] {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to the \"yellow page\" from \"blue page\"", null, new string[] {
                         "mytag"});
 #line 34
 this.ScenarioInitialize(scenarioInfo);
@@ -181,23 +181,23 @@ this.ScenarioInitialize(scenarioInfo);
 #line 6
 this.FeatureBackground();
 #line 35
- testRunner.Given("The \"blue view\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("The \"blue page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 36
- testRunner.When("The \"button to open the yellow view\" is pressed in current view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("The \"button to open the yellow page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 37
- testRunner.Then("The \"yellow view\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("The \"yellow page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="The back button in \"yellow view\" should open the previous view")]
+        [Xunit.TheoryAttribute(DisplayName="The back button in \"yellow page\" should open the previous page")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "The back button in \"yellow view\" should open the previous view")]
+        [Xunit.TraitAttribute("Description", "The back button in \"yellow page\" should open the previous page")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        [Xunit.InlineDataAttribute("\"menu view\"", "\"button to open the yellow view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"blue view\"", "\"button to open the yellow view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"red view\"", "\"button to open the yellow view\"", new string[0])]
-        public virtual void TheBackButtonInYellowViewShouldOpenThePreviousView(string view_Before_Yellow, string button_To_Open_Yellow_View, string[] exampleTags)
+        [Xunit.InlineDataAttribute("\"menu page\"", "\"button to open the yellow page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"blue page\"", "\"button to open the yellow page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"red page\"", "\"button to open the yellow page\"", new string[0])]
+        public virtual void TheBackButtonInYellowPageShouldOpenThePreviousPage(string view_Before_Yellow, string button_To_Open_Yellow_View, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -205,7 +205,7 @@ this.FeatureBackground();
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The back button in \"yellow view\" should open the previous view", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The back button in \"yellow page\" should open the previous page", null, @__tags);
 #line 40
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -214,26 +214,26 @@ this.FeatureBackground();
 #line 41
     testRunner.Given(string.Format("The {0} has been opened", view_Before_Yellow), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line 42
-    testRunner.When(string.Format("The {0} is pressed in current view", button_To_Open_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When(string.Format("The {0} is pressed in current page", button_To_Open_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 43
- testRunner.Then("The \"yellow view\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("The \"yellow page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 44
-    testRunner.When("The \"button to go back to the previous view\" is pressed in current view", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+    testRunner.When("The \"button to go back to the previous page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 45
     testRunner.Then(string.Format("The {0} should be opened", view_Before_Yellow), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Navigate from a view to another and come back to the original view.")]
+        [Xunit.TheoryAttribute(DisplayName="Navigate from a page to another and come back to the original page.")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "Navigate from a view to another and come back to the original view.")]
+        [Xunit.TraitAttribute("Description", "Navigate from a page to another and come back to the original page.")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        [Xunit.InlineDataAttribute("\"menu view\"", "\"yellow view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"blue view\"", "\"red view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"red view\"", "\"yellow view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"yellow view\"", "\"menu view\"", new string[0])]
-        public virtual void NavigateFromAViewToAnotherAndComeBackToTheOriginalView_(string original_View, string destination_View, string[] exampleTags)
+        [Xunit.InlineDataAttribute("\"menu page\"", "\"yellow page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"blue page\"", "\"red page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"red page\"", "\"yellow page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"yellow page\"", "\"menu page\"", new string[0])]
+        public virtual void NavigateFromAPageToAnotherAndComeBackToTheOriginalPage_(string original_View, string destination_View, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -241,7 +241,7 @@ this.FeatureBackground();
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate from a view to another and come back to the original view.", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate from a page to another and come back to the original page.", null, @__tags);
 #line 54
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -261,17 +261,17 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.TheoryAttribute(DisplayName="Resolve navigation when an action can open more than one view.")]
+        [Xunit.TheoryAttribute(DisplayName="Resolve navigation when an action can open more than one page.")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "Resolve navigation when an action can open more than one view.")]
+        [Xunit.TraitAttribute("Description", "Resolve navigation when an action can open more than one page.")]
         [Xunit.TraitAttribute("Category", "mytag")]
-        [Xunit.InlineDataAttribute("\"blue view\"", "\"red view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"red view\"", "\"blue view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"menu view\"", "\"blue view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"menu view\"", "\"red view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"red view\"", "\"menu view\"", new string[0])]
-        [Xunit.InlineDataAttribute("\"blue view\"", "\"menu view\"", new string[0])]
-        public virtual void ResolveNavigationWhenAnActionCanOpenMoreThanOneView_(string view_Opening_Yellow_View, string a_Different_Than_View_Opening_Yellow_View, string[] exampleTags)
+        [Xunit.InlineDataAttribute("\"blue page\"", "\"red page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"red page\"", "\"blue page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"menu page\"", "\"blue page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"menu page\"", "\"red page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"red page\"", "\"menu page\"", new string[0])]
+        [Xunit.InlineDataAttribute("\"blue page\"", "\"menu page\"", new string[0])]
+        public virtual void ResolveNavigationWhenAnActionCanOpenMoreThanOnePage_(string view_Opening_Yellow_View, string a_Different_Than_View_Opening_Yellow_View, string[] exampleTags)
         {
             string[] @__tags = new string[] {
                     "mytag"};
@@ -279,7 +279,7 @@ this.FeatureBackground();
             {
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Resolve navigation when an action can open more than one view.", null, @__tags);
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Resolve navigation when an action can open more than one page.", null, @__tags);
 #line 70
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -288,7 +288,7 @@ this.FeatureBackground();
 #line 71
     testRunner.When(string.Format("I navigate to {0}", view_Opening_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 72
-    testRunner.And("I navigate to \"yellow view\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("I navigate to \"yellow page\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 73
     testRunner.And(string.Format("I navigate to {0}", a_Different_Than_View_Opening_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 74

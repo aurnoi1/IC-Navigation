@@ -8,15 +8,15 @@ namespace IC.Navigation.Extensions.Appium
     public static class IWindowsDriverSessionEx
     {
         /// <summary>
-        /// Find a WindowsElement in the last known INavigable, based on its attribute UIArtefact.UsageName, on the last known view.
+        /// Find a WindowsElement in the last known INavigable, based on its attribute Aliases, on the last known view.
         /// </summary>
         /// <param name="winDriverSession">This IWindowsDriverSession.</param>
-        /// <param name="usageName">The matching usage name.</param>
+        /// <param name="alias">The matching alias.</param>
         /// <returns>The WindowsElement if found, otherwise <c>null</c>.</returns>
-        public static WindowsElement FindElementByUsageNameInLastINavigable(this IWindowsDriverSession winDriverSession, string usageName)
+        public static WindowsElement FindElementByAliasesInLastINavigable(this IWindowsDriverSession winDriverSession, string alias)
         {
             WindowsElement match = null;
-            var prop = GetLastINavigableUIArtefactAndProperties(winDriverSession).SingleOrDefault(x => x.Key.UsageName == usageName).Value;
+            var prop = GetLastINavigableAliasesAndProperties(winDriverSession).SingleOrDefault(x => x.Key.Values.Contains(alias)).Value;
             if (prop != null)
             {
                 match = prop.GetMethod.Invoke(winDriverSession.Last, null) as WindowsElement;
@@ -26,21 +26,20 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the properties and the associated UIArtefact attribute, of last known INavigable.
+        /// Get the properties and the associated Aliases attribute, of last known INavigable.
         /// </summary>
         /// <param name="winDriverSession">This IWindowsDriverSession.</param>
-        /// <returns>The properties and the associated UIArtefact attribute, of last INavigable.</returns>
-        public static Dictionary<UIArtefact, PropertyInfo> GetLastINavigableUIArtefactAndProperties(this IWindowsDriverSession winDriverSession)
+        /// <returns>The properties and the associated Aliases of last INavigable.</returns>
+        public static Dictionary<Aliases, PropertyInfo> GetLastINavigableAliasesAndProperties(this IWindowsDriverSession winDriverSession)
         {
-            Dictionary<UIArtefact, PropertyInfo> propertyInfos = new Dictionary<UIArtefact, PropertyInfo>();
+            Dictionary<Aliases, PropertyInfo> propertyInfos = new Dictionary<Aliases, PropertyInfo>();
             var properties = winDriverSession.Last.GetType().GetProperties();
             foreach (PropertyInfo prop in properties)
             {
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    UIArtefact uIArtefact = attr as UIArtefact;
-                    if (uIArtefact != null && prop.PropertyType.Equals(typeof(WindowsElement)))
+                    if (attr is Aliases uIArtefact && prop.PropertyType.Equals(typeof(WindowsElement)))
                     {
                         propertyInfos.Add(uIArtefact, prop);
                     }

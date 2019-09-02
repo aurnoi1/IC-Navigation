@@ -16,7 +16,7 @@ namespace IC.Navigation.Interfaces
         List<INavigable> GetShortestPath(INavigable origin, INavigable destination);
 
         /// <summary>
-        /// The nodes of INavigable forming the Graph.
+        /// The nodes of INavigables forming the Graph.
         /// </summary>
         HashSet<INavigable> Nodes { get; }
     }
