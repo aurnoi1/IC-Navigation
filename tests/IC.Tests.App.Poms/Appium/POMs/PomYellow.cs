@@ -1,5 +1,7 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Extensions;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -25,25 +27,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// The tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
-            "TitleYellow",
-            TimeSpan.FromSeconds(3));
+        public SearchParam UITitle => new SearchParam(WDLocators.AutomationId, "TitleYellow");
 
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnBack",
-            TimeSpan.FromSeconds(3));
+        public SearchParam UIBtnBack => new SearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public WindowsElement UIBtnOpenMenuPage => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnOpenMenuView",
-            TimeSpan.FromSeconds(3));
+        public SearchParam UIBtnOpenMenuPage => new SearchParam(WDLocators.AutomationId, "BtnOpenMenuView");
 
         #endregion Controls
 
@@ -83,7 +79,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The ViewMenu.</returns>
         public PomMenu OpenMenuByMenuBtn()
         {
-            UIBtnOpenMenuPage.Click();
+            wd.Get(UIBtnOpenMenuPage).Click();
             return session.PomMenu;
         }
 
@@ -97,11 +93,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                UIBtnBack.Click();
+                wd.Get(UIBtnBack).Click();
             }
             else
             {
-                UIBtnOpenMenuPage.Click();
+                wd.Get(UIBtnOpenMenuPage).Click();
             }
         }
 
@@ -119,7 +115,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                () => UIBtnBack.Click(),
+                () => wd.Get(UIBtnBack).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives);

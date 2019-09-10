@@ -29,6 +29,5 @@ namespace IC.Navigation
         {
             Values = alias.ToList();
         }
-        
     }
 }

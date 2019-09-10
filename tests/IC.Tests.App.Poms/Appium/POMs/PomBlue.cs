@@ -24,33 +24,23 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// The tile of this page.
+        /// The title of this page.
         /// </summary>
-        public SearchParam Title => new SearchParam(WDLocators.AutomationId, "TitleBlue");
+        public SearchParam UILblTitle => new SearchParam(WDLocators.AutomationId, "TitleBlue");
 
-        /// <summary>
-        /// The tile of this page.
-        /// </summary>
-        [Aliases("title")] // explicitly same than other pages for test.
-        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
-            "TitleBlue",
-            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnBack",
-            TimeSpan.FromSeconds(3));
+        public SearchParam SPBtnBack => new SearchParam(WDLocators.AutomationId, "BtnBack");
+
 
         /// <summary>
         /// A control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnOpenYellowView",
-            TimeSpan.FromSeconds(3));
+        public SearchParam SPBtnOpenYellowView => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         #endregion Controls
 
@@ -59,7 +49,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = UITitle != null;
+            bool isDisplayed = session.WindowsDriver.Get(UILblTitle) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -74,8 +64,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomMenu, () => UIBtnBack.Click() },
-                { session.PomYellow, () => UIBtnOpenYellowView.Click() },
+                { session.PomMenu, () => wd.Get(SPBtnBack).Click() },
+                { session.PomYellow, () => wd.Get(SPBtnOpenYellowView).Click() },
             };
         }
     }

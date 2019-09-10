@@ -1,5 +1,7 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Extensions;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -25,25 +27,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// The tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
-            "TitleRed",
-            TimeSpan.FromSeconds(3));
+        public SearchParam UITitle => new SearchParam(WDLocators.AutomationId, "TitleRed");
 
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnBack",
-            TimeSpan.FromSeconds(3));
+        public SearchParam UIBtnBack => new SearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
         /// A control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnOpenYellowView",
-            TimeSpan.FromSeconds(3));
+        public SearchParam UIBtnOpenYellowView => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         #endregion Controls
 
@@ -67,8 +63,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomMenu, () => UIBtnBack.Click() },
-                { session.PomYellow, () => UIBtnOpenYellowView.Click() },
+                { session.PomMenu, () => wd.Get(UIBtnBack).Click() },
+                { session.PomYellow, () => wd.Get(UIBtnOpenYellowView).Click() },
             };
         }
     }

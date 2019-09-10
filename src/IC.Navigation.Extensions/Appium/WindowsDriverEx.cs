@@ -67,43 +67,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <exception cref="OpenQA.Selenium.WebDriverException">Thrown when element is not found.</exception>
         public static WindowsElement Get(this WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
         {
-            return GetWindowsElement(windowsDriver, searchParam);
-        }
-
-        /// <summary>
-        /// Find the first element matching the SearchParam.
-        /// </summary>
-        /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
-        /// <returns>The first element matching the SearchParam, otherwise <c>null</c>.</returns>
-        public static WindowsElement FindFirst(this WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
-        {
             return FindWindowsElement(windowsDriver, searchParam);
-        }
-
-        /// <summary>
-        /// Get the WindowsElement.
-        /// </summary>
-        /// <param name="windowsDriver">The WindowsDriver<WindowsElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
-        /// <returns>The matching WindowsElement.</returns>
-        /// <exception cref="OpenQA.Selenium.WebDriverException">Thrown when element is not found.</exception>
-        private static WindowsElement GetWindowsElement(WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
-        {
-            switch (searchParam.Locator)
-            {
-                case Enums.WDLocators.AutomationId:
-                    return windowsDriver.FindElementByAccessibilityId(searchParam.Value);
-
-                case Enums.WDLocators.ClassName:
-                    return windowsDriver.FindElementByClassName(searchParam.Value);
-
-                case Enums.WDLocators.Name:
-                    return windowsDriver.FindElementByName(searchParam.Value);
-
-                default:
-                    throw new Exception($"Unknown locator: {searchParam.Locator}.");
-            }
         }
 
         private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)

@@ -35,7 +35,7 @@ namespace IC.Navigation.UITests
         {
             sut.Last.GoTo(sut.PomBlue).Do(() =>
             {
-                var title = sut.WindowsDriver.FindFirst(sut.PomBlue.Title);
+                var title = sut.WindowsDriver.Get(sut.PomBlue.UILblTitle);
                 Assert.NotNull(title);
             });
         }

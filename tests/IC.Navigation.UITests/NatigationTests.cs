@@ -22,6 +22,7 @@ namespace IC.Navigation.UITests
         public NatigationTests()
         {
             sut = new AppiumContext().SUT;
+            wd = sut.WindowsDriver;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
         }
 
@@ -31,6 +32,7 @@ namespace IC.Navigation.UITests
 
         private IFacade sut;
         private IFixture fixture;
+        private WindowsDriver<WindowsElement> wd;
 
         #endregion Private
 
@@ -163,8 +165,8 @@ namespace IC.Navigation.UITests
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.PomMenu.Do(() => sut.PomMenu.UITxtBoxImportantMessage.SendKeys(expected));
-            Assert.Equal(expected, sut.PomMenu.UITxtBoxImportantMessage.Text);
+            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessage).SendKeys(expected));
+            Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessage).Text);
         }
 
         [Fact]

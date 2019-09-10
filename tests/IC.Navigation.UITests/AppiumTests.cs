@@ -2,6 +2,7 @@ using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using Xunit;
 
@@ -13,6 +14,7 @@ namespace IC.Navigation.UITests
         public AppiumTests()
         {
             sut = new AppiumContext().SUT;
+            wd = sut.WindowsDriver;
         }
 
         #region Properties
@@ -20,6 +22,7 @@ namespace IC.Navigation.UITests
         #region Private
 
         private IFacade sut;
+        private WindowsDriver<WindowsElement> wd;
 
         #endregion Private
 
@@ -32,7 +35,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueView()
         {
-            Assert.Equal("BtnOpenBlueView", sut.PomMenu.UIBtnOpenBlueView.GetAttribute("AutomationId"));
+            Assert.Equal("BtnOpenBlueView", wd.Get(sut.PomMenu.UIBtnOpenBlueView).GetAttribute("AutomationId"));
         }
 
         [Fact]
@@ -44,7 +47,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindMenuTitle()
         {
-            Assert.Equal("TitleMenu", sut.PomMenu.UITitle.GetAttribute("AutomationId"));
+            Assert.Equal("TitleMenu", wd.Get(sut.PomMenu.UITitle).GetAttribute("AutomationId"));
         }
 
 
@@ -53,20 +56,20 @@ namespace IC.Navigation.UITests
         {
             string expected = "This is a text";
             sut.PomMenu.EnterText(expected);
-            Assert.Equal(expected, sut.PomMenu.UITxtBoxImportantMessage.Text);
+            Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessage).Text);
         }
 
         [Fact]
         public void ShouldOpenBlueView()
         {
-            sut.PomMenu.UIBtnOpenBlueView.Click();
+            wd.Get(sut.PomMenu.UIBtnOpenBlueView).Click();
             Assert.True(sut.PomBlue.WaitForExists());
         }
 
         [Fact]
         public void ShouldOpenRedView()
         {
-            sut.PomMenu.UIBtnOpenRedView.Click();
+            wd.Get(sut.PomMenu.UIBtnOpenRedView).Click();
             Assert.True(sut.PomRed.WaitForExists());
         }
 
