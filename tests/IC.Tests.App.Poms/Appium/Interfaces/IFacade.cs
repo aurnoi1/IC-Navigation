@@ -1,5 +1,6 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;

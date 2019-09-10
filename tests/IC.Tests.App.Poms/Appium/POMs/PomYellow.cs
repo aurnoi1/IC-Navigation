@@ -1,10 +1,8 @@
 ﻿using IC.Navigation;
-using IC.Navigation.Extensions;
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Enums;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
+using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 
@@ -27,19 +25,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// The tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam UITitle => new SearchParam(WDLocators.AutomationId, "TitleYellow");
+        public WDSearchParam UITitle => new WDSearchParam(WDLocators.AutomationId, "TitleYellow");
 
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam UIBtnBack => new SearchParam(WDLocators.AutomationId, "BtnBack");
+        public WDSearchParam UIBtnBack => new WDSearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
         /// A control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public SearchParam UIBtnOpenMenuPage => new SearchParam(WDLocators.AutomationId, "BtnOpenMenuView");
+        public WDSearchParam UIBtnOpenMenuPage => new WDSearchParam(WDLocators.AutomationId, "BtnOpenMenuView");
 
         #endregion Controls
 

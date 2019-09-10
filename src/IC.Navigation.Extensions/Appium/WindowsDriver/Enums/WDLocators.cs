@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace IC.Navigation.Extensions.Enums
+namespace IC.Navigation.Extensions.Appium.WindowsDriver.Enums
 {
     public enum WDLocators
     {

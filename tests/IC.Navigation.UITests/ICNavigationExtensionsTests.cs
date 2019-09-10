@@ -1,5 +1,5 @@
 using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
@@ -28,7 +28,6 @@ namespace IC.Navigation.UITests
         #region Methods
 
         #region Public
-
 
         [Fact]
         public void ShouldFindMenuTitleInPomBlue()

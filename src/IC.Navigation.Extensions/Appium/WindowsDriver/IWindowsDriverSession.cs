@@ -1,10 +1,8 @@
 ﻿using IC.Navigation.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace IC.Navigation.Extensions.Appium
+namespace IC.Navigation.Extensions.Appium.WindowsDriver
 {
     public interface IWindowsDriverSession : ISession, IDisposable
     {

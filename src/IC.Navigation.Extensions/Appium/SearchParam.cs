@@ -1,20 +1,19 @@
-﻿using IC.Navigation.Extensions.Enums;
-using IC.Navigation.Extensions.Interfaces;
+﻿using IC.Navigation.Extensions.Appium.Interfaces;
 
-namespace IC.Navigation.Extensions
+namespace IC.Navigation.Extensions.Appium
 {
     public class SearchParam : ISearchParam
     {
-        public SearchParam(WDLocators locator, string value)
+        public SearchParam(string locator, string value)
         {
             Locator = locator;
             Value = value;
         }
 
         /// <summary>
-        /// Name of the parameter.
+        /// Locator to find the WindowsElement.
         /// </summary>
-        public WDLocators Locator { get; set; }
+        public string Locator { get; set; }
 
         /// <summary>
         /// Value of the parameter.

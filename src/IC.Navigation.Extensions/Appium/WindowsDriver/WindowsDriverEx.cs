@@ -1,10 +1,11 @@
-﻿using IC.Navigation.Extensions.Interfaces;
+﻿using IC.Navigation.Extensions.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 
-namespace IC.Navigation.Extensions.Appium
+namespace IC.Navigation.Extensions.Appium.WindowsDriver
 {
     public static class WindowsDriverEx
     {
@@ -57,7 +58,6 @@ namespace IC.Navigation.Extensions.Appium
             return FindElement(windowsDriver, searchMethod, timeout);
         }
 
-
         /// <summary>
         /// Get the WindowsElement.
         /// </summary>
@@ -72,9 +72,9 @@ namespace IC.Navigation.Extensions.Appium
 
         private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
         {
-            switch (searchParam.Locator)
+            switch (Enum.Parse(typeof(WDLocators), searchParam.Locator))
             {
-                case Enums.WDLocators.AutomationId:
+                case WDLocators.AutomationId:
                     return windowsDriver.FindElementsByAccessibilityId(searchParam.Value).FirstOrDefault();
 
                 case Enums.WDLocators.ClassName:

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace IC.Navigation.Extensions.Appium
+namespace IC.Navigation.Extensions.Appium.WindowsDriver
 {
     public static class IWindowsDriverSessionEx
     {
