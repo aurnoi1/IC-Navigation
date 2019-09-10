@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium.Appium.Windows;
+﻿using IC.Navigation.Extensions.Appium.WindowsDriver.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
