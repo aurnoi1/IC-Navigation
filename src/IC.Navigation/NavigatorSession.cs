@@ -456,7 +456,7 @@ namespace IC.Navigation
                     CancellationToken token = source.Token;
                     foreach (var iNavigagble in iNavigables)
                     {
-                        tasks.Add(new Task<INavigable>(() => WaitForExists(iNavigagble), token));
+                        tasks.Add(new Task<INavigable>(() => GetExistingNavigable(iNavigagble), token));
                     }
 
                     bool tasksStarted = false;
@@ -491,7 +491,7 @@ namespace IC.Navigation
             return match;
         }
 
-        private INavigable WaitForExists(INavigable navigable)
+        private INavigable GetExistingNavigable(INavigable navigable)
         {
             bool exists = navigable.PublishStatus().Exists;
             return exists ? navigable : null;
