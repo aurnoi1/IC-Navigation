@@ -27,7 +27,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("title")] // explicitly same than other pages for test.
         public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
             "TitleYellow",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control to open the previous page.
@@ -35,7 +35,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("button to go back to the previous page")]
         public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnBack",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control to open the previous page.
@@ -43,7 +43,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("button to open menu page")]
         public WindowsElement UIBtnOpenMenuPage => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenMenuView",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         #endregion Controls
 

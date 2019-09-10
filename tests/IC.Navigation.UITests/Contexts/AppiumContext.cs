@@ -34,7 +34,7 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         {
             ISUTAppiumConfig config = new SUTAppiumConfig();
             IAppiumSession session = new SUTAppiumSession(config);
-            var sut = new Facade(session, thinkTime: 1);
+            var sut = new Facade(session);
             sut.WaitForEntryPoints();
             return sut;
         }

@@ -44,6 +44,26 @@ namespace IC.Navigation.UITests.Specflow.Steps
             }
         }
 
+        [Given(@"(.*) day from today in the news paper")]
+        public void GivenDayFromToday(DateTime date)
+        {
+            var d = date;
+        }
+
+        [Given(@"(.*) day\(s\) in the news paper")]
+        public void GivenDaySInTheNewsPaper(DateTime date)
+        {
+            var d = date;
+        }
+
+
+        [Given(@"(.*) apple in the basket")]
+        public void GivenAppleInTheBasket(int num)
+        {
+            var i = num;
+        }
+
+
 
         public void Dispose()
         {

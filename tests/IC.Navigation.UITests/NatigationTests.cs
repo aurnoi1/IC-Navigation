@@ -60,8 +60,7 @@ namespace IC.Navigation.UITests
                 .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
                 .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
                 .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
-                .GoTo(sut.EntryPoint) // The entry point.
-                .WaitForExists(ephemeralThinkTime: 5);
+                .GoTo(sut.EntryPoint); // The entry point.
 
             Assert.True(sut.Historic.ElementAt(0).WaitForExists());
         }
@@ -187,20 +186,6 @@ namespace IC.Navigation.UITests
         {
             sut.PomMenu.GoTo(sut.PomBlue);
             Assert.Equal(typeof(PomBlue), sut.Historic.Last().GetType());
-        }
-
-
-
-        [Theory, AutoData]
-        [InlineAutoData(0)]
-        public void ThinkTime_Should_Adjust_Timeout(double thinkTime, TimeSpan timeout)
-        {
-            sut.ThinkTime = Math.Abs(thinkTime);
-            var expected = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(sut.ThinkTime));
-
-            var actual = sut.AdjustTimeout(timeout);
-
-            Assert.Equal(expected, actual);
         }
 
         public void Dispose()

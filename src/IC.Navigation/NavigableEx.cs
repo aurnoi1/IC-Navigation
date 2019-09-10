@@ -60,29 +60,5 @@ namespace IC.Navigation.CoreExtensions
         {
             return source.PublishStatus().Exists;
         }
-
-        /// <summary>
-        /// Wait for INavigable to exists with a specified <see cref="ISession.ThinkTime"/>.
-        /// </summary>
-        /// <param name="source">This INavigable instance.</param>
-        /// <param name="ephemeralThinkTime">An ephemeral ThinkTime set for this action only.</param>
-        /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
-        public static bool WaitForExists(this INavigable source, uint ephemeralThinkTime)
-        {
-            var actualThinkTime = source.Session.ThinkTime;
-            try
-            {
-                source.Session.ThinkTime = ephemeralThinkTime;
-                return source.PublishStatus().Exists;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                source.Session.ThinkTime = actualThinkTime;
-            }
-        }
     }
 }

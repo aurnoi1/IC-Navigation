@@ -27,7 +27,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("not implemented")]
         public WindowsElement UIBtnNotImplemented => session.WindowsDriver.FindElementByAccessibilityId(
             "NotImplemented",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// The tile of this page.
@@ -35,7 +35,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("title")] // explicitly same than other pages for test.
         public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
             "TitleMenu",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control to open the BlueView.
@@ -43,7 +43,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("button to open the blue page")]
         public WindowsElement UIBtnOpenBlueView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenBlueView",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control to open the RedView.
@@ -51,7 +51,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("button to open the red page")]
         public WindowsElement UIBtnOpenRedView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenRedView",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control to open the RedView.
@@ -59,7 +59,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("button to open the yellow page")]
         public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
             "BtnOpenYellowView",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         /// <summary>
         /// A control where text can be enter.
@@ -67,7 +67,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         [Aliases("box where enter text")]
         public WindowsElement UITxtBoxImportantMessage => session.WindowsDriver.FindElementByAccessibilityId(
             "TxtBoxImportantMessage",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+            TimeSpan.FromSeconds(3));
 
         #endregion Controls
 

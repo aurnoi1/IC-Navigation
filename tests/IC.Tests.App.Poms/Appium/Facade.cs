@@ -19,14 +19,8 @@ namespace IC.Tests.App.Poms.Appium
             EntryPoints = new HashSet<INavigable>() { PomMenu };
         }
 
-        public Facade(IAppiumSession appiumSession, double thinkTime) : this(appiumSession)
-        {
-            ThinkTime = thinkTime;
-        }
-
         public Facade(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, double thinkTime)
         {
-            ThinkTime = thinkTime;
             Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             WindowsDriver = winDriver;
@@ -72,28 +66,6 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         public override HashSet<INavigable> EntryPoints { get; protected set; }
 
-        private double thinkTime = 1;
-
-        /// <summary>
-        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
-        /// The default value is 1.
-        /// </summary>
-        public override double ThinkTime
-        {
-            get
-            {
-                return thinkTime;
-            }
-            set
-            {
-                if (value < 0)
-                {
-                    throw new Exception($"The value of {nameof(ThinkTime)} must be positive.");
-                }
-
-                thinkTime = value;
-            }
-        }
 
         #endregion Public
 

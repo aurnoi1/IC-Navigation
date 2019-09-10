@@ -50,11 +50,6 @@ namespace IC.Navigation
         public abstract HashSet<INavigable> EntryPoints { get; protected set; }
 
         /// <summary>
-        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
-        /// </summary>
-        public abstract double ThinkTime { get; set; }
-
-        /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
         /// Otherwise <c>null</c> if nothing found at the time.
         /// </summary>
@@ -151,17 +146,6 @@ namespace IC.Navigation
             }
 
             return navigables;
-        }
-
-        /// <summary>
-        /// Adjust the timeout when waiting for the UI objects depending the <see cref="ThinkTime"/> value.
-        /// </summary>
-        /// <param name="timeout">The timeout.</param>
-        /// <returns>The adjusted timeout.</returns>
-        public virtual TimeSpan AdjustTimeout(TimeSpan timeout)
-        {
-            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(ThinkTime));
-            return adjTimeout;
         }
 
         /// <summary>

@@ -22,17 +22,5 @@ namespace IC.Navigation.Interfaces
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
         /// </summary>
         INavigable EntryPoint { get; }
-
-        /// <summary>
-        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
-        /// </summary>
-        double ThinkTime { get; set; }
-
-        /// <summary>
-        /// Adjust the timeout when waiting for the UI objects depending the <see cref="ThinkTime"/> value.
-        /// </summary>
-        /// <param name="timeout">The timeout.</param>
-        /// <returns>The adjusted timeout.</returns>
-        TimeSpan AdjustTimeout(TimeSpan timeout);
     }
 }

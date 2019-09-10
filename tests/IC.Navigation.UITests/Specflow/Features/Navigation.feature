@@ -18,6 +18,18 @@ Scenario: Reuse steps declares in different Step classes
     And The control "button to open the red page" should be displayed in the current page
     And The control "fake name" should not be displayed in the current page
 
+
+
+@mytag
+Scenario: try date
+	Given 1 day from today in the news paper
+    Given 1 day(s) in the news paper
+
+    @mytag
+Scenario: try not date
+	Given 1 apple in the basket
+
+
 @mytag
 Scenario: Navigate from the "menu page" to "blue page"
 	Given The "menu page" has been opened
