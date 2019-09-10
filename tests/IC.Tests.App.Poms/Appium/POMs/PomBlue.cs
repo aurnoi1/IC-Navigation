@@ -1,5 +1,7 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Extensions;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -20,6 +22,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         }
 
         #region Controls
+
+        /// <summary>
+        /// The tile of this page.
+        /// </summary>
+        public SearchParam Title => new SearchParam(WDLocators.AutomationId, "TitleBlue");
 
         /// <summary>
         /// The tile of this page.

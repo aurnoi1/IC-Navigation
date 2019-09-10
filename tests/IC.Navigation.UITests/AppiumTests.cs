@@ -1,4 +1,5 @@
 using IC.Navigation.CoreExtensions;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
@@ -45,6 +46,7 @@ namespace IC.Navigation.UITests
         {
             Assert.Equal("TitleMenu", sut.PomMenu.UITitle.GetAttribute("AutomationId"));
         }
+
 
         [Fact]
         public void ShouldEnterTextInMenuTextBox()
