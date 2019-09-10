@@ -1,9 +1,8 @@
-﻿using IC.Navigation.Extensions.Appium.Interfaces;
+﻿using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
+using IC.Navigation.Extensions.Appium.WindowsDriver.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
-using System.Diagnostics;
 using System.Linq;
-using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 
 namespace IC.Navigation.Extensions.Appium.WindowsDriver
 {
@@ -16,12 +15,12 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
         /// <returns>The matching WindowsElement.</returns>
         /// <exception cref="OpenQA.Selenium.WebDriverException">Thrown when element is not found.</exception>
-        public static WindowsElement Get(this WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
+        public static WindowsElement Get(this WindowsDriver<WindowsElement> windowsDriver, IWDSearchParam searchParam)
         {
             return FindWindowsElement(windowsDriver, searchParam);
         }
 
-        private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
+        private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, IWDSearchParam searchParam)
         {
             switch (Enum.Parse(typeof(WDLocators), searchParam.Locator))
             {
