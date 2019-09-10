@@ -61,8 +61,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomMenu, () => wd.Get(UIBtnBack).Click() },
-                { session.PomYellow, () => wd.Get(UIBtnOpenYellowView).Click() },
+                { session.PomMenu, () => session.WindowsDriver.Get(UIBtnBack).Click() },
+                { session.PomYellow, () => session.WindowsDriver.Get(UIBtnOpenYellowView).Click() },
             };
         }
     }

@@ -19,7 +19,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public PomBase(in IFacade session)
         {
             this.session = session;
-            wd = session.WindowsDriver;
             RegisterObserver(session);
         }
 
@@ -89,10 +88,5 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// The navigation session.
         /// </summary>
         ISession INavigable.Session => session;
-
-        /// <summary>
-        /// The WindowsDriver<WindowsElement> to use to find element.
-        /// </summary>
-        private protected WindowsDriver<WindowsElement> wd { get; private set;}
     }
 }

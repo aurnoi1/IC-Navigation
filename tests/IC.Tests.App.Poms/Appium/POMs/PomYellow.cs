@@ -77,7 +77,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The ViewMenu.</returns>
         public PomMenu OpenMenuByMenuBtn()
         {
-            wd.Get(UIBtnOpenMenuPage).Click();
+            session.WindowsDriver.Get(UIBtnOpenMenuPage).Click();
             return session.PomMenu;
         }
 
@@ -91,11 +91,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                wd.Get(UIBtnBack).Click();
+                session.WindowsDriver.Get(UIBtnBack).Click();
             }
             else
             {
-                wd.Get(UIBtnOpenMenuPage).Click();
+                session.WindowsDriver.Get(UIBtnOpenMenuPage).Click();
             }
         }
 
@@ -113,7 +113,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                () => wd.Get(UIBtnBack).Click(),
+                () => session.WindowsDriver.Get(UIBtnBack).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives);

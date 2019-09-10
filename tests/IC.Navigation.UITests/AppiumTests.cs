@@ -42,7 +42,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldNotFindUIBtnFake()
         {
-            Assert.Null(sut.PomMenu.UIBtnNotImplemented);
+            Assert.Null(wd.Get(sut.PomMenu.UIBtnNotImplemented));
         }
 
         [Fact]

@@ -24,6 +24,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// The title of this page.
         /// </summary>
+        [Aliases("title")]
         public WDSearchParam UILblTitle => new WDSearchParam(WDLocators.AutomationId, "TitleBlue");
 
         /// <summary>
@@ -60,8 +61,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomMenu, () => wd.Get(SPBtnBack).Click() },
-                { session.PomYellow, () => wd.Get(SPBtnOpenYellowView).Click() },
+                { session.PomMenu, () => session.WindowsDriver.Get(SPBtnBack).Click() },
+                { session.PomYellow, () => session.WindowsDriver.Get(SPBtnOpenYellowView).Click() },
             };
         }
     }

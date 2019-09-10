@@ -55,7 +55,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// A control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public WDSearchParam UITxtBoxImportantMessage => new WDSearchParam(WDLocators.AutomationId, "TitleMenu");
+        public WDSearchParam UITxtBoxImportantMessage => new WDSearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
 
         #endregion Controls
 
@@ -79,9 +79,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomBlue, () => wd.Get(UIBtnOpenBlueView).Click() },
-                { session.PomRed, () => wd.Get(UIBtnOpenRedView).Click() },
-                { session.PomYellow, () => wd.Get(UIBtnOpenYellowView).Click() },
+                { session.PomBlue, () => session.WindowsDriver.Get(UIBtnOpenBlueView).Click() },
+                { session.PomRed, () => session.WindowsDriver.Get(UIBtnOpenRedView).Click() },
+                { session.PomYellow, () => session.WindowsDriver.Get(UIBtnOpenYellowView).Click() },
             };
         }
 
@@ -91,7 +91,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <param name="text">The text to enter.</param>
         public void EnterText(string text)
         {
-            wd.Get(UITxtBoxImportantMessage).SendKeys(text);
+            session.WindowsDriver.Get(UITxtBoxImportantMessage).SendKeys(text);
         }
     }
 }
