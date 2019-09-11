@@ -36,13 +36,12 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             string attributeName,
             string expectedAttributeValue)
         {
-            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
-            if (elmt == null) return null;
+            WindowsElement elmt = default;
             var expected = new Dictionary<string, string>();
             expected.Add(attributeName, expectedAttributeValue);
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                WaitForConditionsToBeMet(elmt, expected, cts.Token);
+                elmt = GetWhen(windowsDriver, searchParam, expected, cts.Token);
             }
 
             return elmt;
@@ -61,11 +60,10 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             IWDSearchParam searchParam,
             Dictionary<string, string> expectedAttribsNamesValues)
         {
-            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
-            if (elmt == null) return null;
+            WindowsElement elmt = default;
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, cts.Token);
+                elmt = GetWhen(windowsDriver, searchParam, expectedAttribsNamesValues, cts.Token);
             }
 
             return elmt;
@@ -84,16 +82,30 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
            IWDSearchParam searchParam,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
         {
-            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
-            if (elmt == null) return null;
+            WindowsElement elmt = default;
             var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                WaitForConditionsToBeMet(elmt, expectedDic, cts.Token);
+                elmt = GetWhen(windowsDriver, searchParam, expectedDic, cts.Token);
             }
 
             return elmt;
         }
+
+        public static WindowsElement GetWhen(
+           this WindowsDriver<WindowsElement> windowsDriver,
+           IWDSearchParam searchParam,
+           Dictionary<string, string> expectedAttribsNamesValues,
+           CancellationToken ct
+           )
+        {
+            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
+            if (elmt == null) return null;
+            WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, ct);
+            return elmt;
+        }
+
+        #region Private
 
         private static void WaitForConditionsToBeMet(
             WindowsElement elmt,
@@ -146,5 +158,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
                     throw new Exception($"Unknown locator: {searchParam.Locator}.");
             }
         }
+
+        #endregion
     }
 }
