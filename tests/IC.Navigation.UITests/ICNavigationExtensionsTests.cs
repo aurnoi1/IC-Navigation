@@ -144,7 +144,7 @@ namespace IC.Navigation.UITests
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), expectedAttribsValues);
             });
-            
+
             // Assert
             Assert.NotNull(title);
         }
@@ -213,7 +213,6 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), "IsEnabled", "True");
             });
 
@@ -225,8 +224,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_Should_Returns_Null_When_Timeout_Even_If_Control_Is_Found()
         {
             // Arrange
-            int expectedSeconds = 3;
-            var expectedElapse = TimeSpan.FromSeconds(expectedSeconds);
+            var expectedElapse = TimeSpan.FromSeconds(3);
             var param = sut.PomMenu.UITitleParam;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
@@ -244,7 +242,7 @@ namespace IC.Navigation.UITests
             // Assert
             Assert.Null(title);
             bool isInTimeoutRange = (actualElapse > expectedElapse)
-                & (actualElapse < TimeSpan.FromSeconds(expectedSeconds + 1));
+                & (actualElapse < expectedElapse.Add(TimeSpan.FromSeconds(1)));
 
             Assert.True(isInTimeoutRange);
         }
@@ -253,8 +251,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_Should_Returns_Null_When_Cancellation_Is_Requested_Even_If_Control_Is_Found()
         {
             // Arrange
-            int expectedSeconds = 3;
-            var expectedElapse = TimeSpan.FromSeconds(expectedSeconds);
+            var expectedElapse = TimeSpan.FromSeconds(3);
             var param = sut.PomMenu.UITitleParam;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
@@ -274,10 +271,41 @@ namespace IC.Navigation.UITests
 
             // Assert
             Assert.Null(title);
-            bool isInTimeoutRange = (actualElapse > expectedElapse)
-                & (actualElapse < TimeSpan.FromSeconds(expectedSeconds + 1));
+            var diff = actualElapse.Subtract(expectedElapse);
+            Assert.True(diff.TotalMilliseconds < 500);
+        }
 
-            Assert.True(isInTimeoutRange);
+        [Fact]
+        public void GetWhen_Should_Returns_Null_When_Cancellation_Is_Requested_Before_The_End_Of_Timeout()
+        {
+            // Arrange
+            var expectedElapse = TimeSpan.FromSeconds(5);
+            var expectedCancellationTimeout = TimeSpan.FromSeconds(2);
+            int cancellationTimeoutMS = Convert.ToInt32(expectedCancellationTimeout.TotalMilliseconds);
+            var param = sut.PomMenu.UITitleParam;
+            Stopwatch stopwatch = new Stopwatch();
+            WindowsElement title = default;
+            var actualElapse = TimeSpan.Zero;
+
+            // Act
+            sut.PomMenu.Do(() =>
+            {
+                using (CancellationTokenSource cts = new CancellationTokenSource(expectedElapse))
+                {
+                    using (var timer = new Timer((x) => cts.Cancel(), null, cancellationTimeoutMS, Timeout.Infinite))
+                    {
+                        stopwatch.Start();
+                        title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "InvalidValue");
+                        stopwatch.Stop();
+                        actualElapse = stopwatch.Elapsed;
+                    }
+                }
+            });
+
+            // Assert
+            Assert.Null(title);
+            var diff = actualElapse.Subtract(expectedCancellationTimeout);
+            Assert.True(diff.TotalMilliseconds < 500);
         }
 
         public void Dispose()
