@@ -27,21 +27,23 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// </summary>
         /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement GetWhen(
             this WindowsDriver<WindowsElement> windowsDriver,
             IWDSearchParam searchParam,
+            TimeSpan timeout,
             string attributeName,
             string expectedAttributeValue)
         {
             WindowsElement elmt = default;
             var expected = new Dictionary<string, string>();
             expected.Add(attributeName, expectedAttributeValue);
-            using (CancellationTokenSource cts = new CancellationTokenSource())
+            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
             {
-                elmt = GetWhen(windowsDriver, searchParam, expected, cts.Token);
+                elmt = GetWhen(windowsDriver, searchParam, cts.Token, expected);
             }
 
             return elmt;
@@ -53,17 +55,19 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// </summary>
         /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
             this WindowsDriver<WindowsElement> windowsDriver,
             IWDSearchParam searchParam,
+            TimeSpan timeout,
             Dictionary<string, string> expectedAttribsNamesValues)
         {
             WindowsElement elmt = default;
-            using (CancellationTokenSource cts = new CancellationTokenSource())
+            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
             {
-                elmt = GetWhen(windowsDriver, searchParam, expectedAttribsNamesValues, cts.Token);
+                elmt = GetWhen(windowsDriver, searchParam, cts.Token, expectedAttribsNamesValues);
             }
 
             return elmt;
@@ -75,39 +79,52 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// </summary>
         /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
            this WindowsDriver<WindowsElement> windowsDriver,
            IWDSearchParam searchParam,
+           TimeSpan timeout,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
         {
             WindowsElement elmt = default;
             var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
-            using (CancellationTokenSource cts = new CancellationTokenSource())
+            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
             {
-                elmt = GetWhen(windowsDriver, searchParam, expectedDic, cts.Token);
+                elmt = GetWhen(windowsDriver, searchParam, cts.Token, expectedDic);
             }
 
             return elmt;
         }
 
+        /// <summary>
+        /// Get the first WindowsElement matching the SearchParam
+        /// and when the condition are met.
+        /// </summary>
+        /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="ct">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
+        /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
            this WindowsDriver<WindowsElement> windowsDriver,
            IWDSearchParam searchParam,
-           Dictionary<string, string> expectedAttribsNamesValues,
-           CancellationToken ct
+           CancellationToken ct,
+           Dictionary<string, string> expectedAttribsNamesValues
            )
         {
             WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
             if (elmt == null) return null;
-            WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, ct);
+            if (!WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, ct))
+                return null;
+
             return elmt;
         }
 
         #region Private
 
-        private static void WaitForConditionsToBeMet(
+        private static bool WaitForConditionsToBeMet(
             WindowsElement elmt,
             Dictionary<string, string> expected,
             CancellationToken ct)
@@ -117,9 +134,11 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
                 var actual = GetAttributesValues(elmt, expected.Keys);
                 if (AreConditionsMet(expected, actual))
                 {
-                    break;
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private static bool AreConditionsMet(
