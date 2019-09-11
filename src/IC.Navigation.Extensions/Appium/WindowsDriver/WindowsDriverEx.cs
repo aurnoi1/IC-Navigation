@@ -55,6 +55,29 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// </summary>
         /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="ct">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="attributeName">The attribute name (case sensitive).</param>
+        /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
+        /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
+        public static WindowsElement GetWhen(
+            this WindowsDriver<WindowsElement> windowsDriver,
+            IWDSearchParam searchParam,
+            CancellationToken ct,
+            string attributeName,
+            string expectedAttributeValue)
+        {
+            var expected = new Dictionary<string, string>();
+            expected.Add(attributeName, expectedAttributeValue);
+            WindowsElement elmt = GetWhen(windowsDriver, searchParam, ct, expected);
+            return elmt;
+        }
+
+        /// <summary>
+        /// Get the first WindowsElement matching the SearchParam
+        /// and when the condition are met.
+        /// </summary>
+        /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
@@ -106,6 +129,26 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
         /// <param name="ct">The CancellationToken used to stop to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
+        /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
+        public static WindowsElement GetWhen(
+           this WindowsDriver<WindowsElement> windowsDriver,
+           IWDSearchParam searchParam,
+           CancellationToken ct,
+           params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
+        {
+            var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
+            WindowsElement elmt = GetWhen(windowsDriver, searchParam, ct, expectedDic);
+            return elmt;
+        }
+
+        /// <summary>
+        /// Get the first WindowsElement matching the SearchParam
+        /// and when the condition are met.
+        /// </summary>
+        /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="ct">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
            this WindowsDriver<WindowsElement> windowsDriver,
@@ -178,6 +221,6 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             }
         }
 
-        #endregion
+        #endregion Private
     }
 }
