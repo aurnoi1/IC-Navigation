@@ -31,27 +31,18 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement GetWhen(
-            this WindowsDriver<WindowsElement> windowsDriver, 
-            IWDSearchParam searchParam, 
+            this WindowsDriver<WindowsElement> windowsDriver,
+            IWDSearchParam searchParam,
             string attributeName,
             string expectedAttributeValue)
         {
-            WindowsElement elmt = default;
+            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
+            if (elmt == null) return null;
+            var expected = new Dictionary<string, string>();
+            expected.Add(attributeName, expectedAttributeValue);
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                do
-                {
-                    elmt = FindWindowsElement(windowsDriver, searchParam);
-                    var expected = new Dictionary<string, string>();
-                    expected.Add(attributeName, expectedAttributeValue);
-                    var actual = GetAttributesValues(elmt, expected.Keys);
-                    if (AreConditionsMet(expected, actual))
-                    {
-                        break;
-                    }
-
-                } while (!cts.IsCancellationRequested);
-
+                WaitForConditionsToBeMet(elmt, expected, cts);
             }
 
             return elmt;
@@ -70,20 +61,11 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             IWDSearchParam searchParam,
             Dictionary<string, string> expectedAttribsNamesValues)
         {
-            WindowsElement elmt = default;
+            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
+            if (elmt == null) return null;
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                do
-                {
-                    elmt = FindWindowsElement(windowsDriver, searchParam);
-                    var actualAttribsValues = GetAttributesValues(elmt, expectedAttribsNamesValues.Keys);
-                    if (AreConditionsMet(expectedAttribsNamesValues, actualAttribsValues))
-                    {
-                        break;
-                    }
-
-                } while (!cts.IsCancellationRequested);
-
+                WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, cts);
             }
 
             return elmt;
@@ -102,26 +84,31 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
            IWDSearchParam searchParam,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
         {
-            WindowsElement elmt = default;
+            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
+            if (elmt == null) return null;
+            var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                do
-                {
-                    elmt = FindWindowsElement(windowsDriver, searchParam);
-                    var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
-                    var actualAttribsValues = GetAttributesValues(elmt, expectedDic.Keys);
-                    if (AreConditionsMet(expectedDic, actualAttribsValues))
-                    {
-                        break;
-                    }
-
-                } while (!cts.IsCancellationRequested);
-
+                WaitForConditionsToBeMet(elmt, expectedDic, cts);
             }
 
             return elmt;
         }
 
+        private static void WaitForConditionsToBeMet(
+            WindowsElement elmt,
+            Dictionary<string, string> expected,
+            CancellationTokenSource cts)
+        {
+            do
+            {
+                var actual = GetAttributesValues(elmt, expected.Keys);
+                if (AreConditionsMet(expected, actual))
+                {
+                    break;
+                }
+            } while (!cts.IsCancellationRequested);
+        }
 
         private static bool AreConditionsMet(
             Dictionary<string, string> first,

@@ -76,6 +76,42 @@ namespace IC.Navigation.UITests
             });
         }
 
+        [Fact]
+        public void GetWhen_Should_Returns_Null_When_Control_With_Dictionnary_Of_Attributes_Is_Not_Found()
+        {
+            sut.PomMenu.Do(() =>
+            {
+                var param = sut.PomMenu.UIBtnNotImplementedParam;
+                var title = sut.WindowsDriver.GetWhen(param, ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                Assert.Null(title);
+            });
+        }
+
+        [Fact]
+        public void GetWhen_Should_Returns_Null_When_Control_With_Many_ValueTuple_Of_Attributes_Is_Not_Found()
+        {
+            sut.PomMenu.Do(() =>
+            {
+                var param = sut.PomMenu.UIBtnNotImplementedParam;
+                var expectedAttribsValues = new Dictionary<string, string>();
+                expectedAttribsValues.Add("IsEnabled", "True");
+                expectedAttribsValues.Add("IsOffscreen", "False");
+                var title = sut.WindowsDriver.GetWhen(param, expectedAttribsValues);
+                Assert.Null(title);
+            });
+        }
+
+        [Fact]
+        public void GetWhen_Should_Returns_Control_With_Single_Property_Is_Not_Found()
+        {
+            sut.PomMenu.Do(() =>
+            {
+                var param = sut.PomMenu.UIBtnNotImplementedParam;
+                var title = sut.WindowsDriver.GetWhen(param, "IsEnabled", "True");
+                Assert.Null(title);
+            });
+        }
+
         public void Dispose()
         {
             sut?.Dispose();
