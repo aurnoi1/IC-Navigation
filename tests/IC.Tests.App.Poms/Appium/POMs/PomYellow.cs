@@ -65,7 +65,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             {
                 { session.PomMenu, () => ActionToOpenMenuPage() }, // Resolve two actions opening the same page.
 
-                // Resolve one action can open many pages (3 when conting ViewMenu).
+                // Resolve one action can open many pages (3 when counting ViewMenu).
                 { session.PomBlue, () => ResolveBackBtnClick(this) },
                 { session.PomRed, () => ResolveBackBtnClick(this) },
             };
