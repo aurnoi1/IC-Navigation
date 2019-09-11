@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace IC.Navigation
@@ -447,46 +446,61 @@ namespace IC.Navigation
         private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables)
         {
             INavigable match = null;
-            int counter = iNavigables.Count();
-            List<Task<INavigable>> tasks = new List<Task<INavigable>>();
-            using (CancellationTokenSource source = new CancellationTokenSource())
+            Parallel.ForEach(iNavigables, x =>
             {
-                try
+                var neighbor = GetExistingNavigable(x);
+                if (neighbor != null)
                 {
-                    CancellationToken token = source.Token;
-                    foreach (var iNavigagble in iNavigables)
-                    {
-                        tasks.Add(new Task<INavigable>(() => GetExistingNavigable(iNavigagble), token));
-                    }
-
-                    bool tasksStarted = false;
-                    while (counter > 0)
-                    {
-                        if (!tasksStarted)
-                        {
-                            tasks.ForEach(x => x.Start());
-                            tasksStarted = true;
-                        }
-
-                        Task<INavigable> completed = Task.WhenAny(tasks.ToArray()).GetAwaiter().GetResult();
-                        if (completed.Status == TaskStatus.RanToCompletion && completed.Result != null)
-                        {
-                            match = completed.Result;
-                            counter = 0;
-                            source.Cancel();
-                            break;
-                        }
-                        else
-                        {
-                            counter--;
-                        }
-                    }
+                    match = neighbor;
                 }
-                catch (OperationCanceledException)
-                {
-                    // Do nothing.
-                }
+            });
+
+            if (match == null)
+            {
+                throw new Exception("Could not find any neighbors.");
             }
+
+            //INavigable match = null;
+            //int counter = iNavigables.Count();
+            //List<Task<INavigable>> tasks = new List<Task<INavigable>>();
+            //using (CancellationTokenSource source = new CancellationTokenSource())
+            //{
+            //    try
+            //    {
+            //        CancellationToken token = source.Token;
+            //        foreach (var iNavigagble in iNavigables)
+            //        {
+            //            tasks.Add(new Task<INavigable>(() => GetExistingNavigable(iNavigagble), token));
+            //        }
+
+            //        bool tasksStarted = false;
+            //        while (counter > 0)
+            //        {
+            //            if (!tasksStarted)
+            //            {
+            //                tasks.ForEach(x => x.Start());
+            //                tasksStarted = true;
+            //            }
+
+            //            Task<INavigable> completed = Task.WhenAny(tasks.ToArray()).GetAwaiter().GetResult();
+            //            if (completed.Status == TaskStatus.RanToCompletion && completed.Result != null)
+            //            {
+            //                match = completed.Result;
+            //                counter = 0;
+            //                source.Cancel();
+            //                break;
+            //            }
+            //            else
+            //            {
+            //                counter--;
+            //            }
+            //        }
+            //    }
+            //    catch (OperationCanceledException)
+            //    {
+            //        // Do nothing.
+            //    }
+            //}
 
             return match;
         }

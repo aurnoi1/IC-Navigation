@@ -1,8 +1,8 @@
 ﻿using IC.Navigation;
-using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
+using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 
@@ -22,28 +22,22 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// The tile of this page.
+        /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
-            "TitleYellow",
-            TimeSpan.FromSeconds(3));
+        public WDSearchParam UITitleParam => new WDSearchParam(WDLocators.AutomationId, "TitleYellow");
 
         /// <summary>
-        /// A control to open the previous page.
+        /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnBack",
-            TimeSpan.FromSeconds(3));
+        public WDSearchParam UIBtnBackParam => new WDSearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
-        /// A control to open the previous page.
+        /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public WindowsElement UIBtnOpenMenuPage => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnOpenMenuView",
-            TimeSpan.FromSeconds(3));
+        public WDSearchParam UIBtnOpenMenuPageParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenMenuView");
 
         #endregion Controls
 
@@ -54,7 +48,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = UITitle != null;
+            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -71,7 +65,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             {
                 { session.PomMenu, () => ActionToOpenMenuPage() }, // Resolve two actions opening the same page.
 
-                // Resolve one action can open many pages (3 when conting ViewMenu).
+                // Resolve one action can open many pages (3 when counting ViewMenu).
                 { session.PomBlue, () => ResolveBackBtnClick(this) },
                 { session.PomRed, () => ResolveBackBtnClick(this) },
             };
@@ -83,7 +77,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The ViewMenu.</returns>
         public PomMenu OpenMenuByMenuBtn()
         {
-            UIBtnOpenMenuPage.Click();
+            session.WindowsDriver.Get(UIBtnOpenMenuPageParam).Click();
             return session.PomMenu;
         }
 
@@ -97,11 +91,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                UIBtnBack.Click();
+                session.WindowsDriver.Get(UIBtnBackParam).Click();
             }
             else
             {
-                UIBtnOpenMenuPage.Click();
+                session.WindowsDriver.Get(UIBtnOpenMenuPageParam).Click();
             }
         }
 
@@ -119,7 +113,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                () => UIBtnBack.Click(),
+                () => session.WindowsDriver.Get(UIBtnBackParam).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives);

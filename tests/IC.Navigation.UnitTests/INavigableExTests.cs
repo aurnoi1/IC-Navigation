@@ -17,7 +17,7 @@ namespace IC.Navigation.UnitTests
             Mock.Get(sut).Setup(x => x.PublishStatus().Exists).Returns(true);
 
             // Act
-            var actual = sut.WaitForExists();
+            var actual = sut.Exists();
 
             // Assert
             Assert.True(actual);
@@ -31,7 +31,7 @@ namespace IC.Navigation.UnitTests
             Mock.Get(sut).Setup(x => x.PublishStatus().Exists).Returns(false);
 
             // Act
-            var actual = sut.WaitForExists();
+            var actual = sut.Exists();
 
             // Assert
             Assert.False(actual);

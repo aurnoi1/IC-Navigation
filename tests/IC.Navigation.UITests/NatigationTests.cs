@@ -2,7 +2,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
 using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
@@ -22,6 +22,7 @@ namespace IC.Navigation.UITests
         public NatigationTests()
         {
             sut = new AppiumContext().SUT;
+            wd = sut.WindowsDriver;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
         }
 
@@ -31,6 +32,7 @@ namespace IC.Navigation.UITests
 
         private IFacade sut;
         private IFixture fixture;
+        private WindowsDriver<WindowsElement> wd;
 
         #endregion Private
 
@@ -62,7 +64,7 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
                 .GoTo(sut.EntryPoint); // The entry point.
 
-            Assert.True(sut.Historic.ElementAt(0).WaitForExists());
+            Assert.True(sut.Historic.ElementAt(0).Exists());
         }
 
         [Fact]
@@ -80,7 +82,7 @@ namespace IC.Navigation.UITests
             }
 
             // Act
-            sut.PomMenu.WaitForExists();
+            sut.PomMenu.Exists();
 
             // Assert
             Assert.NotEmpty(callbackResults);
@@ -114,7 +116,7 @@ namespace IC.Navigation.UITests
 
             // Act
             sut.PomMenu.UnregisterObserver(expected);
-            sut.PomMenu.WaitForExists();
+            sut.PomMenu.Exists();
             var registeredObservers = callbackResults.Select(x => x.observer).ToList();
 
             // Assert
@@ -146,7 +148,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindMenuViewByNavigation()
         {
-            Assert.True(sut.PomMenu.WaitForExists());
+            Assert.True(sut.PomMenu.Exists());
         }
 
         [Fact]
@@ -156,22 +158,22 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.PomYellow)
                 .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn());
 
-            Assert.True(sut.PomMenu.WaitForExists());
+            Assert.True(sut.PomMenu.Exists());
         }
 
         [Fact]
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.PomMenu.Do(() => sut.PomMenu.UITxtBoxImportantMessage.SendKeys(expected));
-            Assert.Equal(expected, sut.PomMenu.UITxtBoxImportantMessage.Text);
+            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).SendKeys(expected));
+            Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).Text);
         }
 
         [Fact]
         public void ShouldGoToBlueView()
         {
             sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.True(sut.PomBlue.WaitForExists());
+            Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]

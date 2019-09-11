@@ -1,5 +1,6 @@
 ﻿using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;

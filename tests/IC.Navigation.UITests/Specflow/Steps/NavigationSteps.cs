@@ -1,5 +1,5 @@
 ﻿using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -50,7 +50,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         public void ThenTheShouldBeOpened(string viewUsageName)
         {
             var expectedView = sut.GetINavigableByUsageName(viewUsageName);
-            Assert.True(expectedView.WaitForExists());
+            Assert.True(expectedView.Exists());
         }
 
         [Then(@"The control ""(.*)"" should not be displayed")]

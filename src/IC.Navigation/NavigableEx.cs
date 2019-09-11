@@ -10,7 +10,7 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Executes the action passed in parameter.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This Navigable instance.</param>
         /// <param name="action">The action to execute.</param>
         /// <returns>The current INavigable.</returns>
         public static INavigable Do(this INavigable source, Action action)
@@ -21,7 +21,7 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Executes the Function passed in parameter.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This Navigable instance.</param>
         /// <param name="function">The Function to execute.</param>
         /// <returns>The expected INavigable returns by the Function.</returns>
         public static INavigable Do<T>(this INavigable source, Func<INavigable> function) where T : INavigable
@@ -33,7 +33,7 @@ namespace IC.Navigation.CoreExtensions
         /// Find the shortest path of navigation to go to the destination INavigable,
         /// then performs actions through other INavigables.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This Navigable instance.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The destination.</returns>
         public static INavigable GoTo(this INavigable source, INavigable destination)
@@ -44,7 +44,7 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Go to the previous INavigable.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This Navigable instance.</param>
         /// <returns>The previous INavigable.</returns>
         public static INavigable Back(this INavigable source)
         {
@@ -52,11 +52,11 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Wait for INavigable to exists with the default <see cref="ISession.ThinkTime"/>.
+        /// Get the <see cref="INavigableStatus.Exists"/> status of the Navigable./>.
         /// </summary>
-        /// <param name="source">This INavigable instance.</param>
+        /// <param name="source">This Navigable instance.</param>
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
-        public static bool WaitForExists(this INavigable source)
+        public static bool Exists(this INavigable source)
         {
             return source.PublishStatus().Exists;
         }
