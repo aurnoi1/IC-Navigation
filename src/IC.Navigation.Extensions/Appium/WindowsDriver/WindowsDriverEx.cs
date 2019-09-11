@@ -174,7 +174,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         {
             while (!ct.IsCancellationRequested)
             {
-                var actual = GetAttributesValues(elmt, expected.Keys);
+                var actual = GetAttributesValues(elmt, expected.Keys, ct);
                 if (AreConditionsMet(expected, actual))
                 {
                     return true;
@@ -191,11 +191,15 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             return first.Count == second.Count && !first.Except(second).Any();
         }
 
-        private static Dictionary<string, string> GetAttributesValues(WindowsElement elmt, IEnumerable<string> expectedAttribsNames)
+        private static Dictionary<string, string> GetAttributesValues(
+            WindowsElement elmt,
+            IEnumerable<string> expectedAttribsNames,
+            CancellationToken ct)
         {
             Dictionary<string, string> attributesValues = new Dictionary<string, string>();
             foreach (var attribName in expectedAttribsNames)
             {
+                if (ct.IsCancellationRequested) return null;
                 var value = elmt.GetAttribute(attribName);
                 attributesValues.Add(attribName, value);
             }
