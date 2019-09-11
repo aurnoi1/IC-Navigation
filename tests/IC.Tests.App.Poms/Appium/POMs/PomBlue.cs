@@ -22,22 +22,22 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// The title of this page.
+        /// WDSearchParam to find the title of this page.
         /// </summary>
         [Aliases("title")]
-        public WDSearchParam UILblTitle => new WDSearchParam(WDLocators.AutomationId, "TitleBlue");
+        public WDSearchParam UILblTitleParam => new WDSearchParam(WDLocators.AutomationId, "TitleBlue");
 
         /// <summary>
-        /// A control to open the previous page.
+        /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WDSearchParam SPBtnBack => new WDSearchParam(WDLocators.AutomationId, "BtnBack");
+        public WDSearchParam UIBtnBackParam => new WDSearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
-        /// A control to open the yellow page.
+        /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WDSearchParam SPBtnOpenYellowView => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public WDSearchParam BtnOpenYellowViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         #endregion Controls
 
@@ -46,7 +46,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UILblTitle) != null;
+            bool isDisplayed = session.WindowsDriver.Get(UILblTitleParam) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -61,8 +61,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomMenu, () => session.WindowsDriver.Get(SPBtnBack).Click() },
-                { session.PomYellow, () => session.WindowsDriver.Get(SPBtnOpenYellowView).Click() },
+                { session.PomMenu, () => session.WindowsDriver.Get(UIBtnBackParam).Click() },
+                { session.PomYellow, () => session.WindowsDriver.Get(BtnOpenYellowViewParam).Click() },
             };
         }
     }

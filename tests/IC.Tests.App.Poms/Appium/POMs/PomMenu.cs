@@ -22,40 +22,40 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// A control NOT IMPLEMENTED only use for negative test.
+        /// WDSearchParam to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
         [Aliases("not implemented")]
-        public WDSearchParam UIBtnNotImplemented => new WDSearchParam(WDLocators.AutomationId, "NotImplemented");
+        public WDSearchParam UIBtnNotImplementedParam => new WDSearchParam(WDLocators.AutomationId, "NotImplemented");
 
         /// <summary>
-        /// The tile of this page.
+        /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WDSearchParam UITitle => new WDSearchParam(WDLocators.AutomationId, "TitleMenu");
+        public WDSearchParam UITitleParam => new WDSearchParam(WDLocators.AutomationId, "TitleMenu");
 
         /// <summary>
-        /// A control to open the BlueView.
+        /// WDSearchParam to find a control to open the BlueView.
         /// </summary>
         [Aliases("button to open the blue page")]
-        public WDSearchParam UIBtnOpenBlueView => new WDSearchParam(WDLocators.AutomationId, "BtnOpenBlueView");
+        public WDSearchParam UIBtnOpenBlueViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenBlueView");
 
         /// <summary>
-        /// A control to open the RedView.
+        /// WDSearchParam to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the red page")]
-        public WDSearchParam UIBtnOpenRedView => new WDSearchParam(WDLocators.AutomationId, "BtnOpenRedView");
+        public WDSearchParam UIBtnOpenRedViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenRedView");
 
         /// <summary>
-        /// A control to open the RedView.
+        /// WDSearchParam to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WDSearchParam UIBtnOpenYellowView => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public WDSearchParam UIBtnOpenYellowViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         /// <summary>
-        /// A control where text can be enter.
+        /// WDSearchParam to find a control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public WDSearchParam UITxtBoxImportantMessage => new WDSearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
+        public WDSearchParam UITxtBoxImportantMessageParam => new WDSearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
 
         #endregion Controls
 
@@ -64,7 +64,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = UITitle != null;
+            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -79,9 +79,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action>()
             {
-                { session.PomBlue, () => session.WindowsDriver.Get(UIBtnOpenBlueView).Click() },
-                { session.PomRed, () => session.WindowsDriver.Get(UIBtnOpenRedView).Click() },
-                { session.PomYellow, () => session.WindowsDriver.Get(UIBtnOpenYellowView).Click() },
+                { session.PomBlue, () => session.WindowsDriver.Get(UIBtnOpenBlueViewParam).Click() },
+                { session.PomRed, () => session.WindowsDriver.Get(UIBtnOpenRedViewParam).Click() },
+                { session.PomYellow, () => session.WindowsDriver.Get(UIBtnOpenYellowViewParam).Click() },
             };
         }
 
@@ -91,7 +91,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <param name="text">The text to enter.</param>
         public void EnterText(string text)
         {
-            session.WindowsDriver.Get(UITxtBoxImportantMessage).SendKeys(text);
+            session.WindowsDriver.Get(UITxtBoxImportantMessageParam).SendKeys(text);
         }
     }
 }
