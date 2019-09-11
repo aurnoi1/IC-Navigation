@@ -3,6 +3,7 @@ using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace IC.Navigation.UITests
@@ -30,11 +31,47 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
-        public void ShouldFindMenuTitleInPomBlue()
+        public void Get_Should_Returns_Control_Matching_WDSearchParam()
         {
-            sut.Last.GoTo(sut.PomBlue).Do(() =>
+            sut.Last.Do(() =>
             {
-                var title = sut.WindowsDriver.Get(sut.PomBlue.UILblTitleParam);
+                var title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam);
+                Assert.NotNull(title);
+            });
+        }
+
+        [Fact]
+        public void GetWhen_Should_Returns_Control_When_Single_Property_Is_True()
+        {
+            sut.PomMenu.Do(() =>
+            {
+                var param = sut.PomMenu.UITitleParam;
+                var title = sut.WindowsDriver.GetWhen(param, "IsEnabled", "True");
+                Assert.NotNull(title);
+            });
+        }
+
+        [Fact]
+        public void GetWhen_Should_Returns_Control_When_Many_Attributes_Are_True()
+        {
+            sut.PomMenu.Do(() =>
+            {
+                var param = sut.PomMenu.UITitleParam;
+                var expectedAttribsValues = new Dictionary<string, string>();
+                expectedAttribsValues.Add("IsEnabled", "True");
+                expectedAttribsValues.Add("IsOffscreen", "False");
+                var title = sut.WindowsDriver.GetWhen(param, expectedAttribsValues);
+                Assert.NotNull(title);
+            });
+        }
+
+        [Fact]
+        public void GetWhen_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
+        {
+            sut.PomMenu.Do(() =>
+            {
+                var param = sut.PomMenu.UITitleParam;
+                var title = sut.WindowsDriver.GetWhen(param, ("IsEnabled", "True"), ("IsOffscreen", "False"));
                 Assert.NotNull(title);
             });
         }
