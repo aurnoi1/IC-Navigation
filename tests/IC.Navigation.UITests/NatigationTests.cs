@@ -64,7 +64,7 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
                 .GoTo(sut.EntryPoint); // The entry point.
 
-            Assert.True(sut.Historic.ElementAt(0).WaitForExists());
+            Assert.True(sut.Historic.ElementAt(0).Exists());
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace IC.Navigation.UITests
             }
 
             // Act
-            sut.PomMenu.WaitForExists();
+            sut.PomMenu.Exists();
 
             // Assert
             Assert.NotEmpty(callbackResults);
@@ -116,7 +116,7 @@ namespace IC.Navigation.UITests
 
             // Act
             sut.PomMenu.UnregisterObserver(expected);
-            sut.PomMenu.WaitForExists();
+            sut.PomMenu.Exists();
             var registeredObservers = callbackResults.Select(x => x.observer).ToList();
 
             // Assert
@@ -148,7 +148,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindMenuViewByNavigation()
         {
-            Assert.True(sut.PomMenu.WaitForExists());
+            Assert.True(sut.PomMenu.Exists());
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.PomYellow)
                 .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn());
 
-            Assert.True(sut.PomMenu.WaitForExists());
+            Assert.True(sut.PomMenu.Exists());
         }
 
         [Fact]
@@ -173,7 +173,7 @@ namespace IC.Navigation.UITests
         public void ShouldGoToBlueView()
         {
             sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.True(sut.PomBlue.WaitForExists());
+            Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]

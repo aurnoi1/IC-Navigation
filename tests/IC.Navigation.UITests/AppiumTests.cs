@@ -64,14 +64,14 @@ namespace IC.Navigation.UITests
         public void ShouldOpenBlueView()
         {
             wd.Get(sut.PomMenu.UIBtnOpenBlueViewParam).Click();
-            Assert.True(sut.PomBlue.WaitForExists());
+            Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]
         public void ShouldOpenRedView()
         {
             wd.Get(sut.PomMenu.UIBtnOpenRedViewParam).Click();
-            Assert.True(sut.PomRed.WaitForExists());
+            Assert.True(sut.PomRed.Exists());
         }
 
         public void Dispose()
