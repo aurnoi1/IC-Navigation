@@ -100,14 +100,14 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             Dictionary<string, string> expected,
             CancellationTokenSource cts)
         {
-            do
+            while (!cts.IsCancellationRequested)
             {
                 var actual = GetAttributesValues(elmt, expected.Keys);
                 if (AreConditionsMet(expected, actual))
                 {
                     break;
                 }
-            } while (!cts.IsCancellationRequested);
+            }
         }
 
         private static bool AreConditionsMet(
