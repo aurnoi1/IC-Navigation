@@ -42,7 +42,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             expected.Add(attributeName, expectedAttributeValue);
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                WaitForConditionsToBeMet(elmt, expected, cts);
+                WaitForConditionsToBeMet(elmt, expected, cts.Token);
             }
 
             return elmt;
@@ -65,7 +65,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             if (elmt == null) return null;
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, cts);
+                WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, cts.Token);
             }
 
             return elmt;
@@ -89,7 +89,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
             using (CancellationTokenSource cts = new CancellationTokenSource())
             {
-                WaitForConditionsToBeMet(elmt, expectedDic, cts);
+                WaitForConditionsToBeMet(elmt, expectedDic, cts.Token);
             }
 
             return elmt;
@@ -98,9 +98,9 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         private static void WaitForConditionsToBeMet(
             WindowsElement elmt,
             Dictionary<string, string> expected,
-            CancellationTokenSource cts)
+            CancellationToken ct)
         {
-            while (!cts.IsCancellationRequested)
+            while (!ct.IsCancellationRequested)
             {
                 var actual = GetAttributesValues(elmt, expected.Keys);
                 if (AreConditionsMet(expected, actual))
