@@ -22,6 +22,48 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         }
 
         /// <summary>
+        /// Get the first WindowsElement matching the SearchParam.
+        /// </summary>
+        /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
+        /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
+        public static WindowsElement Get(
+            this WindowsDriver<WindowsElement> windowsDriver, 
+            IWDSearchParam searchParam, 
+            TimeSpan timeout)
+        {
+            using (var cts = new CancellationTokenSource(timeout))
+            {
+                return Get(windowsDriver, searchParam, cts.Token);
+            }
+        }
+
+        /// <summary>
+        /// Get the first WindowsElement matching the SearchParam.
+        /// </summary>
+        /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
+        /// <param name="ct">The CancellationToken used to stop to wait for the control to be found.</param>
+        /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
+        public static WindowsElement Get(
+            this WindowsDriver<WindowsElement> windowsDriver,
+            IWDSearchParam searchParam,
+            CancellationToken ct)
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                while (!ct.IsCancellationRequested)
+                {
+                    var match = FindWindowsElement(windowsDriver, searchParam);
+                    if (match != null) return match;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Get the first WindowsElement matching the SearchParam
         /// and when the condition is met.
         /// </summary>

@@ -50,6 +50,73 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
+        public void Get_With_Timeout_Should_Returns_Control_Matching_WDSearchParam()
+        {
+            // Arrange
+            WindowsElement title = default;
+            var timeout = TimeSpan.FromSeconds(10);
+            Stopwatch stopwatch = new Stopwatch();
+            var maxExpectedElapse = TimeSpan.FromMilliseconds(500);
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                stopwatch.Start();
+                title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam, timeout);
+                stopwatch.Stop();
+            });
+
+            // Assert
+            Assert.NotNull(title);
+            var diff = timeout.Subtract(timeout.Subtract(stopwatch.Elapsed));
+            Assert.True(diff.TotalMilliseconds < maxExpectedElapse.TotalMilliseconds);
+        }
+
+        [Fact]
+        public void Get_Should_Returns_Null_When_Control_Is_Not_Found()
+        {
+            // Arrange
+            WindowsElement title = default;
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam);
+            });
+
+            // Assert
+            Assert.Null(title);
+        }
+
+        [Fact]
+        public void Get_With_CToken_Should_Returns_Control_Matching_WDSearchParam()
+        {
+            // Arrange
+            WindowsElement title = default;
+            var timeout = TimeSpan.FromSeconds(10);
+            Stopwatch stopwatch = new Stopwatch();
+            var maxExpectedElapse = TimeSpan.FromMilliseconds(500);
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                stopwatch.Start();
+                using (var cts = new CancellationTokenSource())
+                {
+                    title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam, cts.Token);
+                }
+
+                stopwatch.Stop();
+            });
+
+            // Assert
+            Assert.NotNull(title);
+            var diff = timeout.Subtract(timeout.Subtract(stopwatch.Elapsed));
+            Assert.True(diff.TotalMilliseconds < maxExpectedElapse.TotalMilliseconds);
+        }
+
+
+        [Fact]
         public void GetWhen_CToken_WithTimeout_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
@@ -220,6 +287,58 @@ namespace IC.Navigation.UITests
             Assert.Null(title);
         }
 
+
+        [Fact]
+        public void Get_With_Timeout_Should_Returns_Null_When_Control_Is_Not_Found()
+        {
+            // Arrange
+            WindowsElement title = default;
+            var expectedTimeout = TimeSpan.FromSeconds(3);
+            Stopwatch stopwatch = new Stopwatch();
+            var actualElapse = TimeSpan.Zero;
+            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                stopwatch.Start();
+                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam, expectedTimeout);
+                stopwatch.Stop();
+            });
+
+            // Assert
+            Assert.Null(title);
+            var diff = actualElapse.Subtract(expectedTimeout);
+            Assert.True(diff.TotalMilliseconds < expectedMaxElapse.TotalMilliseconds);
+        }
+
+        [Fact]
+        public void Get_With_CToken_Should_Returns_Null_When_Control_Is_Not_Found()
+        {
+            // Arrange
+            WindowsElement title = default;
+            var expectedTimeout = TimeSpan.FromSeconds(3);
+            Stopwatch stopwatch = new Stopwatch();
+            var actualElapse = TimeSpan.Zero;
+            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                stopwatch.Start();
+                using (var cts = new CancellationTokenSource(expectedTimeout))
+                {
+                    title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam, cts.Token);
+                    stopwatch.Stop();
+                }
+            });
+
+            // Assert
+            Assert.Null(title);
+            var diff = actualElapse.Subtract(expectedTimeout);
+            Assert.True(diff.TotalMilliseconds < expectedMaxElapse.TotalMilliseconds);
+        }
+
         [Fact]
         public void GetWhen_Should_Returns_Null_When_Timeout_Even_If_Control_Is_Found()
         {
@@ -229,6 +348,7 @@ namespace IC.Navigation.UITests
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
+            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
 
             // Act
             sut.PomMenu.Do(() =>
@@ -241,10 +361,8 @@ namespace IC.Navigation.UITests
 
             // Assert
             Assert.Null(title);
-            bool isInTimeoutRange = (actualElapse > expectedElapse)
-                & (actualElapse < expectedElapse.Add(TimeSpan.FromSeconds(1)));
-
-            Assert.True(isInTimeoutRange);
+            var diff = actualElapse.Subtract(expectedElapse);
+            Assert.True(diff.TotalMilliseconds < expectedMaxElapse.TotalMilliseconds);
         }
 
         [Fact]
@@ -256,6 +374,7 @@ namespace IC.Navigation.UITests
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
+            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
 
             // Act
             sut.PomMenu.Do(() =>
@@ -272,7 +391,7 @@ namespace IC.Navigation.UITests
             // Assert
             Assert.Null(title);
             var diff = actualElapse.Subtract(expectedElapse);
-            Assert.True(diff.TotalMilliseconds < 500);
+            Assert.True(diff.TotalMilliseconds < expectedMaxElapse.TotalMilliseconds);
         }
 
         [Fact]
@@ -286,6 +405,7 @@ namespace IC.Navigation.UITests
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
+            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
 
             // Act
             sut.PomMenu.Do(() =>
@@ -305,7 +425,7 @@ namespace IC.Navigation.UITests
             // Assert
             Assert.Null(title);
             var diff = actualElapse.Subtract(expectedCancellationTimeout);
-            Assert.True(diff.TotalMilliseconds < 500);
+            Assert.True(diff.TotalMilliseconds < expectedMaxElapse.TotalMilliseconds);
         }
 
         public void Dispose()
