@@ -1,7 +1,7 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
-using AutoFixture.Xunit2;
 using IC.Navigation.CoreExtensions;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
