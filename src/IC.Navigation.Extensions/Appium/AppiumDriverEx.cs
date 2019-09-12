@@ -82,15 +82,9 @@ namespace IC.Navigation.Extensions.Appium
             string attributeName,
             string expectedAttributeValue) where T : IWebElement
         {
-            T elmt = default;
             var expected = new Dictionary<string, string>();
             expected.Add(attributeName, expectedAttributeValue);
-            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
-            {
-                elmt = GetWhen(driver, searchParam, cts.Token, expected);
-            }
-
-            return elmt;
+            return GetWhen(driver, searchParam, timeout, expected);
         }
 
         /// <summary>
@@ -100,21 +94,17 @@ namespace IC.Navigation.Extensions.Appium
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="driver">This AppiumDriver<IWebElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
-        /// <param name="ct">The CancellationToken used to stop to wait for the condition to meet.</param>
-        /// <param name="attributeName">The attribute name (case sensitive).</param>
-        /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
-        /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
+        /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
+        /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public static T GetWhen<T>(
-            this AppiumDriver<T> driver,
-            ISearchParam searchParam,
-            CancellationToken ct,
-            string attributeName,
-            string expectedAttributeValue) where T : IWebElement
+           this AppiumDriver<T> driver,
+           ISearchParam searchParam,
+           TimeSpan timeout,
+           params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
         {
-            var expected = new Dictionary<string, string>();
-            expected.Add(attributeName, expectedAttributeValue);
-            T elmt = GetWhen(driver, searchParam, ct, expected);
-            return elmt;
+            var expected = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
+            return GetWhen(driver, searchParam, timeout, expected);
         }
 
         /// <summary>
@@ -149,22 +139,20 @@ namespace IC.Navigation.Extensions.Appium
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="driver">This AppiumDriver<IWebElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
-        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
-        /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
-        /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
+        /// <param name="ct">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="attributeName">The attribute name (case sensitive).</param>
+        /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
+        /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public static T GetWhen<T>(
-           this AppiumDriver<T> driver,
-           ISearchParam searchParam,
-           TimeSpan timeout,
-           params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
+            this AppiumDriver<T> driver,
+            ISearchParam searchParam,
+            CancellationToken ct,
+            string attributeName,
+            string expectedAttributeValue) where T : IWebElement
         {
-            T elmt = default;
-            var expectedDic = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
-            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
-            {
-                elmt = GetWhen(driver, searchParam, cts.Token, expectedDic);
-            }
-
+            var expected = new Dictionary<string, string>();
+            expected.Add(attributeName, expectedAttributeValue);
+            T elmt = GetWhen(driver, searchParam, ct, expected);
             return elmt;
         }
 
