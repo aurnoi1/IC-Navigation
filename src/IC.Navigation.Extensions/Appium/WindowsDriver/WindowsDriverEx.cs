@@ -1,6 +1,4 @@
 ﻿using IC.Navigation.Extensions.Appium.Interfaces;
-using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
-using IC.Navigation.Extensions.Appium.WindowsDriver.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
