@@ -509,9 +509,12 @@ namespace IC.Navigation
 
         private void WaitUntilNavigableExists(INavigable iNavigable, string definition, CancellationToken ct)
         {
-            while (!ct.IsCancellationRequested & !iNavigable.PublishStatus().Exists)
+            while (!ct.IsCancellationRequested)
             {
-                ct.WaitHandle.WaitOne(TimeSpan.FromMilliseconds(100));
+                if (iNavigable.PublishStatus().Exists)
+                {
+                    return;
+                }
             }
         }
 
