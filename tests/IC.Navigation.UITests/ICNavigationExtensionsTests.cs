@@ -34,6 +34,33 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
+        public void Search_With_Timeout_Should_Returns_Control_Matching_SearchParam()
+        {
+            // Arrange
+            WindowsElement title = default;
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                title = sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.FromSeconds(10));
+            });
+
+            // Assert
+            Assert.NotNull(title);
+        }
+
+        [Fact]
+        public void Search_With_Timeout_Should_Throws_TimeoutException_On_Timeout()
+        {
+            // Act
+            sut.Last.Do(() =>
+            {
+                Assert.Throws<TimeoutException>(() => 
+                sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.FromMilliseconds(1)));
+            });
+        }
+
+        [Fact]
         public void Get_Should_Returns_Control_Matching_SearchParam()
         {
             // Arrange
@@ -127,7 +154,7 @@ namespace IC.Navigation.UITests
             {
                 using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
                 {
-                    title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                    title = sut.WindowsDriver.GetWhen(param, cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
                 }
             });
 

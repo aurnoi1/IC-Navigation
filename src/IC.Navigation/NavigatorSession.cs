@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Exceptions;
+using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,7 +120,7 @@ namespace IC.Navigation
             }
             else
             {
-                throw new Exception($"\"{type}\" is not part of the Nodes.");
+                throw new UnregistredNodeException(type);
             }
         }
 
@@ -153,7 +154,9 @@ namespace IC.Navigation
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
         /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
+        /// <returns>The first INavigable found.</returns>
+        /// <exception cref="OperationCanceledException">Throw when the operation has been canceled.</exception>
+        /// <exception cref="EntryPointsNotFoundException">Throw when no EntryPoint has been found.</exception>
         public virtual INavigable WaitForEntryPoints(CancellationToken ct)
         {
             return GetFirstINavigableExisting(EntryPoints.ToList(), ct);
@@ -164,7 +167,8 @@ namespace IC.Navigation
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for any EntryPoints.</param>
-        /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
+        /// <returns>The first INavigable found</returns>
+        /// <exception cref="TimeoutException">Throw when timeout is reached before any EntryPoint is found.</exception>
         public INavigable WaitForEntryPoints(TimeSpan timeout)
         {
             using (var cts = new CancellationTokenSource(timeout))
@@ -177,7 +181,6 @@ namespace IC.Navigation
                 {
                     throw new TimeoutException("The timeout has been reached.");
                 }
-                
             }
         }
 
@@ -191,14 +194,13 @@ namespace IC.Navigation
         {
             if (!origin.PublishStatus().Exists)
             {
-                throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
+                throw new NavigableNotFoundException("origin", origin);
             }
 
             uIAction.Invoke();
             if (!origin.PublishStatus().Exists)
             {
-                throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
-                    $" If it was expected, used \"Do<T>\" instead.");
+                throw new NavigableNotFoundException("expected", origin, $"If it was expected, used \"Do<T>\" instead.");
             }
 
             return origin;
@@ -215,11 +217,9 @@ namespace IC.Navigation
         {
             ValidateINavigableExists(origin, "origin");
             INavigable retINavigable = function.Invoke();
-            var actualINavigable = retINavigable.GetType();
-            Type expectedINavigable = typeof(T);
             if (typeof(T) != retINavigable.GetType())
             {
-                throw new Exception($"The expected INavigagble Type is \"{expectedINavigable}\" but the actual INavigagble Type is \"{actualINavigable}\"");
+                throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }
 
             ValidateINavigableExists(retINavigable, "destination");
@@ -235,17 +235,15 @@ namespace IC.Navigation
         /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The next INavigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
-        /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action<CancellationToken>> actionToNextINavigable, INavigable nextNavigable, CancellationToken ct)
         {
             var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
-            INavigable nextNavigableRef = navigableAndAction.Key;
-            var actionToOpen = navigableAndAction.Value;
-            if (nextNavigableRef == null)
+            if (navigableAndAction.Key == null)
             {
-                throw new ArgumentException($"The INavigable \"{nextNavigable}\" is not available in \"{MethodBase.GetCurrentMethod().DeclaringType}\".");
+                throw new UnregistredNeighborException(nextNavigable, MethodBase.GetCurrentMethod().DeclaringType);
             }
 
+            var actionToOpen = navigableAndAction.Value;
             actionToOpen.Invoke(ct);
             if (gotoDestination != null)
             {
@@ -267,7 +265,7 @@ namespace IC.Navigation
         /// <returns>The destination.</returns>
         public virtual INavigable GoTo(INavigable origin, INavigable destination, CancellationToken ct)
         {
-            if (Graph == null) { throw new Exception($"The \"Graph\" is not initialized."); }
+            if (Graph == null) { throw new GraphNotInitialized(); }
 
             ValidateINavigableExists(origin, "origin");
 
@@ -277,7 +275,7 @@ namespace IC.Navigation
             var shortestPath = GetShortestPath(origin, destination);
             if (shortestPath.Count == 0)
             {
-                throw new Exception($"There is no path from \"{origin.GetType().Name}\" to \"{destination.GetType().Name}\".");
+                throw new PathNotFound(origin, destination);
             }
 
             gotoDestination = gotoDestination ?? destination;
@@ -501,7 +499,7 @@ namespace IC.Navigation
 
             if (match == null)
             {
-                throw new Exception("Could not find any neighbors.");
+                throw new EntryPointsNotFoundException(iNavigables);
             }
 
             return match;
@@ -517,7 +515,7 @@ namespace IC.Navigation
         {
             if (!iNavigable.PublishStatus().Exists)
             {
-                throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
+                throw new NavigableNotFoundException(definition, iNavigable);
             }
         }
 

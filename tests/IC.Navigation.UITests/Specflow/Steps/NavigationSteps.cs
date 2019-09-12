@@ -31,17 +31,12 @@ namespace IC.Navigation.UITests.Specflow.Steps
             Assert.NotNull(sut.Last);
         }
 
+        [When(@"I navigate to ""(.*)""")]
         [Given(@"The ""(.*)"" has been opened")]
         public void GivenTheViewHasBeenOpened(string usageName)
         {
             var destination = sut.GetINavigableByUsageName(usageName);
             sut.Last.GoTo(destination, ct);
-        }
-
-        [When(@"I navigate to ""(.*)""")]
-        public void WhenINavigateTo(string usageName)
-        {
-            GivenTheViewHasBeenOpened(usageName);
         }
 
         [When(@"The ""(.*)"" is pressed in current page")]
