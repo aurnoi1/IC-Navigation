@@ -79,7 +79,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The ViewMenu.</returns>
         public PomMenu OpenMenuByMenuBtn(CancellationToken ct)
         {
-            session.WindowsDriver.Get(UIBtnOpenMenuPageParam, ct)?.Click();
+            session.WindowsDriver.Get(UIBtnOpenMenuPageParam, ct).Click();
             return session.PomMenu;
         }
 
@@ -94,11 +94,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                session.WindowsDriver.Get(UIBtnBackParam, ct)?.Click();
+                session.WindowsDriver.Get(UIBtnBackParam, ct).Click();
             }
             else
             {
-                session.WindowsDriver.Get(UIBtnOpenMenuPageParam, ct)?.Click();
+                session.WindowsDriver.Get(UIBtnOpenMenuPageParam, ct).Click();
             }
         }
 
@@ -117,7 +117,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                (x) => session.WindowsDriver.Get(UIBtnBackParam, x)?.Click(),
+                (x) => session.WindowsDriver.Get(UIBtnBackParam, x).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives, ct);
