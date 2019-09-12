@@ -55,13 +55,10 @@ namespace IC.Navigation.Extensions.Appium
             ISearchParam searchParam,
             CancellationToken ct) where T : IWebElement
         {
-            using (var cts = new CancellationTokenSource())
+            while (!ct.IsCancellationRequested)
             {
-                while (!ct.IsCancellationRequested)
-                {
-                    var match = FindFirstElement(driver, searchParam);
-                    if (match != null) return match;
-                }
+                var match = FindFirstElement(driver, searchParam);
+                if (match != null) return match;
             }
 
             return default;
