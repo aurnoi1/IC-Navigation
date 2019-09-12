@@ -1,4 +1,6 @@
 ﻿using IC.Navigation.Extensions.Appium.Interfaces;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement Get(this WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
         {
-            return FindWindowsElement(windowsDriver, searchParam);
+            return FindFirstElement(windowsDriver, searchParam);
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             {
                 while (!ct.IsCancellationRequested)
                 {
-                    var match = FindWindowsElement(windowsDriver, searchParam);
+                    var match = FindFirstElement(windowsDriver, searchParam);
                     if (match != null) return match;
                 }
             }
@@ -198,7 +200,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
            Dictionary<string, string> expectedAttribsNamesValues
            )
         {
-            WindowsElement elmt = FindWindowsElement(windowsDriver, searchParam);
+            WindowsElement elmt = FindFirstElement(windowsDriver, searchParam);
             if (elmt == null) return null;
             if (!WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, ct))
                 return null;
@@ -248,7 +250,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             return attributesValues;
         }
 
-        private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
+        private static T FindFirstElement<T>(AppiumDriver<T> windowsDriver, ISearchParam searchParam) where T : IWebElement
         {
             return windowsDriver.FindElements(searchParam.Locator, searchParam.Value).FirstOrDefault();
         }
