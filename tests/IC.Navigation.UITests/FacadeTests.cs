@@ -40,7 +40,7 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
-        public void WaitForEntryPoints_Should_Returns_Found_EntryPoint()
+        public void WaitForEntryPoints_With_CToken_Should_Returns_Found_EntryPoint()
         {
             var expected = typeof(PomMenu);
             INavigable actual = null;
@@ -54,12 +54,34 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void WaitForEntryPoints_Should_Throw_OperationCanceledException_On_Timeout()
+        public void WaitForEntryPoints_With_CToken_Should_Throw_OperationCanceledException_On_Timeout()
         {
             using (var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(1)))
             using (var sut = appContext.GetFacade())
             {
                 Assert.Throws<OperationCanceledException>(() => sut.WaitForEntryPoints(cts.Token));
+            }
+        }
+
+        [Fact]
+        public void WaitForEntryPoints_With_Timeout_Should_Returns_Found_EntryPoint()
+        {
+            var expected = typeof(PomMenu);
+            INavigable actual = null;
+            using (var sut = appContext.GetFacade())
+            {
+                actual = sut.WaitForEntryPoints(TimeSpan.FromSeconds(10));
+            }
+
+            Assert.Equal(expected, actual.GetType());
+        }
+
+        [Fact]
+        public void WaitForEntryPoints_With_Timeout_Should_Throw_TimeoutException_On_Timeout()
+        {
+            using (var sut = appContext.GetFacade())
+            {
+                Assert.Throws<TimeoutException>(() => sut.WaitForEntryPoints(TimeSpan.FromMilliseconds(1)));
             }
         }
 

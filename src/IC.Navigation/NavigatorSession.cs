@@ -160,6 +160,28 @@ namespace IC.Navigation
         }
 
         /// <summary>
+        /// Wait for any EntryPoints of the navigation to exists.
+        /// The amount of time to wait is defined by each INavigable.WaitForExists().
+        /// </summary>
+        /// <param name="timeout">The maximum amount of time to wait for any EntryPoints.</param>
+        /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
+        public INavigable WaitForEntryPoints(TimeSpan timeout)
+        {
+            using (var cts = new CancellationTokenSource(timeout))
+            {
+                try
+                {
+                    return GetFirstINavigableExisting(EntryPoints.ToList(), cts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw new TimeoutException("The timeout has been reached.");
+                }
+                
+            }
+        }
+
+        /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
