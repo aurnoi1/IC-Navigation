@@ -51,23 +51,30 @@ namespace IC.Navigation.UITests
         public void FullExample()
         {
             sut.Last
-            .GoTo(sut.PomYellow, ct)
-            .Do<PomMenu>(() =>
-            {
-                return sut.PomYellow.OpenMenuByMenuBtn(ct);
-            }, ct) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
-            .GoTo(sut.PomBlue, ct) // Force the path to PomBlue then PomYellow...
-            .GoTo(sut.PomYellow, ct) //... to test PomYellowFeat.ActionToOpenViewMenu().
-            .GoTo(sut.PomMenu, ct) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
-            .Do(() =>
-            {
-                sut.PomMenu.EnterText("This is a test");
-            }, ct)
-            .GoTo(sut.PomBlue, ct)
-            .Back(ct) // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
-            .GoTo(sut.Historic.ElementAt(1), ct) // The second element of historic is ViewYellow.
-            .GoTo(sut.PomRed, ct)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
-            .GoTo(sut.EntryPoint, ct); // The entry point.
+                .GoTo(sut.PomYellow, ct)
+                .Do<PomMenu>(() =>
+                {
+                    // Create a Linked CancellationTokenSource to limit the current scope
+                    // while the global ct is still running. First one to cancel will stop this scope.
+                    using (var ctsLocal = CancellationTokenSource.CreateLinkedTokenSource(ct))
+                    {
+                        ctsLocal.CancelAfter(TimeSpan.FromSeconds(3));
+                        return sut.PomYellow.OpenMenuByMenuBtn(ctsLocal.Token);
+                    }
+
+                }, ct)
+                .GoTo(sut.PomBlue, ct) // Force the path to PomBlue then PomYellow...
+                .GoTo(sut.PomYellow, ct) //... to test PomYellow.ActionToOpenViewMenu().
+                .GoTo(sut.PomMenu, ct) // Since last was PomBlue, PomYellow.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
+                .Do(() =>
+                {
+                    sut.PomMenu.EnterText("This is a test");
+                }, ct)
+                .GoTo(sut.PomBlue, ct)
+                .Back(ct) // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
+                .GoTo(sut.Historic.ElementAt(1), ct) // The second element of historic is ViewYellow.
+                .GoTo(sut.PomRed, ct)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
+                .GoTo(sut.EntryPoint, ct); // The entry point.
 
             Assert.True(sut.Historic.ElementAt(0).Exists());
         }

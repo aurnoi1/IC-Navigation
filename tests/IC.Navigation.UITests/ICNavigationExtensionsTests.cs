@@ -60,7 +60,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 Assert.Throws<TimeoutException>(() => 
-                sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.FromMilliseconds(1)));
+                sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.Zero));
             }, ct);
         }
 

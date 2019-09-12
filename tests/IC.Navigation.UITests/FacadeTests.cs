@@ -56,7 +56,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void WaitForEntryPoints_With_CToken_Should_Throw_OperationCanceledException_On_Timeout()
         {
-            using (var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(1)))
+            using (var cts = new CancellationTokenSource(TimeSpan.Zero))
             using (var sut = appContext.GetFacade())
             {
                 Assert.Throws<OperationCanceledException>(() => sut.WaitForEntryPoints(cts.Token));
@@ -81,7 +81,7 @@ namespace IC.Navigation.UITests
         {
             using (var sut = appContext.GetFacade())
             {
-                Assert.Throws<TimeoutException>(() => sut.WaitForEntryPoints(TimeSpan.FromMilliseconds(1)));
+                Assert.Throws<TimeoutException>(() => sut.WaitForEntryPoints(TimeSpan.Zero));
             }
         }
 
