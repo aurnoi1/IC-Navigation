@@ -15,8 +15,8 @@ namespace IC.Navigation.Interfaces
         List<INavigable> INavigables { get; }
 
         /// <summary>
-        /// The UI action.
+        /// The alternative action.
         /// </summary>
-        Action<CancellationToken> UIAction { get; }
+        Action<CancellationToken> AlternativateAction { get; }
     }
 }

@@ -355,7 +355,7 @@ namespace IC.Navigation
         {
             ValidateINavigableExists(origin, "origin");
             INavigable match = null;
-            onActionAlternatives.UIAction.Invoke(ct);
+            onActionAlternatives.AlternativateAction.Invoke(ct);
             match = GetFirstINavigableExisting(onActionAlternatives.INavigables, ct);
             return match;
         }
