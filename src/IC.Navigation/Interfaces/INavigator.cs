@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
@@ -57,7 +58,7 @@ namespace IC.Navigation.Interfaces
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The destination.</returns>
-        INavigable GoTo(INavigable origin, INavigable destination);
+        INavigable GoTo(INavigable origin, INavigable destination, CancellationToken ct);
 
         /// <summary>
         /// Performs UI action to step to the next INavigable in the resolve path.
@@ -65,15 +66,17 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="actionToOpenInavigable">A Dictionary of UI actions to step to the next Navigable.</param>
         /// <param name="nextNavigable">The next INavigable.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The next consecutive or the rebased INavigable.</returns>
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
-        INavigable StepToNext(Dictionary<INavigable, Action> actionToOpenInavigable, INavigable nextNavigable);
+        INavigable StepToNext(Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable, INavigable nextNavigable, CancellationToken ct);
 
         /// <summary>
         /// Back to the previous INavigable.
         /// </summary>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The previous INavigable.</returns>
-        INavigable Back();
+        INavigable Back(CancellationToken ct);
 
         /// <summary>
         /// Resolve a path when one Action leads to more than one page.
@@ -82,8 +85,9 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives);
+        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct);
 
         /// <summary>
         /// Resolve a path when one Action leads to more than one INavigable.
@@ -93,7 +97,8 @@ namespace IC.Navigation.Interfaces
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint);
+        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint, CancellationToken ct);
     }
 }

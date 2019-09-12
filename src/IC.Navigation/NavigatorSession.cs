@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IC.Navigation
@@ -208,20 +209,21 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="actionToNextINavigable">A Dictionary of UI actions to step to the next Navigable.</param>
         /// <param name="nextNavigable">The next INavigable.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The next INavigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
-        public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
+        public virtual INavigable StepToNext(Dictionary<INavigable, Action<CancellationToken>> actionToNextINavigable, INavigable nextNavigable, CancellationToken ct)
         {
             var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
             INavigable nextNavigableRef = navigableAndAction.Key;
-            Action actionToOpen = navigableAndAction.Value;
+            var actionToOpen = navigableAndAction.Value;
             if (nextNavigableRef == null)
             {
                 throw new ArgumentException($"The INavigable \"{nextNavigable}\" is not available in \"{MethodBase.GetCurrentMethod().DeclaringType}\".");
             }
 
-            actionToOpen.Invoke();
+            actionToOpen.Invoke(ct);
             if (gotoDestination != null)
             {
                 ValidateINavigableExists(nextNavigable, "neighbor to open");
@@ -238,8 +240,9 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable GoTo(INavigable origin, INavigable destination)
+        public virtual INavigable GoTo(INavigable origin, INavigable destination, CancellationToken ct)
         {
             if (Graph == null) { throw new Exception($"The \"Graph\" is not initialized."); }
 
@@ -261,7 +264,7 @@ namespace IC.Navigation
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    StepToNext(currentNode.GetActionToNext(), nextNode);
+                    StepToNext(currentNode.GetActionToNext(), nextNode, ct);
                 }
                 else
                 {
@@ -280,10 +283,11 @@ namespace IC.Navigation
         /// <summary>
         /// Back to the previous INavigable.
         /// </summary>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The previous INavigable.</returns>
-        public virtual INavigable Back()
+        public virtual INavigable Back(CancellationToken ct)
         {
-            return GoTo(Last, Previous);
+            return GoTo(Last, Previous, ct);
         }
 
         /// <summary>
@@ -304,11 +308,12 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives)
+        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
         {
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
-            return GoTo(newOrigin, gotoDestination);
+            return GoTo(newOrigin, gotoDestination, ct);
         }
 
         /// <summary>
@@ -319,8 +324,9 @@ namespace IC.Navigation
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <param name="waypoint">An INavigable waypoint to cross if the expected INavigable is not cross during the resolution.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
+        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint, CancellationToken ct)
         {
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
@@ -332,8 +338,8 @@ namespace IC.Navigation
             else
             {
                 // Force to pass by waypoint.
-                GoTo(navigableAfterAction, waypoint);
-                return GoTo(waypoint, finalDestination);
+                GoTo(navigableAfterAction, waypoint, ct);
+                return GoTo(waypoint, finalDestination, ct);
             }
         }
 

@@ -12,6 +12,7 @@ using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace IC.Navigation.UITests
@@ -24,6 +25,8 @@ namespace IC.Navigation.UITests
             sut = new AppiumContext().SUT;
             wd = sut.WindowsDriver;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
+            cts = new CancellationTokenSource();
+            ct = cts.Token;
         }
 
         #region Properties
@@ -33,6 +36,8 @@ namespace IC.Navigation.UITests
         private IFacade sut;
         private IFixture fixture;
         private WindowsDriver<WindowsElement> wd;
+        private CancellationTokenSource cts;
+        private readonly CancellationToken ct;
 
         #endregion Private
 
@@ -46,23 +51,23 @@ namespace IC.Navigation.UITests
         public void FullExample()
         {
             sut.Last
-                .GoTo(sut.PomYellow)
-                .Do<PomMenu>(() =>
-                {
-                    return sut.PomYellow.OpenMenuByMenuBtn();
-                }) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
-                .GoTo(sut.PomBlue) // Force the path to PomBlue then PomYellow...
-                .GoTo(sut.PomYellow) //... to test PomYellowFeat.ActionToOpenViewMenu().
-                .GoTo(sut.PomMenu) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
-                .Do(() =>
-                {
-                    sut.PomMenu.EnterText("This is a test");
-                })
-                .GoTo(sut.PomBlue)
-                .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
-                .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
-                .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
-                .GoTo(sut.EntryPoint); // The entry point.
+            .GoTo(sut.PomYellow, ct)
+            .Do<PomMenu>(() =>
+            {
+                return sut.PomYellow.OpenMenuByMenuBtn(ct);
+            }) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
+            .GoTo(sut.PomBlue, ct) // Force the path to PomBlue then PomYellow...
+            .GoTo(sut.PomYellow, ct) //... to test PomYellowFeat.ActionToOpenViewMenu().
+            .GoTo(sut.PomMenu, ct) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
+            .Do(() =>
+            {
+                sut.PomMenu.EnterText("This is a test");
+            })
+            .GoTo(sut.PomBlue, ct)
+            .Back(ct) // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
+            .GoTo(sut.Historic.ElementAt(1), ct) // The second element of historic is ViewYellow.
+            .GoTo(sut.PomRed, ct)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
+            .GoTo(sut.EntryPoint, ct); // The entry point.
 
             Assert.True(sut.Historic.ElementAt(0).Exists());
         }
@@ -155,8 +160,8 @@ namespace IC.Navigation.UITests
         public void ShouldOpenViewMenuFromYellowViewByOpenViewMenuDirectly()
         {
             sut.Last
-                .GoTo(sut.PomYellow)
-                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn());
+                .GoTo(sut.PomYellow, ct)
+                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(ct));
 
             Assert.True(sut.PomMenu.Exists());
         }
@@ -172,27 +177,28 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldGoToBlueView()
         {
-            sut.PomMenu.GoTo(sut.PomBlue);
+            sut.PomMenu.GoTo(sut.PomBlue, ct);
             Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]
         public void ShouldHaveViewMenuAsFirstInHistoric()
         {
-            sut.PomMenu.GoTo(sut.PomBlue);
+            sut.PomMenu.GoTo(sut.PomBlue, ct);
             Assert.Equal(typeof(PomMenu), sut.Historic.First().GetType());
         }
 
         [Fact]
         public void ShouldHaveViewBlueAsLastInHistoric()
         {
-            sut.PomMenu.GoTo(sut.PomBlue);
+            sut.PomMenu.GoTo(sut.PomBlue, ct);
             Assert.Equal(typeof(PomBlue), sut.Historic.Last().GetType());
         }
 
         public void Dispose()
         {
             sut?.Dispose();
+            cts?.Dispose();
         }
 
         #endregion Public

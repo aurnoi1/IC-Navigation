@@ -5,6 +5,7 @@ using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
@@ -57,12 +58,12 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        public override Dictionary<INavigable, Action> GetActionToNext()
+        public override Dictionary<INavigable, Action<CancellationToken>> GetActionToNext()
         {
-            return new Dictionary<INavigable, Action>()
+            return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, () => session.WindowsDriver.Get(UIBtnBackParam).Click() },
-                { session.PomYellow, () => session.WindowsDriver.Get(UIBtnOpenYellowViewParam).Click() },
+                { session.PomMenu, (ct) => session.WindowsDriver.Get(UIBtnBackParam, ct)?.Click() },
+                { session.PomYellow, (ct) => session.WindowsDriver.Get(UIBtnOpenYellowViewParam, ct)?.Click() },
             };
         }
     }

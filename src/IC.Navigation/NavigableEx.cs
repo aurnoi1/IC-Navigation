@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace IC.Navigation.CoreExtensions
 {
@@ -35,20 +36,22 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public static INavigable GoTo(this INavigable source, INavigable destination)
+        public static INavigable GoTo(this INavigable source, INavigable destination, CancellationToken ct)
         {
-            return source.Session.GoTo(source, destination);
+            return source.Session.GoTo(source, destination, ct);
         }
 
         /// <summary>
         /// Go to the previous INavigable.
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The previous INavigable.</returns>
-        public static INavigable Back(this INavigable source)
+        public static INavigable Back(this INavigable source, CancellationToken ct)
         {
-            return source.Session.Back();
+            return source.Session.Back(ct);
         }
 
         /// <summary>

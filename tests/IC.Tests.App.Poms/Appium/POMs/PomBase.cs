@@ -3,6 +3,7 @@ using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
@@ -30,7 +31,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        abstract public Dictionary<INavigable, Action> GetActionToNext();
+        abstract public Dictionary<INavigable, Action<CancellationToken>> GetActionToNext();
 
         /// <summary>
         /// Register the INavigableObserver as a WeakReference.
