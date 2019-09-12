@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
@@ -16,6 +17,6 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// The UI action.
         /// </summary>
-        Action UIAction { get; }
+        Action<CancellationToken> UIAction { get; }
     }
 }

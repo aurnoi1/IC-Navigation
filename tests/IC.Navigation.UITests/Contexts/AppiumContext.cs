@@ -2,6 +2,8 @@
 using IC.Navigation.UITests.Interfaces;
 using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using System;
+using System.Threading;
 
 namespace IC.Navigation.UITests.Specflow.Contexts
 {
@@ -32,11 +34,14 @@ namespace IC.Navigation.UITests.Specflow.Contexts
 
         private IFacade Create()
         {
-            ISUTAppiumConfig config = new SUTAppiumConfig();
-            IAppiumSession session = new SUTAppiumSession(config);
-            var sut = new Facade(session);
-            sut.WaitForEntryPoints();
-            return sut;
+            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
+            {
+                ISUTAppiumConfig config = new SUTAppiumConfig();
+                IAppiumSession session = new SUTAppiumSession(config);
+                var sut = new Facade(session);
+                sut.WaitForEntryPoints(cts.Token);
+                return sut;
+            }
         }
     }
 }

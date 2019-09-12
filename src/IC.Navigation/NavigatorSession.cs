@@ -152,10 +152,11 @@ namespace IC.Navigation
         /// Wait for any EntryPoints to exists.
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
-        public virtual INavigable WaitForEntryPoints()
+        public virtual INavigable WaitForEntryPoints(CancellationToken ct)
         {
-            return GetFirstINavigableExisting(EntryPoints.ToList());
+            return GetFirstINavigableExisting(EntryPoints.ToList(), ct);
         }
 
         /// <summary>
@@ -312,7 +313,7 @@ namespace IC.Navigation
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
         {
-            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
+            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives, ct);
             return GoTo(newOrigin, gotoDestination, ct);
         }
 
@@ -330,7 +331,7 @@ namespace IC.Navigation
         {
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
-            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
+            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives, ct);
             if (navigableAfterAction == finalDestination)
             {
                 return navigableAfterAction;
@@ -348,13 +349,14 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public virtual INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives)
+        public virtual INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
         {
             ValidateINavigableExists(origin, "origin");
             INavigable match = null;
-            onActionAlternatives.UIAction.Invoke();
-            match = GetFirstINavigableExisting(onActionAlternatives.INavigables);
+            onActionAlternatives.UIAction.Invoke(ct);
+            match = GetFirstINavigableExisting(onActionAlternatives.INavigables, ct);
             return match;
         }
 
@@ -449,72 +451,44 @@ namespace IC.Navigation
             }
         }
 
-        private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables)
+        private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables, CancellationToken ct)
         {
             INavigable match = null;
-            Parallel.ForEach(iNavigables, x =>
+            using (var internalCts = new CancellationTokenSource())
+            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(internalCts.Token, ct))
             {
-                var neighbor = GetExistingNavigable(x);
-                if (neighbor != null)
+                ParallelOptions po = new ParallelOptions();
+                po.CancellationToken = linkedCts.Token;
+                try
                 {
-                    match = neighbor;
+                    Parallel.ForEach(iNavigables, po, x =>
+                    {
+                        var neighbor = GetExistingNavigable(x);
+                        if (neighbor != null)
+                        {
+                            match = neighbor;
+                            internalCts.Cancel();
+                        }
+                    });
                 }
-            });
+                catch (OperationCanceledException)
+                {
+                    if (ct.IsCancellationRequested) ct.ThrowIfCancellationRequested();
+                }
+            }
 
             if (match == null)
             {
                 throw new Exception("Could not find any neighbors.");
             }
 
-            //INavigable match = null;
-            //int counter = iNavigables.Count();
-            //List<Task<INavigable>> tasks = new List<Task<INavigable>>();
-            //using (CancellationTokenSource source = new CancellationTokenSource())
-            //{
-            //    try
-            //    {
-            //        CancellationToken token = source.Token;
-            //        foreach (var iNavigagble in iNavigables)
-            //        {
-            //            tasks.Add(new Task<INavigable>(() => GetExistingNavigable(iNavigagble), token));
-            //        }
-
-            //        bool tasksStarted = false;
-            //        while (counter > 0)
-            //        {
-            //            if (!tasksStarted)
-            //            {
-            //                tasks.ForEach(x => x.Start());
-            //                tasksStarted = true;
-            //            }
-
-            //            Task<INavigable> completed = Task.WhenAny(tasks.ToArray()).GetAwaiter().GetResult();
-            //            if (completed.Status == TaskStatus.RanToCompletion && completed.Result != null)
-            //            {
-            //                match = completed.Result;
-            //                counter = 0;
-            //                source.Cancel();
-            //                break;
-            //            }
-            //            else
-            //            {
-            //                counter--;
-            //            }
-            //        }
-            //    }
-            //    catch (OperationCanceledException)
-            //    {
-            //        // Do nothing.
-            //    }
-            //}
-
             return match;
         }
 
         private INavigable GetExistingNavigable(INavigable navigable)
         {
-            bool exists = navigable.PublishStatus().Exists;
-            return exists ? navigable : null;
+            bool? exists = navigable.PublishStatus()?.Exists;
+            return exists != null ? navigable : null;
         }
 
         private void ValidateINavigableExists(INavigable iNavigable, string definition)

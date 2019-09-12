@@ -1,6 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation
 {
@@ -14,7 +15,7 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="uIAction">The UI action.</param>
         /// <param name="iNavigables">The possible INavigables.</param>
-        public OnActionAlternatives(Action uIAction, List<INavigable> iNavigables)
+        public OnActionAlternatives(Action<CancellationToken> uIAction, List<INavigable> iNavigables)
         {
             UIAction = uIAction;
             INavigables = iNavigables;
@@ -28,6 +29,6 @@ namespace IC.Navigation
         /// <summary>
         /// The UI action.
         /// </summary>
-        public Action UIAction { get; private set; }
+        public Action<CancellationToken> UIAction { get; private set; }
     }
 }

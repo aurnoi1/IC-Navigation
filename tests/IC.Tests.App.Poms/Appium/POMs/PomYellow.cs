@@ -117,7 +117,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                () => session.WindowsDriver.Get(UIBtnBackParam)?.Click(),
+                (x) => session.WindowsDriver.Get(UIBtnBackParam, x)?.Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives, ct);

@@ -41,8 +41,9 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives);
+        INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct);
 
         /// <summary>
         /// Get the shortest path from the origin to the destination.
