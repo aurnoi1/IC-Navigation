@@ -159,6 +159,7 @@ namespace IC.Navigation
         /// <exception cref="EntryPointsNotFoundException">Throw when no EntryPoint has been found.</exception>
         public virtual INavigable WaitForEntryPoints(CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             return GetFirstINavigableExisting(EntryPoints.ToList(), ct);
         }
 
@@ -175,6 +176,7 @@ namespace IC.Navigation
             {
                 try
                 {
+                    cts.Token.ThrowIfCancellationRequested();
                     return GetFirstINavigableExisting(EntryPoints.ToList(), cts.Token);
                 }
                 catch (OperationCanceledException)
@@ -193,6 +195,7 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(INavigable origin, Action action, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             WaitUntilNavigableExists(origin, "origin", ct);
             action.Invoke();
             WaitUntilNavigableExists(origin, "origin", ct);
@@ -209,6 +212,7 @@ namespace IC.Navigation
         /// <returns>The INavigable returns by the Function.</returns>
         public virtual INavigable Do<T>(INavigable origin, Func<INavigable> function, CancellationToken ct) where T : INavigable
         {
+            ct.ThrowIfCancellationRequested();
             WaitUntilNavigableExists(origin, "origin", ct);
             INavigable retINavigable = function.Invoke();
             if (typeof(T) != retINavigable.GetType())
@@ -231,6 +235,7 @@ namespace IC.Navigation
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
         public virtual INavigable StepToNext(Dictionary<INavigable, Action<CancellationToken>> actionToNextINavigable, INavigable nextNavigable, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
             if (navigableAndAction.Key == null)
             {
@@ -259,8 +264,8 @@ namespace IC.Navigation
         /// <returns>The destination.</returns>
         public virtual INavigable GoTo(INavigable origin, INavigable destination, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             if (Graph == null) { throw new GraphNotInitialized(); }
-
             WaitUntilNavigableExists(origin, "origin", ct);
 
             // Avoid calculing the shortest path for the same destination than origin.
@@ -302,6 +307,7 @@ namespace IC.Navigation
         /// <returns>The previous INavigable.</returns>
         public virtual INavigable Back(CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             return GoTo(Last, Previous, ct);
         }
 
@@ -313,6 +319,9 @@ namespace IC.Navigation
         /// <returns>The HashSet of INavigable from the origin to the destination.</returns>
         public virtual List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
+            if (Graph == null)
+                throw new GraphNotInitialized();
+
             return Graph.GetShortestPath(origin, destination);
         }
 
@@ -327,6 +336,7 @@ namespace IC.Navigation
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives, ct);
             return GoTo(newOrigin, gotoDestination, ct);
         }
@@ -343,6 +353,8 @@ namespace IC.Navigation
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
+
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
             var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives, ct);
@@ -367,6 +379,7 @@ namespace IC.Navigation
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
         public virtual INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             WaitUntilNavigableExists(origin, "origin", ct);
             INavigable match = null;
             onActionAlternatives.AlternativateAction.Invoke(ct);

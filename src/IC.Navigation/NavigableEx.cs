@@ -17,6 +17,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns>The current INavigable.</returns>
         public static INavigable Do(this INavigable source, Action action, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             return source.Session.Do(source, action, ct);
         }
 
@@ -29,6 +30,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns>The expected INavigable returns by the Function.</returns>
         public static INavigable Do<T>(this INavigable source, Func<INavigable> function, CancellationToken ct) where T : INavigable
         {
+            ct.ThrowIfCancellationRequested();
             return source.Session.Do<T>(source, function, ct);
         }
 
@@ -42,6 +44,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns>The destination.</returns>
         public static INavigable GoTo(this INavigable source, INavigable destination, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             return source.Session.GoTo(source, destination, ct);
         }
 
@@ -53,6 +56,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns>The previous INavigable.</returns>
         public static INavigable Back(this INavigable source, CancellationToken ct)
         {
+            ct.ThrowIfCancellationRequested();
             return source.Session.Back(ct);
         }
 
