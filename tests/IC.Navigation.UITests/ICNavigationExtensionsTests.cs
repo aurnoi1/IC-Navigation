@@ -1,6 +1,5 @@
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -35,7 +34,7 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
-        public void Get_Should_Returns_Control_Matching_WDSearchParam()
+        public void Get_Should_Returns_Control_Matching_SearchParam()
         {
             // Arrange
             WindowsElement title = default;
@@ -51,7 +50,23 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Get_With_Timeout_Should_Returns_Control_Matching_WDSearchParam()
+        public void Get_Should_Returns_Null_When_Control_Is_Not_Found()
+        {
+            // Arrange
+            WindowsElement title = default;
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam);
+            });
+
+            // Assert
+            Assert.Null(title);
+        }
+
+        [Fact]
+        public void Get_With_Timeout_Should_Returns_Control_Matching_SearchParam()
         {
             // Arrange
             WindowsElement title = default;
@@ -74,23 +89,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Get_Should_Returns_Null_When_Control_Is_Not_Found()
-        {
-            // Arrange
-            WindowsElement title = default;
-
-            // Act
-            sut.Last.Do(() =>
-            {
-                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam);
-            });
-
-            // Assert
-            Assert.Null(title);
-        }
-
-        [Fact]
-        public void Get_With_CToken_Should_Returns_Control_Matching_WDSearchParam()
+        public void Get_With_CToken_Should_Returns_Control_Matching_SearchParam()
         {
             // Arrange
             WindowsElement title = default;
@@ -116,52 +115,8 @@ namespace IC.Navigation.UITests
             Assert.True(diff.TotalMilliseconds < maxExpectedElapse.TotalMilliseconds);
         }
 
-
         [Fact]
-        public void GetWhen_CToken_WithTimeout_Should_Returns_Control_When_Single_Property_Is_True()
-        {
-            // Arrange
-            var param = sut.PomMenu.UITitleParam;
-            WindowsElement title = default;
-
-            // Act
-            sut.PomMenu.Do(() =>
-            {
-                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
-                {
-                    title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "True");
-                }
-            });
-
-            // Assert
-            Assert.NotNull(title);
-        }
-
-        [Fact]
-        public void GetWhen_CToken_WithTimeout_Should_Returns_Control_When_Many_Attributes_Are_True()
-        {
-            // Arrange
-            var param = sut.PomMenu.UITitleParam;
-            var expectedAttribsValues = new Dictionary<string, string>();
-            expectedAttribsValues.Add("IsEnabled", "True");
-            expectedAttribsValues.Add("IsOffscreen", "False");
-            WindowsElement title = default;
-
-            // Act
-            sut.PomMenu.Do(() =>
-            {
-                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
-                {
-                    title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), expectedAttribsValues);
-                }
-            });
-
-            // Assert
-            Assert.NotNull(title);
-        }
-
-        [Fact]
-        public void GetWhen_CToken_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
+        public void GetWhen_With_CToken_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
             var param = sut.PomMenu.UITitleParam;
@@ -181,7 +136,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_WithTimeout_Should_Returns_Control_When_Single_Property_Is_True()
+        public void GetWhen_With_Timeout_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
             var param = sut.PomMenu.UITitleParam;
@@ -198,7 +153,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_WithTimeout_Should_Returns_Control_When_Many_Attributes_Are_True()
+        public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_Attributes_Are_True()
         {
             // Arrange
             var param = sut.PomMenu.UITitleParam;
@@ -218,7 +173,50 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_WithTimeout_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
+        public void GetWhen_With_CToken_Should_Returns_Control_When_Single_Property_Is_True()
+        {
+            // Arrange
+            var param = sut.PomMenu.UITitleParam;
+            WindowsElement title = default;
+
+            // Act
+            sut.PomMenu.Do(() =>
+            {
+                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
+                {
+                    title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "True");
+                }
+            });
+
+            // Assert
+            Assert.NotNull(title);
+        }
+
+        [Fact]
+        public void GetWhen_With_CToken_Should_Returns_Control_When_Many_Attributes_Are_True()
+        {
+            // Arrange
+            var param = sut.PomMenu.UITitleParam;
+            var expectedAttribsValues = new Dictionary<string, string>();
+            expectedAttribsValues.Add("IsEnabled", "True");
+            expectedAttribsValues.Add("IsOffscreen", "False");
+            WindowsElement title = default;
+
+            // Act
+            sut.PomMenu.Do(() =>
+            {
+                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
+                {
+                    title = sut.WindowsDriver.GetWhen(param, cts.Token, expectedAttribsValues);
+                }
+            });
+
+            // Assert
+            Assert.NotNull(title);
+        }
+
+        [Fact]
+        public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
             var param = sut.PomMenu.UITitleParam;
@@ -235,7 +233,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_WithTimeout_Should_Returns_Null_When_Control_With_Dictionnary_Of_Attributes_Is_Not_Found()
+        public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Dictionnary_Of_Attributes_Is_Not_Found()
         {
             // Arrange
             var param = sut.PomMenu.UIBtnNotImplementedParam;
@@ -252,7 +250,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_WithTimeout_Should_Returns_Null_When_Control_With_Many_ValueTuple_Of_Attributes_Is_Not_Found()
+        public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Many_ValueTuple_Of_Attributes_Is_Not_Found()
         {
             // Arrange
             var param = sut.PomMenu.UIBtnNotImplementedParam;
@@ -272,7 +270,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_WithTimeout_Should_Returns_Control_With_Single_Property_Is_Not_Found()
+        public void GetWhen_With_Timeout_Should_Returns_Control_With_Single_Property_Is_Not_Found()
         {
             // Arrange
             var param = sut.PomMenu.UIBtnNotImplementedParam;
@@ -287,7 +285,6 @@ namespace IC.Navigation.UITests
             // Assert
             Assert.Null(title);
         }
-
 
         [Fact]
         public void Get_With_Timeout_Should_Returns_Null_When_Control_Is_Not_Found()
@@ -341,7 +338,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_Should_Returns_Null_When_Timeout_Even_If_Control_Is_Found()
+        public void GetWhen_With_Timeout_Should_Returns_Null_When_Timeout_Even_If_Control_Is_Found()
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(3);
@@ -367,7 +364,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_Should_Returns_Null_When_Cancellation_Is_Requested_Even_If_Control_Is_Found()
+        public void GetWhen_With_CToken_Should_Returns_Null_When_Cancellation_Is_Requested_Even_If_Control_Is_Found()
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(3);
@@ -396,7 +393,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void GetWhen_Should_Returns_Null_When_Cancellation_Is_Requested_Before_The_End_Of_Timeout()
+        public void GetWhen_With_CToken_Should_Returns_Null_When_Cancellation_Is_Requested_Before_The_End_Of_Timeout()
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(5);
