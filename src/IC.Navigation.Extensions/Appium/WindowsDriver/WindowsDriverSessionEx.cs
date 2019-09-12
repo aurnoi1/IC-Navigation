@@ -20,7 +20,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             var prop = GetLastINavigableAliasesAndProperties(winDriverSession).SingleOrDefault(x => x.Key.Values.Contains(alias)).Value;
             if (prop != null)
             {
-                var wdSearchParam = prop.GetValue(winDriverSession.Last) as WDSearchParam;
+                var wdSearchParam = prop.GetValue(winDriverSession.Last) as SearchParam;
                 match = winDriverSession.WindowsDriver.Get(wdSearchParam);
             }
 
@@ -41,7 +41,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    if (attr is Aliases uIArtefact && prop.PropertyType.Equals(typeof(WDSearchParam)))
+                    if (attr is Aliases uIArtefact && prop.PropertyType.Equals(typeof(SearchParam)))
                     {
                         propertyInfos.Add(uIArtefact, prop);
                     }

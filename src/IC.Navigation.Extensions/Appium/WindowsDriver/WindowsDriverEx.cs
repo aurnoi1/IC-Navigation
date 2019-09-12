@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
+﻿using IC.Navigation.Extensions.Appium.Interfaces;
+using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 using IC.Navigation.Extensions.Appium.WindowsDriver.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
@@ -16,7 +17,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <param name="windowsDriver">This WindowsDriver<WindowsElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WindowsElement.</param>
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
-        public static WindowsElement Get(this WindowsDriver<WindowsElement> windowsDriver, IWDSearchParam searchParam)
+        public static WindowsElement Get(this WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
         {
             return FindWindowsElement(windowsDriver, searchParam);
         }
@@ -30,7 +31,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement Get(
             this WindowsDriver<WindowsElement> windowsDriver, 
-            IWDSearchParam searchParam, 
+            ISearchParam searchParam, 
             TimeSpan timeout)
         {
             using (var cts = new CancellationTokenSource(timeout))
@@ -48,7 +49,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement Get(
             this WindowsDriver<WindowsElement> windowsDriver,
-            IWDSearchParam searchParam,
+            ISearchParam searchParam,
             CancellationToken ct)
         {
             using (var cts = new CancellationTokenSource())
@@ -75,7 +76,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement GetWhen(
             this WindowsDriver<WindowsElement> windowsDriver,
-            IWDSearchParam searchParam,
+            ISearchParam searchParam,
             TimeSpan timeout,
             string attributeName,
             string expectedAttributeValue)
@@ -103,7 +104,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c>.</returns>
         public static WindowsElement GetWhen(
             this WindowsDriver<WindowsElement> windowsDriver,
-            IWDSearchParam searchParam,
+            ISearchParam searchParam,
             CancellationToken ct,
             string attributeName,
             string expectedAttributeValue)
@@ -125,7 +126,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
             this WindowsDriver<WindowsElement> windowsDriver,
-            IWDSearchParam searchParam,
+            ISearchParam searchParam,
             TimeSpan timeout,
             Dictionary<string, string> expectedAttribsNamesValues)
         {
@@ -149,7 +150,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
            this WindowsDriver<WindowsElement> windowsDriver,
-           IWDSearchParam searchParam,
+           ISearchParam searchParam,
            TimeSpan timeout,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
         {
@@ -174,7 +175,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
            this WindowsDriver<WindowsElement> windowsDriver,
-           IWDSearchParam searchParam,
+           ISearchParam searchParam,
            CancellationToken ct,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
         {
@@ -194,7 +195,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <returns>The first matching WindowsElement, otherwise <c>null</c></returns>
         public static WindowsElement GetWhen(
            this WindowsDriver<WindowsElement> windowsDriver,
-           IWDSearchParam searchParam,
+           ISearchParam searchParam,
            CancellationToken ct,
            Dictionary<string, string> expectedAttribsNamesValues
            )
@@ -249,22 +250,9 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             return attributesValues;
         }
 
-        private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, IWDSearchParam searchParam)
+        private static WindowsElement FindWindowsElement(WindowsDriver<WindowsElement> windowsDriver, ISearchParam searchParam)
         {
-            switch (Enum.Parse(typeof(WDLocators), searchParam.Locator))
-            {
-                case WDLocators.AutomationId:
-                    return windowsDriver.FindElementsByAccessibilityId(searchParam.Value).FirstOrDefault();
-
-                case Enums.WDLocators.ClassName:
-                    return windowsDriver.FindElementsByClassName(searchParam.Value).FirstOrDefault();
-
-                case Enums.WDLocators.Name:
-                    return windowsDriver.FindElementsByName(searchParam.Value).FirstOrDefault();
-
-                default:
-                    throw new Exception($"Unknown locator: {searchParam.Locator}.");
-            }
+            return windowsDriver.FindElements(searchParam.Locator, searchParam.Value).FirstOrDefault();
         }
 
         #endregion Private

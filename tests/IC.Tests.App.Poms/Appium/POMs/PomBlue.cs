@@ -25,19 +25,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find the title of this page.
         /// </summary>
         [Aliases("title")]
-        public WDSearchParam UILblTitleParam => new WDSearchParam(WDLocators.AutomationId, "TitleBlue");
+        public SearchParam UILblTitleParam => new SearchParam(WDLocators.AutomationId, "TitleBlue");
 
         /// <summary>
         /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WDSearchParam UIBtnBackParam => new WDSearchParam(WDLocators.AutomationId, "BtnBack");
+        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
         /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WDSearchParam BtnOpenYellowViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchParam BtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         #endregion Controls
 

@@ -4,10 +4,10 @@ using System.Text;
 
 namespace IC.Navigation.Extensions.Appium.WindowsDriver.Enums
 {
-    public enum WDLocators
+    public static class WDLocators
     {
-        AutomationId = 0,
-        ClassName = 1,
-        Name = 3
+        public static string AutomationId = "accessibility id";
+        public static string ClassName = "class name";
+        public static string Name = "name";  
     }
 }
