@@ -18,9 +18,9 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class NatigationTests : IDisposable
+    public class NavigationTests : IDisposable
     {
-        public NatigationTests()
+        public NavigationTests()
         {
             sut = new AppiumContext().SUT;
             wd = sut.WindowsDriver;
