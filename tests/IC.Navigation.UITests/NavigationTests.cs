@@ -55,14 +55,14 @@ namespace IC.Navigation.UITests
             .Do<PomMenu>(() =>
             {
                 return sut.PomYellow.OpenMenuByMenuBtn(ct);
-            }) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
+            }, ct) // Could be inline: .DoThenFrom<PomMenu>(() => sut.PomYellow.OpenViewMenuByMenuBtn());
             .GoTo(sut.PomBlue, ct) // Force the path to PomBlue then PomYellow...
             .GoTo(sut.PomYellow, ct) //... to test PomYellowFeat.ActionToOpenViewMenu().
             .GoTo(sut.PomMenu, ct) // Since last was PomBlue, PomYellowFeat.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
             .Do(() =>
             {
                 sut.PomMenu.EnterText("This is a test");
-            })
+            }, ct)
             .GoTo(sut.PomBlue, ct)
             .Back(ct) // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
             .GoTo(sut.Historic.ElementAt(1), ct) // The second element of historic is ViewYellow.
@@ -161,7 +161,7 @@ namespace IC.Navigation.UITests
         {
             sut.Last
                 .GoTo(sut.PomYellow, ct)
-                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(ct));
+                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(ct), ct);
 
             Assert.True(sut.PomMenu.Exists());
         }
@@ -170,7 +170,7 @@ namespace IC.Navigation.UITests
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).SendKeys(expected));
+            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).SendKeys(expected), ct);
             Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).Text);
         }
 

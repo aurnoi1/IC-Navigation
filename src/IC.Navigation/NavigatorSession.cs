@@ -188,21 +188,14 @@ namespace IC.Navigation
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
-        /// <param name="uIAction">The UI action to execute.</param>
+        /// <param name="action">The action to execute.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        public virtual INavigable Do(INavigable origin, Action uIAction)
+        public virtual INavigable Do(INavigable origin, Action action, CancellationToken ct)
         {
-            if (!origin.PublishStatus().Exists)
-            {
-                throw new NavigableNotFoundException("origin", origin);
-            }
-
-            uIAction.Invoke();
-            if (!origin.PublishStatus().Exists)
-            {
-                throw new NavigableNotFoundException("expected", origin, $"If it was expected, used \"Do<T>\" instead.");
-            }
-
+            WaitUntilNavigableExists(origin, "origin", ct);
+            action.Invoke();
+            WaitUntilNavigableExists(origin, "origin", ct);
             return origin;
         }
 
@@ -212,17 +205,18 @@ namespace IC.Navigation
         /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The INavigable returns by the Function.</returns>
-        public virtual INavigable Do<T>(INavigable origin, Func<INavigable> function) where T : INavigable
+        public virtual INavigable Do<T>(INavigable origin, Func<INavigable> function, CancellationToken ct) where T : INavigable
         {
-            ValidateINavigableExists(origin, "origin");
+            WaitUntilNavigableExists(origin, "origin", ct);
             INavigable retINavigable = function.Invoke();
             if (typeof(T) != retINavigable.GetType())
             {
                 throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }
 
-            ValidateINavigableExists(retINavigable, "destination");
+            WaitUntilNavigableExists(retINavigable, "destination", ct);
             return retINavigable;
         }
 
@@ -247,7 +241,7 @@ namespace IC.Navigation
             actionToOpen.Invoke(ct);
             if (gotoDestination != null)
             {
-                ValidateINavigableExists(nextNavigable, "neighbor to open");
+                WaitUntilNavigableExists(nextNavigable, "neighbor to open", ct);
                 return nextNavigable;
             }
             else
@@ -267,7 +261,7 @@ namespace IC.Navigation
         {
             if (Graph == null) { throw new GraphNotInitialized(); }
 
-            ValidateINavigableExists(origin, "origin");
+            WaitUntilNavigableExists(origin, "origin", ct);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -373,7 +367,7 @@ namespace IC.Navigation
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
         public virtual INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
         {
-            ValidateINavigableExists(origin, "origin");
+            WaitUntilNavigableExists(origin, "origin", ct);
             INavigable match = null;
             onActionAlternatives.AlternativateAction.Invoke(ct);
             match = GetFirstINavigableExisting(onActionAlternatives.INavigables, ct);
@@ -481,11 +475,12 @@ namespace IC.Navigation
                 po.CancellationToken = linkedCts.Token;
                 try
                 {
-                    Parallel.ForEach(iNavigables, po, x =>
+                    Parallel.ForEach(iNavigables, po, (x, state) =>
                     {
-                        var neighbor = GetExistingNavigable(x);
+                        var neighbor = GetExistingNavigable(x, po.CancellationToken);
                         if (neighbor != null)
                         {
+                            state.Break();
                             match = neighbor;
                             internalCts.Cancel();
                         }
@@ -505,17 +500,18 @@ namespace IC.Navigation
             return match;
         }
 
-        private INavigable GetExistingNavigable(INavigable navigable)
+        private INavigable GetExistingNavigable(INavigable navigable, CancellationToken ct)
         {
-            bool? exists = navigable.PublishStatus()?.Exists;
-            return exists != null ? navigable : null;
+            if (ct.IsCancellationRequested) return null;
+            bool exists = navigable.PublishStatus().Exists;
+            return exists ? navigable : null;
         }
 
-        private void ValidateINavigableExists(INavigable iNavigable, string definition)
+        private void WaitUntilNavigableExists(INavigable iNavigable, string definition, CancellationToken ct)
         {
-            if (!iNavigable.PublishStatus().Exists)
+            while (!ct.IsCancellationRequested & !iNavigable.PublishStatus().Exists)
             {
-                throw new NavigableNotFoundException(definition, iNavigable);
+                ct.WaitHandle.WaitOne(TimeSpan.FromMilliseconds(100));
             }
         }
 

@@ -23,9 +23,10 @@ namespace IC.Navigation.Interfaces
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
-        /// <param name="uIAction">The UI action to execute.</param>
+        /// <param name="action">The action to execute.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        INavigable Do(INavigable origin, Action uIAction);
+        INavigable Do(INavigable origin, Action action, CancellationToken ct);
 
         /// <summary>
         /// Executes the Function passed in parameter.
@@ -33,8 +34,9 @@ namespace IC.Navigation.Interfaces
         /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The INavigable returns by the Function.</returns>
-        INavigable Do<T>(INavigable origin, Func<INavigable> function) where T : INavigable;
+        INavigable Do<T>(INavigable origin, Func<INavigable> function, CancellationToken ct) where T : INavigable;
 
         /// <summary>
         /// Get a INavigagble that exists from a List &gt;INavigable&lt; after the UI action is completed.

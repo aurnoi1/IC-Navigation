@@ -21,7 +21,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         public NavigationSteps(AppiumContext appiumContext)
         {
             this.sut = appiumContext.SUT;
-            cts = new CancellationTokenSource();
+            cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
             ct = cts.Token;
         }
 
@@ -63,6 +63,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         public void Dispose()
         {
             sut?.Dispose();
+            cts?.Dispose();
         }
     }
 }

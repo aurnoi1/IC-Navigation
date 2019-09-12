@@ -13,10 +13,11 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
         /// <param name="action">The action to execute.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The current INavigable.</returns>
-        public static INavigable Do(this INavigable source, Action action)
+        public static INavigable Do(this INavigable source, Action action, CancellationToken ct)
         {
-            return source.Session.Do(source, action);
+            return source.Session.Do(source, action, ct);
         }
 
         /// <summary>
@@ -24,10 +25,11 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
         /// <param name="function">The Function to execute.</param>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The expected INavigable returns by the Function.</returns>
-        public static INavigable Do<T>(this INavigable source, Func<INavigable> function) where T : INavigable
+        public static INavigable Do<T>(this INavigable source, Func<INavigable> function, CancellationToken ct) where T : INavigable
         {
-            return source.Session.Do<T>(source, function);
+            return source.Session.Do<T>(source, function, ct);
         }
 
         /// <summary>
