@@ -473,7 +473,7 @@ namespace IC.Navigation
                 }
                 catch (OperationCanceledException)
                 {
-                    if (ct.IsCancellationRequested) ct.ThrowIfCancellationRequested();
+                    ct.ThrowIfCancellationRequested();
                 }
             }
 
