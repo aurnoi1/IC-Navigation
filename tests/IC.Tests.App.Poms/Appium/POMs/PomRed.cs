@@ -1,6 +1,6 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
-using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
@@ -25,19 +25,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WDSearchParam UITitleParam => new WDSearchParam(WDLocators.AutomationId, "TitleRed");
+        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleRed");
 
         /// <summary>
         /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WDSearchParam UIBtnBackParam => new WDSearchParam(WDLocators.AutomationId, "BtnBack");
+        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
         /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WDSearchParam UIBtnOpenYellowViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchParam UIBtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         #endregion Controls
 

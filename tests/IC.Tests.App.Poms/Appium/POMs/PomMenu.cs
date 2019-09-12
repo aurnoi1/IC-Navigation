@@ -1,6 +1,6 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
-using IC.Navigation.Extensions.Appium.WindowsDriver.Enums;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using System;
@@ -25,37 +25,37 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
         [Aliases("not implemented")]
-        public WDSearchParam UIBtnNotImplementedParam => new WDSearchParam(WDLocators.AutomationId, "NotImplemented");
+        public SearchParam UIBtnNotImplementedParam => new SearchParam(WDLocators.AutomationId, "NotImplemented");
 
         /// <summary>
         /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WDSearchParam UITitleParam => new WDSearchParam(WDLocators.AutomationId, "TitleMenu");
+        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleMenu");
 
         /// <summary>
         /// WDSearchParam to find a control to open the BlueView.
         /// </summary>
         [Aliases("button to open the blue page")]
-        public WDSearchParam UIBtnOpenBlueViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenBlueView");
+        public SearchParam UIBtnOpenBlueViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenBlueView");
 
         /// <summary>
         /// WDSearchParam to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the red page")]
-        public WDSearchParam UIBtnOpenRedViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenRedView");
+        public SearchParam UIBtnOpenRedViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenRedView");
 
         /// <summary>
         /// WDSearchParam to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WDSearchParam UIBtnOpenYellowViewParam => new WDSearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchParam UIBtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         /// <summary>
         /// WDSearchParam to find a control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public WDSearchParam UITxtBoxImportantMessageParam => new WDSearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
+        public SearchParam UITxtBoxImportantMessageParam => new SearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
 
         #endregion Controls
 
