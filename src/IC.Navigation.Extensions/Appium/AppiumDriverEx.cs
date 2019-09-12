@@ -10,6 +10,38 @@ namespace IC.Navigation.Extensions.Appium
 {
     public static class AppiumDriverEx
     {
+        #region Find methods
+
+        /// <summary>
+        /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// </summary>
+        /// <typeparam name="T">The type of WebElement.</typeparam>
+        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
+        /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
+        /// <exception cref="TimeoutException">Throw when timeout is reached before WebElement is found.</exception>
+        public static T Search<T>(
+            this AppiumDriver<T> driver,
+            ISearchParam searchParam,
+            TimeSpan timeout) where T : IWebElement
+        {
+            using (var cts = new CancellationTokenSource(timeout))
+            {
+                var elmt = Get(driver, searchParam, cts.Token);
+                if (cts.Token.IsCancellationRequested)
+                {
+                    throw new TimeoutException("The timeout has been reached.");
+                }
+
+                return elmt;
+            }
+        }
+
+        #endregion Find methods
+
+        #region Get methods
+
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
@@ -200,6 +232,8 @@ namespace IC.Navigation.Extensions.Appium
 
             return elmt;
         }
+
+        #endregion Get methods
 
         #region Private
 

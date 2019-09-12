@@ -26,6 +26,7 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for any EntryPoints.</param>
         /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
+        /// <exception cref="TimeoutException">Throw when timeout is reached before any EntryPoint is found.</exception>
         INavigable WaitForEntryPoints(TimeSpan timeout);
 
         /// <summary>
