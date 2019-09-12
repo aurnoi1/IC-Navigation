@@ -16,6 +16,7 @@ namespace IC.Navigation.UnitTests.Collections
             Mock<INavigable> n3 = new Mock<INavigable>();
             Mock<INavigable> n4 = new Mock<INavigable>();
             Mock<INavigable> n5 = new Mock<INavigable>();
+            Mock<HashSet<INavigable>> nodes = new Mock<HashSet<INavigable>>();
 
             n1.Setup(x => x.PublishStatus().Exists).Returns(true);
             n1.Setup(x => x.GetActionToNext())
@@ -52,7 +53,13 @@ namespace IC.Navigation.UnitTests.Collections
                 {
                 });
 
-            Nodes = new HashSet<INavigable>() { n1.Object, n2.Object, n3.Object, n4.Object };
+            Nodes = nodes.Object;
+            Nodes.Add(n1.Object);
+            Nodes.Add(n2.Object);
+            Nodes.Add(n3.Object);
+            Nodes.Add(n4.Object);
+            Nodes.Add(n5.Object);
+
             N1 = n1;
             N2 = n2;
             N3 = n3;
