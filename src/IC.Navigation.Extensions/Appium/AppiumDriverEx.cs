@@ -19,7 +19,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="driver">This AppiumDriver<IWebElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
-        /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
+        /// <returns>The first matching WebElement.</returns>
         /// <exception cref="TimeoutException">Throw when timeout is reached before WebElement is found.</exception>
         public static T Search<T>(
             this AppiumDriver<T> driver,
@@ -30,12 +30,21 @@ namespace IC.Navigation.Extensions.Appium
             {
                 var elmt = Get(driver, searchParam, cts.Token);
                 if (cts.Token.IsCancellationRequested)
-                {
                     throw new TimeoutException("The timeout has been reached.");
-                }
 
                 return elmt;
             }
+        }
+
+        public static T Search<T>(
+            this AppiumDriver<T> driver,
+            ISearchParam searchParam,
+            CancellationToken ct) where T : IWebElement
+        {
+            var elmt = Get(driver, searchParam, ct);
+            ct.ThrowIfCancellationRequested();
+            return elmt;
+            
         }
 
         #endregion Find methods

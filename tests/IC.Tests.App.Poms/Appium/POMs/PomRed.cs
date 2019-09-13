@@ -62,8 +62,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => session.WindowsDriver.Get(UIBtnBackParam, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Get(UIBtnOpenYellowViewParam, ct).Click() },
+                { session.PomMenu, (ct) => session.WindowsDriver.Search(UIBtnBackParam, ct).Click() },
+                { session.PomYellow, (ct) => session.WindowsDriver.Search(UIBtnOpenYellowViewParam, ct).Click() },
             };
         }
     }
