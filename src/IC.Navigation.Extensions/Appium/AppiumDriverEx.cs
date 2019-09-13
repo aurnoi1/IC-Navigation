@@ -36,6 +36,15 @@ namespace IC.Navigation.Extensions.Appium
             }
         }
 
+        /// <summary>
+        /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// </summary>
+        /// <typeparam name="T">The type of WebElement.</typeparam>
+        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
+        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
+        /// <param name="ct">The CancellationToken used to stop waiting for the control to be found.</param>
+        /// <returns>The first matching WebElement.</returns>
+        /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
         public static T Search<T>(
             this AppiumDriver<T> driver,
             ISearchParam searchParam,
@@ -44,7 +53,6 @@ namespace IC.Navigation.Extensions.Appium
             var elmt = Get(driver, searchParam, ct);
             ct.ThrowIfCancellationRequested();
             return elmt;
-            
         }
 
         #endregion Find methods
@@ -89,7 +97,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="driver">This AppiumDriver<IWebElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
-        /// <param name="ct">The CancellationToken used to stop to wait for the control to be found.</param>
+        /// <param name="ct">The CancellationToken used to stop waiting for the control to be found.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public static T Get<T>(
             this AppiumDriver<T> driver,

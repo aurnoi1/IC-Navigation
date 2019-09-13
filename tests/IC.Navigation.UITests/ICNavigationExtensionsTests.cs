@@ -54,12 +54,27 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
+        public void Search_With_CT_Should_Throws_OperationCanceledException_When_No_Control_Found()
+        {
+            // Act
+            sut.Last.Do(() =>
+            {
+                using (var ctsLocal = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
+                {
+                    ctsLocal.CancelAfter(TimeSpan.FromSeconds(1));
+                    Assert.Throws<OperationCanceledException>(() =>
+                        sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, ctsLocal.Token));
+                }
+            }, ct);
+        }
+
+        [Fact]
         public void Search_With_Timeout_Should_Throws_TimeoutException_On_Timeout()
         {
             // Act
             sut.Last.Do(() =>
             {
-                Assert.Throws<TimeoutException>(() => 
+                Assert.Throws<TimeoutException>(() =>
                 sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.Zero));
             }, ct);
         }
