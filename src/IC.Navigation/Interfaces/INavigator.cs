@@ -24,9 +24,9 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="action">The action to execute.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        INavigable Do(INavigable origin, Action action, CancellationToken ct);
+        INavigable Do(INavigable origin, Action action, CancellationToken cancellationToken);
 
         /// <summary>
         /// Executes the Function passed in parameter.
@@ -34,18 +34,18 @@ namespace IC.Navigation.Interfaces
         /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The INavigable returns by the Function.</returns>
-        INavigable Do<T>(INavigable origin, Func<INavigable> function, CancellationToken ct) where T : INavigable;
+        INavigable Do<T>(INavigable origin, Func<INavigable> function, CancellationToken cancellationToken) where T : INavigable;
 
         /// <summary>
         /// Get a INavigagble that exists from a List &gt;INavigable&lt; after the UI action is completed.
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct);
+        INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get the shortest path from the origin to the destination.
@@ -61,7 +61,7 @@ namespace IC.Navigation.Interfaces
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The destination.</returns>
-        INavigable GoTo(INavigable origin, INavigable destination, CancellationToken ct);
+        INavigable GoTo(INavigable origin, INavigable destination, CancellationToken cancellationToken);
 
         /// <summary>
         /// Performs UI action to step to the next INavigable in the resolve path.
@@ -69,17 +69,20 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="actionToOpenInavigable">A Dictionary of UI actions to step to the next Navigable.</param>
         /// <param name="nextNavigable">The next INavigable.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The next consecutive or the rebased INavigable.</returns>
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
-        INavigable StepToNext(Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable, INavigable nextNavigable, CancellationToken ct);
+        INavigable StepToNext(
+            Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable, 
+            INavigable nextNavigable, 
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Back to the previous INavigable.
         /// </summary>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The previous INavigable.</returns>
-        INavigable Back(CancellationToken ct);
+        INavigable Back(CancellationToken cancellationToken);
 
         /// <summary>
         /// Resolve a path when one Action leads to more than one page.
@@ -88,9 +91,9 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken ct);
+        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
 
         /// <summary>
         /// Resolve a path when one Action leads to more than one INavigable.
@@ -100,8 +103,12 @@ namespace IC.Navigation.Interfaces
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint, CancellationToken ct);
+        INavigable Resolve(
+            INavigable origin, 
+            IOnActionAlternatives onActionAlternatives, 
+            INavigable waypoint, 
+            CancellationToken cancellationToken);
     }
 }

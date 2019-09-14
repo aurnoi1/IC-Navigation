@@ -47,7 +47,7 @@ namespace IC.Navigation.UITests
             {
                 ctsLocal.CancelAfter(TimeSpan.Zero);
                 Assert.Throws<OperationCanceledException>(() =>
-                    sut.WindowsDriver.Get(sut.PomMenu.UITitleParam).ContinueWhen(ctsLocal.Token, ("IsEnabled", "True")));
+                    sut.WindowsDriver.Get(sut.PomMenu.UITitleParam).ContinueWhen(ctsLocal.Token, ("IsEnabled", "False")));
             }
         }
 
@@ -56,7 +56,7 @@ namespace IC.Navigation.UITests
         {
             Assert.Throws<TimeoutException>(() =>
                 sut.WindowsDriver.Get(sut.PomMenu.UITitleParam)
-                .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "True")));
+                .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "False")));
         }
 
         [Fact]
