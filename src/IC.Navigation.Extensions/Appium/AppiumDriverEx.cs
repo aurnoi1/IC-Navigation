@@ -244,7 +244,7 @@ namespace IC.Navigation.Extensions.Appium
         {
             T elmt = FindFirstElement(driver, searchParam);
             if (elmt == null) return default;
-            if (!WaitForConditionsToBeMet(elmt, expectedAttribsNamesValues, ct))
+            if (!elmt.WaitUntil(expectedAttribsNamesValues, ct))
                 return default;
 
             return elmt;
@@ -253,46 +253,6 @@ namespace IC.Navigation.Extensions.Appium
         #endregion Get methods
 
         #region Private
-
-        private static bool WaitForConditionsToBeMet(
-            IWebElement elmt,
-            Dictionary<string, string> expected,
-            CancellationToken ct)
-        {
-            while (!ct.IsCancellationRequested)
-            {
-                var actual = GetAttributesValues(elmt, expected.Keys, ct);
-                if (AreConditionsMet(expected, actual))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool AreConditionsMet(
-            Dictionary<string, string> first,
-            Dictionary<string, string> second)
-        {
-            return first.Count == second.Count && !first.Except(second).Any();
-        }
-
-        private static Dictionary<string, string> GetAttributesValues(
-            IWebElement elmt,
-            IEnumerable<string> expectedAttribsNames,
-            CancellationToken ct)
-        {
-            Dictionary<string, string> attributesValues = new Dictionary<string, string>();
-            foreach (var attribName in expectedAttribsNames)
-            {
-                if (ct.IsCancellationRequested) return null;
-                var value = elmt.GetAttribute(attribName);
-                attributesValues.Add(attribName, value);
-            }
-
-            return attributesValues;
-        }
 
         private static T FindFirstElement<T>(AppiumDriver<T> driver, ISearchParam searchParam) where T : IWebElement
         {

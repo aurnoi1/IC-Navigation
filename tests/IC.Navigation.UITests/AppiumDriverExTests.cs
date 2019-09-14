@@ -12,9 +12,9 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class ICNavigationExtensionsTests : IDisposable
+    public class AppiumDriverExTests : IDisposable
     {
-        public ICNavigationExtensionsTests()
+        public AppiumDriverExTests()
         {
             sut = new AppiumContext().SUT;
             cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
@@ -54,18 +54,26 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Search_With_CT_Should_Throws_OperationCanceledException_When_No_Control_Found()
+        public void Search_With_CT_Should_Throws_OperationCanceledException_When_CT_Is_Cancelled()
         {
             // Act
             sut.Last.Do(() =>
             {
                 using (var ctsLocal = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
                 {
-                    ctsLocal.CancelAfter(TimeSpan.FromSeconds(1));
+                    ctsLocal.CancelAfter(TimeSpan.Zero);
                     Assert.Throws<OperationCanceledException>(() =>
                         sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, ctsLocal.Token));
                 }
             }, ct);
+        }
+
+        [Fact]
+        public void Search_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
+        {
+            // Act
+            Assert.Throws<TimeoutException>(() =>
+                        sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, TimeSpan.Zero));
         }
 
         [Fact]
