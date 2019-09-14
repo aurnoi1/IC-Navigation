@@ -38,7 +38,7 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
-        public void Search_With_Timeout_Should_Returns_Control_Matching_SearchParam()
+        public void Find_With_Timeout_Should_Returns_Control_Matching_SearchParam()
         {
             // Arrange
             WindowsElement title = default;
@@ -46,7 +46,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.FromSeconds(10));
+                title = sut.WindowsDriver.Find(sut.PomMenu.UITitleParam, TimeSpan.FromSeconds(10));
             }, ct);
 
             // Assert
@@ -54,7 +54,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Search_With_CT_Should_Throws_OperationCanceledException_When_CT_Is_Cancelled()
+        public void Find_With_CT_Should_Throws_OperationCanceledException_When_CT_Is_Cancelled()
         {
             // Act
             sut.Last.Do(() =>
@@ -63,27 +63,27 @@ namespace IC.Navigation.UITests
                 {
                     ctsLocal.CancelAfter(TimeSpan.Zero);
                     Assert.Throws<OperationCanceledException>(() =>
-                        sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, ctsLocal.Token));
+                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplementedParam, ctsLocal.Token));
                 }
             }, ct);
         }
 
         [Fact]
-        public void Search_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
+        public void Find_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
         {
             // Act
             Assert.Throws<TimeoutException>(() =>
-                        sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, TimeSpan.Zero));
+                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplementedParam, TimeSpan.Zero));
         }
 
         [Fact]
-        public void Search_With_Timeout_Should_Throws_TimeoutException_On_Timeout()
+        public void Find_With_Timeout_Should_Throws_TimeoutException_On_Timeout()
         {
             // Act
             sut.Last.Do(() =>
             {
                 Assert.Throws<TimeoutException>(() =>
-                sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.Zero));
+                sut.WindowsDriver.Find(sut.PomMenu.UITitleParam, TimeSpan.Zero));
             }, ct);
         }
 

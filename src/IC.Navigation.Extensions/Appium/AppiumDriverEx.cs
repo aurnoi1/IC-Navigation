@@ -21,7 +21,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
         /// <returns>The first matching WebElement.</returns>
         /// <exception cref="TimeoutException">Throw when timeout is reached before WebElement is found.</exception>
-        public static T Search<T>(
+        public static T Find<T>(
             this AppiumDriver<T> driver,
             ISearchParam searchParam,
             TimeSpan timeout) where T : IWebElement
@@ -45,7 +45,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="cancellationToken">The CancellationToken used to stop waiting for the control to be found.</param>
         /// <returns>The first matching WebElement.</returns>
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
-        public static T Search<T>(
+        public static T Find<T>(
             this AppiumDriver<T> driver,
             ISearchParam searchParam,
             CancellationToken cancellationToken) where T : IWebElement
