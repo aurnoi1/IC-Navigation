@@ -1,6 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation
 {
@@ -12,11 +13,11 @@ namespace IC.Navigation
         /// <summary>
         /// Initializes a new instance of the <see cref="Navigator"/> class.
         /// </summary>
-        /// <param name="uIAction">The UI action.</param>
+        /// <param name="alternativeAction">The alternative action.</param>
         /// <param name="iNavigables">The possible INavigables.</param>
-        public OnActionAlternatives(Action uIAction, List<INavigable> iNavigables)
+        public OnActionAlternatives(Action<CancellationToken> alternativeAction, List<INavigable> iNavigables)
         {
-            UIAction = uIAction;
+            AlternativateAction = alternativeAction;
             INavigables = iNavigables;
         }
 
@@ -26,8 +27,8 @@ namespace IC.Navigation
         public List<INavigable> INavigables { get; private set; }
 
         /// <summary>
-        /// The UI action.
+        /// The alternative action.
         /// </summary>
-        public Action UIAction { get; private set; }
+        public Action<CancellationToken> AlternativateAction { get; private set; }
     }
 }

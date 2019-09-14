@@ -121,46 +121,6 @@ this.FeatureBackground();
             this.ScenarioCleanup();
         }
         
-        [Xunit.FactAttribute(DisplayName="try date")]
-        [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "try date")]
-        [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void TryDate()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("try date", null, new string[] {
-                        "mytag"});
-#line 24
-this.ScenarioInitialize(scenarioInfo);
-            this.ScenarioStart();
-#line 6
-this.FeatureBackground();
-#line 25
- testRunner.Given("1 day from today in the news paper", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 26
-    testRunner.Given("1 day(s) in the news paper", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
-        [Xunit.FactAttribute(DisplayName="try not date")]
-        [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
-        [Xunit.TraitAttribute("Description", "try not date")]
-        [Xunit.TraitAttribute("Category", "mytag")]
-        public virtual void TryNotDate()
-        {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("try not date", null, new string[] {
-                        "mytag"});
-#line 29
-this.ScenarioInitialize(scenarioInfo);
-            this.ScenarioStart();
-#line 6
-this.FeatureBackground();
-#line 30
- testRunner.Given("1 apple in the basket", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line hidden
-            this.ScenarioCleanup();
-        }
-        
         [Xunit.FactAttribute(DisplayName="Navigate from the \"menu page\" to \"blue page\"")]
         [Xunit.TraitAttribute("FeatureTitle", "Navigation")]
         [Xunit.TraitAttribute("Description", "Navigate from the \"menu page\" to \"blue page\"")]
@@ -169,16 +129,16 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate from the \"menu page\" to \"blue page\"", null, new string[] {
                         "mytag"});
-#line 34
+#line 22
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 35
+#line 23
  testRunner.Given("The \"menu page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 36
+#line 24
  testRunner.When("The \"button to open the blue page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 37
+#line 25
  testRunner.Then("The \"blue page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -192,16 +152,16 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate back to the \"menu page\" from \"blue page\"", null, new string[] {
                         "mytag"});
-#line 40
+#line 28
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 41
+#line 29
  testRunner.Given("The \"blue page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 42
+#line 30
  testRunner.When("The \"button to go back to the previous page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 43
+#line 31
  testRunner.Then("The \"menu page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -215,16 +175,16 @@ this.FeatureBackground();
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate to the \"yellow page\" from \"blue page\"", null, new string[] {
                         "mytag"});
-#line 46
+#line 34
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 47
+#line 35
  testRunner.Given("The \"blue page\" has been opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 48
+#line 36
  testRunner.When("The \"button to open the yellow page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 49
+#line 37
  testRunner.Then("The \"yellow page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -246,20 +206,20 @@ this.FeatureBackground();
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("The back button in \"yellow page\" should open the previous page", null, @__tags);
-#line 52
+#line 40
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 53
+#line 41
     testRunner.Given(string.Format("The {0} has been opened", view_Before_Yellow), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 54
+#line 42
     testRunner.When(string.Format("The {0} is pressed in current page", button_To_Open_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 55
+#line 43
  testRunner.Then("The \"yellow page\" should be opened", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 56
+#line 44
     testRunner.When("The \"button to go back to the previous page\" is pressed in current page", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 57
+#line 45
     testRunner.Then(string.Format("The {0} should be opened", view_Before_Yellow), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -282,20 +242,20 @@ this.FeatureBackground();
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Navigate from a page to another and come back to the original page.", null, @__tags);
-#line 66
+#line 54
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 67
+#line 55
     testRunner.Given(string.Format("The {0} has been opened", original_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 68
+#line 56
     testRunner.When(string.Format("I navigate to {0}", destination_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 69
+#line 57
     testRunner.Then(string.Format("The {0} should be opened", destination_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 70
+#line 58
     testRunner.When(string.Format("I navigate to {0}", original_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 71
+#line 59
     testRunner.Then(string.Format("The {0} should be opened", original_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -320,18 +280,18 @@ this.FeatureBackground();
                 @__tags = System.Linq.Enumerable.ToArray(System.Linq.Enumerable.Concat(@__tags, exampleTags));
             }
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Resolve navigation when an action can open more than one page.", null, @__tags);
-#line 82
+#line 70
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 6
 this.FeatureBackground();
-#line 83
+#line 71
     testRunner.When(string.Format("I navigate to {0}", view_Opening_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 84
+#line 72
     testRunner.And("I navigate to \"yellow page\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 85
+#line 73
     testRunner.And(string.Format("I navigate to {0}", a_Different_Than_View_Opening_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 86
+#line 74
     testRunner.Then(string.Format("The {0} should be opened", a_Different_Than_View_Opening_Yellow_View), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

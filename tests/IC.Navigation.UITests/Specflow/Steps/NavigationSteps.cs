@@ -4,6 +4,7 @@ using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Xunit;
 
@@ -14,10 +15,14 @@ namespace IC.Navigation.UITests.Specflow.Steps
     public class NavigationSteps : IDisposable
     {
         private readonly IFacade sut;
+        private readonly CancellationTokenSource cts;
+        private readonly CancellationToken ct;
 
         public NavigationSteps(AppiumContext appiumContext)
         {
             this.sut = appiumContext.SUT;
+            cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+            ct = cts.Token;
         }
 
         [Given(@"The application under test has been started")]
@@ -26,17 +31,12 @@ namespace IC.Navigation.UITests.Specflow.Steps
             Assert.NotNull(sut.Last);
         }
 
+        [When(@"I navigate to ""(.*)""")]
         [Given(@"The ""(.*)"" has been opened")]
         public void GivenTheViewHasBeenOpened(string usageName)
         {
             var destination = sut.GetINavigableByUsageName(usageName);
-            sut.Last.GoTo(destination);
-        }
-
-        [When(@"I navigate to ""(.*)""")]
-        public void WhenINavigateTo(string usageName)
-        {
-            GivenTheViewHasBeenOpened(usageName);
+            sut.Last.GoTo(destination, ct);
         }
 
         [When(@"The ""(.*)"" is pressed in current page")]
@@ -63,6 +63,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
         public void Dispose()
         {
             sut?.Dispose();
+            cts?.Dispose();
         }
     }
 }

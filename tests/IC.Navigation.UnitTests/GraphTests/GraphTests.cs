@@ -26,22 +26,24 @@ namespace IC.Navigation.UnitTests
             Assert.Equal(expected.Select(x => x.Object).ToList(), actual);
         }
 
+#pragma warning disable xUnit1026
         [Theory]
         [ClassData(typeof(NoPathData))]
-        public void GetShortestPath_Should_Return_No_Path(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
+        public void GetShortestPath_Should_Return_No_Path(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> _)
         {
             IGraph sut = new Graph(nodes);
             var actual = sut.GetShortestPath(origin, destination);
-            Assert.Equal(expected, actual);
+            Assert.Empty(actual);
         }
 
+#pragma warning disable xUnit1026
         [Theory]
         [ClassData(typeof(OriginIsDestinationData))]
-        public void GetShortestPath_Should_Returns_No_Path_When_Origin_Is_Destination(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> expected)
+        public void GetShortestPath_Should_Returns_No_Path_When_Origin_Is_Destination(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> _)
         {
             IGraph sut = new Graph(nodes);
             var actual = sut.GetShortestPath(origin, destination);
-            Assert.Equal(expected, actual);
+            Assert.Empty(actual);
         }
     }
 }

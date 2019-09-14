@@ -12,11 +12,13 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class ICNavigationExtensionsTests : IDisposable
+    public class AppiumDriverExTests : IDisposable
     {
-        public ICNavigationExtensionsTests()
+        public AppiumDriverExTests()
         {
             sut = new AppiumContext().SUT;
+            cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
+            ct = cts.Token;
         }
 
         #region Properties
@@ -24,6 +26,8 @@ namespace IC.Navigation.UITests
         #region Private
 
         private IFacade sut;
+        private readonly CancellationTokenSource cts;
+        private readonly CancellationToken ct;
 
         #endregion Private
 
@@ -32,6 +36,56 @@ namespace IC.Navigation.UITests
         #region Methods
 
         #region Public
+
+        [Fact]
+        public void Search_With_Timeout_Should_Returns_Control_Matching_SearchParam()
+        {
+            // Arrange
+            WindowsElement title = default;
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                title = sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.FromSeconds(10));
+            }, ct);
+
+            // Assert
+            Assert.NotNull(title);
+        }
+
+        [Fact]
+        public void Search_With_CT_Should_Throws_OperationCanceledException_When_CT_Is_Cancelled()
+        {
+            // Act
+            sut.Last.Do(() =>
+            {
+                using (var ctsLocal = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
+                {
+                    ctsLocal.CancelAfter(TimeSpan.Zero);
+                    Assert.Throws<OperationCanceledException>(() =>
+                        sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, ctsLocal.Token));
+                }
+            }, ct);
+        }
+
+        [Fact]
+        public void Search_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
+        {
+            // Act
+            Assert.Throws<TimeoutException>(() =>
+                        sut.WindowsDriver.Search(sut.PomMenu.UIBtnNotImplementedParam, TimeSpan.Zero));
+        }
+
+        [Fact]
+        public void Search_With_Timeout_Should_Throws_TimeoutException_On_Timeout()
+        {
+            // Act
+            sut.Last.Do(() =>
+            {
+                Assert.Throws<TimeoutException>(() =>
+                sut.WindowsDriver.Search(sut.PomMenu.UITitleParam, TimeSpan.Zero));
+            }, ct);
+        }
 
         [Fact]
         public void Get_Should_Returns_Control_Matching_SearchParam()
@@ -43,7 +97,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam);
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -59,7 +113,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam);
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -80,7 +134,7 @@ namespace IC.Navigation.UITests
                 stopwatch.Start();
                 title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam, timeout);
                 stopwatch.Stop();
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -107,7 +161,7 @@ namespace IC.Navigation.UITests
                 }
 
                 stopwatch.Stop();
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -127,9 +181,9 @@ namespace IC.Navigation.UITests
             {
                 using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
                 {
-                    title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                    title = sut.WindowsDriver.GetWhen(param, cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
                 }
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -146,7 +200,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), "IsEnabled", "True");
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -166,7 +220,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), expectedAttribsValues);
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -186,7 +240,7 @@ namespace IC.Navigation.UITests
                 {
                     title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "True");
                 }
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -209,7 +263,7 @@ namespace IC.Navigation.UITests
                 {
                     title = sut.WindowsDriver.GetWhen(param, cts.Token, expectedAttribsValues);
                 }
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -226,7 +280,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
-            });
+            }, ct);
 
             // Assert
             Assert.NotNull(title);
@@ -243,7 +297,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -263,7 +317,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), expectedAttribsValues);
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -280,7 +334,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), "IsEnabled", "True");
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -302,7 +356,7 @@ namespace IC.Navigation.UITests
                 stopwatch.Start();
                 title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam, expectedTimeout);
                 stopwatch.Stop();
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -329,7 +383,7 @@ namespace IC.Navigation.UITests
                     title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam, cts.Token);
                     stopwatch.Stop();
                 }
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -355,7 +409,7 @@ namespace IC.Navigation.UITests
                 title = sut.WindowsDriver.GetWhen(param, expectedElapse, "IsEnabled", "InvalidValue");
                 stopwatch.Stop();
                 actualElapse = stopwatch.Elapsed;
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -384,7 +438,7 @@ namespace IC.Navigation.UITests
                     stopwatch.Stop();
                     actualElapse = stopwatch.Elapsed;
                 }
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -418,7 +472,7 @@ namespace IC.Navigation.UITests
                         actualElapse = stopwatch.Elapsed;
                     }
                 }
-            });
+            }, ct);
 
             // Assert
             Assert.Null(title);
@@ -429,6 +483,7 @@ namespace IC.Navigation.UITests
         public void Dispose()
         {
             sut?.Dispose();
+            cts?.Dispose();
         }
 
         #endregion Public

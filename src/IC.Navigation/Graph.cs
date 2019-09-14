@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Exceptions;
+using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,9 +90,13 @@ namespace IC.Navigation
         public List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
             if (Vertices.Count == 0)
-            {
                 throw new Exception($"The \"Graph\" is empty.");
-            }
+
+            if (!Nodes.Contains(origin))
+                throw new UnregistredNodeException(origin.GetType());
+
+            if (!Nodes.Contains(destination))
+                throw new UnregistredNodeException(destination.GetType());
 
             string originName = origin.ToString();
             string destinationName = destination.ToString();

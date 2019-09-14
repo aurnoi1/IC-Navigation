@@ -1,17 +1,25 @@
-﻿using AutoFixture;
-using AutoFixture.AutoMoq;
-using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Xunit;
 
 namespace IC.Navigation.UnitTests.NavigatorSessionTests
 {
-    public class NavigationTests
+    public class NavigationTests : IDisposable
     {
+        private readonly CancellationTokenSource cts;
+        private readonly CancellationToken ct;
+
+        public NavigationTests()
+        {
+            cts = new CancellationTokenSource();
+            ct = cts.Token;
+        }
+
 #pragma warning disable xUnit1026
 
         [Theory]
@@ -50,9 +58,14 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
                 node.Setup(n => n.PublishStatus().Exists).Returns(true);
             }
 
-            var actual = sut.Object.GoTo(origin.Object, destination.Object);
+            var actual = sut.Object.GoTo(origin.Object, destination.Object, ct);
             Assert.Equal(expected.Last().Object, actual);
             iGraph.Verify(x => x.GetShortestPath(origin.Object, destination.Object), Times.Exactly(1));
+        }
+
+        public void Dispose()
+        {
+            cts?.Dispose();
         }
     }
 }

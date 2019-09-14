@@ -10,7 +10,7 @@ namespace IC.Navigation.UnitTests
     public class INavigableExTests
     {
         [Fact]
-        public void WaitForExistsShouldReturnTrue()
+        public void Exists_Should_Returns_True()
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
@@ -24,7 +24,7 @@ namespace IC.Navigation.UnitTests
         }
 
         [Fact]
-        public void WaitForExistsShouldReturnFalse()
+        public void Exists_Should_Returns_False()
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();

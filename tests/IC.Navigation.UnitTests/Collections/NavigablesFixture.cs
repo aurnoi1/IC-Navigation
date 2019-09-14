@@ -2,6 +2,7 @@
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation.UnitTests.Collections
 {
@@ -9,16 +10,17 @@ namespace IC.Navigation.UnitTests.Collections
     {
         public NavigablesFixture()
         {
-            Mock<Action> action = new Mock<Action>();
+            Mock<Action<CancellationToken>> action = new Mock<Action<CancellationToken>>();
             Mock<INavigable> n1 = new Mock<INavigable>();
             Mock<INavigable> n2 = new Mock<INavigable>();
             Mock<INavigable> n3 = new Mock<INavigable>();
             Mock<INavigable> n4 = new Mock<INavigable>();
             Mock<INavigable> n5 = new Mock<INavigable>();
+            Mock<HashSet<INavigable>> nodes = new Mock<HashSet<INavigable>>();
 
             n1.Setup(x => x.PublishStatus().Exists).Returns(true);
             n1.Setup(x => x.GetActionToNext())
-                .Returns(new Dictionary<INavigable, Action>()
+                .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {
                     { n2.Object, action.Object },
                     { n3.Object, action.Object },
@@ -26,32 +28,38 @@ namespace IC.Navigation.UnitTests.Collections
                 });
 
             n2.Setup(x => x.GetActionToNext())
-                .Returns(new Dictionary<INavigable, Action>()
+                .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {
                     { n1.Object, action.Object },
                     { n3.Object, action.Object }
                 });
 
             n3.Setup(x => x.GetActionToNext())
-                .Returns(new Dictionary<INavigable, Action>()
+                .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {
                     { n1.Object, action.Object },
                     { n2.Object, action.Object }
                 });
 
             n4.Setup(x => x.GetActionToNext())
-                .Returns(new Dictionary<INavigable, Action>()
+                .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {
                     { n3.Object, action.Object },
                 });
 
             // No connection to other nodes.
             n5.Setup(x => x.GetActionToNext())
-                .Returns(new Dictionary<INavigable, Action>()
+                .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {
                 });
 
-            Nodes = new HashSet<INavigable>() { n1.Object, n2.Object, n3.Object, n4.Object };
+            Nodes = nodes.Object;
+            Nodes.Add(n1.Object);
+            Nodes.Add(n2.Object);
+            Nodes.Add(n3.Object);
+            Nodes.Add(n4.Object);
+            Nodes.Add(n5.Object);
+
             N1 = n1;
             N2 = n2;
             N3 = n3;
