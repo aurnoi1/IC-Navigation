@@ -16,9 +16,9 @@ namespace IC.Navigation.Interfaces
         /// Wait for any EntryPoints of the navigation to exists.
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
-        INavigable WaitForEntryPoints(CancellationToken ct);
+        INavigable WaitForEntryPoints(CancellationToken cancellationToken);
 
         /// <summary>
         /// Wait for any EntryPoints of the navigation to exists.
