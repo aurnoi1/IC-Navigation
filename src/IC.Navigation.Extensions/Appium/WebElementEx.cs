@@ -68,7 +68,7 @@ namespace IC.Navigation.Extensions.Appium
             CancellationToken cancellationToken,
             Dictionary<string, string> expectedAttribsNamesValues) where T : IWebElement
         {
-            if (elmt.WaitUntil(expectedAttribsNamesValues, cancellationToken))
+            if (elmt.WaitUntil(cancellationToken, expectedAttribsNamesValues))
                 return elmt;
 
             // WaitUntil() can only return false when the CancellationToken has been Cancelled.
@@ -192,7 +192,7 @@ namespace IC.Navigation.Extensions.Appium
         {
             using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
             {
-                return elmt.WaitUntil(expectedAttribsNamesValues, cts.Token);
+                return elmt.WaitUntil(cts.Token, expectedAttribsNamesValues);
             }
         }
 
@@ -214,7 +214,7 @@ namespace IC.Navigation.Extensions.Appium
         {
             var expected = new Dictionary<string, string>();
             expected.Add(attributeName, expectedAttributeValue);
-            return elmt.WaitUntil(expected, cancellationToken);
+            return elmt.WaitUntil(cancellationToken, expected);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace IC.Navigation.Extensions.Appium
             params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
         {
             var expected = expectedAttribsNamesValues.ToDictionary(x => x.attributeName, x => x.expectedAttributeValue);
-            return elmt.WaitUntil(expected, cancellationToken);
+            return elmt.WaitUntil(cancellationToken, expected);
         }
 
         /// <summary>
@@ -245,8 +245,9 @@ namespace IC.Navigation.Extensions.Appium
         /// otherwise <c>false</c> if the CancellationToken is cancelled.</returns>
         public static bool WaitUntil<T>(
             this T elmt,
-            Dictionary<string, string> expectedAttribsNamesValues,
-            CancellationToken cancellationToken) where T : IWebElement
+            CancellationToken cancellationToken,
+            Dictionary<string, string> expectedAttribsNamesValues
+            ) where T : IWebElement
         {
             if (elmt == null) throw new ArgumentNullException("The WebElement is null.");
             while (!cancellationToken.IsCancellationRequested)

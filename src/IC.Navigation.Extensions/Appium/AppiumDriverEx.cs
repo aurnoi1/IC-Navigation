@@ -244,7 +244,7 @@ namespace IC.Navigation.Extensions.Appium
         {
             T elmt = FindFirstElement(driver, searchParam);
             if (elmt == null) return default;
-            if (!elmt.WaitUntil(expectedAttribsNamesValues, cancellationToken))
+            if (!elmt.WaitUntil(cancellationToken, expectedAttribsNamesValues))
                 return default;
 
             return elmt;
