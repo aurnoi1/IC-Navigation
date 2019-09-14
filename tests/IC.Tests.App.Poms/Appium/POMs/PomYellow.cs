@@ -1,10 +1,11 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
@@ -22,28 +23,22 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// The tile of this page.
+        /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
-            "TitleYellow",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleYellow");
 
         /// <summary>
-        /// A control to open the previous page.
+        /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnBack",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
-        /// A control to open the previous page.
+        /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public WindowsElement UIBtnOpenMenuPage => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnOpenMenuView",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+        public SearchParam UIBtnOpenMenuPageParam => new SearchParam(WDLocators.AutomationId, "BtnOpenMenuView");
 
         #endregion Controls
 
@@ -54,7 +49,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = UITitle != null;
+            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -65,25 +60,26 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        public override Dictionary<INavigable, Action> GetActionToNext()
+        public override Dictionary<INavigable, Action<CancellationToken>> GetActionToNext()
         {
-            return new Dictionary<INavigable, Action>()
+            return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, () => ActionToOpenMenuPage() }, // Resolve two actions opening the same page.
+                { session.PomMenu, (ct) => ActionToOpenMenuPage(ct) }, // Resolve two actions opening the same page.
 
-                // Resolve one action can open many pages (3 when conting ViewMenu).
-                { session.PomBlue, () => ResolveBackBtnClick(this) },
-                { session.PomRed, () => ResolveBackBtnClick(this) },
+                // Resolve one action can open many pages (3 when counting ViewMenu).
+                { session.PomBlue, (ct) => ResolveBackBtnClick(this, ct) },
+                { session.PomRed, (ct) => ResolveBackBtnClick(this, ct) },
             };
         }
 
         /// <summary>
         /// Open the View Menu by clicking on UIBtnOpenMenuView.
         /// </summary>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The ViewMenu.</returns>
-        public PomMenu OpenMenuByMenuBtn()
+        public PomMenu OpenMenuByMenuBtn(CancellationToken ct)
         {
-            UIBtnOpenMenuPage.Click();
+            session.WindowsDriver.Find(UIBtnOpenMenuPageParam, ct).Click();
             return session.PomMenu;
         }
 
@@ -92,16 +88,17 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Determines the action to open the ViewMenu by UIBtnBack depending the Navigation context.
         /// </summary>
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The action to open the ViewMenu.</returns>
-        private void ActionToOpenMenuPage()
+        private void ActionToOpenMenuPage(CancellationToken ct)
         {
             if (session.Previous == session.PomMenu)
             {
-                UIBtnBack.Click();
+                session.WindowsDriver.Find(UIBtnBackParam, ct).Click();
             }
             else
             {
-                UIBtnOpenMenuPage.Click();
+                session.WindowsDriver.Find(UIBtnOpenMenuPageParam, ct).Click();
             }
         }
 
@@ -109,7 +106,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Resolve the navigation when the UIBackBtn is clicked.
         /// </summary>
         /// <param name="source">The source.</param>
-        private void ResolveBackBtnClick(INavigable source)
+        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        private void ResolveBackBtnClick(INavigable source, CancellationToken ct)
         {
             List<INavigable> alternatives = new List<INavigable>()
             {
@@ -119,10 +117,10 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                () => UIBtnBack.Click(),
+                (x) => session.WindowsDriver.Find(UIBtnBackParam, x).Click(),
                 alternatives);
 
-            session.Resolve(source, onActionAlternatives);
+            session.Resolve(source, onActionAlternatives, ct);
         }
 
         #endregion Private

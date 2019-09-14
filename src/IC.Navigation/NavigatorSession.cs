@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Exceptions;
+using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,11 +49,6 @@ namespace IC.Navigation
         /// The INavigables to be expected as entry points when the application start.
         /// </summary>
         public abstract HashSet<INavigable> EntryPoints { get; protected set; }
-
-        /// <summary>
-        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
-        /// </summary>
-        public abstract double ThinkTime { get; set; }
 
         /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
@@ -124,7 +120,7 @@ namespace IC.Navigation
             }
             else
             {
-                throw new Exception($"\"{type}\" is not part of the Nodes.");
+                throw new UnregistredNodeException(type);
             }
         }
 
@@ -154,46 +150,55 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Adjust the timeout when waiting for the UI objects depending the <see cref="ThinkTime"/> value.
-        /// </summary>
-        /// <param name="timeout">The timeout.</param>
-        /// <returns>The adjusted timeout.</returns>
-        public virtual TimeSpan AdjustTimeout(TimeSpan timeout)
-        {
-            var adjTimeout = TimeSpan.FromTicks(timeout.Ticks * Convert.ToInt64(ThinkTime));
-            return adjTimeout;
-        }
-
-        /// <summary>
         /// Wait for any EntryPoints to exists.
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
-        /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
-        public virtual INavigable WaitForEntryPoints()
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <returns>The first INavigable found.</returns>
+        /// <exception cref="OperationCanceledException">Throw when the operation has been canceled.</exception>
+        /// <exception cref="EntryPointsNotFoundException">Throw when no EntryPoint has been found.</exception>
+        public virtual INavigable WaitForEntryPoints(CancellationToken cancellationToken)
         {
-            return GetFirstINavigableExisting(EntryPoints.ToList());
+            cancellationToken.ThrowIfCancellationRequested();
+            return GetFirstINavigableExisting(EntryPoints.ToList(), cancellationToken);
+        }
+
+        /// <summary>
+        /// Wait for any EntryPoints of the navigation to exists.
+        /// The amount of time to wait is defined by each INavigable.WaitForExists().
+        /// </summary>
+        /// <param name="timeout">The maximum amount of time to wait for any EntryPoints.</param>
+        /// <returns>The first INavigable found</returns>
+        /// <exception cref="TimeoutException">Throw when timeout is reached before any EntryPoint is found.</exception>
+        public INavigable WaitForEntryPoints(TimeSpan timeout)
+        {
+            using (var cts = new CancellationTokenSource(timeout))
+            {
+                try
+                {
+                    cts.Token.ThrowIfCancellationRequested();
+                    return GetFirstINavigableExisting(EntryPoints.ToList(), cts.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    throw new TimeoutException("The timeout has been reached.");
+                }
+            }
         }
 
         /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
-        /// <param name="uIAction">The UI action to execute.</param>
+        /// <param name="action">The action to execute.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        public virtual INavigable Do(INavigable origin, Action uIAction)
+        public virtual INavigable Do(INavigable origin, Action action, CancellationToken cancellationToken)
         {
-            if (!origin.PublishStatus().Exists)
-            {
-                throw new Exception($"The current INavigagble is not the one expected as origin(\"{origin.ToString()}\").");
-            }
-
-            uIAction.Invoke();
-            if (!origin.PublishStatus().Exists)
-            {
-                throw new Exception($"The current INavigagble is not the same than expected (\"{origin.ToString()}\")." +
-                    $" If it was expected, used \"Do<T>\" instead.");
-            }
-
+            cancellationToken.ThrowIfCancellationRequested();
+            WaitUntilNavigableExists(origin, "origin", cancellationToken);
+            action.Invoke();
+            WaitUntilNavigableExists(origin, "origin", cancellationToken);
             return origin;
         }
 
@@ -203,19 +208,22 @@ namespace IC.Navigation
         /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The INavigable returns by the Function.</returns>
-        public virtual INavigable Do<T>(INavigable origin, Func<INavigable> function) where T : INavigable
+        public virtual INavigable Do<T>(
+            INavigable origin, 
+            Func<INavigable> function, 
+            CancellationToken cancellationToken) where T : INavigable
         {
-            ValidateINavigableExists(origin, "origin");
+            cancellationToken.ThrowIfCancellationRequested();
+            WaitUntilNavigableExists(origin, "origin", cancellationToken);
             INavigable retINavigable = function.Invoke();
-            var actualINavigable = retINavigable.GetType();
-            Type expectedINavigable = typeof(T);
             if (typeof(T) != retINavigable.GetType())
             {
-                throw new Exception($"The expected INavigagble Type is \"{expectedINavigable}\" but the actual INavigagble Type is \"{actualINavigable}\"");
+                throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }
 
-            ValidateINavigableExists(retINavigable, "destination");
+            WaitUntilNavigableExists(retINavigable, "destination", cancellationToken);
             return retINavigable;
         }
 
@@ -225,23 +233,27 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="actionToNextINavigable">A Dictionary of UI actions to step to the next Navigable.</param>
         /// <param name="nextNavigable">The next INavigable.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The next INavigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
-        /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
-        public virtual INavigable StepToNext(Dictionary<INavigable, Action> actionToNextINavigable, INavigable nextNavigable)
+        public virtual INavigable StepToNext(
+            Dictionary<INavigable, 
+            Action<CancellationToken>> actionToNextINavigable, 
+            INavigable nextNavigable, 
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
-            INavigable nextNavigableRef = navigableAndAction.Key;
-            Action actionToOpen = navigableAndAction.Value;
-            if (nextNavigableRef == null)
+            if (navigableAndAction.Key == null)
             {
-                throw new ArgumentException($"The INavigable \"{nextNavigable}\" is not available in \"{MethodBase.GetCurrentMethod().DeclaringType}\".");
+                throw new UnregistredNeighborException(nextNavigable, MethodBase.GetCurrentMethod().DeclaringType);
             }
 
-            actionToOpen.Invoke();
+            var actionToOpen = navigableAndAction.Value;
+            actionToOpen.Invoke(cancellationToken);
             if (gotoDestination != null)
             {
-                ValidateINavigableExists(nextNavigable, "neighbor to open");
+                WaitUntilNavigableExists(nextNavigable, "neighbor to open", cancellationToken);
                 return nextNavigable;
             }
             else
@@ -255,12 +267,13 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable GoTo(INavigable origin, INavigable destination)
+        public virtual INavigable GoTo(INavigable origin, INavigable destination, CancellationToken cancellationToken)
         {
-            if (Graph == null) { throw new Exception($"The \"Graph\" is not initialized."); }
-
-            ValidateINavigableExists(origin, "origin");
+            cancellationToken.ThrowIfCancellationRequested();
+            if (Graph == null) { throw new GraphNotInitialized(); }
+            WaitUntilNavigableExists(origin, "origin", cancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -268,7 +281,7 @@ namespace IC.Navigation
             var shortestPath = GetShortestPath(origin, destination);
             if (shortestPath.Count == 0)
             {
-                throw new Exception($"There is no path from \"{origin.GetType().Name}\" to \"{destination.GetType().Name}\".");
+                throw new PathNotFound(origin, destination);
             }
 
             gotoDestination = gotoDestination ?? destination;
@@ -278,7 +291,7 @@ namespace IC.Navigation
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    StepToNext(currentNode.GetActionToNext(), nextNode);
+                    StepToNext(currentNode.GetActionToNext(), nextNode, cancellationToken);
                 }
                 else
                 {
@@ -297,10 +310,12 @@ namespace IC.Navigation
         /// <summary>
         /// Back to the previous INavigable.
         /// </summary>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The previous INavigable.</returns>
-        public virtual INavigable Back()
+        public virtual INavigable Back(CancellationToken cancellationToken)
         {
-            return GoTo(Last, Previous);
+            cancellationToken.ThrowIfCancellationRequested();
+            return GoTo(Last, Previous, cancellationToken);
         }
 
         /// <summary>
@@ -311,6 +326,9 @@ namespace IC.Navigation
         /// <returns>The HashSet of INavigable from the origin to the destination.</returns>
         public virtual List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
+            if (Graph == null)
+                throw new GraphNotInitialized();
+
             return Graph.GetShortestPath(origin, destination);
         }
 
@@ -321,11 +339,13 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives)
+        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken)
         {
-            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives);
-            return GoTo(newOrigin, gotoDestination);
+            cancellationToken.ThrowIfCancellationRequested();
+            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives, cancellationToken);
+            return GoTo(newOrigin, gotoDestination, cancellationToken);
         }
 
         /// <summary>
@@ -336,12 +356,19 @@ namespace IC.Navigation
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <param name="waypoint">An INavigable waypoint to cross if the expected INavigable is not cross during the resolution.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, INavigable waypoint)
+        public virtual INavigable Resolve(
+            INavigable origin, 
+            IOnActionAlternatives onActionAlternatives, 
+            INavigable waypoint, 
+            CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
-            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives);
+            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives, cancellationToken);
             if (navigableAfterAction == finalDestination)
             {
                 return navigableAfterAction;
@@ -349,8 +376,8 @@ namespace IC.Navigation
             else
             {
                 // Force to pass by waypoint.
-                GoTo(navigableAfterAction, waypoint);
-                return GoTo(waypoint, finalDestination);
+                GoTo(navigableAfterAction, waypoint, cancellationToken);
+                return GoTo(waypoint, finalDestination, cancellationToken);
             }
         }
 
@@ -359,13 +386,18 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public virtual INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives)
+        public virtual INavigable GetINavigableAfterAction(
+            INavigable origin, 
+            IOnActionAlternatives onActionAlternatives, 
+            CancellationToken cancellationToken)
         {
-            ValidateINavigableExists(origin, "origin");
+            cancellationToken.ThrowIfCancellationRequested();
+            WaitUntilNavigableExists(origin, "origin", cancellationToken);
             INavigable match = null;
-            onActionAlternatives.UIAction.Invoke();
-            match = GetFirstINavigableExisting(onActionAlternatives.INavigables);
+            onActionAlternatives.AlternativateAction.Invoke(cancellationToken);
+            match = GetFirstINavigableExisting(onActionAlternatives.INavigables, cancellationToken);
             return match;
         }
 
@@ -460,64 +492,56 @@ namespace IC.Navigation
             }
         }
 
-        private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables)
+        private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables, CancellationToken cancellationToken)
         {
             INavigable match = null;
-            int counter = iNavigables.Count();
-            List<Task<INavigable>> tasks = new List<Task<INavigable>>();
-            using (CancellationTokenSource source = new CancellationTokenSource())
+            using (var internalCts = new CancellationTokenSource())
+            using (var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(internalCts.Token, cancellationToken))
             {
+                ParallelOptions po = new ParallelOptions();
+                po.CancellationToken = linkedCts.Token;
                 try
                 {
-                    CancellationToken token = source.Token;
-                    foreach (var iNavigagble in iNavigables)
+                    Parallel.ForEach(iNavigables, po, (x, state) =>
                     {
-                        tasks.Add(new Task<INavigable>(() => WaitForExists(iNavigagble), token));
-                    }
-
-                    bool tasksStarted = false;
-                    while (counter > 0)
-                    {
-                        if (!tasksStarted)
+                        var neighbor = GetExistingNavigable(x, po.CancellationToken);
+                        if (neighbor != null)
                         {
-                            tasks.ForEach(x => x.Start());
-                            tasksStarted = true;
+                            state.Break();
+                            match = neighbor;
+                            internalCts.Cancel();
                         }
-
-                        Task<INavigable> completed = Task.WhenAny(tasks.ToArray()).GetAwaiter().GetResult();
-                        if (completed.Status == TaskStatus.RanToCompletion && completed.Result != null)
-                        {
-                            match = completed.Result;
-                            counter = 0;
-                            source.Cancel();
-                            break;
-                        }
-                        else
-                        {
-                            counter--;
-                        }
-                    }
+                    });
                 }
                 catch (OperationCanceledException)
                 {
-                    // Do nothing.
+                    cancellationToken.ThrowIfCancellationRequested();
                 }
+            }
+
+            if (match == null)
+            {
+                throw new EntryPointsNotFoundException(iNavigables);
             }
 
             return match;
         }
 
-        private INavigable WaitForExists(INavigable navigable)
+        private INavigable GetExistingNavigable(INavigable navigable, CancellationToken cancellationToken)
         {
+            if (cancellationToken.IsCancellationRequested) return null;
             bool exists = navigable.PublishStatus().Exists;
             return exists ? navigable : null;
         }
 
-        private void ValidateINavigableExists(INavigable iNavigable, string definition)
+        private void WaitUntilNavigableExists(INavigable iNavigable, string definition, CancellationToken cancellationToken)
         {
-            if (!iNavigable.PublishStatus().Exists)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                throw new Exception($"The {definition} \"{iNavigable.ToString()}\" was not found.");
+                if (iNavigable.PublishStatus().Exists)
+                {
+                    return;
+                }
             }
         }
 

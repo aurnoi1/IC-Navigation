@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
@@ -23,7 +24,7 @@ namespace IC.Navigation.Interfaces
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        Dictionary<INavigable, Action> GetActionToNext();
+        Dictionary<INavigable, Action<CancellationToken>> GetActionToNext();
 
         /// <summary>
         /// Register the INavigableObserver as a WeakReference.

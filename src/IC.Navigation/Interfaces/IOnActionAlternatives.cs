@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
@@ -14,8 +15,8 @@ namespace IC.Navigation.Interfaces
         List<INavigable> INavigables { get; }
 
         /// <summary>
-        /// The UI action.
+        /// The alternative action.
         /// </summary>
-        Action UIAction { get; }
+        Action<CancellationToken> AlternativateAction { get; }
     }
 }

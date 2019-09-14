@@ -1,9 +1,10 @@
-﻿using OpenQA.Selenium.Appium.Windows;
+﻿using IC.Navigation.Extensions.Appium.WindowsDriver.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace IC.Navigation.Extensions.Appium
+namespace IC.Navigation.Extensions.Appium.WindowsDriver
 {
     public static class IWindowsDriverSessionEx
     {
@@ -19,7 +20,8 @@ namespace IC.Navigation.Extensions.Appium
             var prop = GetLastINavigableAliasesAndProperties(winDriverSession).SingleOrDefault(x => x.Key.Values.Contains(alias)).Value;
             if (prop != null)
             {
-                match = prop.GetMethod.Invoke(winDriverSession.Last, null) as WindowsElement;
+                var wdSearchParam = prop.GetValue(winDriverSession.Last) as SearchParam;
+                match = winDriverSession.WindowsDriver.Get(wdSearchParam);
             }
 
             return match;
@@ -39,7 +41,7 @@ namespace IC.Navigation.Extensions.Appium
                 object[] attrs = prop.GetCustomAttributes(true);
                 foreach (object attr in attrs)
                 {
-                    if (attr is Aliases uIArtefact && prop.PropertyType.Equals(typeof(WindowsElement)))
+                    if (attr is Aliases uIArtefact && prop.PropertyType.Equals(typeof(SearchParam)))
                     {
                         propertyInfos.Add(uIArtefact, prop);
                     }

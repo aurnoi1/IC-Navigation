@@ -1,11 +1,11 @@
-﻿using IC.Navigation.Extensions.Appium;
+﻿using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
+using System.Linq;
 using TechTalk.SpecFlow;
 using Xunit;
-using System.Linq;
 
 namespace IC.Navigation.UITests.Specflow.Steps
 {
@@ -43,7 +43,6 @@ namespace IC.Navigation.UITests.Specflow.Steps
                 ThenTheControlShouldBeDisplayed(value.Values.FirstOrDefault());
             }
         }
-
 
         public void Dispose()
         {

@@ -1,10 +1,11 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
@@ -22,28 +23,22 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// The tile of this page.
+        /// WDSearchParam to find the title of this page.
         /// </summary>
-        [Aliases("title")] // explicitly same than other pages for test.
-        public WindowsElement UITitle => session.WindowsDriver.FindElementByAccessibilityId(
-            "TitleBlue",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+        [Aliases("title")]
+        public SearchParam UILblTitleParam => new SearchParam(WDLocators.AutomationId, "TitleBlue");
 
         /// <summary>
-        /// A control to open the previous page.
+        /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public WindowsElement UIBtnBack => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnBack",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
 
         /// <summary>
-        /// A control to open the yellow page.
+        /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public WindowsElement UIBtnOpenYellowView => session.WindowsDriver.FindElementByAccessibilityId(
-            "BtnOpenYellowView",
-            session.AdjustTimeout(TimeSpan.FromSeconds(3)));
+        public SearchParam BtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
 
         #endregion Controls
 
@@ -52,7 +47,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = UITitle != null;
+            bool isDisplayed = session.WindowsDriver.Get(UILblTitleParam) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -63,12 +58,12 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        public override Dictionary<INavigable, Action> GetActionToNext()
+        public override Dictionary<INavigable, Action<CancellationToken>> GetActionToNext()
         {
-            return new Dictionary<INavigable, Action>()
+            return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, () => UIBtnBack.Click() },
-                { session.PomYellow, () => UIBtnOpenYellowView.Click() },
+                { session.PomMenu, (ct) => session.WindowsDriver.Find(UIBtnBackParam, ct).Click() },
+                { session.PomYellow, (ct) => session.WindowsDriver.Find(BtnOpenYellowViewParam, ct).Click() },
             };
         }
     }

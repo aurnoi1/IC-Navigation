@@ -1,6 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
@@ -15,24 +16,22 @@ namespace IC.Navigation.Interfaces
         /// Wait for any EntryPoints of the navigation to exists.
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
-        INavigable WaitForEntryPoints();
+        INavigable WaitForEntryPoints(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Wait for any EntryPoints of the navigation to exists.
+        /// The amount of time to wait is defined by each INavigable.WaitForExists().
+        /// </summary>
+        /// <param name="timeout">The maximum amount of time to wait for any EntryPoints.</param>
+        /// <returns>The first INavigable found, otherwise <c>null</c>.</returns>
+        /// <exception cref="TimeoutException">Throw when timeout is reached before any EntryPoint is found.</exception>
+        INavigable WaitForEntryPoints(TimeSpan timeout);
 
         /// <summary>
         /// The INavigable EntryPoint that is found at the beginning of the navigation.
         /// </summary>
         INavigable EntryPoint { get; }
-
-        /// <summary>
-        /// Positive multiplier to adjust the timeouts when waiting for UI objects.
-        /// </summary>
-        double ThinkTime { get; set; }
-
-        /// <summary>
-        /// Adjust the timeout when waiting for the UI objects depending the <see cref="ThinkTime"/> value.
-        /// </summary>
-        /// <param name="timeout">The timeout.</param>
-        /// <returns>The adjusted timeout.</returns>
-        TimeSpan AdjustTimeout(TimeSpan timeout);
     }
 }

@@ -1,7 +1,10 @@
 using IC.Navigation.CoreExtensions;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
+using System.Threading;
 using Xunit;
 
 namespace IC.Navigation.UITests
@@ -12,13 +15,19 @@ namespace IC.Navigation.UITests
         public AppiumTests()
         {
             sut = new AppiumContext().SUT;
+            wd = sut.WindowsDriver;
+            cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
+            ct = cts.Token;
         }
 
         #region Properties
 
         #region Private
 
-        private IFacade sut;
+        private readonly IFacade sut;
+        private readonly WindowsDriver<WindowsElement> wd;
+        private readonly CancellationTokenSource cts;
+        private readonly CancellationToken ct;
 
         #endregion Private
 
@@ -31,19 +40,19 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueView()
         {
-            Assert.Equal("BtnOpenBlueView", sut.PomMenu.UIBtnOpenBlueView.GetAttribute("AutomationId"));
+            Assert.Equal("BtnOpenBlueView", wd.Get(sut.PomMenu.UIBtnOpenBlueViewParam, ct).GetAttribute("AutomationId"));
         }
 
         [Fact]
         public void ShouldNotFindUIBtnFake()
         {
-            Assert.Null(sut.PomMenu.UIBtnNotImplemented);
+            Assert.Null(wd.Get(sut.PomMenu.UIBtnNotImplementedParam));
         }
 
         [Fact]
         public void ShouldFindMenuTitle()
         {
-            Assert.Equal("TitleMenu", sut.PomMenu.UITitle.GetAttribute("AutomationId"));
+            Assert.Equal("TitleMenu", wd.Get(sut.PomMenu.UITitleParam, ct).GetAttribute("AutomationId"));
         }
 
         [Fact]
@@ -51,26 +60,27 @@ namespace IC.Navigation.UITests
         {
             string expected = "This is a text";
             sut.PomMenu.EnterText(expected);
-            Assert.Equal(expected, sut.PomMenu.UITxtBoxImportantMessage.Text);
+            Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam, ct).Text);
         }
 
         [Fact]
         public void ShouldOpenBlueView()
         {
-            sut.PomMenu.UIBtnOpenBlueView.Click();
-            Assert.True(sut.PomBlue.WaitForExists());
+            wd.Get(sut.PomMenu.UIBtnOpenBlueViewParam, ct).Click();
+            Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]
         public void ShouldOpenRedView()
         {
-            sut.PomMenu.UIBtnOpenRedView.Click();
-            Assert.True(sut.PomRed.WaitForExists());
+            wd.Get(sut.PomMenu.UIBtnOpenRedViewParam, ct).Click();
+            Assert.True(sut.PomRed.Exists());
         }
 
         public void Dispose()
         {
             sut?.Dispose();
+            cts?.Dispose();
         }
 
         #endregion Public
