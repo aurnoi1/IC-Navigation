@@ -11,9 +11,9 @@
         <PackageReference Include="AutoFixture.Xunit2" Version="4.11.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
         <PackageReference Include="Moq" Version="4.13.0" />
-        <PackageReference Include="SpecFlow" Version="3.0.225" />
-        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.0.225" />
-        <PackageReference Include="SpecFlow.xUnit" Version="3.0.225" />
+        <PackageReference Include="SpecFlow" Version="3.1.32-beta" />
+        <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="3.1.32-beta" />
+        <PackageReference Include="SpecFlow.xUnit" Version="3.1.32-beta" />
         <PackageReference Include="System.ValueTuple" Version="4.5.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.console" Version="2.4.1">
