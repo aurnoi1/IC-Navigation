@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
    <PropertyGroup>
-      <TargetFramework>netstandard2.0</TargetFramework>
-      <LangVersion>7.3</LangVersion>
+      <TargetFramework>netstandard2.1</TargetFramework>
+      <LangVersion>8</LangVersion>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
       <Description>System to automate navigation mainly through user interfaces.</Description>
