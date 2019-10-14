@@ -12,14 +12,14 @@ namespace IC.Navigation.Extensions.Appium
             this SearchParam<T> searchParam,
             TimeSpan timeout) where T : IWebElement
         {
-            using (var cts = new CancellationTokenSource(timeout))
+            using var cts = new CancellationTokenSource(timeout);
+            var elmt = Get(searchParam, cts.Token);
+            if (cts.Token.IsCancellationRequested)
             {
-                var elmt = Get(searchParam, cts.Token);
-                if (cts.Token.IsCancellationRequested)
-                    throw new TimeoutException("The timeout has been reached.");
-
-                return elmt;
+                throw new TimeoutException("The timeout has been reached.");
             }
+
+            return elmt;
         }
 
         public static T Get<T>(this SearchParam<T> searchParam) where T : IWebElement
