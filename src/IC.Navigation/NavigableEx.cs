@@ -10,6 +10,18 @@ namespace IC.Navigation.CoreExtensions
         /// Executes the action passed in parameter.
         /// </summary>
         /// <param name="origin">This Navigable instance.</param>
+        /// <param name="action">The non-cancellable Action to execute with origin as first parameter.</param>
+        /// <returns>The current INavigable.</returns>
+        public static INavigable Do<T>(this T origin, Action<T> action) where T : INavigable
+        {
+            void actionNotCancellable() => action(origin);
+            return Do(origin, actionNotCancellable);
+        }
+
+        /// <summary>
+        /// Executes the action passed in parameter.
+        /// </summary>
+        /// <param name="origin">This Navigable instance.</param>
         /// <param name="action">The non-cancellable Action to execute.</param>
         /// <returns>The current INavigable.</returns>
         public static INavigable Do(this INavigable origin, Action action)
@@ -32,6 +44,21 @@ namespace IC.Navigation.CoreExtensions
             using var infinitTokenSource = new CancellationTokenSource();
             INavigable functionNotCancellable(CancellationToken ct) => function();
             return origin.Session.Do<T>(origin, functionNotCancellable, infinitTokenSource.Token);
+        }
+
+
+        /// <summary>
+        /// Executes the action passed in parameter.
+        /// </summary>
+        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="action">The Action to execute with origin as first parameter and CancellationToken as second.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
+        /// <returns>The current INavigable.</returns>
+        public static INavigable Do<T>(this T origin, Action<T, CancellationToken> action, CancellationToken cancellationToken = default) where T : INavigable
+        {
+            void actionCancellable(CancellationToken ct) => action(origin, cancellationToken);
+            return Do(origin, actionCancellable, cancellationToken);
         }
 
         /// <summary>

@@ -47,6 +47,28 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
+        public void AAAAAAAAAAA()
+        {
+            string text;
+            sut.PomMenu.Do(x => text = wd.Get(x.UIBtnOpenBlueViewParam).Text);
+        }
+
+        [Fact]
+        public void BBBBBBBB()
+        {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+            string text;
+            sut.PomMenu.Do((x,ct) =>
+            {
+                while (!ct.IsCancellationRequested)
+                {
+                    text = wd.Get(x.UIBtnOpenBlueViewParam).Text;
+                }
+
+            }, cts.Token);
+        }
+
+        [Fact]
         public void FullExample()
         {
             // Set the GlobalCancellationToken used for the time of the Navigation session.
