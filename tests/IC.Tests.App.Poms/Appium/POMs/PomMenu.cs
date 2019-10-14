@@ -12,11 +12,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("menu page")]
     public class PomMenu : PomBase
     {
-        private readonly IFacade session;
-
         public PomMenu(in IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 

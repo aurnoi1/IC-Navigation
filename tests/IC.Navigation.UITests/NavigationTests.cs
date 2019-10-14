@@ -26,7 +26,6 @@ namespace IC.Navigation.UITests
             wd = sut.WindowsDriver;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
             cts = new CancellationTokenSource();
-            ct = cts.Token;
         }
 
         #region Properties
@@ -37,7 +36,6 @@ namespace IC.Navigation.UITests
         private IFixture fixture;
         private WindowsDriver<WindowsElement> wd;
         private CancellationTokenSource cts;
-        private readonly CancellationToken ct;
 
         #endregion Private
 
@@ -51,29 +49,25 @@ namespace IC.Navigation.UITests
         public void FullExample()
         {
             sut.Last
-                .GoTo(sut.PomYellow, ct)
+                .GoTo(sut.PomYellow)
                 .Do<PomMenu>(() =>
                 {
                     // Create a Linked CancellationTokenSource to limit the current scope
                     // while the global ct is still running. First one to cancel will stop this scope.
-                    using (var ctsLocal = CancellationTokenSource.CreateLinkedTokenSource(ct))
-                    {
-                        ctsLocal.CancelAfter(TimeSpan.FromSeconds(3));
-                        return sut.PomYellow.OpenMenuByMenuBtn(ctsLocal.Token);
-                    }
-                }, ct)
-                .GoTo(sut.PomBlue, ct) // Force the path to PomBlue then PomYellow...
-                .GoTo(sut.PomYellow, ct) //... to test PomYellow.ActionToOpenViewMenu().
-                .GoTo(sut.PomMenu, ct) // Since last was PomBlue, PomYellow.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
+                    return sut.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(3));
+                })
+                .GoTo(sut.PomBlue) // Force the path to PomBlue then PomYellow...
+                .GoTo(sut.PomYellow) //... to test PomYellow.ActionToOpenViewMenu().
+                .GoTo(sut.PomMenu) // Since last was PomBlue, PomYellow.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
                 .Do(() =>
                 {
                     sut.PomMenu.EnterText("This is a test");
-                }, ct)
-                .GoTo(sut.PomBlue, ct)
-                .Back(ct) // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
-                .GoTo(sut.Historic.ElementAt(1), ct) // The second element of historic is ViewYellow.
-                .GoTo(sut.PomRed, ct)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
-                .GoTo(sut.EntryPoint, ct); // The entry point.
+                })
+                .GoTo(sut.PomBlue)
+                .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
+                .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
+                .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
+                .GoTo(sut.EntryPoint); // The entry point.
 
             Assert.True(sut.Historic.ElementAt(0).Exists());
         }
@@ -166,8 +160,8 @@ namespace IC.Navigation.UITests
         public void ShouldOpenViewMenuFromYellowViewByOpenViewMenuDirectly()
         {
             sut.Last
-                .GoTo(sut.PomYellow, ct)
-                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(ct), ct);
+                .GoTo(sut.PomYellow)
+                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(10)));
 
             Assert.True(sut.PomMenu.Exists());
         }
@@ -176,28 +170,28 @@ namespace IC.Navigation.UITests
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).SendKeys(expected), ct);
+            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).SendKeys(expected));
             Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).Text);
         }
 
         [Fact]
         public void ShouldGoToBlueView()
         {
-            sut.PomMenu.GoTo(sut.PomBlue, ct);
+            sut.PomMenu.GoTo(sut.PomBlue);
             Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]
         public void ShouldHaveViewMenuAsFirstInHistoric()
         {
-            sut.PomMenu.GoTo(sut.PomBlue, ct);
+            sut.PomMenu.GoTo(sut.PomBlue);
             Assert.Equal(typeof(PomMenu), sut.Historic.First().GetType());
         }
 
         [Fact]
         public void ShouldHaveViewBlueAsLastInHistoric()
         {
-            sut.PomMenu.GoTo(sut.PomBlue, ct);
+            sut.PomMenu.GoTo(sut.PomBlue);
             Assert.Equal(typeof(PomBlue), sut.Historic.Last().GetType());
         }
 

@@ -12,11 +12,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("yellow page")]
     public class PomYellow : PomBase
     {
-        private readonly IFacade session;
-
-        public PomYellow(in IFacade session) : base(session)
+        public PomYellow(IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 
@@ -75,12 +72,27 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Open the View Menu by clicking on UIBtnOpenMenuView.
         /// </summary>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="timeout">The timeout to interrupt the task as soon as possible in parallel
+        /// of <see cref="Facade.GlobalCancellationToken"/>.</param>
         /// <returns>The ViewMenu.</returns>
-        public PomMenu OpenMenuByMenuBtn(CancellationToken ct)
+        public PomMenu OpenMenuByMenuBtn(TimeSpan timeout)
         {
-            session.WindowsDriver.Find(UIBtnOpenMenuPageParam, ct).Click();
-            return session.PomMenu;
+            CancellationTokenSource localCts = default;
+            try
+            {
+                localCts = new CancellationTokenSource(timeout);
+                using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
+                    session.GlobalCancellationToken, 
+                    localCts.Token);
+
+                session.WindowsDriver.Find(UIBtnOpenMenuPageParam, linkedCts.Token).Click();
+                return session.PomMenu;
+            }
+            catch (Exception)
+            {
+                localCts?.Dispose();
+                throw;
+            }
         }
 
         #region Private

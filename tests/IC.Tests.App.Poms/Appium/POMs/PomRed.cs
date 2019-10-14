@@ -11,12 +11,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     [Aliases("red page")]
     public class PomRed : PomBase
-    {
-        private readonly IFacade session;
-
+    {        
         public PomRed(in IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 

@@ -27,12 +27,13 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
         /// <param name="function">The Function to execute.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The expected INavigable returns by the Function.</returns>
         public static INavigable Do<T>(
             this INavigable source, 
             Func<INavigable> function, 
-            CancellationToken cancellationToken) where T : INavigable
+            CancellationToken cancellationToken = default) where T : INavigable
         {
             cancellationToken.ThrowIfCancellationRequested();
             return source.Session.Do<T>(source, function, cancellationToken);
@@ -44,9 +45,13 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
         /// <param name="destination">The destination.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The destination.</returns>
-        public static INavigable GoTo(this INavigable source, INavigable destination, CancellationToken cancellationToken)
+        public static INavigable GoTo(
+            this INavigable source, 
+            INavigable destination, 
+            CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             return source.Session.GoTo(source, destination, cancellationToken);
@@ -56,9 +61,10 @@ namespace IC.Navigation.CoreExtensions
         /// Go to the previous INavigable.
         /// </summary>
         /// <param name="source">This Navigable instance.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous INavigable.</returns>
-        public static INavigable Back(this INavigable source, CancellationToken cancellationToken)
+        public static INavigable Back(this INavigable source, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             return source.Session.Back(cancellationToken);

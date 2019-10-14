@@ -12,11 +12,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("blue page")]
     public class PomBlue : PomBase
     {
-        private readonly IFacade session;
-
         public PomBlue(in IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 
