@@ -62,7 +62,7 @@ namespace IC.Navigation.UITests
                 {
                     ctsLocal.CancelAfter(TimeSpan.Zero);
                     Assert.Throws<OperationCanceledException>(() =>
-                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplementedParam, ctsLocal.Token));
+                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplemented, ctsLocal.Token));
                 }
             });
         }
@@ -72,7 +72,7 @@ namespace IC.Navigation.UITests
         {
             // Act
             Assert.Throws<TimeoutException>(() =>
-                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplementedParam, TimeSpan.Zero));
+                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplemented, TimeSpan.Zero));
         }
 
         [Fact]
@@ -111,7 +111,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam);
+                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented);
             });
 
             // Assert
@@ -289,7 +289,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Dictionnary_Of_Attributes_Is_Not_Found()
         {
             // Arrange
-            var param = sut.PomMenu.UIBtnNotImplementedParam;
+            var param = sut.PomMenu.UIBtnNotImplemented;
             WindowsElement title = default;
 
             // Act
@@ -306,7 +306,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Many_ValueTuple_Of_Attributes_Is_Not_Found()
         {
             // Arrange
-            var param = sut.PomMenu.UIBtnNotImplementedParam;
+            var param = sut.PomMenu.UIBtnNotImplemented;
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
@@ -326,7 +326,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_With_Single_Property_Is_Not_Found()
         {
             // Arrange
-            var param = sut.PomMenu.UIBtnNotImplementedParam;
+            var param = sut.PomMenu.UIBtnNotImplemented;
             WindowsElement title = default;
 
             // Act
@@ -353,7 +353,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam, expectedTimeout);
+                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented, expectedTimeout);
                 stopwatch.Stop();
             });
 
@@ -379,7 +379,7 @@ namespace IC.Navigation.UITests
                 stopwatch.Start();
                 using (var cts = new CancellationTokenSource(expectedTimeout))
                 {
-                    title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam, cts.Token);
+                    title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented, cts.Token);
                     stopwatch.Stop();
                 }
             });

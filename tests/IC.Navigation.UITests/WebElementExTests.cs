@@ -232,7 +232,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_Timeout_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam)
+                sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented)
                 .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "True")));
         }
 
@@ -240,7 +240,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_CT_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplementedParam)
+                sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented)
                 .ContinueWhen(ct, ("IsEnabled", "True")));
         }
 

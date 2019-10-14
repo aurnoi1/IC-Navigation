@@ -24,19 +24,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam<WindowsElement> UITitleParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleYellow", session.WindowsDriver);
+        public SearchParam<WindowsElement> UITitle => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleYellow", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam<WindowsElement> UIBtnBackParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
+        public SearchParam<WindowsElement> UIBtnBack => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public SearchParam<WindowsElement> UIBtnOpenMenuPageParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenMenuView", session.WindowsDriver);
+        public SearchParam<WindowsElement> UIBtnOpenMenuPage => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenMenuView", session.WindowsDriver);
 
         #endregion Controls
 
@@ -47,7 +47,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
+            bool isDisplayed = session.WindowsDriver.Get(UITitle) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -86,7 +86,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
                     session.GlobalCancellationToken, 
                     localCts.Token);
 
-                session.WindowsDriver.Find(UIBtnOpenMenuPageParam, linkedCts.Token).Click();
+                session.WindowsDriver.Find(UIBtnOpenMenuPage, linkedCts.Token).Click();
                 return session.PomMenu;
             }
             catch (Exception)
@@ -107,11 +107,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                session.WindowsDriver.Find(UIBtnBackParam, ct).Click();
+                session.WindowsDriver.Find(UIBtnBack, ct).Click();
             }
             else
             {
-                session.WindowsDriver.Find(UIBtnOpenMenuPageParam, ct).Click();
+                session.WindowsDriver.Find(UIBtnOpenMenuPage, ct).Click();
             }
         }
 
@@ -130,7 +130,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                (x) => session.WindowsDriver.Find(UIBtnBackParam, x).Click(),
+                (x) => session.WindowsDriver.Find(UIBtnBack, x).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives, ct);

@@ -49,7 +49,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void AAAAAA()
         {
-            sut.PomMenu.UIBtnOpenBlueViewParam.Get().Click();
+            sut.PomMenu.UIBtnOpenBlueView.Get().Click();
             throw new NotImplementedException("see issue #27");
         }
 
@@ -201,8 +201,8 @@ namespace IC.Navigation.UITests
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).SendKeys(expected));
-            Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessageParam).Text);
+            sut.PomMenu.Do(() => wd.Get(sut.PomMenu.UITxtBoxImportantMessage).SendKeys(expected));
+            Assert.Equal(expected, wd.Get(sut.PomMenu.UITxtBoxImportantMessage).Text);
         }
 
         [Fact]

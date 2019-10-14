@@ -24,19 +24,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find the title of this page.
         /// </summary>
         [Aliases("title")]
-        public SearchParam<WindowsElement> UILblTitleParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleBlue", session.WindowsDriver);
+        public SearchParam<WindowsElement> UILblTitle => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleBlue", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam<WindowsElement> UIBtnBackParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
+        public SearchParam<WindowsElement> UIBtnBack => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam<WindowsElement> BtnOpenYellowViewParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
+        public SearchParam<WindowsElement> BtnOpenYellowView => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         #endregion Controls
 
@@ -45,7 +45,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UILblTitleParam) != null;
+            bool isDisplayed = session.WindowsDriver.Get(UILblTitle) != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -60,8 +60,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => session.WindowsDriver.Find(UIBtnBackParam, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Find(BtnOpenYellowViewParam, ct).Click() },
+                { session.PomMenu, (ct) => session.WindowsDriver.Find(UIBtnBack, ct).Click() },
+                { session.PomYellow, (ct) => session.WindowsDriver.Find(BtnOpenYellowView, ct).Click() },
             };
         }
     }
