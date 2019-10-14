@@ -20,7 +20,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
         /// <returns>The first matching WebElement.</returns>
-        /// <exception cref="TimeoutException">Throw when timeout is reached before WebElement is found.</exception>
+        /// <exception cref="TimeoutException">Thrown when timeout is reached before WebElement is found.</exception>
         public static T Find<T>(
             this AppiumDriver<T> driver,
             ISearchParam<T> searchParam,
@@ -63,7 +63,6 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver"></param>
         /// <param name="driver">This AppiumDriver<IWebElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
