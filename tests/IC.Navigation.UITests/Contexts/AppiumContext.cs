@@ -53,10 +53,16 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         /// <returns>The SUT session.</returns>
         public IFacade GetFacade()
         {
-            ISUTAppiumConfig config = new SUTAppiumConfig();
-            IAppiumSession session = new SUTAppiumSession(config);
+            IAppiumSession session = GetAppiumSession();
             var sut = new Facade(session);
             return sut;
+        }
+
+        public IAppiumSession GetAppiumSession()
+        {
+            ISUTAppiumConfig config = new SUTAppiumConfig();
+            IAppiumSession session = new SUTAppiumSession(config);
+            return session;
         }
     }
 }

@@ -61,7 +61,6 @@ namespace IC.Navigation.UITests
                         ctsLocal.CancelAfter(TimeSpan.FromSeconds(3));
                         return sut.PomYellow.OpenMenuByMenuBtn(ctsLocal.Token);
                     }
-
                 }, ct)
                 .GoTo(sut.PomBlue, ct) // Force the path to PomBlue then PomYellow...
                 .GoTo(sut.PomYellow, ct) //... to test PomYellow.ActionToOpenViewMenu().
