@@ -216,8 +216,8 @@ namespace IC.Navigation
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The INavigable returns by the Function.</returns>
         public virtual INavigable Do<T>(
-            INavigable origin, 
-            Func<INavigable> function, 
+            INavigable origin,
+            Func<INavigable> function,
             CancellationToken cancellationToken) where T : INavigable
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -242,9 +242,9 @@ namespace IC.Navigation
         /// <returns>The next INavigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
         public virtual INavigable StepToNext(
-            Dictionary<INavigable, 
-            Action<CancellationToken>> actionToNextINavigable, 
-            INavigable nextNavigable, 
+            Dictionary<INavigable,
+            Action<CancellationToken>> actionToNextINavigable,
+            INavigable nextNavigable,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -274,10 +274,12 @@ namespace IC.Navigation
         /// <param name="destination">The destination.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
+        /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
+        /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
         public virtual INavigable GoTo(INavigable origin, INavigable destination, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            if (Graph == null) { throw new GraphNotInitialized(); }
+            if (Graph == null) { throw new UninitializedGraphException(); }
             WaitUntilNavigableExists(origin, "origin", cancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
@@ -286,7 +288,7 @@ namespace IC.Navigation
             var shortestPath = GetShortestPath(origin, destination);
             if (shortestPath.Count == 0)
             {
-                throw new PathNotFound(origin, destination);
+                throw new PathNotFoundException(origin, destination);
             }
 
             gotoDestination = gotoDestination ?? destination;
@@ -329,10 +331,11 @@ namespace IC.Navigation
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The HashSet of INavigable from the origin to the destination.</returns>
+        /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         public virtual List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
             if (Graph == null)
-                throw new GraphNotInitialized();
+                throw new UninitializedGraphException();
 
             return Graph.GetShortestPath(origin, destination);
         }
@@ -364,9 +367,9 @@ namespace IC.Navigation
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(
-            INavigable origin, 
-            IOnActionAlternatives onActionAlternatives, 
-            INavigable waypoint, 
+            INavigable origin,
+            IOnActionAlternatives onActionAlternatives,
+            INavigable waypoint,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -394,8 +397,8 @@ namespace IC.Navigation
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
         public virtual INavigable GetINavigableAfterAction(
-            INavigable origin, 
-            IOnActionAlternatives onActionAlternatives, 
+            INavigable origin,
+            IOnActionAlternatives onActionAlternatives,
             CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
@@ -481,6 +484,32 @@ namespace IC.Navigation
         #endregion Public
 
         #region Private
+
+        /// <summary>
+        /// Select the CancellationToken to use for a task.
+        /// If the local token is not <c>null</c> it will we used,
+        /// otherwise the GlobalCancellationToken will be used if not <c>null</c>.
+        /// </summary>
+        /// <param name="localToken"></param>
+        /// <returns></returns>
+        /// <remarks>The localToken may contains the GlobalCancellationToken if its source has been linked.</remarks>
+        /// <exception cref="UninitializedGlobalCancellationTokenException">Thrown when the GlobalCancellationToken is unitialized.</exception>
+        private CancellationToken SelectCancellationToken(CancellationToken localToken)
+        {
+            if (localToken != null)
+            {
+                return localToken;
+            }
+
+            if (GlobalCancellationToken == null)
+            {
+                throw new UninitializedGlobalCancellationTokenException();
+            }
+            else
+            {
+                return GlobalCancellationToken;
+            }
+        }
 
         /// <summary>
         /// Set the last known INavigable is exists.

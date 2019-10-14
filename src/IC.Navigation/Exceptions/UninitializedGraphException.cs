@@ -4,9 +4,9 @@ using System.Text;
 
 namespace IC.Navigation.Exceptions
 {
-    public class GraphNotInitialized : Exception
+    public class UninitializedGraphException : Exception
     {
-        public GraphNotInitialized() : base($"Graph is not initialized.")
+        public UninitializedGraphException() : base($"Graph is uninitialized.")
         {
         }
     }

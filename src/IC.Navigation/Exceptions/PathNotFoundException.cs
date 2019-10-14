@@ -6,9 +6,9 @@ using System.Text;
 
 namespace IC.Navigation.Exceptions
 {
-    public class PathNotFound : Exception
+    public class PathNotFoundException : Exception
     {
-        public PathNotFound(INavigable origin, INavigable destination) 
+        public PathNotFoundException(INavigable origin, INavigable destination) 
             : base($"No path was found between \"{origin.GetType().FullName}\" and \"{destination.GetType().FullName}\".")
         {
         }
