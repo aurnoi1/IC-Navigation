@@ -20,7 +20,7 @@ namespace IC.Navigation.Interfaces
         HashSet<INavigable> Nodes { get; }
 
         /// <summary>
-        /// The Cancellation Token used to cancel all the running navigation tasks.
+        /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
         /// </summary>
         CancellationToken GlobalCancellationToken { get; set; }
 

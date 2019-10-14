@@ -46,7 +46,7 @@ namespace IC.Navigation
         public abstract HashSet<INavigable> Nodes { get; }
 
         /// <summary>
-        /// The Cancellation Token used to cancel all the running navigation tasks.
+        /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
         /// </summary>
         public abstract CancellationToken GlobalCancellationToken { get; set; }
 
@@ -158,14 +158,16 @@ namespace IC.Navigation
         /// Wait for any EntryPoints to exists.
         /// The amount of time to wait is defined by each INavigable.WaitForExists().
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The first INavigable found.</returns>
         /// <exception cref="OperationCanceledException">Throw when the operation has been canceled.</exception>
         /// <exception cref="EntryPointsNotFoundException">Throw when no EntryPoint has been found.</exception>
-        public virtual INavigable WaitForEntryPoints(CancellationToken cancellationToken)
+        public virtual INavigable WaitForEntryPoints(CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return GetFirstINavigableExisting(EntryPoints.ToList(), cancellationToken);
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
+            return GetFirstINavigableExisting(EntryPoints.ToList(), localCancellationToken);
         }
 
         /// <summary>
@@ -196,14 +198,19 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="action">The action to execute.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        public virtual INavigable Do(INavigable origin, Action action, CancellationToken cancellationToken)
+        public virtual INavigable Do(
+            INavigable origin, 
+            Action action, 
+            CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, "origin", cancellationToken);
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
+            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
             action.Invoke();
-            WaitUntilNavigableExists(origin, "origin", cancellationToken);
+            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
             return origin;
         }
 
@@ -213,22 +220,24 @@ namespace IC.Navigation
         /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
         /// <param name="origin">The INvagable set as origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The INavigable returns by the Function.</returns>
         public virtual INavigable Do<T>(
             INavigable origin,
             Func<INavigable> function,
-            CancellationToken cancellationToken) where T : INavigable
+            CancellationToken cancellationToken = default) where T : INavigable
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, "origin", cancellationToken);
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
+            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
             INavigable retINavigable = function.Invoke();
             if (typeof(T) != retINavigable.GetType())
             {
                 throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }
 
-            WaitUntilNavigableExists(retINavigable, "destination", cancellationToken);
+            WaitUntilNavigableExists(retINavigable, "destination", localCancellationToken);
             return retINavigable;
         }
 
@@ -238,16 +247,18 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="actionToNextINavigable">A Dictionary of UI actions to step to the next Navigable.</param>
         /// <param name="nextNavigable">The next INavigable.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The next INavigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next INavigable (in case of Resolve() for example). </returns>
         public virtual INavigable StepToNext(
             Dictionary<INavigable,
             Action<CancellationToken>> actionToNextINavigable,
             INavigable nextNavigable,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
             var navigableAndAction = actionToNextINavigable.Where(x => x.Key == nextNavigable).SingleOrDefault();
             if (navigableAndAction.Key == null)
             {
@@ -255,10 +266,10 @@ namespace IC.Navigation
             }
 
             var actionToOpen = navigableAndAction.Value;
-            actionToOpen.Invoke(cancellationToken);
+            actionToOpen.Invoke(localCancellationToken);
             if (gotoDestination != null)
             {
-                WaitUntilNavigableExists(nextNavigable, "neighbor to open", cancellationToken);
+                WaitUntilNavigableExists(nextNavigable, "neighbor to open", localCancellationToken);
                 return nextNavigable;
             }
             else
@@ -272,15 +283,19 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The destination.</returns>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
-        public virtual INavigable GoTo(INavigable origin, INavigable destination, CancellationToken cancellationToken)
+        public virtual INavigable GoTo(
+            INavigable origin, 
+            INavigable destination, 
+            CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
             if (Graph == null) { throw new UninitializedGraphException(); }
-            WaitUntilNavigableExists(origin, "origin", cancellationToken);
+            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -298,7 +313,7 @@ namespace IC.Navigation
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    StepToNext(currentNode.GetActionToNext(), nextNode, cancellationToken);
+                    StepToNext(currentNode.GetActionToNext(), nextNode, localCancellationToken);
                 }
                 else
                 {
@@ -317,12 +332,14 @@ namespace IC.Navigation
         /// <summary>
         /// Back to the previous INavigable.
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous INavigable.</returns>
-        public virtual INavigable Back(CancellationToken cancellationToken)
+        public virtual INavigable Back(CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            return GoTo(Last, Previous, cancellationToken);
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
+            return GoTo(Last, Previous, localCancellationToken);
         }
 
         /// <summary>
@@ -347,13 +364,18 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken)
+        public virtual INavigable Resolve(
+            INavigable origin, 
+            IOnActionAlternatives onActionAlternatives, 
+            CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives, cancellationToken);
-            return GoTo(newOrigin, gotoDestination, cancellationToken);
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
+            var newOrigin = GetINavigableAfterAction(origin, onActionAlternatives, localCancellationToken);
+            return GoTo(newOrigin, gotoDestination, localCancellationToken);
         }
 
         /// <summary>
@@ -364,19 +386,21 @@ namespace IC.Navigation
         /// <param name="origin">The origin before Action invocation.</param>
         /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
         /// <param name="waypoint">An INavigable waypoint to cross if the expected INavigable is not cross during the resolution.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(
             INavigable origin,
             IOnActionAlternatives onActionAlternatives,
             INavigable waypoint,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
 
             // gotoDestination will be reset with the first call to GoTo().
             var finalDestination = gotoDestination;
-            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives, cancellationToken);
+            var navigableAfterAction = GetINavigableAfterAction(origin, onActionAlternatives, localCancellationToken);
             if (navigableAfterAction == finalDestination)
             {
                 return navigableAfterAction;
@@ -384,8 +408,8 @@ namespace IC.Navigation
             else
             {
                 // Force to pass by waypoint.
-                GoTo(navigableAfterAction, waypoint, cancellationToken);
-                return GoTo(waypoint, finalDestination, cancellationToken);
+                GoTo(navigableAfterAction, waypoint, localCancellationToken);
+                return GoTo(waypoint, finalDestination, localCancellationToken);
             }
         }
 
@@ -394,18 +418,20 @@ namespace IC.Navigation
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
         public virtual INavigable GetINavigableAfterAction(
             INavigable origin,
             IOnActionAlternatives onActionAlternatives,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, "origin", cancellationToken);
+            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
+            localCancellationToken.ThrowIfCancellationRequested();
+            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
             INavigable match = null;
-            onActionAlternatives.AlternativateAction.Invoke(cancellationToken);
-            match = GetFirstINavigableExisting(onActionAlternatives.INavigables, cancellationToken);
+            onActionAlternatives.AlternativateAction.Invoke(localCancellationToken);
+            match = GetFirstINavigableExisting(onActionAlternatives.INavigables, localCancellationToken);
             return match;
         }
 
@@ -487,8 +513,8 @@ namespace IC.Navigation
 
         /// <summary>
         /// Select the CancellationToken to use for a task.
-        /// If the local token is not <c>null</c> it will we used,
-        /// otherwise the GlobalCancellationToken will be used if not <c>null</c>.
+        /// If the local token is not <c>None</c> it will we used,
+        /// otherwise the GlobalCancellationToken will be used if not <c>None</c>.
         /// </summary>
         /// <param name="localToken"></param>
         /// <returns></returns>
@@ -496,12 +522,13 @@ namespace IC.Navigation
         /// <exception cref="UninitializedGlobalCancellationTokenException">Thrown when the GlobalCancellationToken is unitialized.</exception>
         private CancellationToken SelectCancellationToken(CancellationToken localToken)
         {
-            if (localToken != null)
+            localToken.ThrowIfCancellationRequested();
+            if (localToken != null || localToken != CancellationToken.None)
             {
                 return localToken;
             }
 
-            if (GlobalCancellationToken == null)
+            if (GlobalCancellationToken == null || GlobalCancellationToken == CancellationToken.None)
             {
                 throw new UninitializedGlobalCancellationTokenException();
             }
