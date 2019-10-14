@@ -23,7 +23,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <exception cref="TimeoutException">Throw when timeout is reached before WebElement is found.</exception>
         public static T Find<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             TimeSpan timeout) where T : IWebElement
         {
             using (var cts = new CancellationTokenSource(timeout))
@@ -47,7 +47,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
         public static T Find<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             CancellationToken cancellationToken) where T : IWebElement
         {
             var elmt = Get(driver, searchParam, cancellationToken);
@@ -67,7 +67,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="driver">This AppiumDriver<IWebElement>.</param>
         /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
-        public static T Get<T>(this AppiumDriver<T> driver, ISearchParam searchParam) where T : IWebElement
+        public static T Get<T>(this AppiumDriver<T> driver, ISearchParam<T> searchParam) where T : IWebElement
         {
             return FindFirstElement(driver, searchParam);
         }
@@ -82,7 +82,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public static T Get<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             TimeSpan timeout) where T : IWebElement
         {
             using (var cts = new CancellationTokenSource(timeout))
@@ -101,7 +101,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public static T Get<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             CancellationToken cancellationToken) where T : IWebElement
         {
             while (!cancellationToken.IsCancellationRequested)
@@ -126,7 +126,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public static T GetWhen<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             TimeSpan timeout,
             string attributeName,
             string expectedAttributeValue) where T : IWebElement
@@ -148,7 +148,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public static T GetWhen<T>(
            this AppiumDriver<T> driver,
-           ISearchParam searchParam,
+           ISearchParam<T> searchParam,
            TimeSpan timeout,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
         {
@@ -168,7 +168,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public static T GetWhen<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             TimeSpan timeout,
             Dictionary<string, string> expectedAttribsNamesValues) where T : IWebElement
         {
@@ -194,7 +194,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public static T GetWhen<T>(
             this AppiumDriver<T> driver,
-            ISearchParam searchParam,
+            ISearchParam<T> searchParam,
             CancellationToken cancellationToken,
             string attributeName,
             string expectedAttributeValue) where T : IWebElement
@@ -217,7 +217,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public static T GetWhen<T>(
            this AppiumDriver<T> driver,
-           ISearchParam searchParam,
+           ISearchParam<T> searchParam,
            CancellationToken cancellationToken,
            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
         {
@@ -238,7 +238,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public static T GetWhen<T>(
            this AppiumDriver<T> driver,
-           ISearchParam searchParam,
+           ISearchParam<T> searchParam,
            CancellationToken cancellationToken,
            Dictionary<string, string> expectedAttribsNamesValues) where T : IWebElement
         {
@@ -254,7 +254,7 @@ namespace IC.Navigation.Extensions.Appium
 
         #region Private
 
-        private static T FindFirstElement<T>(AppiumDriver<T> driver, ISearchParam searchParam) where T : IWebElement
+        private static T FindFirstElement<T>(AppiumDriver<T> driver, ISearchParam<T> searchParam) where T : IWebElement
         {
             return driver.FindElements(searchParam.Locator, searchParam.Value).FirstOrDefault();
         }

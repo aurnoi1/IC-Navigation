@@ -3,6 +3,7 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -23,19 +24,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find the title of this page.
         /// </summary>
         [Aliases("title")]
-        public SearchParam UILblTitleParam => new SearchParam(WDLocators.AutomationId, "TitleBlue");
+        public SearchParam<WindowsElement> UILblTitleParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleBlue", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
+        public SearchParam<WindowsElement> UIBtnBackParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam BtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchParam<WindowsElement> BtnOpenYellowViewParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         #endregion Controls
 

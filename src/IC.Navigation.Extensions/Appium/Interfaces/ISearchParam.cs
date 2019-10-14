@@ -1,6 +1,9 @@
-﻿namespace IC.Navigation.Extensions.Appium.Interfaces
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Appium;
+
+namespace IC.Navigation.Extensions.Appium.Interfaces
 {
-    public interface ISearchParam
+    public interface ISearchParam<T> where T : IWebElement
     {
         /// <summary>
         /// Locator to find the WindowsElement.
@@ -11,5 +14,7 @@
         /// Value of the parameter.
         /// </summary>
         string Value { get; set; }
+
+        public AppiumDriver<T> AppiumDriver { get; set; }
     }
 }

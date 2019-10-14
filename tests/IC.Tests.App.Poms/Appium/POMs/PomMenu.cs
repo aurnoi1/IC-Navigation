@@ -1,8 +1,10 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.Interfaces;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -23,37 +25,37 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
         [Aliases("not implemented")]
-        public SearchParam UIBtnNotImplementedParam => new SearchParam(WDLocators.AutomationId, "NotImplemented");
+        public SearchParam<WindowsElement> UIBtnNotImplementedParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "NotImplemented", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleMenu");
+        public SearchParam<WindowsElement> UITitleParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleMenu", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the BlueView.
         /// </summary>
         [Aliases("button to open the blue page")]
-        public SearchParam UIBtnOpenBlueViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenBlueView");
+        public SearchParam<WindowsElement> UIBtnOpenBlueViewParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenBlueView", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the red page")]
-        public SearchParam UIBtnOpenRedViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenRedView");
+        public SearchParam<WindowsElement> UIBtnOpenRedViewParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenRedView", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam UIBtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchParam<WindowsElement> UIBtnOpenYellowViewParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         /// <summary>
         /// WDSearchParam to find a control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public SearchParam UITxtBoxImportantMessageParam => new SearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
+        public SearchParam<WindowsElement> UITxtBoxImportantMessageParam => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TxtBoxImportantMessage", session.WindowsDriver);
 
         #endregion Controls
 

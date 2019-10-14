@@ -47,6 +47,13 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
+        public void AAAAAA()
+        {
+            sut.PomMenu.UIBtnOpenBlueViewParam.Get().Click();
+            throw new NotImplementedException("see issue #27");
+        }
+
+        [Fact]
         public void FullExample()
         {
             // Set the GlobalCancellationToken used for the time of the Navigation session.
