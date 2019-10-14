@@ -25,17 +25,18 @@ namespace IC.Navigation.UITests
             sut = new AppiumContext().SUT;
             wd = sut.WindowsDriver;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
-            cts = new CancellationTokenSource();
+            globalCts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            sut.GlobalCancellationToken = globalCts.Token;
         }
 
         #region Properties
 
         #region Private
 
-        private IFacade sut;
-        private IFixture fixture;
-        private WindowsDriver<WindowsElement> wd;
-        private CancellationTokenSource cts;
+        private readonly IFacade sut;
+        private readonly IFixture fixture;
+        private readonly WindowsDriver<WindowsElement> wd;
+        private CancellationTokenSource globalCts;
 
         #endregion Private
 
@@ -48,12 +49,14 @@ namespace IC.Navigation.UITests
         [Fact]
         public void FullExample()
         {
+            // Set the GlobalCancellationToken used for the time of the Navigation session.
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            sut.GlobalCancellationToken = cts.Token;
             sut.Last
                 .GoTo(sut.PomYellow)
                 .Do<PomMenu>(() =>
                 {
-                    // Create a Linked CancellationTokenSource to limit the current scope
-                    // while the global ct is still running. First one to cancel will stop this scope.
+                    // Add a timeout in concurence of GlobalCancellationToken;
                     return sut.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(3));
                 })
                 .GoTo(sut.PomBlue) // Force the path to PomBlue then PomYellow...
@@ -70,6 +73,25 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.EntryPoint); // The entry point.
 
             Assert.True(sut.Historic.ElementAt(0).Exists());
+        }
+
+        [Fact]
+        public void GlobalCancellationToken_Should_Interrupt_Navigation()
+        {
+            using var testTimeout = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            sut.GlobalCancellationToken = cts.Token;
+            Assert.Throws<OperationCanceledException>(() =>
+            {
+                while (!testTimeout.IsCancellationRequested)
+                {
+                    sut.Last
+                    .GoTo(sut.PomYellow)
+                    .GoTo(sut.Previous);
+                }
+            });
+
+            Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
         }
 
         [Fact]
@@ -159,9 +181,11 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldOpenViewMenuFromYellowViewByOpenViewMenuDirectly()
         {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
+            sut.GlobalCancellationToken = cts.Token;
             sut.Last
                 .GoTo(sut.PomYellow)
-                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(10)));
+                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(5)));
 
             Assert.True(sut.PomMenu.Exists());
         }
@@ -198,7 +222,7 @@ namespace IC.Navigation.UITests
         public void Dispose()
         {
             sut?.Dispose();
-            cts?.Dispose();
+            globalCts?.Dispose();
         }
 
         #endregion Public
