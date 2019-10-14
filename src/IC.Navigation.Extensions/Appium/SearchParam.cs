@@ -19,6 +19,6 @@ namespace IC.Navigation.Extensions.Appium
 
         public string Locator { get; set; }
         public string Value { get; set; }
-        public AppiumDriver<T> AppiumDriver { get; set; }
+        public AppiumDriver<T> AppiumDriver { get; private set; }
     }
 }

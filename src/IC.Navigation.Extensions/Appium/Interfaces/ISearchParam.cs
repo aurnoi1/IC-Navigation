@@ -15,6 +15,6 @@ namespace IC.Navigation.Extensions.Appium.Interfaces
         /// </summary>
         string Value { get; set; }
 
-        public AppiumDriver<T> AppiumDriver { get; set; }
+        public AppiumDriver<T> AppiumDriver { get; }
     }
 }
