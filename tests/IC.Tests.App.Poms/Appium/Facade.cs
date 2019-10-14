@@ -6,6 +6,7 @@ using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium
 {
@@ -55,6 +56,11 @@ namespace IC.Tests.App.Poms.Appium
         /// The WindowsDriver used to connect to the application.
         /// </summary>
         public WindowsDriver<WindowsElement> WindowsDriver { get; private set; }
+
+        /// <summary>
+        /// The Cancellation Token used to cancel all the running navigation tasks.
+        /// </summary>
+        public override CancellationToken GlobalCancellationToken { get; set; }
 
         /// <summary>
         /// Get the Graph containing the INavigables.

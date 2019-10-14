@@ -20,6 +20,11 @@ namespace IC.Navigation.Interfaces
         HashSet<INavigable> Nodes { get; }
 
         /// <summary>
+        /// The Cancellation Token used to cancel all the running navigation tasks.
+        /// </summary>
+        CancellationToken GlobalCancellationToken { get; set; }
+
+        /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>

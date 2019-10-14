@@ -46,6 +46,11 @@ namespace IC.Navigation
         public abstract HashSet<INavigable> Nodes { get; }
 
         /// <summary>
+        /// The Cancellation Token used to cancel all the running navigation tasks.
+        /// </summary>
+        public abstract CancellationToken GlobalCancellationToken { get; set; }
+
+        /// <summary>
         /// The INavigables to be expected as entry points when the application start.
         /// </summary>
         public abstract HashSet<INavigable> EntryPoints { get; protected set; }
