@@ -203,13 +203,13 @@ namespace IC.Navigation
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(
             INavigable origin, 
-            Action action, 
+            Action<CancellationToken> action, 
             CancellationToken cancellationToken = default)
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
             WaitUntilNavigableExists(origin, "origin", localCancellationToken);
-            action.Invoke();
+            action.Invoke(localCancellationToken);
             WaitUntilNavigableExists(origin, "origin", localCancellationToken);
             return origin;
         }
@@ -225,13 +225,13 @@ namespace IC.Navigation
         /// <returns>The INavigable returns by the Function.</returns>
         public virtual INavigable Do<T>(
             INavigable origin,
-            Func<INavigable> function,
+            Func<CancellationToken, INavigable> function,
             CancellationToken cancellationToken = default) where T : INavigable
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
             WaitUntilNavigableExists(origin, "origin", localCancellationToken);
-            INavigable retINavigable = function.Invoke();
+            INavigable retINavigable = function.Invoke(localCancellationToken);
             if (typeof(T) != retINavigable.GetType())
             {
                 throw new UnexpectedNavigableException(typeof(T), retINavigable);
