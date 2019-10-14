@@ -40,7 +40,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueView()
         {
-            Assert.Equal("BtnOpenBlueView", wd.Get(sut.PomMenu.UIBtnOpenBlueView, ct).GetAttribute("AutomationId"));
+            Assert.Equal("BtnOpenBlueView", wd.Get(sut.PomMenu.UIBtnOpenBluePage, ct).GetAttribute("AutomationId"));
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindMenuTitle()
         {
-            Assert.Equal("TitleMenu", wd.Get(sut.PomMenu.UITitleParam, ct).GetAttribute("AutomationId"));
+            Assert.Equal("TitleMenu", wd.Get(sut.PomMenu.UITitle, ct).GetAttribute("AutomationId"));
         }
 
         [Fact]
@@ -66,14 +66,14 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldOpenBlueView()
         {
-            wd.Get(sut.PomMenu.UIBtnOpenBlueView, ct).Click();
+            wd.Get(sut.PomMenu.UIBtnOpenBluePage, ct).Click();
             Assert.True(sut.PomBlue.Exists());
         }
 
         [Fact]
         public void ShouldOpenRedView()
         {
-            wd.Get(sut.PomMenu.UIBtnOpenRedViewP, ct).Click();
+            wd.Get(sut.PomMenu.UIBtnOpenRedPage, ct).Click();
             Assert.True(sut.PomRed.Exists());
         }
 

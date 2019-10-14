@@ -12,9 +12,9 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class AppiumDriverExTests : IDisposable
+    public class SearchParamExTests : IDisposable
     {
-        public AppiumDriverExTests()
+        public SearchParamExTests()
         {
             sut = new AppiumContext().SUT;
             globalCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
@@ -45,7 +45,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.WindowsDriver.Find(sut.PomMenu.UITitleParam, TimeSpan.FromSeconds(10));
+                title = sut.PomMenu.UITitle.Find(TimeSpan.FromSeconds(10));
             });
 
             // Assert
@@ -72,7 +72,7 @@ namespace IC.Navigation.UITests
         {
             // Act
             Assert.Throws<TimeoutException>(() =>
-                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplemented, TimeSpan.Zero));
+                        sut.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
         }
 
         [Fact]
@@ -82,7 +82,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 Assert.Throws<TimeoutException>(() =>
-                sut.WindowsDriver.Find(sut.PomMenu.UITitleParam, TimeSpan.Zero));
+                    sut.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
             });
         }
 
@@ -95,7 +95,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam);
+                title = sut.WindowsDriver.Get(sut.PomMenu.UITitle);
             });
 
             // Assert
@@ -131,7 +131,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam, timeout);
+                title = sut.WindowsDriver.Get(sut.PomMenu.UITitle, timeout);
                 stopwatch.Stop();
             });
 
@@ -156,7 +156,7 @@ namespace IC.Navigation.UITests
                 stopwatch.Start();
                 using (var cts = new CancellationTokenSource())
                 {
-                    title = sut.WindowsDriver.Get(sut.PomMenu.UITitleParam, cts.Token);
+                    title = sut.WindowsDriver.Get(sut.PomMenu.UITitle, cts.Token);
                 }
 
                 stopwatch.Stop();
@@ -172,7 +172,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
@@ -192,7 +192,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
@@ -209,7 +209,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
@@ -229,7 +229,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
@@ -249,7 +249,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Many_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
@@ -272,7 +272,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
@@ -395,7 +395,7 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(3);
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
@@ -421,7 +421,7 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(3);
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
@@ -452,7 +452,7 @@ namespace IC.Navigation.UITests
             var expectedElapse = TimeSpan.FromSeconds(5);
             var expectedCancellationTimeout = TimeSpan.FromSeconds(2);
             int cancellationTimeoutMS = Convert.ToInt32(expectedCancellationTimeout.TotalMilliseconds);
-            var param = sut.PomMenu.UITitleParam;
+            var param = sut.PomMenu.UITitle;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;

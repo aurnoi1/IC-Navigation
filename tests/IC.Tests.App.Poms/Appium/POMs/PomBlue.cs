@@ -36,7 +36,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchParam to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam<WindowsElement> BtnOpenYellowView => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
+        public SearchParam<WindowsElement> BtnOpenYellowPage => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         #endregion Controls
 
@@ -61,7 +61,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
                 { session.PomMenu, (ct) => session.WindowsDriver.Find(UIBtnBack, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Find(BtnOpenYellowView, ct).Click() },
+                { session.PomYellow, (ct) => session.WindowsDriver.Find(BtnOpenYellowPage, ct).Click() },
             };
         }
     }

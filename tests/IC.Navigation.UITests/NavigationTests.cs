@@ -49,7 +49,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void AAAAAA()
         {
-            sut.PomMenu.UIBtnOpenBlueView.Get().Click();
+            sut.PomMenu.UIBtnOpenBluePage.Get().Click();
             throw new NotImplementedException("see issue #27");
         }
 
