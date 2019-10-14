@@ -27,7 +27,7 @@ namespace IC.Navigation.UITests.Configs
         {
             var splited = Environment.CurrentDirectory.Split('\\').ToList();
             var build = splited.ElementAt(splited.IndexOf("bin") + 1);
-            var testsDir = Environment.CurrentDirectory.Replace($@"IC.Navigation.UITests\bin\{build}\netcoreapp2.1", "");
+            var testsDir = Environment.CurrentDirectory.Replace($@"IC.Navigation.UITests\bin\{build}\netcoreapp3.0", "");
             string path = $@"{testsDir}IC.Tests.App\bin\{build}\IC.Tests.App.exe";
             if (!File.Exists(path))
             {

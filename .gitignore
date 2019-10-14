@@ -328,3 +328,6 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# Features.cs files from Specflow
+tests/IC.Navigation.UITests/Specflow/Features/*.cs
