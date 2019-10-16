@@ -1,7 +1,9 @@
 ﻿using IC.Navigation.Extensions.Appium.Interfaces;
+using IC.Navigation.Extensions.Exceptions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
@@ -13,23 +15,29 @@ namespace IC.Navigation.Extensions.Appium
         {
         }
 
-        public SearchParam(string locator, string value, AppiumDriver<T> appiumDriver)
+        public SearchParam(
+            string locator,
+            string value,
+            AppiumDriver<T> appiumDriver,
+            CancellationToken defaultCancellationToken = default)
         {
             Locator = locator;
             Value = value;
             AppiumDriver = appiumDriver;
+            DefaultCancellationToken = defaultCancellationToken;
         }
 
         public string Locator { get; set; }
         public string Value { get; set; }
         public AppiumDriver<T> AppiumDriver { get; private set; }
 
+        public CancellationToken DefaultCancellationToken { get; private set; }
+
         /// <summary>
         /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="searchParam">This SearchParam.</param>
-        /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the control to be found.
+        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The first matching WebElement.</returns>
         /// <exception cref="TimeoutException">Thrown when timeout is reached before WebElement is found.</exception>
         public T Find(TimeSpan timeout)
@@ -47,8 +55,6 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="searchParam">This SearchParam.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public T Get()
         {
@@ -58,13 +64,14 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="searchParam">This SearchParam.</param>
-        /// <param name="cancellationToken">The CancellationToken used to stop waiting for the control to be found.</param>
+        /// <param name="cancellationTokens">The CancellationTokens used to stop waiting for the control to be found.
+        /// They will be linked to the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
-        public T Get(CancellationToken cancellationToken)
+        public T Get(params CancellationToken[] cancellationTokens)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            var linkedTokens = LinkCancellationTokens(cancellationTokens);
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
+            while (!linkedTokenSource.IsCancellationRequested)
             {
                 var match = FindFirstElement();
                 if (match != null) return match;
@@ -74,6 +81,24 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         #region Private
+
+        private CancellationToken[] LinkCancellationTokens(params CancellationToken[] cancellationTokens)
+        {
+            throw new NotImplementedException("To Test");
+            var linkedTokens = new List<CancellationToken>();
+            if (cancellationTokens.Length == 0 && DefaultCancellationToken == null)
+            {
+                throw new UninitializedDefaultCancellationTokenException();
+            }
+
+            if (DefaultCancellationToken != CancellationToken.None)
+            {
+                linkedTokens.Add(DefaultCancellationToken);
+            }
+
+            linkedTokens.AddRange(cancellationTokens);
+            return linkedTokens.ToArray();
+        }
 
         private T FindFirstElement()
         {

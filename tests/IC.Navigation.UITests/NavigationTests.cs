@@ -49,8 +49,9 @@ namespace IC.Navigation.UITests
         [Fact]
         public void AAAAAA()
         {
-            sut.PomMenu.UIBtnOpenBluePage.Get().Click();
-            throw new NotImplementedException("see issue #27");
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            sut.PomMenu.UIBtnOpenBluePage.Get(cts.Token).Click();
+            //throw new NotImplementedException("see issue #27");
         }
 
         [Fact]

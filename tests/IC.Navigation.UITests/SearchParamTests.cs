@@ -12,9 +12,9 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class SearchParamExTests : IDisposable
+    public class SearchParamTests : IDisposable
     {
-        public SearchParamExTests()
+        public SearchParamTests()
         {
             sut = new AppiumContext().SUT;
             globalCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));

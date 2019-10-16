@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using System.Threading;
 
 namespace IC.Navigation.Extensions.Appium.Interfaces
 {
@@ -15,6 +16,14 @@ namespace IC.Navigation.Extensions.Appium.Interfaces
         /// </summary>
         string Value { get; set; }
 
+        /// <summary>
+        /// The AppiumDriver used to find the WindowsElement.
+        /// </summary>
         public AppiumDriver<T> AppiumDriver { get; }
+
+        /// <summary>
+        /// The default CancelleationToken to interrupt a search of the WindowsElement.
+        /// </summary>
+        CancellationToken DefaultCancellationToken { get; }
     }
 }
