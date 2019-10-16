@@ -3,6 +3,7 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,34 +12,31 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     [Aliases("red page")]
     public class PomRed : PomBase
-    {
-        private readonly IFacade session;
-
+    {        
         public PomRed(in IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 
         #region Controls
 
         /// <summary>
-        /// WDSearchParam to find the tile of this page.
+        /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleRed");
+        public SearchProperties<WindowsElement> UITitle => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TitleRed", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the previous page.
+        /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
+        public SearchProperties<WindowsElement> UIBtnBack => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the yellow page.
+        /// WDSearchProperties to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam UIBtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchProperties<WindowsElement> UIBtnOpenYellowPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         #endregion Controls
 
@@ -47,7 +45,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
+            bool isDisplayed = UITitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -62,8 +60,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => session.WindowsDriver.Find(UIBtnBackParam, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Find(UIBtnOpenYellowViewParam, ct).Click() },
+                { session.PomMenu, (ct) => UIBtnBack.Find(ct).Click() },
+                { session.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
             };
         }
     }

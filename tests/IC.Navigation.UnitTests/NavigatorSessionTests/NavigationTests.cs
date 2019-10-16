@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Exceptions;
+using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;
 using System;
@@ -9,15 +10,18 @@ using Xunit;
 
 namespace IC.Navigation.UnitTests.NavigatorSessionTests
 {
-    public class NavigationTests : IDisposable
+    public class NavigationTests
     {
-        private readonly CancellationTokenSource cts;
-        private readonly CancellationToken ct;
-
         public NavigationTests()
         {
-            cts = new CancellationTokenSource();
-            ct = cts.Token;
+        }
+
+        [Fact]
+        public void WaitForEntryPoints_Should_Throws_UninitializedGlobalCancellationTokenException()
+        {
+            var sut = new Mock<NavigatorSession>();
+            sut.CallBase = true; // Ensure to call default implementation of virtual members.
+            Assert.Throws<UninitializedGlobalCancellationTokenException>(() => sut.Object.WaitForEntryPoints());
         }
 
 #pragma warning disable xUnit1026
@@ -45,6 +49,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
         [ClassData(typeof(StraightPathData))]
         public void GoTo_Should_Follow_Resolved_Paths(HashSet<INavigable> _, Mock<INavigable> origin, Mock<INavigable> destination, List<Mock<INavigable>> expected)
         {
+            using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
             var expectedToList = expected.Select(x => x.Object).ToList();
             Mock<IGraph> iGraph = new Mock<IGraph>();
             iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
@@ -58,14 +63,9 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
                 node.Setup(n => n.PublishStatus().Exists).Returns(true);
             }
 
-            var actual = sut.Object.GoTo(origin.Object, destination.Object, ct);
+            var actual = sut.Object.GoTo(origin.Object, destination.Object, cts.Token);
             Assert.Equal(expected.Last().Object, actual);
             iGraph.Verify(x => x.GetShortestPath(origin.Object, destination.Object), Times.Exactly(1));
-        }
-
-        public void Dispose()
-        {
-            cts?.Dispose();
         }
     }
 }

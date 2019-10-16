@@ -6,11 +6,16 @@ using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium
 {
     public class Facade : NavigatorSession, IFacade
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Facade"/> class.
+        /// </summary>
+        /// <param name="appiumSession">The AppiumSession.</param>
         public Facade(IAppiumSession appiumSession)
         {
             Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
@@ -18,13 +23,18 @@ namespace IC.Tests.App.Poms.Appium
             WindowsDriver = appiumSession.WindowsDriver;
             EntryPoints = new HashSet<INavigable>() { PomMenu };
         }
-
-        public Facade(WindowsDriver<WindowsElement> winDriver, HashSet<INavigable> entryPoints, double thinkTime)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Facade"/> class.
+        /// </summary>
+        /// <param name="appiumSession">The AppiumSession.</param>
+        /// <param name="globalCancellationToken">The GlobalCancellationToken.</param>
+        public Facade(IAppiumSession appiumSession, CancellationToken globalCancellationToken)
         {
             Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
-            WindowsDriver = winDriver;
-            EntryPoints = entryPoints;
+            WindowsDriver = appiumSession.WindowsDriver;
+            EntryPoints = new HashSet<INavigable>() { PomMenu };
+            GlobalCancellationToken = globalCancellationToken;
         }
 
         #region Properties
@@ -55,6 +65,11 @@ namespace IC.Tests.App.Poms.Appium
         /// The WindowsDriver used to connect to the application.
         /// </summary>
         public WindowsDriver<WindowsElement> WindowsDriver { get; private set; }
+
+        /// <summary>
+        /// The Cancellation Token used to cancel all the running navigation tasks.
+        /// </summary>
+        public override CancellationToken GlobalCancellationToken { get; set; }
 
         /// <summary>
         /// Get the Graph containing the INavigables.

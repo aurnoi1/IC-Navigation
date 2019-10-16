@@ -9,7 +9,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public abstract class PomBase : INavigable
     {
-        private readonly IFacade session;
+        protected private readonly IFacade session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
         private PomBase()

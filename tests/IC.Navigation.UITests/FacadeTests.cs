@@ -1,17 +1,8 @@
-using AutoFixture;
-using AutoFixture.AutoMoq;
-using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
-using IC.Tests.App.Poms.Appium.Interfaces;
+using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.POMs;
-using Moq;
-using OpenQA.Selenium.Appium.Windows;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using Xunit;
 
@@ -40,6 +31,20 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
+        public void Constructor_Should_Set_GlobalCancellationToken()
+        {
+            //Arrange
+            var appiumSession = appContext.GetAppiumSession();
+            using var cts = new CancellationTokenSource();
+
+            // Act
+            using Facade facade = new Facade(appiumSession, cts.Token);
+
+            // Assert
+            Assert.Equal(cts.Token, facade.GlobalCancellationToken);
+        }
+
+        [Fact]
         public void WaitForEntryPoints_With_CToken_Should_Returns_Found_EntryPoint()
         {
             var expected = typeof(PomMenu);
@@ -47,7 +52,7 @@ namespace IC.Navigation.UITests
             using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
             using (var sut = appContext.GetFacade())
             {
-               actual = sut.WaitForEntryPoints(cts.Token);
+                actual = sut.WaitForEntryPoints(cts.Token);
             }
 
             Assert.Equal(expected, actual.GetType());

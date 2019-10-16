@@ -1,8 +1,10 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.Interfaces;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -12,51 +14,48 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("menu page")]
     public class PomMenu : PomBase
     {
-        private readonly IFacade session;
-
         public PomMenu(in IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 
         #region Controls
 
         /// <summary>
-        /// WDSearchParam to find a control NOT IMPLEMENTED only use for negative test.
+        /// WDSearchProperties to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
         [Aliases("not implemented")]
-        public SearchParam UIBtnNotImplementedParam => new SearchParam(WDLocators.AutomationId, "NotImplemented");
+        public SearchProperties<WindowsElement> UIBtnNotImplemented => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "NotImplemented", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find the tile of this page.
+        /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleMenu");
+        public SearchProperties<WindowsElement> UITitle => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TitleMenu", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the BlueView.
+        /// WDSearchProperties to find a control to open the BlueView.
         /// </summary>
         [Aliases("button to open the blue page")]
-        public SearchParam UIBtnOpenBlueViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenBlueView");
+        public SearchProperties<WindowsElement> UIBtnOpenBluePage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenBlueView", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the RedView.
+        /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the red page")]
-        public SearchParam UIBtnOpenRedViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenRedView");
+        public SearchProperties<WindowsElement> UIBtnOpenRedPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenRedView", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the RedView.
+        /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam UIBtnOpenYellowViewParam => new SearchParam(WDLocators.AutomationId, "BtnOpenYellowView");
+        public SearchProperties<WindowsElement> UIBtnOpenYellowPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control where text can be enter.
+        /// WDSearchProperties to find a control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public SearchParam UITxtBoxImportantMessageParam => new SearchParam(WDLocators.AutomationId, "TxtBoxImportantMessage");
+        public SearchProperties<WindowsElement> UITxtBoxImportantMessage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TxtBoxImportantMessage", session.WindowsDriver);
 
         #endregion Controls
 
@@ -65,7 +64,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
+            bool isDisplayed = UITitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -80,9 +79,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomBlue, (ct) => session.WindowsDriver.Find(UIBtnOpenBlueViewParam, ct).Click() },
-                { session.PomRed, (ct) => session.WindowsDriver.Find(UIBtnOpenRedViewParam, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Find(UIBtnOpenYellowViewParam, ct).Click() },
+                { session.PomBlue, (ct) => UIBtnOpenBluePage.Find(ct).Click() },
+                { session.PomRed, (ct) => UIBtnOpenRedPage.Find(ct).Click() },
+                { session.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
             };
         }
 
@@ -92,7 +91,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <param name="text">The text to enter.</param>
         public void EnterText(string text)
         {
-            session.WindowsDriver.Get(UITxtBoxImportantMessageParam).SendKeys(text);
+            UITxtBoxImportantMessage.Get().SendKeys(text);
         }
     }
 }

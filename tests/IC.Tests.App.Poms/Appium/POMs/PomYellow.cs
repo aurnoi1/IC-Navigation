@@ -3,6 +3,7 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -12,33 +13,30 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("yellow page")]
     public class PomYellow : PomBase
     {
-        private readonly IFacade session;
-
-        public PomYellow(in IFacade session) : base(session)
+        public PomYellow(IFacade session) : base(session)
         {
-            this.session = session;
             RegisterObserver(session);
         }
 
         #region Controls
 
         /// <summary>
-        /// WDSearchParam to find the tile of this page.
+        /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam UITitleParam => new SearchParam(WDLocators.AutomationId, "TitleYellow");
+        public SearchProperties<WindowsElement> UITitle => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TitleYellow", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the previous page.
+        /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam UIBtnBackParam => new SearchParam(WDLocators.AutomationId, "BtnBack");
+        public SearchProperties<WindowsElement> UIBtnBack => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the previous page.
+        /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public SearchParam UIBtnOpenMenuPageParam => new SearchParam(WDLocators.AutomationId, "BtnOpenMenuView");
+        public SearchProperties<WindowsElement> UIBtnOpenMenuPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenMenuView", session.WindowsDriver);
 
         #endregion Controls
 
@@ -49,7 +47,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UITitleParam) != null;
+            bool isDisplayed = UITitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -75,12 +73,27 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Open the View Menu by clicking on UIBtnOpenMenuView.
         /// </summary>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="timeout">The timeout to interrupt the task as soon as possible in concurrence
+        /// of <see cref="Facade.GlobalCancellationToken"/>.</param>
         /// <returns>The ViewMenu.</returns>
-        public PomMenu OpenMenuByMenuBtn(CancellationToken ct)
+        public PomMenu OpenMenuByMenuBtn(TimeSpan timeout)
         {
-            session.WindowsDriver.Find(UIBtnOpenMenuPageParam, ct).Click();
-            return session.PomMenu;
+            CancellationTokenSource localCts = default;
+            try
+            {
+                localCts = new CancellationTokenSource(timeout);
+                using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
+                    session.GlobalCancellationToken, 
+                    localCts.Token);
+
+                UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
+                return session.PomMenu;
+            }
+            catch (Exception)
+            {
+                localCts?.Dispose();
+                throw;
+            }
         }
 
         #region Private
@@ -94,11 +107,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                session.WindowsDriver.Find(UIBtnBackParam, ct).Click();
+                UIBtnBack.Find(ct).Click();
             }
             else
             {
-                session.WindowsDriver.Find(UIBtnOpenMenuPageParam, ct).Click();
+                UIBtnOpenMenuPage.Find(ct).Click();
             }
         }
 
@@ -117,7 +130,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                (x) => session.WindowsDriver.Find(UIBtnBackParam, x).Click(),
+                (x) => UIBtnBack.Find(x).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives, ct);
