@@ -21,22 +21,22 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Controls
 
         /// <summary>
-        /// WDSearchParam to find the tile of this page.
+        /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchParam<WindowsElement> UITitle => new SearchParam<WindowsElement>(WDLocators.AutomationId, "TitleRed", session.WindowsDriver);
+        public SearchProperties<WindowsElement> UITitle => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TitleRed", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the previous page.
+        /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchParam<WindowsElement> UIBtnBack => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
+        public SearchProperties<WindowsElement> UIBtnBack => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
 
         /// <summary>
-        /// WDSearchParam to find a control to open the yellow page.
+        /// WDSearchProperties to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchParam<WindowsElement> UIBtnOpenYellowPage => new SearchParam<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
+        public SearchProperties<WindowsElement> UIBtnOpenYellowPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
 
         #endregion Controls
 

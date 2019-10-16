@@ -12,9 +12,9 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class SearchParamTests : IDisposable
+    public class SearchPropertiesTests : IDisposable
     {
-        public SearchParamTests()
+        public SearchPropertiesTests()
         {
             sut = new AppiumContext().SUT;
             globalCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
@@ -37,7 +37,7 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
-        public void Find_With_Timeout_Should_Returns_Control_Matching_SearchParam()
+        public void Find_With_Timeout_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
             WindowsElement title = default;
@@ -87,7 +87,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Get_Should_Returns_Control_Matching_SearchParam()
+        public void Get_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
             WindowsElement title = default;
@@ -119,7 +119,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Get_With_Timeout_Should_Returns_Control_Matching_SearchParam()
+        public void Get_With_Timeout_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
             WindowsElement title = default;
@@ -142,7 +142,7 @@ namespace IC.Navigation.UITests
         }
 
         [Fact]
-        public void Get_With_CToken_Should_Returns_Control_Matching_SearchParam()
+        public void Get_With_CToken_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
             WindowsElement title = default;

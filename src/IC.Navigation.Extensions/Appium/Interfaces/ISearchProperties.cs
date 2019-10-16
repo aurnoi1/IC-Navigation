@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace IC.Navigation.Extensions.Appium.Interfaces
 {
-    public interface ISearchParam<T> where T : IWebElement
+    public interface ISearchProperties<T> where T : IWebElement
     {
         /// <summary>
         /// Locator to find the WindowsElement.
@@ -22,7 +22,7 @@ namespace IC.Navigation.Extensions.Appium.Interfaces
         public AppiumDriver<T> AppiumDriver { get; }
 
         /// <summary>
-        /// The default CancelleationToken to interrupt a search of the WindowsElement.
+        /// The default CancellationToken to interrupt a search of the WindowsElement.
         /// </summary>
         CancellationToken DefaultCancellationToken { get; }
     }

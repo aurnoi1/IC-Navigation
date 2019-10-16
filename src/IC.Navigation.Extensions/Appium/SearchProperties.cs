@@ -9,13 +9,23 @@ using System.Threading;
 
 namespace IC.Navigation.Extensions.Appium
 {
-    public class SearchParam<T> : ISearchParam<T> where T : IWebElement
+    public class SearchProperties<T> : ISearchProperties<T> where T : IWebElement
     {
-        public SearchParam()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchProperties"/> class.
+        /// </summary>
+        public SearchProperties()
         {
         }
 
-        public SearchParam(
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchProperties"/> class.
+        /// </summary>
+        /// <param name="locator"></param>
+        /// <param name="value"></param>
+        /// <param name="appiumDriver"></param>
+        /// <param name="defaultCancellationToken"></param>
+        public SearchProperties(
             string locator,
             string value,
             AppiumDriver<T> appiumDriver,
@@ -27,16 +37,30 @@ namespace IC.Navigation.Extensions.Appium
             DefaultCancellationToken = defaultCancellationToken;
         }
 
+        /// <summary>
+        /// Locator to find the WindowsElement.
+        /// </summary>
         public string Locator { get; set; }
+
+        /// <summary>
+        /// Value of the parameter.
+        /// </summary>
         public string Value { get; set; }
+
+        /// <summary>
+        /// The AppiumDriver used to find the WindowsElement.
+        /// </summary>
         public AppiumDriver<T> AppiumDriver { get; private set; }
 
+        /// <summary>
+        /// The default CancellationToken to interrupt a search of the WindowsElement.
+        /// </summary>
         public CancellationToken DefaultCancellationToken { get; private set; }
 
         #region Find Methods
 
         /// <summary>
-        /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchProperties.
         /// </summary>
         /// <param name="cancellationTokens">The CancellationTokens used to stop waiting for the control to be found.
         /// They will be linked to the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -52,7 +76,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchProperties.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the control to be found.
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -79,7 +103,7 @@ namespace IC.Navigation.Extensions.Appium
         #region Get Methods
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties.
         /// </summary>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public T Get()
@@ -88,7 +112,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the control to be found.
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -102,7 +126,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties.
         /// </summary>
         /// <param name="cancellationTokens">The CancellationTokens used to stop waiting for the control to be found.
         /// They will be linked to the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -119,7 +143,7 @@ namespace IC.Navigation.Extensions.Appium
         #region GetWhen Methods
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties
         /// and when the condition is met.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
@@ -138,7 +162,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties
         /// and when the condition are met.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
@@ -154,7 +178,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties
         /// and when the condition are met.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
@@ -170,7 +194,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties
         /// and when the condition are met.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
@@ -190,7 +214,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties
         /// and when the condition are met.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
@@ -207,7 +231,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties
         /// and when the condition are met.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
