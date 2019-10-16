@@ -43,7 +43,9 @@ namespace IC.Navigation.Extensions.Appium
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
         public T Find(CancellationToken cancellationToken)
         {
-            var elmt = Get(cancellationToken);
+            var linkedTokens = LinkCancellationTokens(cancellationToken);
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
+            var elmt = Get(linkedTokenSource.Token);
             cancellationToken.ThrowIfCancellationRequested();
             return elmt;
         }
@@ -58,7 +60,9 @@ namespace IC.Navigation.Extensions.Appium
         public T Find(TimeSpan timeout)
         {
             using var cts = new CancellationTokenSource(timeout);
-            var elmt = Get(cts.Token);
+            var linkedTokens = LinkCancellationTokens(cts.Token);
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
+            var elmt = Get(linkedTokenSource.Token);
             if (cts.Token.IsCancellationRequested)
             {
                 throw new TimeoutException("The timeout has been reached.");
@@ -88,7 +92,9 @@ namespace IC.Navigation.Extensions.Appium
         public T Get(TimeSpan timeout)
         {
             using var cts = new CancellationTokenSource(timeout);
-            return Get(cts.Token);
+            var linkedTokens = LinkCancellationTokens(cts.Token);
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
+            return Get(linkedTokenSource.Token);
         }
 
         /// <summary>
@@ -101,14 +107,12 @@ namespace IC.Navigation.Extensions.Appium
         {
             var linkedTokens = LinkCancellationTokens(cancellationTokens);
             using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
-            while (!linkedTokenSource.IsCancellationRequested)
-            {
-                var match = FindFirstElement();
-                if (match != null) return match;
-            }
-
-            return default;
+            return Get(linkedTokenSource.Token);
         }
+
+        #endregion Get Methods
+
+        #region GetWhen Methods
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
@@ -204,17 +208,30 @@ namespace IC.Navigation.Extensions.Appium
            CancellationToken cancellationToken,
            Dictionary<string, string> expectedAttribsNamesValues)
         {
+            var linkedTokens = LinkCancellationTokens(cancellationToken);
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
             T elmt = FindFirstElement();
             if (elmt == null) return default;
-            if (!elmt.WaitUntil(cancellationToken, expectedAttribsNamesValues))
+            if (!elmt.WaitUntil(linkedTokenSource.Token, expectedAttribsNamesValues))
                 return default;
 
             return elmt;
         }
 
-        #endregion Get Methods
+        #endregion GetWhen Methods
 
         #region Private
+
+        private T Get(CancellationToken linkedCancellationTokens)
+        {
+            while (!linkedCancellationTokens.IsCancellationRequested)
+            {
+                var match = FindFirstElement();
+                if (match != null) return match;
+            }
+
+            return default;
+        }
 
         private CancellationToken[] LinkCancellationTokens(params CancellationToken[] cancellationTokens)
         {
