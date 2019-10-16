@@ -27,6 +27,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\IC.Timeout\IC.Timeout.csproj" />
       <ProjectReference Include="..\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj" />
     </ItemGroup>
 </Project>

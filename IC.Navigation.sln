@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC.Tests.App", "tests\IC.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Tests.App.Poms", "tests\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj", "{38E50D56-EE60-4BC9-926E-A8500BBE0C0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC.Timeout", "src\IC.Timeout\IC.Timeout.csproj", "{ED8220D9-E3A9-4B6B-A54A-4B6C6930DCB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{38E50D56-EE60-4BC9-926E-A8500BBE0C0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38E50D56-EE60-4BC9-926E-A8500BBE0C0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38E50D56-EE60-4BC9-926E-A8500BBE0C0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED8220D9-E3A9-4B6B-A54A-4B6C6930DCB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED8220D9-E3A9-4B6B-A54A-4B6C6930DCB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED8220D9-E3A9-4B6B-A54A-4B6C6930DCB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED8220D9-E3A9-4B6B-A54A-4B6C6930DCB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

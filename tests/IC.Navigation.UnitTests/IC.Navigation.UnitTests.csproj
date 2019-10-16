@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\IC.Navigation.Extensions\IC.Navigation.Extensions.csproj" />
     <ProjectReference Include="..\..\src\IC.Navigation\IC.Navigation.csproj" />
+    <ProjectReference Include="..\..\src\IC.Timeout\IC.Timeout.csproj" />
   </ItemGroup>
 
 </Project>

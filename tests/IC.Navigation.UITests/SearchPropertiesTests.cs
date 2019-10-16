@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Xunit;
+using IC.Timeout;
 
 namespace IC.Navigation.UITests
 {
@@ -18,8 +19,6 @@ namespace IC.Navigation.UITests
         public SearchPropertiesTests()
         {
             sut = new AppiumContext().SUT;
-            globalCts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
-            sut.GlobalCancellationToken = globalCts.Token;
         }
 
         #region Properties
@@ -27,7 +26,6 @@ namespace IC.Navigation.UITests
         #region Private
 
         private readonly IFacade sut;
-        private CancellationTokenSource globalCts;
 
         #endregion Private
 
@@ -46,7 +44,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.PomMenu.UITitle.Find(TimeSpan.FromSeconds(10));
+                title = sut.PomMenu.UITitle.Find(10.s());
             });
 
             // Assert
@@ -59,7 +57,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                using (var ctsLocal = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
+                using (var ctsLocal = new CancellationTokenSource(10.s()))
                 {
                     ctsLocal.CancelAfter(TimeSpan.Zero);
                     Assert.Throws<OperationCanceledException>(() =>
@@ -91,7 +89,7 @@ namespace IC.Navigation.UITests
         public void SearchProperties_With_DefaultCancellationToken_Should_Returns_Control_Matching()
         {
             // Arrange
-            using var defaultTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5000));
+            using var defaultTokenSource = new CancellationTokenSource(5.s());
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
@@ -142,9 +140,9 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             WindowsElement title = default;
-            var timeout = TimeSpan.FromSeconds(10);
+            var timeout = 10.s();
             Stopwatch stopwatch = new Stopwatch();
-            var maxExpectedElapse = TimeSpan.FromMilliseconds(500);
+            var maxExpectedElapse = 500.ms();
 
             // Act
             sut.Last.Do(() =>
@@ -165,9 +163,9 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             WindowsElement title = default;
-            var timeout = TimeSpan.FromSeconds(10);
+            var timeout = 10.s();
             Stopwatch stopwatch = new Stopwatch();
-            var maxExpectedElapse = TimeSpan.FromMilliseconds(500);
+            var maxExpectedElapse = 500.ms();
 
             // Act
             sut.Last.Do(() =>
@@ -196,7 +194,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
+                using (var cts = new CancellationTokenSource(3.s()))
                 {
                     title = sut.PomMenu.UITitle.GetWhen(cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
                 }
@@ -215,7 +213,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UITitle.GetWhen(TimeSpan.FromSeconds(3), "IsEnabled", "True");
+                title = sut.PomMenu.UITitle.GetWhen(3.s(), "IsEnabled", "True");
             });
 
             // Assert
@@ -234,7 +232,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UITitle.GetWhen(TimeSpan.FromSeconds(3), expectedAttribsValues);
+                title = sut.PomMenu.UITitle.GetWhen(3.s(), expectedAttribsValues);
             });
 
             // Assert
@@ -250,7 +248,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
+                using (var cts = new CancellationTokenSource(3.s()))
                 {
                     title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "True");
                 }
@@ -272,7 +270,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
+                using (var cts = new CancellationTokenSource(3.s()))
                 {
                     title = sut.PomMenu.UITitle.GetWhen(cts.Token, expectedAttribsValues);
                 }
@@ -291,7 +289,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UITitle.GetWhen(TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                title = sut.PomMenu.UITitle.GetWhen(3.s(), ("IsEnabled", "True"), ("IsOffscreen", "False"));
             });
 
             // Assert
@@ -307,7 +305,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), ("IsEnabled", "True"), ("IsOffscreen", "False"));
             });
 
             // Assert
@@ -326,7 +324,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(TimeSpan.FromSeconds(3), expectedAttribsValues);
+                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), expectedAttribsValues);
             });
 
             // Assert
@@ -342,7 +340,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(TimeSpan.FromSeconds(3), "IsEnabled", "True");
+                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), "IsEnabled", "True");
             });
 
             // Assert
@@ -354,10 +352,10 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             WindowsElement title = default;
-            var expectedTimeout = TimeSpan.FromSeconds(3);
+            var expectedTimeout = 3.s();
             Stopwatch stopwatch = new Stopwatch();
             var actualElapse = TimeSpan.Zero;
-            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+            var expectedMaxElapse = 500.ms();
 
             // Act
             sut.Last.Do(() =>
@@ -378,10 +376,10 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             WindowsElement title = default;
-            var expectedTimeout = TimeSpan.FromSeconds(3);
+            var expectedTimeout = 3.s();
             Stopwatch stopwatch = new Stopwatch();
             var actualElapse = TimeSpan.Zero;
-            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+            var expectedMaxElapse = 500.ms();
 
             // Act
             sut.Last.Do(() =>
@@ -404,11 +402,11 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Null_When_Timeout_Even_If_Control_Is_Found()
         {
             // Arrange
-            var expectedElapse = TimeSpan.FromSeconds(3);
+            var expectedElapse = 3.s();
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
-            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+            var expectedMaxElapse = 500.ms();
 
             // Act
             sut.PomMenu.Do(() =>
@@ -429,11 +427,11 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Null_When_Cancellation_Is_Requested_Even_If_Control_Is_Found()
         {
             // Arrange
-            var expectedElapse = TimeSpan.FromSeconds(3);
+            var expectedElapse = 3.s();
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
-            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+            var expectedMaxElapse = 500.ms();
 
             // Act
             sut.PomMenu.Do(() =>
@@ -457,20 +455,20 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Null_When_Cancellation_Is_Requested_Before_The_End_Of_Timeout()
         {
             // Arrange
-            var expectedElapse = TimeSpan.FromSeconds(5);
-            var expectedCancellationTimeout = TimeSpan.FromSeconds(2);
+            var expectedElapse = 5.s();
+            var expectedCancellationTimeout = 2.s();
             int cancellationTimeoutMS = Convert.ToInt32(expectedCancellationTimeout.TotalMilliseconds);
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
-            var expectedMaxElapse = TimeSpan.FromMilliseconds(500);
+            var expectedMaxElapse = 500.ms();
 
             // Act
             sut.PomMenu.Do(() =>
             {
                 using (CancellationTokenSource cts = new CancellationTokenSource(expectedElapse))
                 {
-                    using (var timer = new Timer((x) => cts.Cancel(), null, cancellationTimeoutMS, Timeout.Infinite))
+                    using (var timer = new Timer((x) => cts.Cancel(), null, cancellationTimeoutMS, -1))
                     {
                         stopwatch.Start();
                         title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
@@ -489,7 +487,6 @@ namespace IC.Navigation.UITests
         public void Dispose()
         {
             sut?.Dispose();
-            globalCts?.Dispose();
         }
 
         #endregion Public
