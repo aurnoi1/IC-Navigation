@@ -67,9 +67,9 @@ namespace IC.Navigation.Extensions.Appium
             return elmt;
         }
 
-        #endregion
-        #region Get Methods
+        #endregion Find Methods
 
+        #region Get Methods
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
@@ -87,10 +87,8 @@ namespace IC.Navigation.Extensions.Appium
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public T Get(TimeSpan timeout)
         {
-            using (var cts = new CancellationTokenSource(timeout))
-            {
-                return Get(cts.Token);
-            }
+            using var cts = new CancellationTokenSource(timeout);
+            return Get(cts.Token);
         }
 
         /// <summary>
@@ -112,15 +110,10 @@ namespace IC.Navigation.Extensions.Appium
             return default;
         }
 
-
-
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition is met.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
@@ -139,9 +132,6 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
@@ -157,9 +147,6 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
@@ -167,22 +154,14 @@ namespace IC.Navigation.Extensions.Appium
             TimeSpan timeout,
             Dictionary<string, string> expectedAttribsNamesValues)
         {
-            T elmt = default;
-            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
-            {
-                elmt = GetWhen(cts.Token, expectedAttribsNamesValues);
-            }
-
-            return elmt;
+            using CancellationTokenSource cts = new CancellationTokenSource(timeout);
+            return GetWhen(cts.Token, expectedAttribsNamesValues);
         }
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
@@ -202,9 +181,6 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
@@ -221,9 +197,6 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="driver">This AppiumDriver<IWebElement>.</param>
-        /// <param name="searchParam">The SearchParam to use to find the WebElement.</param>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
