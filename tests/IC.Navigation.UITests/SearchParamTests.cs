@@ -62,7 +62,7 @@ namespace IC.Navigation.UITests
                 {
                     ctsLocal.CancelAfter(TimeSpan.Zero);
                     Assert.Throws<OperationCanceledException>(() =>
-                        sut.WindowsDriver.Find(sut.PomMenu.UIBtnNotImplemented, ctsLocal.Token));
+                        sut.PomMenu.UIBtnNotImplemented.Find(ctsLocal.Token));
                 }
             });
         }
@@ -95,7 +95,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.WindowsDriver.Get(sut.PomMenu.UITitle);
+                title = sut.PomMenu.UITitle.Get();
             });
 
             // Assert
@@ -111,7 +111,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.Last.Do(() =>
             {
-                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented);
+                title = sut.PomMenu.UIBtnNotImplemented.Get();
             });
 
             // Assert
@@ -131,7 +131,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.WindowsDriver.Get(sut.PomMenu.UITitle, timeout);
+                title = sut.PomMenu.UITitle.Get(timeout);
                 stopwatch.Stop();
             });
 
@@ -156,7 +156,7 @@ namespace IC.Navigation.UITests
                 stopwatch.Start();
                 using (var cts = new CancellationTokenSource())
                 {
-                    title = sut.WindowsDriver.Get(sut.PomMenu.UITitle, cts.Token);
+                    title = sut.PomMenu.UITitle.Get(cts.Token);
                 }
 
                 stopwatch.Stop();
@@ -172,7 +172,6 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
@@ -180,7 +179,7 @@ namespace IC.Navigation.UITests
             {
                 using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
                 {
-                    title = sut.WindowsDriver.GetWhen(param, cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
                 }
             });
 
@@ -192,13 +191,12 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), "IsEnabled", "True");
+                title = sut.PomMenu.UITitle.GetWhen(TimeSpan.FromSeconds(3), "IsEnabled", "True");
             });
 
             // Assert
@@ -209,7 +207,6 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitle;
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
@@ -218,7 +215,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), expectedAttribsValues);
+                title = sut.PomMenu.UITitle.GetWhen(TimeSpan.FromSeconds(3), expectedAttribsValues);
             });
 
             // Assert
@@ -229,7 +226,6 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
@@ -237,7 +233,7 @@ namespace IC.Navigation.UITests
             {
                 using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
                 {
-                    title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "True");
+                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "True");
                 }
             });
 
@@ -249,7 +245,6 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Many_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitle;
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
@@ -260,7 +255,7 @@ namespace IC.Navigation.UITests
             {
                 using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(3)))
                 {
-                    title = sut.WindowsDriver.GetWhen(param, cts.Token, expectedAttribsValues);
+                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, expectedAttribsValues);
                 }
             });
 
@@ -272,13 +267,12 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
-            var param = sut.PomMenu.UITitle;
             WindowsElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                title = sut.PomMenu.UITitle.GetWhen(TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
             });
 
             // Assert
@@ -289,13 +283,12 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Dictionnary_Of_Attributes_Is_Not_Found()
         {
             // Arrange
-            var param = sut.PomMenu.UIBtnNotImplemented;
             WindowsElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(TimeSpan.FromSeconds(3), ("IsEnabled", "True"), ("IsOffscreen", "False"));
             });
 
             // Assert
@@ -306,7 +299,6 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Many_ValueTuple_Of_Attributes_Is_Not_Found()
         {
             // Arrange
-            var param = sut.PomMenu.UIBtnNotImplemented;
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
@@ -315,7 +307,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), expectedAttribsValues);
+                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(TimeSpan.FromSeconds(3), expectedAttribsValues);
             });
 
             // Assert
@@ -326,13 +318,12 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_With_Single_Property_Is_Not_Found()
         {
             // Arrange
-            var param = sut.PomMenu.UIBtnNotImplemented;
             WindowsElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
             {
-                title = sut.WindowsDriver.GetWhen(param, TimeSpan.FromSeconds(3), "IsEnabled", "True");
+                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(TimeSpan.FromSeconds(3), "IsEnabled", "True");
             });
 
             // Assert
@@ -353,7 +344,7 @@ namespace IC.Navigation.UITests
             sut.Last.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented, expectedTimeout);
+                title = sut.PomMenu.UIBtnNotImplemented.Get(expectedTimeout);
                 stopwatch.Stop();
             });
 
@@ -379,7 +370,7 @@ namespace IC.Navigation.UITests
                 stopwatch.Start();
                 using (var cts = new CancellationTokenSource(expectedTimeout))
                 {
-                    title = sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented, cts.Token);
+                    title = sut.PomMenu.UIBtnNotImplemented.Get(cts.Token);
                     stopwatch.Stop();
                 }
             });
@@ -395,7 +386,6 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(3);
-            var param = sut.PomMenu.UITitle;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
@@ -405,7 +395,7 @@ namespace IC.Navigation.UITests
             sut.PomMenu.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.WindowsDriver.GetWhen(param, expectedElapse, "IsEnabled", "InvalidValue");
+                title = sut.PomMenu.UITitle.GetWhen(expectedElapse, "IsEnabled", "InvalidValue");
                 stopwatch.Stop();
                 actualElapse = stopwatch.Elapsed;
             });
@@ -421,7 +411,6 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var expectedElapse = TimeSpan.FromSeconds(3);
-            var param = sut.PomMenu.UITitle;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
@@ -433,7 +422,7 @@ namespace IC.Navigation.UITests
                 using (CancellationTokenSource cts = new CancellationTokenSource(expectedElapse))
                 {
                     stopwatch.Start();
-                    title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "InvalidValue");
+                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
                     stopwatch.Stop();
                     actualElapse = stopwatch.Elapsed;
                 }
@@ -452,7 +441,6 @@ namespace IC.Navigation.UITests
             var expectedElapse = TimeSpan.FromSeconds(5);
             var expectedCancellationTimeout = TimeSpan.FromSeconds(2);
             int cancellationTimeoutMS = Convert.ToInt32(expectedCancellationTimeout.TotalMilliseconds);
-            var param = sut.PomMenu.UITitle;
             Stopwatch stopwatch = new Stopwatch();
             WindowsElement title = default;
             var actualElapse = TimeSpan.Zero;
@@ -466,7 +454,7 @@ namespace IC.Navigation.UITests
                     using (var timer = new Timer((x) => cts.Cancel(), null, cancellationTimeoutMS, Timeout.Infinite))
                     {
                         stopwatch.Start();
-                        title = sut.WindowsDriver.GetWhen(param, cts.Token, "IsEnabled", "InvalidValue");
+                        title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
                         stopwatch.Stop();
                         actualElapse = stopwatch.Elapsed;
                     }

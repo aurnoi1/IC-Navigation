@@ -64,7 +64,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UITitle) != null;
+            bool isDisplayed = UITitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -79,9 +79,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomBlue, (ct) => session.WindowsDriver.Find(UIBtnOpenBluePage, ct).Click() },
-                { session.PomRed, (ct) => session.WindowsDriver.Find(UIBtnOpenRedPage, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Find(UIBtnOpenYellowPage, ct).Click() },
+                { session.PomBlue, (ct) => UIBtnOpenBluePage.Find(ct).Click() },
+                { session.PomRed, (ct) => UIBtnOpenRedPage.Find(ct).Click() },
+                { session.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
             };
         }
 
@@ -91,7 +91,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <param name="text">The text to enter.</param>
         public void EnterText(string text)
         {
-            session.WindowsDriver.Get(UITxtBoxImportantMessage).SendKeys(text);
+            UITxtBoxImportantMessage.Get().SendKeys(text);
         }
     }
 }

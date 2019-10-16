@@ -45,7 +45,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UILblTitle) != null;
+            bool isDisplayed = UILblTitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -60,8 +60,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => session.WindowsDriver.Find(UIBtnBack, ct).Click() },
-                { session.PomYellow, (ct) => session.WindowsDriver.Find(BtnOpenYellowPage, ct).Click() },
+                { session.PomMenu, (ct) => UIBtnBack.Find(ct).Click() },
+                { session.PomYellow, (ct) => BtnOpenYellowPage.Find(ct).Click() },
             };
         }
     }

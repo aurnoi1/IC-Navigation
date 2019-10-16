@@ -41,8 +41,8 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+            var actual = sut.PomMenu.UITitle
+                .Get()
                 .ContinueWhen(ct, ("IsEnabled", "True"))
                 .Enabled;
 
@@ -57,8 +57,8 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+            var actual = sut.PomMenu.UITitle
+                .Get()
                 .ContinueWhen(TimeSpan.FromSeconds(1), ("IsEnabled", "True"))
                 .Enabled;
 
@@ -73,8 +73,8 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+            var actual = sut.PomMenu.UITitle
+                .Get()
                 .ContinueWhen(ct, new Dictionary<string, string>() { { "IsEnabled", "True" } })
                 .Enabled;
 
@@ -89,8 +89,8 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+            var actual = sut.PomMenu.UITitle
+                .Get()
                 .ContinueWhen(TimeSpan.FromSeconds(1), new Dictionary<string, string>() { { "IsEnabled", "True" } })
                 .Enabled;
 
@@ -105,8 +105,8 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+            var actual = sut.PomMenu.UITitle
+                .Get()
                 .ContinueWhen(ct, "IsEnabled", "True")
                 .Enabled;
 
@@ -121,8 +121,8 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+            var actual = sut.PomMenu.UITitle
+                .Get()
                 .ContinueWhen(TimeSpan.FromSeconds(1), "IsEnabled", "True")
                 .Enabled;
 
@@ -134,8 +134,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_One_Attrib_And_CT_Should_Returns_True_When_Attribute_Match_Expected_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(ct, "IsEnabled", "True"));
         }
 
@@ -143,8 +143,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_One_Attrib_And_Timeout_Should_Returns_True_When_Attribute_Match_Expected_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(TimeSpan.FromSeconds(1), "IsEnabled", "True"));
         }
 
@@ -152,8 +152,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_Tuple_And_CT_Should_Returns_True_When_Attribute_Match_Expected_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(ct, ("IsEnabled", "True")));
         }
 
@@ -161,8 +161,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_Tuple_And_Timeout_Should_Returns_True_When_Attribute_Match_Expected_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(TimeSpan.FromSeconds(1), ("IsEnabled", "True")));
         }
 
@@ -170,8 +170,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_Tuple_And_CT_Should_Accept_Multiple_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(ct, ("IsEnabled", "True"), ("IsOffscreen", "False")));
         }
 
@@ -179,8 +179,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_Tuple_And_Timeout_Should_Accept_Multiple_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(TimeSpan.FromSeconds(1), ("IsEnabled", "True"), ("IsOffscreen", "False")));
         }
 
@@ -188,8 +188,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_Dic_And_CT_Should_Returns_True_When_Attribute_Match_Expected_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(ct, new Dictionary<string, string>() { { "IsEnabled", "True" } }));
         }
 
@@ -197,8 +197,8 @@ namespace IC.Navigation.UITests
         public void WaitUntil_With_Dic_And_Timeout_Should_Returns_True_When_Attribute_Match_Expected_Value()
         {
             Assert.True(
-                sut.WindowsDriver
-                .Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle
+                .Get()
                 .WaitUntil(TimeSpan.FromSeconds(1), new Dictionary<string, string>() { { "IsEnabled", "True" } }));
         }
 
@@ -206,7 +206,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_CT_Should_Throws_OperationCanceledException_When_AttribueName_Is_Invalid()
         {
             Assert.Throws<OperationCanceledException>(() =>
-                sut.WindowsDriver.Get(sut.PomMenu.UITitle).ContinueWhen(ct, ("invalidAttribName", "True")));
+                sut.PomMenu.UITitle.Get().ContinueWhen(ct, ("invalidAttribName", "True")));
         }
 
         [Fact]
@@ -216,7 +216,7 @@ namespace IC.Navigation.UITests
             {
                 ctsLocal.CancelAfter(TimeSpan.Zero);
                 Assert.Throws<OperationCanceledException>(() =>
-                    sut.WindowsDriver.Get(sut.PomMenu.UITitle).ContinueWhen(ctsLocal.Token, ("IsEnabled", "False")));
+                    sut.PomMenu.UITitle.Get().ContinueWhen(ctsLocal.Token, ("IsEnabled", "False")));
             }
         }
 
@@ -224,7 +224,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
         {
             Assert.Throws<TimeoutException>(() =>
-                sut.WindowsDriver.Get(sut.PomMenu.UITitle)
+                sut.PomMenu.UITitle.Get()
                 .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "False")));
         }
 
@@ -232,7 +232,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_Timeout_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented)
+                sut.PomMenu.UIBtnNotImplemented.Get()
                 .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "True")));
         }
 
@@ -240,7 +240,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_CT_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                sut.WindowsDriver.Get(sut.PomMenu.UIBtnNotImplemented)
+                sut.PomMenu.UIBtnNotImplemented.Get()
                 .ContinueWhen(ct, ("IsEnabled", "True")));
         }
 

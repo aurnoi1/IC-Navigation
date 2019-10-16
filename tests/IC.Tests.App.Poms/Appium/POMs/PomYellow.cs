@@ -47,7 +47,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = session.WindowsDriver.Get(UITitle) != null;
+            bool isDisplayed = UITitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
             status.Exists = isDisplayed;
             NotifyObservers(status);
@@ -86,7 +86,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
                     session.GlobalCancellationToken, 
                     localCts.Token);
 
-                session.WindowsDriver.Find(UIBtnOpenMenuPage, linkedCts.Token).Click();
+                UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
                 return session.PomMenu;
             }
             catch (Exception)
@@ -107,11 +107,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             if (session.Previous == session.PomMenu)
             {
-                session.WindowsDriver.Find(UIBtnBack, ct).Click();
+                UIBtnBack.Find(ct).Click();
             }
             else
             {
-                session.WindowsDriver.Find(UIBtnOpenMenuPage, ct).Click();
+                UIBtnOpenMenuPage.Find(ct).Click();
             }
         }
 
@@ -130,7 +130,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                (x) => session.WindowsDriver.Find(UIBtnBack, x).Click(),
+                (x) => UIBtnBack.Find(x).Click(),
                 alternatives);
 
             session.Resolve(source, onActionAlternatives, ct);

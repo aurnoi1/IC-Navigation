@@ -21,7 +21,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
             if (prop != null)
             {
                 var wdSearchParam = prop.GetValue(winDriverSession.Last) as SearchParam<WindowsElement>;
-                match = winDriverSession.WindowsDriver.Get(wdSearchParam);
+                match = wdSearchParam.Get();
             }
 
             return match;
