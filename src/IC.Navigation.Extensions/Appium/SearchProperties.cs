@@ -104,11 +104,19 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties.
+        /// <see cref="DefaultCancellationToken"/> will be used if defined.
         /// </summary>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public T Get()
         {
-            return FindFirstElement();
+            if (DefaultCancellationToken == null || DefaultCancellationToken == CancellationToken.None)
+            {
+                return FindFirstElement();
+            }
+            else
+            {
+                return Get(DefaultCancellationToken);
+            }
         }
 
         /// <summary>
@@ -141,6 +149,29 @@ namespace IC.Navigation.Extensions.Appium
         #endregion Get Methods
 
         #region GetWhen Methods
+
+        /// <summary>
+        /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties 
+        /// and when the condition is met.
+        /// The <see cref="DefaultCancellationToken"/> cannot be <c>null</c> or <c>None</c>.
+        /// </summary>
+        /// <param name="attributeName">The attribute name (case sensitive).</param>
+        /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
+        /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
+        /// <exception cref="UninitializedDefaultCancellationTokenException">Thrown when DefaultCancellationToken is uninitialized.</exception>
+        public T GetWhen(
+            string attributeName,
+            string expectedAttributeValue)
+        {
+            if (DefaultCancellationToken == null || DefaultCancellationToken == CancellationToken.None)
+            {
+                throw new UninitializedDefaultCancellationTokenException();
+            }
+
+            var expected = new Dictionary<string, string>();
+            expected.Add(attributeName, expectedAttributeValue);
+            return GetWhen(DefaultCancellationToken, expected);
+        }
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchProperties

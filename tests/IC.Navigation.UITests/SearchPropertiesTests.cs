@@ -1,5 +1,6 @@
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -84,6 +85,24 @@ namespace IC.Navigation.UITests
                 Assert.Throws<TimeoutException>(() =>
                     sut.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
             });
+        }
+
+        [Fact]
+        public void SearchProperties_With_DefaultCancellationToken_Should_Returns_Control_Matching()
+        {
+            // Arrange
+            using var defaultTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(5000));
+            var titleMenuSearchProp = new SearchProperties<WindowsElement>(
+                WDLocators.AutomationId,
+                "TitleMenu",
+                sut.WindowsDriver,
+                defaultTokenSource.Token);
+
+            // Act
+            var titleMenu = titleMenuSearchProp.Get();
+
+            // Assert
+            Assert.NotNull(titleMenu);
         }
 
         [Fact]
