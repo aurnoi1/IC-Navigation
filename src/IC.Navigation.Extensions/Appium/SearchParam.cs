@@ -38,15 +38,16 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// Search the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken used to stop waiting for the control to be found.</param>
+        /// <param name="cancellationTokens">The CancellationTokens used to stop waiting for the control to be found.
+        /// They will be linked to the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The first matching WebElement.</returns>
-        /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
-        public T Find(CancellationToken cancellationToken)
+        /// <exception cref="OperationCanceledException">Thrown when any CancellationToken is cancelled.</exception>
+        public T Find(params CancellationToken[] cancellationTokens)
         {
-            var linkedTokens = LinkCancellationTokens(cancellationToken);
+            var linkedTokens = LinkCancellationTokens(cancellationTokens);
             using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
             var elmt = Get(linkedTokenSource.Token);
-            cancellationToken.ThrowIfCancellationRequested();
+            linkedTokenSource.Token.ThrowIfCancellationRequested();
             return elmt;
         }
 
@@ -57,6 +58,7 @@ namespace IC.Navigation.Extensions.Appium
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The first matching WebElement.</returns>
         /// <exception cref="TimeoutException">Thrown when timeout is reached before WebElement is found.</exception>
+        /// <exception cref="OperationCanceledException">Thrown when the <see cref="DefaultCancellationToken"/> is cancelled.</exception>
         public T Find(TimeSpan timeout)
         {
             using var cts = new CancellationTokenSource(timeout);
@@ -68,6 +70,7 @@ namespace IC.Navigation.Extensions.Appium
                 throw new TimeoutException("The timeout has been reached.");
             }
 
+            DefaultCancellationToken.ThrowIfCancellationRequested();
             return elmt;
         }
 
@@ -87,7 +90,8 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam.
         /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for the control to be found.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the control to be found.
+        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
         public T Get(TimeSpan timeout)
         {
@@ -118,7 +122,8 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition is met.
         /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
+        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
@@ -136,7 +141,8 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
+        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public T GetWhen(
@@ -151,7 +157,8 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.</param>
+        /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
+        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public T GetWhen(
@@ -166,7 +173,8 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
+        /// This CancellationToken will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c>.</returns>
@@ -185,7 +193,8 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
+        /// This CancellationToken will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public T GetWhen(
@@ -201,7 +210,8 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the first WebElement of type <typeparamref name="T"/> matching the SearchParam
         /// and when the condition are met.
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
+        /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
+        /// This CancellationToken will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>The first matching WebElement, otherwise <c>null</c></returns>
         public T GetWhen(
