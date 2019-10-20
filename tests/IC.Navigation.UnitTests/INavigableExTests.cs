@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xunit;
+using IC.TimeoutEx;
 
 namespace IC.Navigation.UnitTests
 {
@@ -148,8 +149,8 @@ namespace IC.Navigation.UnitTests
         public void Back_Should_Be_Interrupted_By_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             SetNavigableSessionForBackTests(origin, globalCts.Token, default);
@@ -176,9 +177,9 @@ namespace IC.Navigation.UnitTests
         public void Back_Should_Be_Interrupted_By_LocalCancellationToken_Before_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(2000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(3000.ms());
+            using var globalCts = new CancellationTokenSource(2000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -206,9 +207,9 @@ namespace IC.Navigation.UnitTests
         public void Back_Should_Be_Interrupted_By_GlobalCancellationToken_Before_LocalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(2000));
+            using var testTimeout = new CancellationTokenSource(3000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
+            using var localCts = new CancellationTokenSource(2000.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -237,8 +238,8 @@ namespace IC.Navigation.UnitTests
         public void Back_Should_Be_Interrupted_By_LocalCancellationToken_When_No_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(3000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -269,8 +270,8 @@ namespace IC.Navigation.UnitTests
         public void GoTo_Should_Be_Interrupted_By_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -297,9 +298,9 @@ namespace IC.Navigation.UnitTests
         public void GoTo_Should_Be_Interrupted_By_LocalCancellationToken_Before_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var globalCts = new CancellationTokenSource(3000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -328,9 +329,9 @@ namespace IC.Navigation.UnitTests
         public void GoTo_Should_Be_Interrupted_By_GlobalCancellationToken_Before_LocalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
+            using var localCts = new CancellationTokenSource(3000.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -359,8 +360,8 @@ namespace IC.Navigation.UnitTests
         public void GoTo_Should_Be_Interrupted_By_LocalCancellationToken_When_No_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -391,8 +392,8 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Function_Should_Be_Interrupted_By_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -420,9 +421,9 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Function_Should_Be_Interrupted_By_LocalCancellationToken_Before_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(5000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(5000.ms());
+            using var globalCts = new CancellationTokenSource(3000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -451,9 +452,9 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Function_Should_Be_Interrupted_By_GlobalCancellationToken_Before_LocalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(5000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
+            using var testTimeout = new CancellationTokenSource(5000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
+            using var localCts = new CancellationTokenSource(3000.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -482,8 +483,8 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Function_Should_Be_Interrupted_By_LocalCancellationToken_When_No_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(5000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(5000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             var destination = fixture.Create<INavigable>();
@@ -515,8 +516,8 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Action_Should_Be_Interrupted_By_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(1000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             Action<CancellationToken> action = GetCancellableAction(testTimeout.Token);
@@ -543,9 +544,9 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Action_Should_Be_Interrupted_By_LocalCancellationToken_Before_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(2000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(3000.ms());
+            using var globalCts = new CancellationTokenSource(2000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             Action<CancellationToken> action = GetCancellableAction(testTimeout.Token);
@@ -573,9 +574,9 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Action_Should_Be_Interrupted_By_GlobalCancellationToken_Before_LocalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var globalCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(2000));
+            using var testTimeout = new CancellationTokenSource(3000.ms());
+            using var globalCts = new CancellationTokenSource(250.ms());
+            using var localCts = new CancellationTokenSource(2000.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             Action<CancellationToken> action = GetCancellableAction(testTimeout.Token);
@@ -603,8 +604,8 @@ namespace IC.Navigation.UnitTests
         public void Do_With_Cancellable_Action_Should_Be_Interrupted_By_LocalCancellationToken_When_No_GlobalCancellationToken()
         {
             // Arrange
-            using var testTimeout = new CancellationTokenSource(TimeSpan.FromMilliseconds(3000));
-            using var localCts = new CancellationTokenSource(TimeSpan.FromMilliseconds(250));
+            using var testTimeout = new CancellationTokenSource(3000.ms());
+            using var localCts = new CancellationTokenSource(250.ms());
             IFixture fixture = new Fixture().Customize(new AutoMoqCustomization());
             var origin = fixture.Create<INavigable>();
             Action<CancellationToken> action = GetCancellableAction(testTimeout.Token);
