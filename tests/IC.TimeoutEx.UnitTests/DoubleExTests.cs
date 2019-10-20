@@ -33,7 +33,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Seconds_Should_Returns_Seconds()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromSeconds(sut);
 
             var actual = sut.Seconds();
@@ -43,7 +43,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Negative_s_Should_Returns_Negative_Seconds()
         {
-            double sut = -5;
+            double sut = -5.5;
             var expected = TimeSpan.FromSeconds(sut);
 
             var actual = sut.s();
@@ -53,7 +53,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void ms_Should_Returns_Milliseconds()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromMilliseconds(sut);
 
             var actual = sut.ms();
@@ -63,7 +63,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Milliseconds_Should_Returns_Milliseconds()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromMilliseconds(sut);
 
             var actual = sut.Milliseconds();
@@ -73,7 +73,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Negative_ms_Should_Returns_Negative_Milliseconds()
         {
-            double sut = -5;
+            double sut = -5.5;
             var expected = TimeSpan.FromMilliseconds(sut);
 
             var actual = sut.ms();
@@ -83,7 +83,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void m_Should_Returns_Minutes()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromMinutes(sut);
 
             var actual = sut.m();
@@ -93,7 +93,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Minutes_Should_Returns_Minutes()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromMinutes(sut);
 
             var actual = sut.Minutes();
@@ -103,7 +103,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Negative_m_Should_Returns_Negative_Minutes()
         {
-            double sut = -5;
+            double sut = -5.5;
             var expected = TimeSpan.FromMinutes(sut);
 
             var actual = sut.m();
@@ -113,7 +113,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void h_Should_Returns_Hours()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromHours(sut);
 
             var actual = sut.h();
@@ -123,7 +123,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Hours_Should_Returns_Hours()
         {
-            double sut = 5;
+            double sut = 5.5;
             var expected = TimeSpan.FromHours(sut);
 
             var actual = sut.Hours();
@@ -133,7 +133,7 @@ namespace IC.TimeoutEx.UnitTests
         [Fact]
         public void Negative_h_Should_Returns_Negative_Hours()
         {
-            double sut = -5;
+            double sut = -5.5;
             var expected = TimeSpan.FromHours(sut);
 
             var actual = sut.h();

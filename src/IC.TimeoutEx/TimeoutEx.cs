@@ -15,7 +15,7 @@ namespace IC.TimeoutEx
         /// <summary>
         /// The regex used to find a value inside a pattern.
         /// </summary>
-        public static string ValuePattern = @"(\d+|-\d+)"; // Must be declared before patterns.
+        public const string ValuePattern = @"(-?\d+(?:\.\d+)?)"; // Must be declared before patterns.
 
         private static Dictionary<string, Func<double[], TimeSpan>> _Patterns { get; set; } = 
             new Dictionary<string, Func<double[], TimeSpan>>()
