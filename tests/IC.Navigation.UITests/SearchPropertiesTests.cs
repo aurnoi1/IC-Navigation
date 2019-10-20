@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using Xunit;
-using IC.Timeout;
+using IC.TimeoutEx;
 
 namespace IC.Navigation.UITests
 {

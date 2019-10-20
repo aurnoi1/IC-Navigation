@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xunit;
-using IC.Timeout;
+using IC.TimeoutEx;
 
 namespace IC.Navigation.UnitTests
 {
