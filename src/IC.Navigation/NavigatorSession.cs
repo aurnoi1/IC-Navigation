@@ -223,6 +223,8 @@ namespace IC.Navigation
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The INavigable returns by the Function.</returns>
+        /// <exception cref="UnexpectedNavigableException">Thrown when the page after Function invocation 
+        /// does not implement the expected returned type.</exception>
         public virtual INavigable Do<T>(
             INavigable origin,
             Func<CancellationToken, INavigable> function,
@@ -232,7 +234,7 @@ namespace IC.Navigation
             localCancellationToken.ThrowIfCancellationRequested();
             WaitUntilNavigableExists(origin, "origin", localCancellationToken);
             INavigable retINavigable = function.Invoke(localCancellationToken);
-            if (typeof(T) != retINavigable.GetType())
+            if (!typeof(T).IsAssignableFrom(retINavigable.GetType()))
             {
                 throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }

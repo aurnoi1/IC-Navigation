@@ -71,11 +71,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         }
 
         /// <summary>
-        /// Open the View Menu by clicking on UIBtnOpenMenuView.
+        /// Open the Menu page by clicking on UIBtnOpenMenuPage.
         /// </summary>
         /// <param name="timeout">The timeout to interrupt the task as soon as possible in concurrence
         /// of <see cref="Facade.GlobalCancellationToken"/>.</param>
-        /// <returns>The ViewMenu.</returns>
+        /// <returns>The PomMenu.</returns>
         public PomMenu OpenMenuByMenuBtn(TimeSpan timeout)
         {
             CancellationTokenSource localCts = default;

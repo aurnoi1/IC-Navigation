@@ -1,12 +1,12 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using IC.Tests.App.Poms.Appium.POMs;
+using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium.Appium.Windows;
 using System;
@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xunit;
-using IC.TimeoutEx;
 
 namespace IC.Navigation.UITests
 {
@@ -46,7 +45,6 @@ namespace IC.Navigation.UITests
         #region Methods
 
         #region Public
-
 
         [Fact]
         public void FullExample()
@@ -158,8 +156,25 @@ namespace IC.Navigation.UITests
             Assert.DoesNotContain(expected, registeredObservers);
         }
 
+
+
         [Fact]
-        public void GetView_Should_Returns_Same_Instance()
+        public void Do_With_INavigable_Returned_Type_Should_Return_PomMenu()
+        {
+            using var cts = new CancellationTokenSource(10.s());
+            sut.GlobalCancellationToken = cts.Token;
+            sut.Last
+                .GoTo(sut.PomYellow)
+                .Do<INavigable>(() =>
+                {
+                    // Return the PomMenu which implements INavigable.
+                    return sut.PomYellow.OpenMenuByMenuBtn(5.Seconds());
+                })
+                .GoTo(sut.PomRed);
+        }
+
+        [Fact]
+        public void GetNavigable_Should_Returns_Same_Instance()
         {
             var instance1 = sut.PomMenu;
             var instance2 = sut.PomMenu;

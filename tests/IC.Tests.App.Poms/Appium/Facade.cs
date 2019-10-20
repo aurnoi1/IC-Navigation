@@ -47,14 +47,14 @@ namespace IC.Tests.App.Poms.Appium
 
         #region Public
 
-        #region Views
+        #region POMs
 
         public PomRed PomRed => GetNavigable<PomRed>();
         public PomBlue PomBlue => GetNavigable<PomBlue>();
         public PomMenu PomMenu => GetNavigable<PomMenu>();
         public PomYellow PomYellow => GetNavigable<PomYellow>();
 
-        #endregion Views
+        #endregion POMs
 
         /// <summary>
         /// The nodes of INavigables forming the Graph.
