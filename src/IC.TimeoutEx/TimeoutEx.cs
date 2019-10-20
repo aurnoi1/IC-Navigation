@@ -8,22 +8,22 @@ namespace IC.TimeoutEx
     public class TimeoutEx
     {
         /// <summary>
-        /// The Dictionary of patterns and associated transformation function.
+        /// The Dictionary of patterns and associated transformation functions.
         /// </summary>
-        public static Dictionary<string, Func<double, TimeSpan>> Patterns => _Patterns;
+        public static Dictionary<string, Func<double[], TimeSpan>> Patterns => _Patterns;
 
         /// <summary>
         /// The regex used to find a value inside a pattern.
         /// </summary>
         public static string ValuePattern = @"(\d+|-\d+)"; // Must be declared before patterns.
 
-        private static Dictionary<string, Func<double, TimeSpan>> _Patterns { get; set; } = 
-            new Dictionary<string, Func<double, TimeSpan>>()
+        private static Dictionary<string, Func<double[], TimeSpan>> _Patterns { get; set; } = 
+            new Dictionary<string, Func<double[], TimeSpan>>()
             {
-                { $@"^{ValuePattern} seconds$", x => x.s() },
-                { $@"^{ValuePattern} milliseconds$", x => x.ms() },
-                { $@"^{ValuePattern} minutes$", x => x.m() },
-                { $@"^{ValuePattern} hours$", x => x.h() },
+                { $@"^{ValuePattern} seconds$", x => x.Single().s() },
+                { $@"^{ValuePattern} milliseconds$", x => x.Single().ms() },
+                { $@"^{ValuePattern} minutes$", x => x.Single().m() },
+                { $@"^{ValuePattern} hours$", x => x.Single().h() },
             };
 
         #region Methods
@@ -35,7 +35,7 @@ namespace IC.TimeoutEx
         /// <param name="func">The transformation function to associate with the custom pattern.</param>
         /// <exception cref="Exception">Thrown when a matching pattern already exists in Patterns dictionary.</exception>
         /// <exception cref="ArgumentException">Thrown when the pattern does not contains the <see cref="ValuePattern"/>.</exception>
-        public static void AddPatterns(string customPattern, Func<double, TimeSpan> func)
+        public static void AddPatterns(string customPattern, Func<double[], TimeSpan> func)
         {
             var keyValue = Patterns.Where(x => Regex.IsMatch(customPattern, x.Key)).SingleOrDefault();
             if (keyValue.Key != default)
@@ -46,7 +46,7 @@ namespace IC.TimeoutEx
 
             if (!customPattern.Contains(ValuePattern))
             {
-                throw new ArgumentException($"Cannot get value from \"{customPattern}\". " +
+                throw new ArgumentException($"Cannot get any value from \"{customPattern}\". " +
                     $"Ensure the pattern contains the ValuePattern \"{ValuePattern}\".");
             }
 
@@ -63,19 +63,25 @@ namespace IC.TimeoutEx
         }
 
         /// <summary>
-        /// Gets value from pattern.
+        /// Gets values from pattern.
         /// </summary>
         /// <param name="pattern">The pattern.</param>
-        /// <returns>The value.</returns>
-        public static double GetValue(string pattern)
+        /// <returns>The values.</returns>
+        public static double[] GetValues(string pattern)
         {
-            var match = GetMatch(pattern);
-            if (!double.TryParse(match.Value, out double value))
+            var matches = GetMatches(pattern);
+            var values = new List<double>();
+            foreach (var match in matches)
             {
-                throw new ArgumentException($"Cannot convert\"{match.Value}\" to double.");
+                if (!double.TryParse((match as Match).Value, out double value))
+                {
+                    throw new ArgumentException($"Cannot convert\"{match}\" to double.");
+                }
+
+                values.Add(value);
             }
 
-            return value;
+            return values.ToArray();
         }
 
         /// <summary>
@@ -85,18 +91,18 @@ namespace IC.TimeoutEx
         /// <returns>The timeout as TimeSpan.</returns>
         public static TimeSpan TransformToTimeSpan(string timeout)
         {
-            double value = GetValue(timeout);
+            double[] value = GetValues(timeout);
             var func = GetFunc(timeout);
             return func(value);
         }
 
-        private static Match GetMatch(string pattern)
+        private static MatchCollection GetMatches(string pattern)
         {
-            var match = Regex.Match(pattern, ValuePattern);
+            var match = Regex.Matches(pattern, ValuePattern);
             return match;
         }
 
-        private static Func<double, TimeSpan> GetFunc(string timeout)
+        private static Func<double[], TimeSpan> GetFunc(string timeout)
         {
             var keyValue = Patterns.Where(x => Regex.IsMatch(timeout, x.Key)).SingleOrDefault();
             if (keyValue.Value == default)
