@@ -17,7 +17,7 @@ namespace IC.TimeoutEx
         /// </summary>
         public static string ValuePattern = @"(\d+|-\d+)"; // Must be declared before patterns.
 
-        private static Dictionary<string, Func<double, TimeSpan>> patterns =
+        private static Dictionary<string, Func<double, TimeSpan>> _Patterns { get; set; } = 
             new Dictionary<string, Func<double, TimeSpan>>()
             {
                 { $@"^{ValuePattern} seconds$", x => x.s() },
@@ -25,19 +25,6 @@ namespace IC.TimeoutEx
                 { $@"^{ValuePattern} minutes$", x => x.m() },
                 { $@"^{ValuePattern} hours$", x => x.h() },
             };
-
-        private static Dictionary<string, Func<double, TimeSpan>> _Patterns
-
-        {
-            get
-            {
-                return patterns;
-            }
-            set
-            {
-                patterns = value;
-            }
-        }
 
         #region Methods
 
