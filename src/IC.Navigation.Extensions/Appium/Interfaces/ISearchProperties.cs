@@ -1,10 +1,11 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Interfaces;
 using System.Threading;
 
 namespace IC.Navigation.Extensions.Appium.Interfaces
 {
-    public interface ISearchProperties<T> where T : IWebElement
+    public interface ISearchProperties<W> where W : IWebElement
     {
         /// <summary>
         /// Locator to find the WindowsElement.
@@ -17,9 +18,9 @@ namespace IC.Navigation.Extensions.Appium.Interfaces
         string Value { get; set; }
 
         /// <summary>
-        /// The AppiumDriver used to find the WindowsElement.
+        /// The a WebDriver that implement IFindsByFluentSelector<W>.
         /// </summary>
-        public AppiumDriver<T> AppiumDriver { get; }
+        public IFindsByFluentSelector<W> WebDriver { get; }
 
         /// <summary>
         /// The default CancellationToken to interrupt a search of the WindowsElement.
