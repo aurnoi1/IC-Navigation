@@ -80,7 +80,6 @@ namespace IC.Navigation
 
         #region Public
 
-
         /// <summary>
         /// Get the shortest path from an origin to a destination.
         /// </summary>
@@ -174,7 +173,6 @@ namespace IC.Navigation
         #endregion Public
 
         #region Private
-
 
         /// <summary>
         /// Add Nodes references to the Graph.

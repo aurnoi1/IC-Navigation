@@ -44,6 +44,5 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="status">The NavigableStatus.</param>
         void NotifyObservers(INavigableStatus status);
-
     }
 }

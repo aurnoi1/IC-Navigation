@@ -78,8 +78,8 @@ namespace IC.Navigation.Interfaces
         /// <returns>The next consecutive or the rebased INavigable.</returns>
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         INavigable StepToNext(
-            Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable, 
-            INavigable nextNavigable, 
+            Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable,
+            INavigable nextNavigable,
             CancellationToken cancellationToken);
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace IC.Navigation.Interfaces
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
         INavigable Resolve(
-            INavigable origin, 
-            IOnActionAlternatives onActionAlternatives, 
-            INavigable waypoint, 
+            INavigable origin,
+            IOnActionAlternatives onActionAlternatives,
+            INavigable waypoint,
             CancellationToken cancellationToken);
     }
 }
