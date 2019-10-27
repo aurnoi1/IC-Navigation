@@ -37,6 +37,39 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
+        public void Find_With_Timeout_And_Attributes_Should_Returns_Control_Matching_SearchProperties()
+        {
+            // Arrange
+            IWebElement title = default;
+
+            // Act
+            sut.Last.Do(() =>
+            {
+                title = sut.PomMenu.UITitle.Find(10.s(), ("IsEnabled", "True"));
+            });
+
+            // Assert
+            Assert.NotNull(title);
+        }
+
+        [Fact]
+        public void Find_With_Timeout_And_Attributes_Should_Throws_TimeoutException_When_Element_Exists_But_Attributes_Not_Matching()
+        {
+            // Arrange
+            IWebElement title = default;
+
+            // Act
+            void actual() => sut.Last.Do(() =>
+            {
+                title = sut.PomMenu.UITitle.Find(3.s(), ("IsEnabled", "False"));
+            });
+
+            // Assert
+            var exception = Assert.Throws<OperationCanceledException>(() => actual());
+            Assert.Equal("Timeout was reached before attributes match expected values.", exception.Message);
+        }
+
+        [Fact]
         public void Find_With_Timeout_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange

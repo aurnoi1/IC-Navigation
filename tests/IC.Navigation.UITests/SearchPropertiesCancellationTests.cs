@@ -167,7 +167,8 @@ namespace IC.Navigation.UITests
             Func<WindowsElement> find = () => titleMenuSearchProp.Find(TimeSpan.FromSeconds(10));
 
             // Assert
-            Assert.Throws<OperationCanceledException>(() => find());
+            var exception = Assert.Throws<TimeoutException>(() => find());
+            Assert.Equal("The timeout has been reached before the Element could be found.", exception.Message);
         }
 
         [Fact]

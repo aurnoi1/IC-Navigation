@@ -1,9 +1,7 @@
 ﻿using IC.Navigation.Extensions.Appium.Interfaces;
 using IC.Navigation.Extensions.Exceptions;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Interfaces;
-using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +11,8 @@ namespace IC.Navigation.Extensions.Appium
 {
     public class SearchProperties<W> : ISearchProperties<W> where W : IWebElement
     {
+        const string timeoutExceptionMessage = "The timeout has been reached before the Element could be found.";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchProperties"/> class.
         /// </summary>
@@ -31,7 +31,7 @@ namespace IC.Navigation.Extensions.Appium
             string locator,
             string value,
             IFindsByFluentSelector<W> appiumDriver,
-            CancellationToken defaultCancellationToken = default) 
+            CancellationToken defaultCancellationToken = default)
         {
             Locator = locator;
             Value = value;
@@ -80,23 +80,49 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// Search the first WebElement of type <typeparamref name="W"/> matching the SearchProperties.
         /// </summary>
+        /// <param name="timeout">The maximum amount of time to wait for the control to be found
+        /// and to its attributes to match expected values.
+        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
+        /// <returns>The first matching WebElement.</returns>
+        /// <exception cref="TimeoutException">Thrown when any timeout is reached before WebElement is found.</exception>
+        /// <exception cref="OperationCanceledException">Thrown when any timeout is reached before
+        /// the expected attributes match the expected values.
+        /// </exception>
+        public W Find(
+            TimeSpan timeout,
+            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
+        {
+            using var cts = new CancellationTokenSource(timeout);
+            var linkedTokens = LinkCancellationTokens(cts.Token);
+            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
+            var webElement = Get(linkedTokenSource.Token);
+            if (linkedTokenSource.Token.IsCancellationRequested)
+            {
+                throw new TimeoutException(timeoutExceptionMessage);
+            }
+
+            webElement.ContinueWhen(linkedTokenSource.Token, expectedAttribsNamesValues);
+            return webElement;
+        }
+
+        /// <summary>
+        /// Search the first WebElement of type <typeparamref name="W"/> matching the SearchProperties.
+        /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the control to be found.
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The first matching WebElement.</returns>
-        /// <exception cref="TimeoutException">Thrown when timeout is reached before WebElement is found.</exception>
-        /// <exception cref="OperationCanceledException">Thrown when the <see cref="DefaultCancellationToken"/> is cancelled.</exception>
+        /// <exception cref="TimeoutException">Thrown when any timeout is reached before WebElement is found.</exception>
         public W Find(TimeSpan timeout)
         {
             using var cts = new CancellationTokenSource(timeout);
             var linkedTokens = LinkCancellationTokens(cts.Token);
             using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
             var elmt = Get(linkedTokenSource.Token);
-            if (cts.Token.IsCancellationRequested)
+            if (linkedTokenSource.Token.IsCancellationRequested)
             {
-                throw new TimeoutException("The timeout has been reached.");
+                throw new TimeoutException(timeoutExceptionMessage);
             }
 
-            DefaultCancellationToken.ThrowIfCancellationRequested();
             return elmt;
         }
 
@@ -153,7 +179,7 @@ namespace IC.Navigation.Extensions.Appium
         #region GetWhen Methods
 
         /// <summary>
-        /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties 
+        /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
         /// and when the attribute name and value match expected.
         /// The <see cref="DefaultCancellationToken"/> cannot be <c>null</c> or <c>None</c>.
         /// </summary>
@@ -300,6 +326,11 @@ namespace IC.Navigation.Extensions.Appium
             return default;
         }
 
+        /// <summary>
+        /// Link CancellationToken pass as parameter and the DefaultCancellationToken if initialized.
+        /// </summary>
+        /// <param name="cancellationTokens">The CancellationTokens to link.</param>
+        /// <returns>The linked CancellationTokens.</returns>
         private CancellationToken[] LinkCancellationTokens(params CancellationToken[] cancellationTokens)
         {
             var linkedTokens = new List<CancellationToken>();
