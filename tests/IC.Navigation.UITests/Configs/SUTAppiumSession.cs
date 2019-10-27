@@ -5,7 +5,7 @@ using System;
 
 namespace IC.Navigation.UITests.Configs
 {
-    public class SUTAppiumSession<R> : IAppiumSession<R> where R : WindowsDriver<WindowsElement>
+    public class SUTAppiumSession<R> : IWindowsDriverSession<R> where R : WindowsDriver<WindowsElement>
     {
         private IAppiumConfig appiumConfig;
         private WindowsDriver<WindowsElement> winDriver;
