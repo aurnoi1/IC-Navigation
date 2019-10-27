@@ -183,10 +183,8 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueViewByUsageNameInViewMenu()
         {
-            throw new NotImplementedException();
-
-            //WindowsElement match = sut.FindElementByAliasesInLastINavigable("button to open the blue page");
-            //Assert.Equal("BtnOpenBlueView", match.GetAttribute("AutomationId"));
+            WindowsElement match = sut.FindElementByAliasesInLastINavigable("button to open the blue page");
+            Assert.Equal("BtnOpenBlueView", match.GetAttribute("AutomationId"));
         }
 
         [Fact]

@@ -1,5 +1,6 @@
 ﻿using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
+using IC.Navigation.UITests.Specflow.StepArgumentTransformations;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
@@ -13,7 +14,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class ControlSteps : IDisposable
     {
-        private IFacade<WindowsDriver<WindowsElement>> sut;
+        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
 
         private ControlSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {
@@ -21,20 +22,15 @@ namespace IC.Navigation.UITests.Specflow.Steps
         }
 
         [Then(@"The control ""(.*)"" should be displayed in the current page")]
-        public void ThenTheControlShouldBeDisplayed(string usageName)
+        public void ThenTheControlShouldBeDisplayed(WindowsElement control)
         {
-            throw new NotImplementedException();
-            //WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
-            //Assert.True(match.Displayed, $"The control with usage name {usageName} was not displayed.");
+            Assert.True(control.Displayed, $"The control {control.Id} was not displayed.");
         }
 
         [Then(@"The control ""(.*)"" should not be displayed in the current page")]
-        public void ThenTheControlWithUsageNameShouldNotBeDisplayed(string usageName)
+        public void ThenTheControlWithUsageNameShouldNotBeDisplayed(WindowsElement control)
         {
-            throw new NotImplementedException();
-
-            //WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
-            //Assert.Null(match);
+            Assert.Null(control);
         }
 
         [Then(@"The following controls should be displayed in the current page:")]
@@ -43,7 +39,8 @@ namespace IC.Navigation.UITests.Specflow.Steps
             var usageNameCol = table.Rows.Where(x => x.Keys.Single().Equals("usage_name"));
             foreach (var value in usageNameCol)
             {
-                ThenTheControlShouldBeDisplayed(value.Values.FirstOrDefault());
+                var control = sut.FindElementByAliasesInLastINavigable(value.Values.FirstOrDefault());
+                ThenTheControlShouldBeDisplayed(control);
             }
         }
 

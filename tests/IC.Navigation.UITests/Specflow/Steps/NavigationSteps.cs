@@ -1,5 +1,6 @@
 ﻿using IC.Navigation.CoreExtensions;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
+using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -33,35 +34,27 @@ namespace IC.Navigation.UITests.Specflow.Steps
 
         [When(@"I navigate to ""(.*)""")]
         [Given(@"The ""(.*)"" has been opened")]
-        public void GivenTheViewHasBeenOpened(string usageName)
+        public void GivenTheViewHasBeenOpened(INavigable destination)
         {
-            var destination = sut.GetINavigableByUsageName(usageName);
             sut.Last.GoTo(destination, ct);
         }
 
         [When(@"The ""(.*)"" is pressed in current page")]
-        public void WhenIsPressedInCurrentView(string usageName)
+        public void WhenIsPressedInCurrentView(WindowsElement control)
         {
-            throw new NotImplementedException();
-
-            //WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
-            //match.Click();
+            control.Click();
         }
 
         [Then(@"The ""(.*)"" should be opened")]
-        public void ThenTheShouldBeOpened(string viewUsageName)
+        public void ThenTheShouldBeOpened(INavigable expectedPage)
         {
-            var expectedView = sut.GetINavigableByUsageName(viewUsageName);
-            Assert.True(expectedView.Exists());
+            Assert.True(expectedPage.Exists());
         }
 
         [Then(@"The control ""(.*)"" should not be displayed")]
-        public void ThenTheControlShouldNotBeDisplayed(string usageName)
+        public void ThenTheControlShouldNotBeDisplayed(WindowsElement control)
         {
-            throw new NotImplementedException();
-
-            //var control = sut.FindElementByAliasesInLastINavigable(usageName);
-            //Assert.Null(control);
+            Assert.Null(control);
         }
 
         public void Dispose()
