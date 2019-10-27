@@ -47,6 +47,25 @@ namespace IC.Navigation.UnitTests
         }
 
         [Fact]
+        public void WaitUntil_With_Tuple_And_Timeout_Should_Returns_Expected_Value_With_Delay_But_Before_Timeout()
+        {
+            // Arrange
+            using CancellationTokenSource delayBeforeReturnsValue = new CancellationTokenSource(100.ms());
+            var (name, value) = CreateMockAttributesReturningValueAfterDelay(delayBeforeReturnsValue.Token);
+
+            var stopwatch = Stopwatch.StartNew();
+            TimeSpan timeout = 500.ms();
+
+            // Act
+            var actual = sut.WaitUntil(timeout, name, value);
+            stopwatch.Stop();
+
+            // Assert
+            Assert.True(actual);
+            Assert.True(stopwatch.ElapsedMilliseconds < timeout.Ticks);
+        }
+
+        [Fact]
         public void WaitUntil_With_Tuple_And_CancellationToken_Should_Returns_Expected_Value_Before_Cancellation()
         {
             // Arrange
@@ -173,7 +192,6 @@ namespace IC.Navigation.UnitTests
             // Act
             bool waitUntilWithNullValues() => nulSut.WaitUntil(timeout, attributes);
 
-
             // Assert
             var exception = Assert.Throws<ArgumentNullException>(() => waitUntilWithNullValues());
             Assert.Equal("The WebElement is null. (Parameter 'webElement')", exception.Message);
@@ -214,6 +232,25 @@ namespace IC.Navigation.UnitTests
             }
 
             return attributes;
+        }
+
+        private (string name, string value) CreateMockAttributesReturningValueAfterDelay(CancellationToken token)
+        {
+            var (name, value) = fixture.Create<(string name, string value)>();
+            static string retValueAfterDelay(CancellationToken cancellationToken, string value)
+            {
+                if (!cancellationToken.IsCancellationRequested)
+                {
+                    return null;
+                }
+                else
+                {
+                    return value;
+                }
+            }
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(() => retValueAfterDelay(token, value));
+            return (name, value);
         }
 
         #endregion Private
