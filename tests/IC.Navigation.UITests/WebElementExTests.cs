@@ -131,42 +131,7 @@ namespace IC.Navigation.UITests
             Assert.Equal(expected, actual);
         }
 
-        [Fact]
-        public void WaitUntil_With_One_Attrib_And_CT_Should_Returns_True_When_Attribute_Match_Expected_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(ct, "IsEnabled", "True"));
-        }
-
-        [Fact]
-        public void WaitUntil_With_One_Attrib_And_Timeout_Should_Returns_True_When_Attribute_Match_Expected_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(TimeSpan.FromSeconds(1), "IsEnabled", "True"));
-        }
-
-        [Fact]
-        public void WaitUntil_With_Tuple_And_CT_Should_Returns_True_When_Attribute_Match_Expected_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(ct, ("IsEnabled", "True")));
-        }
-
-        [Fact]
-        public void WaitUntil_With_Tuple_And_Timeout_Should_Returns_True_When_Attribute_Match_Expected_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(TimeSpan.FromSeconds(1), ("IsEnabled", "True")));
-        }
-
+        
         [Fact]
         public void WaitUntil_With_Tuple_And_CT_Should_Accept_Multiple_Value()
         {
