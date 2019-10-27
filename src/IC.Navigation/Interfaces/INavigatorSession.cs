@@ -19,5 +19,13 @@ namespace IC.Navigation.Interfaces
         /// <param name="assembly">The assembly containing the INavigables.</param>
         /// <returns>Intances of INavigables forming the nodes.</returns>
         HashSet<INavigable> GetNodesByReflection(Assembly assembly);
+
+        /// <summary>
+        /// Get the nodes formed by instances of INavigables from the specified assembly.
+        /// </summary>
+        /// <typeparam name="T">The generic type of the classes implementing INavigable.</typeparam>
+        /// <param name="assembly">The assembly containing the INavigables.</param>
+        /// <returns>Intances of INavigables forming the nodes.</returns>
+        HashSet<INavigable> GetNodesByReflection<T>(Assembly assembly);
     }
 }

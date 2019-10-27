@@ -137,17 +137,30 @@ namespace IC.Navigation
         public virtual HashSet<INavigable> GetNodesByReflection(Assembly assembly)
         {
             var navigables = new HashSet<INavigable>();
-            var iNavigables = assembly.GetTypes()
-                .Where(x =>
-                    typeof(INavigable).IsAssignableFrom(x)
-                    && !x.IsInterface
-                    && x.IsPublic
-                    && !x.IsAbstract
-                ).ToList();
-
+            var iNavigables = GetINavigableTypes(assembly);
             foreach (var iNavigable in iNavigables)
             {
                 var instance = Activator.CreateInstance(iNavigable, this) as INavigable;
+                navigables.Add(instance);
+            }
+
+            return navigables;
+        }
+
+        /// <summary>
+        /// Get the nodes formed by instances of INavigables from the specified assembly.
+        /// </summary>
+        /// <typeparam name="T">The generic type of the classes implementing INavigable.</typeparam>
+        /// <param name="assembly">The assembly containing the INavigables.</param>
+        /// <returns>Intances of INavigables forming the nodes.</returns>
+        public virtual HashSet<INavigable> GetNodesByReflection<T>(Assembly assembly)
+        {
+            var navigables = new HashSet<INavigable>();
+            var iNavigables = GetINavigableTypes(assembly);
+            foreach (var iNavigable in iNavigables)
+            {
+                var t = iNavigable.MakeGenericType(typeof(T));
+                var instance = Activator.CreateInstance(t, this) as INavigable;
                 navigables.Add(instance);
             }
 
@@ -202,8 +215,8 @@ namespace IC.Navigation
         /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
         public virtual INavigable Do(
-            INavigable origin, 
-            Action<CancellationToken> action, 
+            INavigable origin,
+            Action<CancellationToken> action,
             CancellationToken cancellationToken = default)
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
@@ -223,7 +236,7 @@ namespace IC.Navigation
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The INavigable returns by the Function.</returns>
-        /// <exception cref="UnexpectedNavigableException">Thrown when the page after Function invocation 
+        /// <exception cref="UnexpectedNavigableException">Thrown when the page after Function invocation
         /// does not implement the expected returned type.</exception>
         public virtual INavigable Do<T>(
             INavigable origin,
@@ -290,8 +303,8 @@ namespace IC.Navigation
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
         public virtual INavigable GoTo(
-            INavigable origin, 
-            INavigable destination, 
+            INavigable origin,
+            INavigable destination,
             CancellationToken cancellationToken = default)
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
@@ -370,8 +383,8 @@ namespace IC.Navigation
         /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The destination.</returns>
         public virtual INavigable Resolve(
-            INavigable origin, 
-            IOnActionAlternatives onActionAlternatives, 
+            INavigable origin,
+            IOnActionAlternatives onActionAlternatives,
             CancellationToken cancellationToken = default)
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
@@ -606,6 +619,17 @@ namespace IC.Navigation
                     return;
                 }
             }
+        }
+
+        private List<Type> GetINavigableTypes(Assembly assembly)
+        {
+            return assembly.GetTypes()
+                .Where(x =>
+                    typeof(INavigable).IsAssignableFrom(x)
+                    && !x.IsInterface
+                    && x.IsPublic
+                    && !x.IsAbstract
+                ).ToList();
         }
 
         #endregion Private

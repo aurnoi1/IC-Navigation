@@ -21,7 +21,7 @@ namespace IC.Tests.App.Poms.Appium
         /// <param name="appiumSession">The AppiumSession.</param>
         public Facade(IAppiumSession<R> appiumSession)
         {
-            Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
+            Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             RemoteDriver = appiumSession.WindowsDriver;
             EntryPoints = new HashSet<INavigable>() { PomMenu };
@@ -33,7 +33,7 @@ namespace IC.Tests.App.Poms.Appium
         /// <param name="globalCancellationToken">The GlobalCancellationToken.</param>
         public Facade(IAppiumSession<R> appiumSession, CancellationToken globalCancellationToken)
         {
-            Nodes = GetNodesByReflection(Assembly.GetExecutingAssembly());
+            Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             RemoteDriver = appiumSession.WindowsDriver;
             EntryPoints = new HashSet<INavigable>() { PomMenu };
