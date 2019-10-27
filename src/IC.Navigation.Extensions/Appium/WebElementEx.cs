@@ -239,21 +239,22 @@ namespace IC.Navigation.Extensions.Appium
         /// Wait until the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="elmt">This WebElement.</param>
+        /// <param name="webElement">This WebElement.</param>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
-        /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
+        /// <param name="expectedAttributesNamesValues">The attributes names as keys and the expected values.</param>
         /// otherwise <c>false</c> if the CancellationToken is cancelled.</returns>
         public static bool WaitUntil<T>(
-            this T elmt,
+            this T webElement,
             CancellationToken cancellationToken,
-            Dictionary<string, string> expectedAttribsNamesValues
+            Dictionary<string, string> expectedAttributesNamesValues
             ) where T : IWebElement
         {
-            if (elmt == null) throw new ArgumentNullException("The WebElement is null.");
+            if (webElement == null) throw new ArgumentNullException(nameof(webElement), "The WebElement is null.");
+            if (expectedAttributesNamesValues == null) throw new ArgumentNullException(nameof(expectedAttributesNamesValues), "Expected keyValuePairs Attribute is null.");
             while (!cancellationToken.IsCancellationRequested)
             {
-                var actual = GetAttributesValues(elmt, expectedAttribsNamesValues.Keys, cancellationToken);
-                if (AreEqual(expectedAttribsNamesValues, actual))
+                var actual = GetAttributesValues(webElement, expectedAttributesNamesValues.Keys, cancellationToken);
+                if (AreEqual(expectedAttributesNamesValues, actual))
                 {
                     return true;
                 }
@@ -266,22 +267,22 @@ namespace IC.Navigation.Extensions.Appium
         /// Get the attributes values of this element.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
-        /// <param name="elmt">This WebElement.</param>
+        /// <param name="webElement">This WebElement.</param>
         /// <param name="attribsNames">The attribute attribute names from where to retrieve the values.</param>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.</param>
         /// <returns>The attributes names as keys and the expected values.</returns>
         /// <exception cref="ArgumentNullException">Throw when the WebElement is null.</exception>
         public static Dictionary<string, string> GetAttributesValues<T>(
-            this T elmt,
+            this T webElement,
             IEnumerable<string> attribsNames,
             CancellationToken cancellationToken) where T : IWebElement
         {
-            if (elmt == null) throw new ArgumentNullException("The WebElement is null.");
+            if (webElement == null) throw new ArgumentNullException(nameof(webElement), "The WebElement is null.");
             Dictionary<string, string> attributesValues = new Dictionary<string, string>();
             foreach (var attribName in attribsNames)
             {
                 if (cancellationToken.IsCancellationRequested) return null;
-                var value = elmt.GetAttribute(attribName);
+                var value = webElement.GetAttribute(attribName);
                 attributesValues.Add(attribName, value);
             }
 

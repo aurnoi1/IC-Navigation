@@ -5,11 +5,11 @@ using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using Xunit;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace IC.Navigation.UnitTests
 {
@@ -62,7 +62,6 @@ namespace IC.Navigation.UnitTests
             Assert.True(actual);
             Assert.False(ct.IsCancellationRequested);
         }
-
 
         [Fact]
         public void WaitUntil_With_Many_Tuples_And_Timeout_Should_Returns_Expected_Value_Before_Timeout()
@@ -132,7 +131,6 @@ namespace IC.Navigation.UnitTests
             Assert.True(stopwatch.ElapsedMilliseconds < timeout.Ticks);
         }
 
-
         [Fact]
         public void WaitUntil_With_Dictionnary_And_CancellationToken_Should_Returns_Expected_Value_Before_Cancellation()
         {
@@ -145,20 +143,6 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.True(actual);
             Assert.False(ct.IsCancellationRequested);
-        }
-
-        private Dictionary<string, string> CreateMockedAttributesDictionary()
-        {
-            var attributes = fixture
-                .CreateMany<KeyValuePair<string, string>>()
-                .ToDictionary(x => x.Key, x => x.Value);
-
-            foreach (var keyValuePair in attributes)
-            {
-                Mock.Get(sut).Setup(x => x.GetAttribute(keyValuePair.Key)).Returns(keyValuePair.Value);
-            }
-
-            return attributes;
         }
 
         [Fact]
@@ -178,9 +162,61 @@ namespace IC.Navigation.UnitTests
             Assert.True(stopwatch.ElapsedMilliseconds < timeout.Ticks);
         }
 
+        [Fact]
+        public void WaitUntil_With_Dictionary_And_Timeout_Should_Returns_Throws_ArgumentNullException_When_IWebElement_Is_Null()
+        {
+            // Arrange
+            Dictionary<string, string> attributes = null;
+
+            TimeSpan timeout = 50.ms();
+            IWebElement nulSut = null;
+            // Act
+            Func<bool> waitUntilWithNullValues = () => nulSut.WaitUntil(timeout, attributes);
+
+
+            // Assert
+            var exception = Assert.Throws<ArgumentNullException>(() => waitUntilWithNullValues());
+            Assert.Equal("The WebElement is null. (Parameter 'webElement')", exception.Message);
+        }
+
+        [Fact]
+        public void WaitUntil_With_Dictionary_And_Timeout_Should_Returns_Throws_ArgumentNullException_When_Dictionary_Is_Null()
+        {
+            // Arrange
+            Dictionary<string, string> attributes = null;
+
+            TimeSpan timeout = 50.ms();
+
+            // Act
+            Func<bool> waitUntilWithNullValues = () => sut.WaitUntil(timeout, attributes);
+
+
+            // Assert
+            var exception = Assert.Throws<ArgumentNullException>(() => waitUntilWithNullValues());
+            Assert.Equal("Expected keyValuePairs Attribute is null. (Parameter 'expectedAttributesNamesValues')", exception.Message);
+        }
+
         public void Dispose()
         {
             cts?.Dispose();
         }
+
+        #region Private
+
+        private Dictionary<string, string> CreateMockedAttributesDictionary()
+        {
+            var attributes = fixture
+                .CreateMany<KeyValuePair<string, string>>()
+                .ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var keyValuePair in attributes)
+            {
+                Mock.Get(sut).Setup(x => x.GetAttribute(keyValuePair.Key)).Returns(keyValuePair.Value);
+            }
+
+            return attributes;
+        }
+
+        #endregion Private
     }
 }
