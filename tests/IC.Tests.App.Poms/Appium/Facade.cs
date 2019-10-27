@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium
 {
-    public class Facade<R> : NavigatorSession, IFacade<R> where R : WindowsDriver<WindowsElement>
+    public class Facade<R> : NavigatorSession, IFacade<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Facade"/> class.
@@ -113,7 +113,10 @@ namespace IC.Tests.App.Poms.Appium
 
             if (disposing)
             {
-                RemoteDriver?.Dispose();
+                using (var remoteDriver = RemoteDriver as IDisposable)
+                {
+                    remoteDriver?.Dispose();
+                }
             }
 
             disposed = true;
