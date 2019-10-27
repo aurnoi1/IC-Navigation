@@ -131,42 +131,6 @@ namespace IC.Navigation.UITests
             Assert.Equal(expected, actual);
         }
 
-        
-        [Fact]
-        public void WaitUntil_With_Tuple_And_CT_Should_Accept_Multiple_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(ct, ("IsEnabled", "True"), ("IsOffscreen", "False")));
-        }
-
-        [Fact]
-        public void WaitUntil_With_Tuple_And_Timeout_Should_Accept_Multiple_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(TimeSpan.FromSeconds(1), ("IsEnabled", "True"), ("IsOffscreen", "False")));
-        }
-
-        [Fact]
-        public void WaitUntil_With_Dic_And_CT_Should_Returns_True_When_Attribute_Match_Expected_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(ct, new Dictionary<string, string>() { { "IsEnabled", "True" } }));
-        }
-
-        [Fact]
-        public void WaitUntil_With_Dic_And_Timeout_Should_Returns_True_When_Attribute_Match_Expected_Value()
-        {
-            Assert.True(
-                sut.PomMenu.UITitle
-                .Get()
-                .WaitUntil(TimeSpan.FromSeconds(1), new Dictionary<string, string>() { { "IsEnabled", "True" } }));
-        }
 
         [Fact]
         public void ContinueWhen_With_CT_Should_Throws_OperationCanceledException_When_AttribueName_Is_Invalid()
