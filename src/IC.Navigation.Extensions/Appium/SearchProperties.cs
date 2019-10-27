@@ -154,7 +154,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties 
-        /// and when the condition is met.
+        /// and when the attribute name and value match expected.
         /// The <see cref="DefaultCancellationToken"/> cannot be <c>null</c> or <c>None</c>.
         /// </summary>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
@@ -177,7 +177,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
-        /// and when the condition is met.
+        /// and when the attribute name and value match expected.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -196,7 +196,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
-        /// and when the condition are met.
+        /// and when the attribute names and values match expected.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -212,7 +212,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
-        /// and when the condition are met.
+        /// and when the attribute names and values match expected.
         /// </summary>
         /// <param name="timeout">The maximum amount of time to wait for the condition to meet.
         /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -228,7 +228,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
-        /// and when the condition are met.
+        /// and when the attribute names and values match expected.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
         /// This CancellationToken will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -248,7 +248,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
-        /// and when the condition are met.
+        /// and when the attribute names and values match expected.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
         /// This CancellationToken will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -265,7 +265,7 @@ namespace IC.Navigation.Extensions.Appium
 
         /// <summary>
         /// Get the first WebElement of type <typeparamref name="W"/> matching the SearchProperties
-        /// and when the condition are met.
+        /// and when the attribute names and values match expected.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken used to stop to wait for the condition to meet.
         /// This CancellationToken will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
@@ -277,7 +277,7 @@ namespace IC.Navigation.Extensions.Appium
         {
             var linkedTokens = LinkCancellationTokens(cancellationToken);
             using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
-            W elmt = FindFirstElement();
+            W elmt = Get(linkedTokenSource.Token);
             if (elmt == null) return default;
             if (!elmt.WaitUntil(linkedTokenSource.Token, expectedAttribsNamesValues))
                 return default;
