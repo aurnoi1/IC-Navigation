@@ -14,8 +14,7 @@ namespace IC.Navigation.UITests
     {
         public AppiumTests()
         {
-            sut = new AppiumContext().SUT;
-            wd = sut.WindowsDriver;
+            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
             cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
             ct = cts.Token;
         }
@@ -24,8 +23,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private readonly IFacade sut;
-        private readonly WindowsDriver<WindowsElement> wd;
+        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 

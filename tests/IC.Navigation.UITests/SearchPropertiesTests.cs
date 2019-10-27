@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Threading;
 using Xunit;
 using IC.TimeoutEx;
+using OpenQA.Selenium;
 
 namespace IC.Navigation.UITests
 {
@@ -18,14 +19,14 @@ namespace IC.Navigation.UITests
     {
         public SearchPropertiesTests()
         {
-            sut = new AppiumContext().SUT;
+            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
         }
 
         #region Properties
 
         #region Private
 
-        private readonly IFacade sut;
+        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
 
         #endregion Private
 
@@ -39,7 +40,7 @@ namespace IC.Navigation.UITests
         public void Find_With_Timeout_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.Last.Do(() =>
@@ -93,7 +94,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 defaultTokenSource.Token);
 
             // Act
@@ -107,7 +108,7 @@ namespace IC.Navigation.UITests
         public void Get_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.Last.Do(() =>
@@ -123,7 +124,7 @@ namespace IC.Navigation.UITests
         public void Get_Should_Returns_Null_When_Control_Is_Not_Found()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.Last.Do(() =>
@@ -139,7 +140,7 @@ namespace IC.Navigation.UITests
         public void Get_With_Timeout_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
             var timeout = 10.s();
             Stopwatch stopwatch = new Stopwatch();
             var maxExpectedElapse = 500.ms();
@@ -162,7 +163,7 @@ namespace IC.Navigation.UITests
         public void Get_With_CToken_Should_Returns_Control_Matching_SearchProperties()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
             var timeout = 10.s();
             Stopwatch stopwatch = new Stopwatch();
             var maxExpectedElapse = 500.ms();
@@ -189,7 +190,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -208,7 +209,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -227,7 +228,7 @@ namespace IC.Navigation.UITests
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -243,7 +244,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_CToken_Should_Returns_Control_When_Single_Property_Is_True()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -265,7 +266,7 @@ namespace IC.Navigation.UITests
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -284,7 +285,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_When_Many_ValueTuple_Attributes_Are_True()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -300,7 +301,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Null_When_Control_With_Dictionnary_Of_Attributes_Is_Not_Found()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -319,7 +320,7 @@ namespace IC.Navigation.UITests
             var expectedAttribsValues = new Dictionary<string, string>();
             expectedAttribsValues.Add("IsEnabled", "True");
             expectedAttribsValues.Add("IsOffscreen", "False");
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -335,7 +336,7 @@ namespace IC.Navigation.UITests
         public void GetWhen_With_Timeout_Should_Returns_Control_With_Single_Property_Is_Not_Found()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
 
             // Act
             sut.PomMenu.Do(() =>
@@ -351,7 +352,7 @@ namespace IC.Navigation.UITests
         public void Get_With_Timeout_Should_Returns_Null_When_Control_Is_Not_Found()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
             var expectedTimeout = 3.s();
             Stopwatch stopwatch = new Stopwatch();
             var actualElapse = TimeSpan.Zero;
@@ -375,7 +376,7 @@ namespace IC.Navigation.UITests
         public void Get_With_CToken_Should_Returns_Null_When_Control_Is_Not_Found()
         {
             // Arrange
-            WindowsElement title = default;
+            IWebElement title = default;
             var expectedTimeout = 3.s();
             Stopwatch stopwatch = new Stopwatch();
             var actualElapse = TimeSpan.Zero;
@@ -404,7 +405,7 @@ namespace IC.Navigation.UITests
             // Arrange
             var expectedElapse = 3.s();
             Stopwatch stopwatch = new Stopwatch();
-            WindowsElement title = default;
+            IWebElement title = default;
             var actualElapse = TimeSpan.Zero;
             var expectedMaxElapse = 500.ms();
 
@@ -429,7 +430,7 @@ namespace IC.Navigation.UITests
             // Arrange
             var expectedElapse = 3.s();
             Stopwatch stopwatch = new Stopwatch();
-            WindowsElement title = default;
+            IWebElement title = default;
             var actualElapse = TimeSpan.Zero;
             var expectedMaxElapse = 500.ms();
 
@@ -459,7 +460,7 @@ namespace IC.Navigation.UITests
             var expectedCancellationTimeout = 2.s();
             int cancellationTimeoutMS = Convert.ToInt32(expectedCancellationTimeout.TotalMilliseconds);
             Stopwatch stopwatch = new Stopwatch();
-            WindowsElement title = default;
+            IWebElement title = default;
             var actualElapse = TimeSpan.Zero;
             var expectedMaxElapse = 500.ms();
 

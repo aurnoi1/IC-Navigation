@@ -3,7 +3,10 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,9 +14,9 @@ using System.Threading;
 namespace IC.Tests.App.Poms.Appium.POMs
 {
     [Aliases("red page")]
-    public class PomRed : PomBase
-    {        
-        public PomRed(in IFacade session) : base(session)
+    public class PomRed<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
+    {
+        public PomRed(IFacade<R> session) : base(session)
         {
             RegisterObserver(session);
         }
@@ -24,19 +27,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<WindowsElement> UITitle => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TitleRed", session.WindowsDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WDLocators.AutomationId, "TitleRed", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchProperties<WindowsElement> UIBtnBack => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
+        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnBack", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchProperties<WindowsElement> UIBtnOpenYellowPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.WindowsDriver);
+        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
 
         #endregion Controls
 

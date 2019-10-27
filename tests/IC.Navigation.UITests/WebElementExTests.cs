@@ -1,6 +1,7 @@
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -13,7 +14,7 @@ namespace IC.Navigation.UITests
     {
         public WebElementExTests()
         {
-            sut = new AppiumContext().SUT;
+            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
             cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
             ct = cts.Token;
         }
@@ -22,7 +23,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private IFacade sut;
+        private IFacade<WindowsDriver<WindowsElement>> sut;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 

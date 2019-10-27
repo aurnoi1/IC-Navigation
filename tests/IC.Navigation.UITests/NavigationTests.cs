@@ -22,8 +22,7 @@ namespace IC.Navigation.UITests
     {
         public NavigationTests()
         {
-            sut = new AppiumContext().SUT;
-            wd = sut.WindowsDriver;
+            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
             globalCts = new CancellationTokenSource(10.s());
             sut.GlobalCancellationToken = globalCts.Token;
@@ -33,9 +32,8 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private readonly IFacade sut;
+        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
         private readonly IFixture fixture;
-        private readonly WindowsDriver<WindowsElement> wd;
         private CancellationTokenSource globalCts;
 
         #endregion Private
@@ -54,7 +52,7 @@ namespace IC.Navigation.UITests
             sut.GlobalCancellationToken = cts.Token;
             sut.Last
                 .GoTo(sut.PomYellow)
-                .Do<PomMenu>(() =>
+                .Do<PomMenu<WindowsDriver<WindowsElement>>>(() =>
                 {
                     // Add a timeout in concurence of GlobalCancellationToken;
                     return sut.PomYellow.OpenMenuByMenuBtn(3.s());
@@ -185,8 +183,10 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueViewByUsageNameInViewMenu()
         {
-            WindowsElement match = sut.FindElementByAliasesInLastINavigable("button to open the blue page");
-            Assert.Equal("BtnOpenBlueView", match.GetAttribute("AutomationId"));
+            throw new NotImplementedException();
+
+            //WindowsElement match = sut.FindElementByAliasesInLastINavigable("button to open the blue page");
+            //Assert.Equal("BtnOpenBlueView", match.GetAttribute("AutomationId"));
         }
 
         [Fact]
@@ -202,7 +202,7 @@ namespace IC.Navigation.UITests
             sut.GlobalCancellationToken = cts.Token;
             sut.Last
                 .GoTo(sut.PomYellow)
-                .Do<PomMenu>(() => sut.PomYellow.OpenMenuByMenuBtn(5.s()));
+                .Do<PomMenu<WindowsDriver<WindowsElement>>>(() => sut.PomYellow.OpenMenuByMenuBtn(5.s()));
 
             Assert.True(sut.PomMenu.Exists());
         }
@@ -226,14 +226,14 @@ namespace IC.Navigation.UITests
         public void ShouldHaveViewMenuAsFirstInHistoric()
         {
             sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.Equal(typeof(PomMenu), sut.Historic.First().GetType());
+            Assert.Equal(typeof(PomMenu<WindowsDriver<WindowsElement>>), sut.Historic.First().GetType());
         }
 
         [Fact]
         public void ShouldHaveViewBlueAsLastInHistoric()
         {
             sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.Equal(typeof(PomBlue), sut.Historic.Last().GetType());
+            Assert.Equal(typeof(PomBlue<WindowsDriver<WindowsElement>>), sut.Historic.Last().GetType());
         }
 
         public void Dispose()

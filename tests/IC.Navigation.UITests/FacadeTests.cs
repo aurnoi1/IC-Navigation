@@ -2,6 +2,7 @@ using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.POMs;
+using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Threading;
 using Xunit;
@@ -13,14 +14,14 @@ namespace IC.Navigation.UITests
     {
         public FacadeTests()
         {
-            appContext = new AppiumContext();
+            appContext = new AppiumContext<WindowsDriver<WindowsElement>>();
         }
 
         #region Properties
 
         #region Private
 
-        private readonly AppiumContext appContext;
+        private readonly AppiumContext<WindowsDriver<WindowsElement>> appContext;
 
         #endregion Private
 
@@ -38,7 +39,7 @@ namespace IC.Navigation.UITests
             using var cts = new CancellationTokenSource();
 
             // Act
-            using Facade facade = new Facade(appiumSession, cts.Token);
+            using Facade<WindowsDriver<WindowsElement>> facade = new Facade<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
 
             // Assert
             Assert.Equal(cts.Token, facade.GlobalCancellationToken);
@@ -47,7 +48,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void WaitForEntryPoints_With_CToken_Should_Returns_Found_EntryPoint()
         {
-            var expected = typeof(PomMenu);
+            var expected = typeof(PomMenu<WindowsDriver<WindowsElement>>);
             INavigable actual = null;
             using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
             using (var sut = appContext.GetFacade())
@@ -71,7 +72,7 @@ namespace IC.Navigation.UITests
         [Fact]
         public void WaitForEntryPoints_With_Timeout_Should_Returns_Found_EntryPoint()
         {
-            var expected = typeof(PomMenu);
+            var expected = typeof(PomMenu<WindowsDriver<WindowsElement>>);
             INavigable actual = null;
             using (var sut = appContext.GetFacade())
             {

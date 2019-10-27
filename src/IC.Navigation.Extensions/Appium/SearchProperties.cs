@@ -3,6 +3,7 @@ using IC.Navigation.Extensions.Exceptions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Interfaces;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,8 +30,8 @@ namespace IC.Navigation.Extensions.Appium
         public SearchProperties(
             string locator,
             string value,
-            AppiumDriver<W> appiumDriver,
-            CancellationToken defaultCancellationToken = default)
+            IFindsByFluentSelector<W> appiumDriver,
+            CancellationToken defaultCancellationToken = default) 
         {
             Locator = locator;
             Value = value;

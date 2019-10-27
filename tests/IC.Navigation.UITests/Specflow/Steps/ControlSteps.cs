@@ -13,9 +13,9 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class ControlSteps : IDisposable
     {
-        private IFacade sut;
+        private IFacade<WindowsDriver<WindowsElement>> sut;
 
-        private ControlSteps(AppiumContext appiumContext)
+        private ControlSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {
             this.sut = appiumContext.SUT;
         }
@@ -23,15 +23,18 @@ namespace IC.Navigation.UITests.Specflow.Steps
         [Then(@"The control ""(.*)"" should be displayed in the current page")]
         public void ThenTheControlShouldBeDisplayed(string usageName)
         {
-            WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
-            Assert.True(match.Displayed, $"The control with usage name {usageName} was not displayed.");
+            throw new NotImplementedException();
+            //WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
+            //Assert.True(match.Displayed, $"The control with usage name {usageName} was not displayed.");
         }
 
         [Then(@"The control ""(.*)"" should not be displayed in the current page")]
         public void ThenTheControlWithUsageNameShouldNotBeDisplayed(string usageName)
         {
-            WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
-            Assert.Null(match);
+            throw new NotImplementedException();
+
+            //WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
+            //Assert.Null(match);
         }
 
         [Then(@"The following controls should be displayed in the current page:")]

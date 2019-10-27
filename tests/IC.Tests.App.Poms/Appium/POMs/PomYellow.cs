@@ -3,7 +3,10 @@ using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,9 +14,9 @@ using System.Threading;
 namespace IC.Tests.App.Poms.Appium.POMs
 {
     [Aliases("yellow page")]
-    public class PomYellow : PomBase
+    public class PomYellow<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomYellow(IFacade session) : base(session)
+        public PomYellow(IFacade<R> session) : base(session)
         {
             RegisterObserver(session);
         }
@@ -24,19 +27,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<WindowsElement> UITitle => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "TitleYellow", session.WindowsDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WDLocators.AutomationId, "TitleYellow", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchProperties<WindowsElement> UIBtnBack => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnBack", session.WindowsDriver);
+        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnBack", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public SearchProperties<WindowsElement> UIBtnOpenMenuPage => new SearchProperties<WindowsElement>(WDLocators.AutomationId, "BtnOpenMenuView", session.WindowsDriver);
+        public SearchProperties<IWebElement> UIBtnOpenMenuPage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnOpenMenuView", session.RemoteDriver);
 
         #endregion Controls
 
@@ -76,7 +79,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <param name="timeout">The timeout to interrupt the task as soon as possible in concurrence
         /// of <see cref="Facade.GlobalCancellationToken"/>.</param>
         /// <returns>The PomMenu.</returns>
-        public PomMenu OpenMenuByMenuBtn(TimeSpan timeout)
+        public PomMenu<R> OpenMenuByMenuBtn(TimeSpan timeout)
         {
             CancellationTokenSource localCts = default;
             try

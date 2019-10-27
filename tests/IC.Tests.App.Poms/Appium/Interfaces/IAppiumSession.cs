@@ -2,8 +2,8 @@
 
 namespace IC.Tests.App.Poms.Appium.Interfaces
 {
-    public interface IAppiumSession
+    public interface IAppiumSession<R> where R : WindowsDriver<WindowsElement>
     {
-        WindowsDriver<WindowsElement> WindowsDriver { get; }
+        R WindowsDriver { get; }
     }
 }

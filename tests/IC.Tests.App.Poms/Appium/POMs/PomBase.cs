@@ -1,5 +1,8 @@
 ﻿using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Appium.Interfaces;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +10,16 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
-    public abstract class PomBase : INavigable
+    public abstract class PomBase<R> : INavigable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        protected private readonly IFacade session;
+        protected private readonly IFacade<R> session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
         private PomBase()
         {
         }
 
-        public PomBase(in IFacade session)
+        public PomBase(IFacade<R> session)
         {
             this.session = session;
             RegisterObserver(session);

@@ -14,11 +14,11 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class NavigationSteps : IDisposable
     {
-        private readonly IFacade sut;
+        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 
-        public NavigationSteps(AppiumContext appiumContext)
+        public NavigationSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {
             this.sut = appiumContext.SUT;
             cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
@@ -42,8 +42,10 @@ namespace IC.Navigation.UITests.Specflow.Steps
         [When(@"The ""(.*)"" is pressed in current page")]
         public void WhenIsPressedInCurrentView(string usageName)
         {
-            WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
-            match.Click();
+            throw new NotImplementedException();
+
+            //WindowsElement match = sut.FindElementByAliasesInLastINavigable(usageName);
+            //match.Click();
         }
 
         [Then(@"The ""(.*)"" should be opened")]
@@ -56,8 +58,10 @@ namespace IC.Navigation.UITests.Specflow.Steps
         [Then(@"The control ""(.*)"" should not be displayed")]
         public void ThenTheControlShouldNotBeDisplayed(string usageName)
         {
-            var control = sut.FindElementByAliasesInLastINavigable(usageName);
-            Assert.Null(control);
+            throw new NotImplementedException();
+
+            //var control = sut.FindElementByAliasesInLastINavigable(usageName);
+            //Assert.Null(control);
         }
 
         public void Dispose()

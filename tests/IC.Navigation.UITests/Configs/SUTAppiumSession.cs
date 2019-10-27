@@ -5,7 +5,7 @@ using System;
 
 namespace IC.Navigation.UITests.Configs
 {
-    public class SUTAppiumSession : IAppiumSession
+    public class SUTAppiumSession<R> : IAppiumSession<R> where R : WindowsDriver<WindowsElement>
     {
         private IAppiumConfig appiumConfig;
         private WindowsDriver<WindowsElement> winDriver;
@@ -15,7 +15,7 @@ namespace IC.Navigation.UITests.Configs
             this.appiumConfig = sutAppiumtConfig;
         }
 
-        public WindowsDriver<WindowsElement> WindowsDriver
+        public R WindowsDriver
         {
             get
             {
@@ -29,7 +29,7 @@ namespace IC.Navigation.UITests.Configs
                     winDriver = windowsDriver;
                 }
 
-                return winDriver;
+                return winDriver as R;
             }
         }
     }

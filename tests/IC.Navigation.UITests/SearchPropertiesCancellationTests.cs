@@ -15,14 +15,14 @@ namespace IC.Navigation.UITests
     {
         public SearchPropertiesCancellationTests()
         {
-            sut = new AppiumContext().SUT;
+            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
         }
 
         #region Properties
 
         #region Private
 
-        private readonly IFacade sut;
+        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
 
         #endregion Private
 
@@ -40,7 +40,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -58,7 +58,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -77,7 +77,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -98,7 +98,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -121,7 +121,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -142,7 +142,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -160,7 +160,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -178,7 +178,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -197,7 +197,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -218,7 +218,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -240,7 +240,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -262,7 +262,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -279,7 +279,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver);
+                sut.RemoteDriver);
 
             // Act
             Func<WindowsElement> getWhen = () => titleMenuSearchProp.GetWhen("IsEnabled", "True");
@@ -296,7 +296,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -315,7 +315,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -334,7 +334,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WDLocators.AutomationId,
                 "TitleMenu",
-                sut.WindowsDriver,
+                sut.RemoteDriver,
                 expiredCts.Token);
 
             // Act
