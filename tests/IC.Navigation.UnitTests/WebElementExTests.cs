@@ -52,7 +52,6 @@ namespace IC.Navigation.UnitTests
             // Arrange
             using CancellationTokenSource delayBeforeReturnsValue = new CancellationTokenSource(50.ms());
             var (name, value) = CreateMockAttributesReturningValueAfterDelay(delayBeforeReturnsValue.Token);
-
             var stopwatch = Stopwatch.StartNew();
             TimeSpan timeout = 500.ms();
 
