@@ -50,7 +50,7 @@ namespace IC.Navigation.UnitTests
         public void WaitUntil_With_Tuple_And_Timeout_Should_Returns_Expected_Value_With_Delay_But_Before_Timeout()
         {
             // Arrange
-            using CancellationTokenSource delayBeforeReturnsValue = new CancellationTokenSource(100.ms());
+            using CancellationTokenSource delayBeforeReturnsValue = new CancellationTokenSource(50.ms());
             var (name, value) = CreateMockAttributesReturningValueAfterDelay(delayBeforeReturnsValue.Token);
 
             var stopwatch = Stopwatch.StartNew();
