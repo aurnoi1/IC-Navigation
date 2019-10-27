@@ -171,7 +171,7 @@ namespace IC.Navigation.UnitTests
             TimeSpan timeout = 50.ms();
             IWebElement nulSut = null;
             // Act
-            Func<bool> waitUntilWithNullValues = () => nulSut.WaitUntil(timeout, attributes);
+            bool waitUntilWithNullValues() => nulSut.WaitUntil(timeout, attributes);
 
 
             // Assert
@@ -188,8 +188,7 @@ namespace IC.Navigation.UnitTests
             TimeSpan timeout = 50.ms();
 
             // Act
-            Func<bool> waitUntilWithNullValues = () => sut.WaitUntil(timeout, attributes);
-
+            bool waitUntilWithNullValues() => sut.WaitUntil(timeout, attributes);
 
             // Assert
             var exception = Assert.Throws<ArgumentNullException>(() => waitUntilWithNullValues());

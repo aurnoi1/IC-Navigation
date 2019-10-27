@@ -282,6 +282,9 @@ namespace IC.Navigation.Extensions.Appium
             foreach (var attribName in attributeNames)
             {
                 if (cancellationToken.IsCancellationRequested) return null;
+
+                // GetAttribute will return null if attribName does not exists.
+                // No exception is thrown.
                 var value = webElement.GetAttribute(attribName);
                 attributesValues.Add(attribName, value);
             }
