@@ -5,8 +5,8 @@ using OpenQA.Selenium.Remote;
 
 namespace IC.Tests.App.Poms.Appium.Interfaces
 {
-    public interface IWindowsDriverSession<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
+    public interface IShallowRemoteDriver<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        R WindowsDriver { get; }
+        R RemoteDriver { get; }
     }
 }

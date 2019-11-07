@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("yellow page")]
     public class PomYellow<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomYellow(IFacade<R> session) : base(session)
+        public PomYellow(IBrowser<R> session) : base(session)
         {
             RegisterObserver(session);
         }
@@ -77,7 +77,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// Open the Menu page by clicking on UIBtnOpenMenuPage.
         /// </summary>
         /// <param name="timeout">The timeout to interrupt the task as soon as possible in concurrence
-        /// of <see cref="Facade.GlobalCancellationToken"/>.</param>
+        /// of <see cref="Browser.GlobalCancellationToken"/>.</param>
         /// <returns>The PomMenu.</returns>
         public PomMenu<R> OpenMenuByMenuBtn(TimeSpan timeout)
         {

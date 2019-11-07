@@ -10,12 +10,12 @@ namespace IC.Navigation.UITests.Specflow.Contexts
 {
     public class AppiumContext<R> where R : WindowsDriver<WindowsElement>
     {
-        private IFacade<R> sut;
+        private IBrowser<R> sut;
 
         /// <summary>
         /// An instance of the SUT's IMySession.
         /// </summary>
-        public IFacade<R> SUT
+        public IBrowser<R> SUT
         {
             get
             {
@@ -41,7 +41,7 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         /// </summary>
         /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The SUT session.</returns>
-        public IFacade<R> Start(CancellationToken ct)
+        public IBrowser<R> Start(CancellationToken ct)
         {
             var sut = GetFacade();
             sut.WaitForEntryPoints(ct);
@@ -52,17 +52,17 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         /// Start the Appium session without waiting for UI to exists.
         /// </summary>
         /// <returns>The SUT session.</returns>
-        public IFacade<R> GetFacade()
+        public IBrowser<R> GetFacade()
         {
-            IWindowsDriverSession<R> session = GetAppiumSession();
-            var sut = new Facade<R>(session);
+            IShallowRemoteDriver<R> session = GetAppiumSession();
+            var sut = new Browser<R>(session);
             return sut;
         }
 
-        public IWindowsDriverSession<R> GetAppiumSession()
+        public IShallowRemoteDriver<R> GetAppiumSession()
         {
             ISUTAppiumConfig config = new SUTAppiumConfig();
-            IWindowsDriverSession<R> session = new SUTAppiumSession<R>(config);
+            IShallowRemoteDriver<R> session = new SUTAppiumSession<R>(config);
             return session;
         }
     }

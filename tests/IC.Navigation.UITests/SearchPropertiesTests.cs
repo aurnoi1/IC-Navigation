@@ -26,7 +26,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
+        private readonly IBrowser<WindowsDriver<WindowsElement>> sut;
 
         #endregion Private
 

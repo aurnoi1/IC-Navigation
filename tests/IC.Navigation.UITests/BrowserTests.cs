@@ -10,9 +10,9 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class FacadeTests
+    public class BrowserTests
     {
-        public FacadeTests()
+        public BrowserTests()
         {
             appContext = new AppiumContext<WindowsDriver<WindowsElement>>();
         }
@@ -39,7 +39,7 @@ namespace IC.Navigation.UITests
             using var cts = new CancellationTokenSource();
 
             // Act
-            using Facade<WindowsDriver<WindowsElement>> facade = new Facade<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
+            using Browser<WindowsDriver<WindowsElement>> facade = new Browser<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
 
             // Assert
             Assert.Equal(cts.Token, facade.GlobalCancellationToken);

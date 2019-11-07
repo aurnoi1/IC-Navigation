@@ -6,7 +6,7 @@ using OpenQA.Selenium.Remote;
 
 namespace IC.Tests.App.Poms.Appium.Interfaces
 {
-    public interface IFacade<R> : INavigatorSession, INavigables<R>, IRemoteDriverSession<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
+    public interface IBrowser<R> : INavigatorSession, INavigables<R>, IRemoteDriverSession<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
     }
 }

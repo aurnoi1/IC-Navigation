@@ -32,7 +32,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
+        private readonly IBrowser<WindowsDriver<WindowsElement>> sut;
         private readonly IFixture fixture;
         private CancellationTokenSource globalCts;
 

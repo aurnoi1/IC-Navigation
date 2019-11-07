@@ -12,14 +12,14 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public abstract class PomBase<R> : INavigable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        protected private readonly IFacade<R> session;
+        protected private readonly IBrowser<R> session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
         private PomBase()
         {
         }
 
-        public PomBase(IFacade<R> session)
+        public PomBase(IBrowser<R> session)
         {
             this.session = session;
             RegisterObserver(session);

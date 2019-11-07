@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("red page")]
     public class PomRed<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomRed(IFacade<R> session) : base(session)
+        public PomRed(IBrowser<R> session) : base(session)
         {
             RegisterObserver(session);
         }

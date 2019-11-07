@@ -14,7 +14,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class ControlSteps : IDisposable
     {
-        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
+        private readonly IBrowser<WindowsDriver<WindowsElement>> sut;
 
         private ControlSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {

@@ -10,7 +10,7 @@ namespace IC.Navigation.UITests.Specflow.StepArgumentTransformations
     [Binding]
     public class NavigableTransformations
     {
-        private readonly IFacade<WindowsDriver<WindowsElement>> sut;
+        private readonly IBrowser<WindowsDriver<WindowsElement>> sut;
 
         public NavigableTransformations(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {

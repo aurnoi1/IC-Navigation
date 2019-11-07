@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("blue page")]
     public class PomBlue<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomBlue(IFacade<R> session) : base(session)
+        public PomBlue(IBrowser<R> session) : base(session)
         {
             RegisterObserver(session);
         }
