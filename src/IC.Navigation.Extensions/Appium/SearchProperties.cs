@@ -11,7 +11,7 @@ namespace IC.Navigation.Extensions.Appium
 {
     public class SearchProperties<W> : ISearchProperties<W> where W : IWebElement
     {
-        const string timeoutExceptionMessage = "The timeout has been reached before the Element could be found.";
+        private const string timeoutExceptionMessage = "The timeout has been reached before the Element could be found.";
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchProperties"/> class.

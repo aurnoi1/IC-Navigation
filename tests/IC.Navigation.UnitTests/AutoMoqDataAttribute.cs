@@ -1,9 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace IC.Navigation.UnitTests
 {
@@ -15,7 +12,6 @@ namespace IC.Navigation.UnitTests
              return fixture;
          })
         {
-
         }
     }
 }

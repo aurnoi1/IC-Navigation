@@ -1,5 +1,4 @@
 ﻿using IC.Navigation.Extensions.Appium.Interfaces;
-using IC.Navigation.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 using OpenQA.Selenium.Remote;

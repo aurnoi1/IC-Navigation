@@ -4,7 +4,6 @@ using IC.Tests.App.Poms.Appium.Interfaces;
 using IC.Tests.App.Poms.Appium.POMs;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -26,6 +25,7 @@ namespace IC.Tests.App.Poms.Appium
             RemoteDriver = appiumSession.RemoteDriver;
             EntryPoints = new HashSet<INavigable>() { PomMenu };
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Facade"/> class.
         /// </summary>
@@ -83,7 +83,6 @@ namespace IC.Tests.App.Poms.Appium
         /// The INavigables to be expected as entry points when the application start.
         /// </summary>
         public override HashSet<INavigable> EntryPoints { get; protected set; }
-
 
         #endregion Public
 

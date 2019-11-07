@@ -131,7 +131,6 @@ namespace IC.Navigation.UITests
             Assert.Equal(expected, actual);
         }
 
-
         [Fact]
         public void ContinueWhen_With_CT_Should_Throws_OperationCanceledException_When_AttribueName_Is_Invalid()
         {

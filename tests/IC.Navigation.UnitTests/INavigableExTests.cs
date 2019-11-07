@@ -2,13 +2,13 @@
 using AutoFixture.AutoMoq;
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.Interfaces;
+using IC.TimeoutEx;
 using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Xunit;
-using IC.TimeoutEx;
 
 namespace IC.Navigation.UnitTests
 {
@@ -133,7 +133,7 @@ namespace IC.Navigation.UnitTests
             var path = new Fixture().Customize(new AutoMoqCustomization()).Create<List<INavigable>>();
             var previous = path.First();
             path.Insert(1, origin);
-            iGraph.Setup(g => g.GetShortestPath(origin, previous)).Returns(new List<INavigable>() { origin, previous});
+            iGraph.Setup(g => g.GetShortestPath(origin, previous)).Returns(new List<INavigable>() { origin, previous });
             sessionMock.CallBase = true;
             sessionMock.Object.GlobalCancellationToken = globalCancellationToken;
             sessionMock.SetupGet(x => x.Graph).Returns(iGraph.Object);
@@ -171,7 +171,6 @@ namespace IC.Navigation.UnitTests
                     Times.Once
                 );
         }
-
 
         [Fact]
         public void Back_Should_Be_Interrupted_By_LocalCancellationToken_Before_GlobalCancellationToken()
@@ -233,7 +232,6 @@ namespace IC.Navigation.UnitTests
                 );
         }
 
-
         [Fact]
         public void Back_Should_Be_Interrupted_By_LocalCancellationToken_When_No_GlobalCancellationToken()
         {
@@ -262,7 +260,7 @@ namespace IC.Navigation.UnitTests
                 );
         }
 
-        #endregion
+        #endregion Back Tests
 
         #region Goto Tests
 
@@ -324,7 +322,6 @@ namespace IC.Navigation.UnitTests
                 );
         }
 
-
         [Fact]
         public void GoTo_Should_Be_Interrupted_By_GlobalCancellationToken_Before_LocalCancellationToken()
         {
@@ -354,7 +351,6 @@ namespace IC.Navigation.UnitTests
                     Times.Once
                 );
         }
-
 
         [Fact]
         public void GoTo_Should_Be_Interrupted_By_LocalCancellationToken_When_No_GlobalCancellationToken()

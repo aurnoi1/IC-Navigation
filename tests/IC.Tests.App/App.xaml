@@ -4,6 +4,5 @@
              xmlns:local="clr-namespace:IC.Tests.App"
              Startup="App_Startup">
     <Application.Resources>
-         
     </Application.Resources>
 </Application>

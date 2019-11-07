@@ -5,7 +5,6 @@ using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -27,8 +26,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         [Aliases("title")]
         public SearchProperties<IWebElement> UILblTitle => new SearchProperties<IWebElement>(
-            WDLocators.AutomationId, 
-            "TitleBlue", 
+            WDLocators.AutomationId,
+            "TitleBlue",
             session.RemoteDriver);
 
         /// <summary>
@@ -36,8 +35,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         [Aliases("button to go back to the previous page")]
         public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(
-            WDLocators.AutomationId, 
-            "BtnBack", 
+            WDLocators.AutomationId,
+            "BtnBack",
             session.RemoteDriver);
 
         /// <summary>
@@ -45,8 +44,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         [Aliases("button to open the yellow page")]
         public SearchProperties<IWebElement> BtnOpenYellowPage => new SearchProperties<IWebElement>(
-            WDLocators.AutomationId, 
-            "BtnOpenYellowView", 
+            WDLocators.AutomationId,
+            "BtnOpenYellowView",
             session.RemoteDriver);
 
         #endregion Controls

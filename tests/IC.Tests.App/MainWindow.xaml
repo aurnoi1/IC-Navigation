@@ -12,6 +12,6 @@
         UseLayoutRounding="True">
 
    <Grid>
-      <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+      <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden" />
    </Grid>
 </Window>

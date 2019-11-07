@@ -17,7 +17,7 @@ namespace IC.TimeoutEx
         /// </summary>
         public const string ValuePattern = @"(-?\d+(?:\.\d+)?)"; // Must be declared before patterns.
 
-        private static Dictionary<string, Func<double[], TimeSpan>> _Patterns { get; set; } = 
+        private static Dictionary<string, Func<double[], TimeSpan>> _Patterns { get; set; } =
             new Dictionary<string, Func<double[], TimeSpan>>()
             {
                 { $@"^{ValuePattern} seconds$", x => x.Single().s() },

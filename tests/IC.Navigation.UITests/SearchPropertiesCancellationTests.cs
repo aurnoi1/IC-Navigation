@@ -254,7 +254,6 @@ namespace IC.Navigation.UITests
             Assert.False(longCts2.IsCancellationRequested);
         }
 
-
         [Fact]
         public void GetWhen_With_DefaultCancellationToken_Should_Returns_Control_Matching()
         {

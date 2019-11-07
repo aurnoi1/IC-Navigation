@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Windows;
-using System.Windows.Media.Imaging;
 
 namespace IC.Tests.App
 {
@@ -25,7 +18,7 @@ namespace IC.Tests.App
             }
             else
             {
-                 mainWindow = new MainWindow();
+                mainWindow = new MainWindow();
             }
 
             var workArea = SystemParameters.WorkArea;

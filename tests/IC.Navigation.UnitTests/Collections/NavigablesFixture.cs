@@ -73,7 +73,5 @@ namespace IC.Navigation.UnitTests.Collections
         public Mock<INavigable> N3;
         public Mock<INavigable> N4;
         public Mock<INavigable> N5;
-
-
     }
 }

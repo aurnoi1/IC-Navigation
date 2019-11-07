@@ -1,6 +1,5 @@
 ﻿using IC.Tests.App.Views;
 using System.Windows;
-using System.Windows.Navigation;
 
 namespace IC.Tests.App
 {

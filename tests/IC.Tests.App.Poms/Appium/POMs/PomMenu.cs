@@ -1,12 +1,10 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.Interfaces;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;

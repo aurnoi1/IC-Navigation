@@ -6,7 +6,7 @@
              x:Name="MenuPage"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-   
+
    <Grid Background="White">
       <Grid.ColumnDefinitions>
          <ColumnDefinition></ColumnDefinition>
@@ -25,10 +25,10 @@
 
       <DockPanel Grid.Row="0" Grid.ColumnSpan="3">
          <StackPanel>
-            <TextBlock x:Name="TitleMenu" Background="White" FontSize="30" Text="Menu View" TextAlignment="Center" Padding="5"/>
+            <TextBlock x:Name="TitleMenu" Background="White" FontSize="30" Text="Menu View" TextAlignment="Center" Padding="5" />
          </StackPanel>
       </DockPanel>
-      
+
       <DockPanel Grid.Row="1" Grid.RowSpan="3" Grid.Column="1">
          <StackPanel VerticalAlignment="Center">
             <Button x:Name="BtnOpenRedView" Background="White" Height="50" Content="Open Red" Click="BtnOpenRedView_Click"></Button>
@@ -43,5 +43,4 @@
          </StackPanel>
       </DockPanel>
    </Grid>
-   
 </Page>

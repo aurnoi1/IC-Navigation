@@ -1,13 +1,9 @@
 ﻿using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;
-using System;
 using System.Collections.Generic;
-using Xunit;
 using System.Linq;
-using AutoFixture.Xunit2;
-using AutoFixture.AutoMoq;
-using AutoFixture;
+using Xunit;
 
 namespace IC.Navigation.UnitTests
 {
@@ -27,6 +23,7 @@ namespace IC.Navigation.UnitTests
         }
 
 #pragma warning disable xUnit1026
+
         [Theory]
         [ClassData(typeof(NoPathData))]
         public void GetShortestPath_Should_Return_No_Path(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> _)
@@ -37,6 +34,7 @@ namespace IC.Navigation.UnitTests
         }
 
 #pragma warning disable xUnit1026
+
         [Theory]
         [ClassData(typeof(OriginIsDestinationData))]
         public void GetShortestPath_Should_Returns_No_Path_When_Origin_Is_Destination(HashSet<INavigable> nodes, INavigable origin, INavigable destination, List<INavigable> _)

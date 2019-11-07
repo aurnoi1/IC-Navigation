@@ -1,5 +1,4 @@
 ﻿using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;

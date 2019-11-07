@@ -5,7 +5,6 @@ using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
@@ -85,7 +84,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             {
                 localCts = new CancellationTokenSource(timeout);
                 using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                    session.GlobalCancellationToken, 
+                    session.GlobalCancellationToken,
                     localCts.Token);
 
                 UIBtnOpenMenuPage.Find(linkedCts.Token).Click();

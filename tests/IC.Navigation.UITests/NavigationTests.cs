@@ -154,8 +154,6 @@ namespace IC.Navigation.UITests
             Assert.DoesNotContain(expected, registeredObservers);
         }
 
-
-
         [Fact]
         public void Do_With_INavigable_Returned_Type_Should_Return_PomMenu()
         {
