@@ -1,5 +1,4 @@
 ﻿using IC.Navigation.UITests.Interfaces;
-using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium;
 using System;
 using System.IO;

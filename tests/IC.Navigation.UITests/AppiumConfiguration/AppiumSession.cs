@@ -7,7 +7,7 @@ namespace IC.Navigation.UITests.AppiumConfiguration
 {
     public class AppiumSession<R> : IAppiumSession<R> where R : WindowsDriver<WindowsElement>
     {
-        private IAppiumConfig appiumConfig;
+        private readonly IAppiumConfig appiumConfig;
         private WindowsDriver<WindowsElement> winDriver;
 
         public AppiumSession(IAppiumConfig appiumConfig)
