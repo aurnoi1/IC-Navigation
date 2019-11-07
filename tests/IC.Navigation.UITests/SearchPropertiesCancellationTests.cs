@@ -22,7 +22,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private readonly IBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
 
         #endregion Private
 

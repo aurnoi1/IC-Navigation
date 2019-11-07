@@ -56,10 +56,10 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             var sut = new Mock<NavigatorSession>();
             sut.SetupGet(x => x.Graph).Returns(iGraph.Object);
             sut.CallBase = true;
-            Mock<ISession> session = new Mock<ISession>();
+            Mock<INavigatorSession> session = new Mock<INavigatorSession>();
             foreach (var node in expected)
             {
-                node.SetupGet(n => n.Session).Returns(session.Object);
+                node.SetupGet(n => n.NavigatorSession).Returns(session.Object);
                 node.Setup(n => n.PublishStatus().Exists).Returns(true);
             }
 

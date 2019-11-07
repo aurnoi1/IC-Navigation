@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace IC.Navigation.Interfaces
 {
-    public interface INavigatorSession : ISession
+    public interface INavigatorSession : IEntryPointManager, INavigator
     {
         /// <summary>
         /// Get the instance of INavigable from the Nodes.

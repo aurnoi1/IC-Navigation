@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
-    public interface ISession : INavigator
+    public interface IEntryPointManager
     {
         /// <summary>
         /// The INavigables to be expected as entry points when the application start.

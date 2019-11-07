@@ -18,7 +18,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     public class PomMenu<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
 
     {
-        public PomMenu(IBrowser<R> session) : base(session)
+        public PomMenu(IAppBrowser<R> session) : base(session)
         {
             RegisterObserver(session);
         }

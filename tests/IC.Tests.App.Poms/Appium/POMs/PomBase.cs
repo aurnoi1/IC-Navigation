@@ -12,14 +12,14 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public abstract class PomBase<R> : INavigable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        protected private readonly IBrowser<R> session;
+        protected private readonly IAppBrowser<R> session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
         private PomBase()
         {
         }
 
-        public PomBase(IBrowser<R> session)
+        public PomBase(IAppBrowser<R> session)
         {
             this.session = session;
             RegisterObserver(session);
@@ -90,6 +90,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// The navigation session.
         /// </summary>
-        ISession INavigable.Session => session;
+        INavigatorSession INavigable.NavigatorSession => session;
     }
 }

@@ -23,7 +23,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private IBrowser<WindowsDriver<WindowsElement>> sut;
+        private IAppBrowser<WindowsDriver<WindowsElement>> sut;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 

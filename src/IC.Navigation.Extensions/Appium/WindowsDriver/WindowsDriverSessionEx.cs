@@ -15,7 +15,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// <param name="winDriverSession">This IWindowsDriverSession.</param>
         /// <param name="alias">The matching alias.</param>
         /// <returns>The WindowsElement if found, otherwise <c>null</c>.</returns>
-        public static WindowsElement FindElementByAliasesInLastINavigable(this IRemoteDriverSession<WindowsDriver<WindowsElement>> winDriverSession, string alias)
+        public static WindowsElement FindElementByAliasesInLastINavigable(this IRemoteDriverBrowser<WindowsDriver<WindowsElement>> winDriverSession, string alias)
         {
             WindowsElement match = null;
             var prop = GetLastINavigableAliasesAndProperties(winDriverSession).SingleOrDefault(x => x.Key.Values.Contains(alias)).Value;
@@ -33,7 +33,7 @@ namespace IC.Navigation.Extensions.Appium.WindowsDriver
         /// </summary>
         /// <param name="winDriverSession">This IWindowsDriverSession.</param>
         /// <returns>The properties and the associated Aliases of last INavigable.</returns>
-        public static Dictionary<Aliases, PropertyInfo> GetLastINavigableAliasesAndProperties(this IRemoteDriverSession<WindowsDriver<WindowsElement>> winDriverSession)
+        public static Dictionary<Aliases, PropertyInfo> GetLastINavigableAliasesAndProperties(this IRemoteDriverBrowser<WindowsDriver<WindowsElement>> winDriverSession)
         {
             Dictionary<Aliases, PropertyInfo> propertyInfos = new Dictionary<Aliases, PropertyInfo>();
             var properties = winDriverSession.Last.GetType().GetProperties();

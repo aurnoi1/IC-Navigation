@@ -16,7 +16,7 @@ namespace IC.Navigation.CoreExtensions
         {
             using var infinitTokenSource = new CancellationTokenSource();
             void actionNotCancellable(CancellationToken ct) => action();
-            return origin.Session.Do(origin, actionNotCancellable, infinitTokenSource.Token);
+            return origin.NavigatorSession.Do(origin, actionNotCancellable, infinitTokenSource.Token);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace IC.Navigation.CoreExtensions
         {
             using var infinitTokenSource = new CancellationTokenSource();
             INavigable functionNotCancellable(CancellationToken ct) => function();
-            return origin.Session.Do<T>(origin, functionNotCancellable, infinitTokenSource.Token);
+            return origin.NavigatorSession.Do<T>(origin, functionNotCancellable, infinitTokenSource.Token);
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace IC.Navigation.CoreExtensions
         public static INavigable Do(this INavigable origin, Action<CancellationToken> action, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.Session.GlobalCancellationToken,
+                origin.NavigatorSession.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.Session.Do(origin, action, linkedCts.Token);
+            return origin.NavigatorSession.Do(origin, action, linkedCts.Token);
         }
 
         /// <summary>
@@ -66,11 +66,11 @@ namespace IC.Navigation.CoreExtensions
             CancellationToken cancellationToken = default) where T : INavigable
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.Session.GlobalCancellationToken,
+                origin.NavigatorSession.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.Session.Do<T>(origin, function, linkedCts.Token);
+            return origin.NavigatorSession.Do<T>(origin, function, linkedCts.Token);
         }
 
         /// <summary>
@@ -88,11 +88,11 @@ namespace IC.Navigation.CoreExtensions
                 CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.Session.GlobalCancellationToken,
+                origin.NavigatorSession.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.Session.GoTo(origin, destination, linkedCts.Token);
+            return origin.NavigatorSession.GoTo(origin, destination, linkedCts.Token);
         }
 
         /// <summary>
@@ -105,11 +105,11 @@ namespace IC.Navigation.CoreExtensions
         public static INavigable Back(this INavigable origin, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.Session.GlobalCancellationToken,
+                origin.NavigatorSession.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.Session.Back(linkedCts.Token);
+            return origin.NavigatorSession.Back(linkedCts.Token);
         }
 
         /// <summary>

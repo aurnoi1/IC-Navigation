@@ -3,14 +3,14 @@ using System.Reflection;
 
 namespace IC.Navigation.CoreExtensions
 {
-    public static class SessionEx
+    public static class INavigatorSessionEx
     {
         /// <summary>
         /// Get INavigable by their attribute Aliases.
         /// </summary>
         /// <param name="alias">The expected alias.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public static INavigable GetINavigableByUsageName(this ISession navigatorSession, string alias)
+        public static INavigable GetINavigableByUsageName(this INavigatorSession navigatorSession, string alias)
         {
             INavigable iNavigable = null;
             foreach (var node in navigatorSession.Graph.Nodes)

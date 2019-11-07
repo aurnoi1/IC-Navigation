@@ -15,7 +15,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class NavigationSteps : IDisposable
     {
-        private readonly IBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 

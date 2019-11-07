@@ -39,7 +39,7 @@ namespace IC.Navigation.UITests
             using var cts = new CancellationTokenSource();
 
             // Act
-            using Browser<WindowsDriver<WindowsElement>> facade = new Browser<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
+            using AppBrowser<WindowsDriver<WindowsElement>> facade = new AppBrowser<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
 
             // Assert
             Assert.Equal(cts.Token, facade.GlobalCancellationToken);

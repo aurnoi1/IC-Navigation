@@ -13,13 +13,13 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium
 {
-    public class Browser<R> : NavigatorSession, IBrowser<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
+    public class AppBrowser<R> : NavigatorSession, IAppBrowser<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Facade"/> class.
         /// </summary>
         /// <param name="appiumSession">The AppiumSession.</param>
-        public Browser(IShallowRemoteDriver<R> appiumSession)
+        public AppBrowser(IShallowRemoteDriver<R> appiumSession)
         {
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
@@ -31,7 +31,7 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         /// <param name="appiumSession">The AppiumSession.</param>
         /// <param name="globalCancellationToken">The GlobalCancellationToken.</param>
-        public Browser(IShallowRemoteDriver<R> appiumSession, CancellationToken globalCancellationToken)
+        public AppBrowser(IShallowRemoteDriver<R> appiumSession, CancellationToken globalCancellationToken)
         {
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);

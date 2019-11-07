@@ -83,9 +83,9 @@ namespace IC.Navigation.UnitTests
             var sessionMock = new Mock<NavigatorSession>();
             sessionMock.CallBase = true;
             sessionMock.Object.GlobalCancellationToken = globalCancellationToken;
-            Mock.Get(origin).Setup(x => x.Session).Returns(sessionMock.Object);
-            Mock.Get(origin).Setup(x => x.Session.GlobalCancellationToken).Returns(globalCancellationToken);
-            Mock.Get(origin).Setup(x => x.Session.Do(origin, action, localCancellationToken)).Returns(origin);
+            Mock.Get(origin).Setup(x => x.NavigatorSession).Returns(sessionMock.Object);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.GlobalCancellationToken).Returns(globalCancellationToken);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.Do(origin, action, localCancellationToken)).Returns(origin);
         }
 
         private void SetNavigableSessionForDoTests(
@@ -97,9 +97,9 @@ namespace IC.Navigation.UnitTests
             var sessionMock = new Mock<NavigatorSession>();
             sessionMock.CallBase = true;
             sessionMock.Object.GlobalCancellationToken = globalCancellationToken;
-            Mock.Get(origin).Setup(x => x.Session).Returns(sessionMock.Object);
-            Mock.Get(origin).Setup(x => x.Session.GlobalCancellationToken).Returns(globalCancellationToken);
-            Mock.Get(origin).Setup(x => x.Session.Do<INavigable>(origin, action, localCancellationToken)).Returns(origin);
+            Mock.Get(origin).Setup(x => x.NavigatorSession).Returns(sessionMock.Object);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.GlobalCancellationToken).Returns(globalCancellationToken);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.Do<INavigable>(origin, action, localCancellationToken)).Returns(origin);
         }
 
         private void SetNavigableSessionForGoToTests(
@@ -117,9 +117,9 @@ namespace IC.Navigation.UnitTests
             sessionMock.CallBase = true;
             sessionMock.Object.GlobalCancellationToken = globalCancellationToken;
             sessionMock.SetupGet(x => x.Graph).Returns(iGraph.Object);
-            Mock.Get(origin).Setup(x => x.Session).Returns(sessionMock.Object);
-            Mock.Get(origin).Setup(x => x.Session.GlobalCancellationToken).Returns(globalCancellationToken);
-            Mock.Get(origin).Setup(x => x.Session.GoTo(origin, destination, localCancellationToken)).Returns(origin);
+            Mock.Get(origin).Setup(x => x.NavigatorSession).Returns(sessionMock.Object);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.GlobalCancellationToken).Returns(globalCancellationToken);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.GoTo(origin, destination, localCancellationToken)).Returns(origin);
         }
 
         private void SetNavigableSessionForBackTests(
@@ -128,7 +128,7 @@ namespace IC.Navigation.UnitTests
             CancellationToken localCancellationToken)
         {
             var sessionMock = new Mock<NavigatorSession>();
-            Mock.Get(origin).Setup(x => x.Session).Returns(sessionMock.Object);
+            Mock.Get(origin).Setup(x => x.NavigatorSession).Returns(sessionMock.Object);
             Mock<IGraph> iGraph = new Mock<IGraph>();
             var path = new Fixture().Customize(new AutoMoqCustomization()).Create<List<INavigable>>();
             var previous = path.First();
@@ -137,10 +137,10 @@ namespace IC.Navigation.UnitTests
             sessionMock.CallBase = true;
             sessionMock.Object.GlobalCancellationToken = globalCancellationToken;
             sessionMock.SetupGet(x => x.Graph).Returns(iGraph.Object);
-            Mock.Get(origin).Setup(x => x.Session.Last).Returns(origin);
-            Mock.Get(origin).Setup(x => x.Session.Previous).Returns(previous);
-            Mock.Get(origin).Setup(x => x.Session.GlobalCancellationToken).Returns(globalCancellationToken);
-            Mock.Get(origin).Setup(x => x.Session.Back(localCancellationToken)).Returns(previous);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.Last).Returns(origin);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.Previous).Returns(previous);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.GlobalCancellationToken).Returns(globalCancellationToken);
+            Mock.Get(origin).Setup(x => x.NavigatorSession.Back(localCancellationToken)).Returns(previous);
         }
 
         #region Back Tests
@@ -161,13 +161,13 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.True(globalCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Back().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Back(It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Back(It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -193,12 +193,12 @@ namespace IC.Navigation.UnitTests
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.False(globalCts.IsCancellationRequested);
             Assert.True(localCts.IsCancellationRequested);
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.Back().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Back(It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Back(It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -223,12 +223,12 @@ namespace IC.Navigation.UnitTests
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.True(globalCts.IsCancellationRequested);
             Assert.False(localCts.IsCancellationRequested);
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.Back().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Back(It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Back(It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -252,12 +252,12 @@ namespace IC.Navigation.UnitTests
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.True(localCts.IsCancellationRequested);
-            Assert.Equal(default, origin.Session.GlobalCancellationToken);
+            Assert.Equal(default, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.Back().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Back(It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Back(It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -283,13 +283,13 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.True(globalCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.GoTo().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -314,12 +314,12 @@ namespace IC.Navigation.UnitTests
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.False(globalCts.IsCancellationRequested);
             Assert.True(localCts.IsCancellationRequested);
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.GoTo().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -345,12 +345,12 @@ namespace IC.Navigation.UnitTests
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.True(globalCts.IsCancellationRequested);
             Assert.False(localCts.IsCancellationRequested);
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.GoTo().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -374,12 +374,12 @@ namespace IC.Navigation.UnitTests
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.True(localCts.IsCancellationRequested);
-            Assert.Equal(default, origin.Session.GlobalCancellationToken);
+            Assert.Equal(default, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.GoTo().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.GoTo(origin, It.IsAny<INavigable>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -406,13 +406,13 @@ namespace IC.Navigation.UnitTests
             //Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.True(globalCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Do<INavigable>().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -436,14 +436,14 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.False(globalCts.IsCancellationRequested);
             Assert.True(localCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Do<INavigable>().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -467,14 +467,14 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.True(globalCts.IsCancellationRequested);
             Assert.False(localCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Do<INavigable>().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -498,12 +498,12 @@ namespace IC.Navigation.UnitTests
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.True(localCts.IsCancellationRequested);
-            Assert.Equal(default, origin.Session.GlobalCancellationToken);
+            Assert.Equal(default, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.Do<INavigable>().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do<INavigable>(origin, It.IsAny<Func<CancellationToken, INavigable>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -529,13 +529,13 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.True(globalCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Do().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -558,14 +558,14 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.True(localCts.IsCancellationRequested);
             Assert.False(globalCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Do().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -588,14 +588,14 @@ namespace IC.Navigation.UnitTests
             // Assert
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
-            Assert.Equal(globalCts.Token, origin.Session.GlobalCancellationToken);
+            Assert.Equal(globalCts.Token, origin.NavigatorSession.GlobalCancellationToken);
             Assert.False(localCts.IsCancellationRequested);
             Assert.True(globalCts.IsCancellationRequested);
 
             // Ensure task was not cancelled before to call Session.Do().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
@@ -618,12 +618,12 @@ namespace IC.Navigation.UnitTests
             Assert.Throws<OperationCanceledException>(() => sut());
             Assert.False(testTimeout.IsCancellationRequested, "The test timeout was reached.");
             Assert.True(localCts.IsCancellationRequested);
-            Assert.Equal(default, origin.Session.GlobalCancellationToken);
+            Assert.Equal(default, origin.NavigatorSession.GlobalCancellationToken);
 
             // Ensure task was not cancelled before to call Session.Do().
             Mock.Get(origin)
                 .Verify(x =>
-                    x.Session.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
+                    x.NavigatorSession.Do(origin, It.IsAny<Action<CancellationToken>>(), It.IsAny<CancellationToken>()),
                     Times.Once
                 );
         }
