@@ -18,7 +18,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
     {
         public PomYellow(IAppBrowser<R> session) : base(session)
         {
-            RegisterObserver(session);
         }
 
         #region Controls
