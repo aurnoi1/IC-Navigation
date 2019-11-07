@@ -1,4 +1,4 @@
-﻿using IC.Navigation.UITests.Configs;
+﻿using IC.Navigation.UITests.AppiumConfiguration;
 using IC.Navigation.UITests.Interfaces;
 using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.Interfaces;
@@ -37,32 +37,32 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         private readonly object _lock = new object();
 
         /// <summary>
-        /// Start the Appium session and wait for UI to exists.
+        /// Start the AppBrowser and wait for UI to exists.
         /// </summary>
         /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The SUT session.</returns>
         public IAppBrowser<R> Start(CancellationToken ct)
         {
-            var sut = GetFacade();
+            var sut = GetAppBrowser();
             sut.WaitForEntryPoints(ct);
             return sut;
         }
 
         /// <summary>
-        /// Start the Appium session without waiting for UI to exists.
+        /// Start the AppBrowser without waiting for UI to exists.
         /// </summary>
         /// <returns>The SUT session.</returns>
-        public IAppBrowser<R> GetFacade()
+        public IAppBrowser<R> GetAppBrowser()
         {
-            IShallowRemoteDriver<R> session = GetAppiumSession();
+            IAppiumSession<R> session = GetAppiumSession();
             var sut = new AppBrowser<R>(session);
             return sut;
         }
 
-        public IShallowRemoteDriver<R> GetAppiumSession()
+        public IAppiumSession<R> GetAppiumSession()
         {
-            ISUTAppiumConfig config = new SUTAppiumConfig();
-            IShallowRemoteDriver<R> session = new SUTAppiumSession<R>(config);
+            IAppiumConfig config = new AppiumConfig();
+            IAppiumSession<R> session = new AppiumSession<R>(config);
             return session;
         }
     }

@@ -19,7 +19,7 @@ namespace IC.Tests.App.Poms.Appium
         /// Initializes a new instance of the <see cref="Facade"/> class.
         /// </summary>
         /// <param name="appiumSession">The AppiumSession.</param>
-        public AppBrowser(IShallowRemoteDriver<R> appiumSession)
+        public AppBrowser(IAppiumSession<R> appiumSession)
         {
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
@@ -31,7 +31,7 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         /// <param name="appiumSession">The AppiumSession.</param>
         /// <param name="globalCancellationToken">The GlobalCancellationToken.</param>
-        public AppBrowser(IShallowRemoteDriver<R> appiumSession, CancellationToken globalCancellationToken)
+        public AppBrowser(IAppiumSession<R> appiumSession, CancellationToken globalCancellationToken)
         {
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);

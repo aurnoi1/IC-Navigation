@@ -1,13 +1,13 @@
 ﻿using IC.Navigation.UITests.Interfaces;
+using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace IC.Navigation.UITests.Configs
+namespace IC.Navigation.UITests.AppiumConfiguration
 {
-    public class SUTAppiumConfig : ISUTAppiumConfig
+    public class AppiumConfig : IAppiumConfig
     {
         public Uri Uri { get => new Uri("http://localhost:4723/wd/hub"); }
 
