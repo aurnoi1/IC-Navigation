@@ -26,37 +26,37 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
         [Aliases("not implemented")]
-        public SearchProperties<IWebElement> UIBtnNotImplemented => new SearchProperties<IWebElement>(WDLocators.AutomationId, "NotImplemented", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnNotImplemented => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "NotImplemented", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WDLocators.AutomationId, "TitleMenu", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleMenu", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the BlueView.
         /// </summary>
         [Aliases("button to open the blue page")]
-        public SearchProperties<IWebElement> UIBtnOpenBluePage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnOpenBlueView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenBluePage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenBlueView", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the red page")]
-        public SearchProperties<IWebElement> UIBtnOpenRedPage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnOpenRedView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenRedPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenRedView", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public SearchProperties<IWebElement> UITxtBoxImportantMessage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "TxtBoxImportantMessage", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITxtBoxImportantMessage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TxtBoxImportantMessage", session.RemoteDriver);
 
         #endregion Controls
 

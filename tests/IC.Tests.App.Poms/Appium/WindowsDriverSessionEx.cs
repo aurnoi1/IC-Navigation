@@ -1,11 +1,12 @@
-﻿using IC.Navigation.Extensions.Appium.Interfaces;
+﻿using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extensions.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace IC.Navigation.Extensions.Appium.WindowsDriver
+namespace IC.Tests.App.Poms.Appium
 {
     public static class IWindowsDriverSessionEx
     {

@@ -26,7 +26,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         [Aliases("title")]
         public SearchProperties<IWebElement> UILblTitle => new SearchProperties<IWebElement>(
-            WDLocators.AutomationId,
+            WindowDriverLocators.AutomationId,
             "TitleBlue",
             session.RemoteDriver);
 
@@ -35,7 +35,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         [Aliases("button to go back to the previous page")]
         public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(
-            WDLocators.AutomationId,
+            WindowDriverLocators.AutomationId,
             "BtnBack",
             session.RemoteDriver);
 
@@ -44,7 +44,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         [Aliases("button to open the yellow page")]
         public SearchProperties<IWebElement> BtnOpenYellowPage => new SearchProperties<IWebElement>(
-            WDLocators.AutomationId,
+            WindowDriverLocators.AutomationId,
             "BtnOpenYellowView",
             session.RemoteDriver);
 

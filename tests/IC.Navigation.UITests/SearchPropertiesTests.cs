@@ -125,7 +125,7 @@ namespace IC.Navigation.UITests
             // Arrange
             using var defaultTokenSource = new CancellationTokenSource(5.s());
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
-                WDLocators.AutomationId,
+                WindowDriverLocators.AutomationId,
                 "TitleMenu",
                 sut.RemoteDriver,
                 defaultTokenSource.Token);

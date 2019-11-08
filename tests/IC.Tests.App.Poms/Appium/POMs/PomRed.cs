@@ -25,19 +25,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WDLocators.AutomationId, "TitleRed", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleRed", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnBack", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnBack", session.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WDLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
 
         #endregion Controls
 

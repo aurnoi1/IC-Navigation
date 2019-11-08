@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace IC.Navigation
+namespace IC.Tests.App.Poms.Appium
 {
     /// <summary>
     /// Represents the attribute of an Aliases.
