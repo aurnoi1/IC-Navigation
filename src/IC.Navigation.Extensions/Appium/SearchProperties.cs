@@ -20,27 +20,41 @@ namespace IC.Navigation.Extensions.Appium
         {
         }
 
+        public SearchProperties(
+            string locator,
+            string value,
+            IFindsByFluentSelector<W> webDriver,
+            int index,
+            CancellationToken defaultCancellationToken = default)
+        {
+            Locator = locator;
+            Value = value;
+            WebDriver = webDriver;
+            Index = index;
+            DefaultCancellationToken = defaultCancellationToken;
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchProperties"/> class.
         /// </summary>
         /// <param name="locator"></param>
         /// <param name="value"></param>
-        /// <param name="appiumDriver"></param>
+        /// <param name="webDriver"></param>
         /// <param name="defaultCancellationToken"></param>
         public SearchProperties(
             string locator,
             string value,
-            IFindsByFluentSelector<W> appiumDriver,
+            IFindsByFluentSelector<W> webDriver,
             CancellationToken defaultCancellationToken = default)
         {
             Locator = locator;
             Value = value;
-            WebDriver = appiumDriver;
+            WebDriver = webDriver;
             DefaultCancellationToken = defaultCancellationToken;
         }
 
         /// <summary>
-        /// Locator to find the WindowsElement.
+        /// Locator to find the WebElement.
         /// </summary>
         public string Locator { get; set; }
 
@@ -50,14 +64,19 @@ namespace IC.Navigation.Extensions.Appium
         public string Value { get; set; }
 
         /// <summary>
-        /// The AppiumDriver used to find the WindowsElement.
+        /// The WebDriver used to find the WebElement.
         /// </summary>
         public IFindsByFluentSelector<W> WebDriver { get; private set; }
 
         /// <summary>
-        /// The default CancellationToken to interrupt a search of the WindowsElement.
+        /// The default CancellationToken to interrupt a search of the WebElement.
         /// </summary>
         public CancellationToken DefaultCancellationToken { get; private set; }
+
+        /// <summary>
+        /// The index of the WebElement in the collection of matching WebElements.
+        /// </summary>
+        public int Index {get; set;}
 
         #region Find Methods
 
