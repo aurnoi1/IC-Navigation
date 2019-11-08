@@ -1,9 +1,9 @@
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using IC.Navigation.CoreExtensions;
-using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
+using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using IC.Tests.App.Poms.Appium.POMs;
 using IC.TimeoutEx;

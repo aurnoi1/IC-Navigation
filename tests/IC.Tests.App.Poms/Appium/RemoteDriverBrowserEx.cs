@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace IC.Tests.App.Poms.Appium
 {
-    public static class IWindowsDriverSessionEx
+    public static class RemoteDriverBrowserEx
     {
         /// <summary>
         /// Find a WindowsElement in the last known INavigable, based on its attribute Aliases, on the last known view.

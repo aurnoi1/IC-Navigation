@@ -1,9 +1,10 @@
 ﻿using IC.Navigation.Interfaces;
+using IC.Tests.App.Poms.Appium;
 using System.Reflection;
 
 namespace IC.Navigation.CoreExtensions
 {
-    public static class INavigatorSessionEx
+    public static class NavigatorSessionEx
     {
         /// <summary>
         /// Get INavigable by their attribute Aliases.
