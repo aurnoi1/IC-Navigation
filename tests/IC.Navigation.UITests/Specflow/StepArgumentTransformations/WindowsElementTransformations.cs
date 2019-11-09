@@ -13,7 +13,7 @@ namespace IC.Navigation.UITests.Specflow.StepArgumentTransformations
 
         public WindowsElementTransformations(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {
-            this.sut = appiumContext.SUT;
+            this.sut = appiumContext.Browser;
         }
 
         [StepArgumentTransformation]

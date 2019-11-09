@@ -10,27 +10,27 @@ namespace IC.Navigation.UITests.Specflow.Contexts
 {
     public class AppiumContext<R> where R : WindowsDriver<WindowsElement>
     {
-        private IAppBrowser<R> sut;
+        private IAppBrowser<R> browser;
 
         /// <summary>
         /// An instance of the SUT's IMySession.
         /// </summary>
-        public IAppBrowser<R> SUT
+        public IAppBrowser<R> Browser
         {
             get
             {
                 lock (_lock)
                 {
-                    if (sut == null || sut.RemoteDriver.SessionId == null)
+                    if (browser == null || browser.RemoteDriver.SessionId == null)
                     {
                         using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
                         {
-                            sut = Start(cts.Token);
+                            browser = Start(cts.Token);
                         }
                     }
                 }
 
-                return sut;
+                return browser;
             }
         }
 

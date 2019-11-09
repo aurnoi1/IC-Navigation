@@ -31,4 +31,23 @@
       <ProjectReference Include="..\..\src\IC.TimeoutEx\IC.TimeoutEx.csproj" />
       <ProjectReference Include="..\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Specflow\Features\AppUI.feature.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AppUI.feature</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <SpecFlowFeatureFiles Update="Specflow\Features\AppUI.feature">
+        <Generator>SpecFlowSingleFileGenerator</Generator>
+        <LastGenOutput>AppUI.feature.cs</LastGenOutput>
+      </SpecFlowFeatureFiles>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Specflow\Features\Approved\" />
+    </ItemGroup>
 </Project>

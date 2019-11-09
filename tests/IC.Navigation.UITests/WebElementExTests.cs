@@ -14,7 +14,7 @@ namespace IC.Navigation.UITests
     {
         public WebElementExTests()
         {
-            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
+            sut = new AppiumContext<WindowsDriver<WindowsElement>>().Browser;
             cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
             ct = cts.Token;
         }

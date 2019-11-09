@@ -14,13 +14,13 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class NavigationSteps : IDisposable
     {
-        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> browser;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 
         public NavigationSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
         {
-            this.sut = appiumContext.SUT;
+            browser = appiumContext.Browser;
             cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
             ct = cts.Token;
         }
@@ -28,14 +28,14 @@ namespace IC.Navigation.UITests.Specflow.Steps
         [Given(@"The application under test has been started")]
         public void GivenTheApplicationUnderTestHasBeenStarted()
         {
-            Assert.NotNull(sut.Last);
+            Assert.NotNull(browser.Last);
         }
 
         [When(@"I navigate to ""(.*)""")]
         [Given(@"The ""(.*)"" has been opened")]
         public void GivenTheViewHasBeenOpened(INavigable destination)
         {
-            sut.Last.GoTo(destination, ct);
+            browser.Last.GoTo(destination, ct);
         }
 
         [When(@"The ""(.*)"" is pressed in current page")]
@@ -58,7 +58,7 @@ namespace IC.Navigation.UITests.Specflow.Steps
 
         public void Dispose()
         {
-            sut?.Dispose();
+            browser?.Dispose();
             cts?.Dispose();
         }
     }
