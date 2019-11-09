@@ -1,3 +1,5 @@
+using ApprovalTests;
+using ApprovalTests.Reporters;
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
@@ -33,6 +35,12 @@ namespace IC.Navigation.UITests
         #region Methods
 
         #region Public
+
+        [Fact]
+        public void AAA_Approvals_Scrap_Test()
+        {
+            Approvals.Verify(sut.PomMenu.UIBtnOpenBluePage.Get(ct).GetAttribute("AutomationId"));
+        }
 
         [Fact]
         public void ShouldFindBtnBlueView()
