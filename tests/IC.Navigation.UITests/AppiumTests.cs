@@ -37,7 +37,7 @@ namespace IC.Navigation.UITests
         #region Public
 
         [Fact]
-        public void AAA_Approvals_Scrap_Test()
+        public void ApprovalTest_Should_Returns_Attribute_AutomationId()
         {
             Approvals.Verify(sut.PomMenu.UIBtnOpenBluePage.Get(ct).GetAttribute("AutomationId"));
         }

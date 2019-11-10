@@ -1,4 +1,5 @@
-﻿Feature: AppUI
+﻿@xunit:collection(UITests)
+Feature: AppUI
 	Ensure the UI is appealing
 
 @mytag

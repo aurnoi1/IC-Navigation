@@ -6,15 +6,18 @@ using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using TechTalk.SpecFlow;
+using Xunit;
 
 namespace IC.Navigation.UITests.Specflow.Steps
 {
     [Binding]
-    public class AppUISteps
+    [Collection("UITests")]
+    public class AppUISteps : IDisposable
     {
         private readonly IAppBrowser<WindowsDriver<WindowsElement>> browser;
         private readonly WindowsDriver<WindowsElement> desktopDriver;
@@ -69,6 +72,12 @@ namespace IC.Navigation.UITests.Specflow.Steps
             Graphics graphic = Graphics.FromImage(retVal);
             graphic.DrawImage(image, -boudingRectangle.X / 2, -boudingRectangle.Y / 2);
             return retVal;
+        }
+
+        public void Dispose()
+        {
+            desktopDriver?.Dispose();
+            browser?.Dispose();
         }
     }
 }
