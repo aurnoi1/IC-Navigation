@@ -15,9 +15,9 @@ namespace IC.Navigation.UITests.Specflow.Steps
     {
         private readonly IAppBrowser<WindowsDriver<WindowsElement>> browser;
 
-        private ControlSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
+        private ControlSteps(WindowsContext<WindowsDriver<WindowsElement>> appiumContext)
         {
-            browser = appiumContext.Browser;
+            browser = appiumContext.AppBrowser;
         }
 
         [Then(@"The control ""(.*)"" should be displayed in the current page")]

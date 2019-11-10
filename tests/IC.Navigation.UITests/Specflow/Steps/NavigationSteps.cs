@@ -18,9 +18,9 @@ namespace IC.Navigation.UITests.Specflow.Steps
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 
-        public NavigationSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
+        public NavigationSteps(WindowsContext<WindowsDriver<WindowsElement>> appiumContext)
         {
-            browser = appiumContext.Browser;
+            browser = appiumContext.AppBrowser;
             cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
             ct = cts.Token;
         }

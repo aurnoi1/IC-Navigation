@@ -12,9 +12,9 @@ namespace IC.Navigation.UITests.Specflow.StepArgumentTransformations
     {
         private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
 
-        public NavigableTransformations(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
+        public NavigableTransformations(WindowsContext<WindowsDriver<WindowsElement>> appiumContext)
         {
-            this.sut = appiumContext.Browser;
+            this.sut = appiumContext.AppBrowser;
         }
 
         [StepArgumentTransformation]

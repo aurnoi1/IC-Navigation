@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace IC.Navigation.UITests.AppiumConfiguration
 {
-    public class AppiumConfig : IAppiumConfig
+    public class AppAppiumConfig : IAppiumConfig
     {
         public Uri Uri { get => new Uri("http://localhost:4723/wd/hub"); }
 

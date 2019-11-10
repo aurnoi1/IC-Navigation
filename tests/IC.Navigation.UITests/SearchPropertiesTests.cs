@@ -19,7 +19,7 @@ namespace IC.Navigation.UITests
     {
         public SearchPropertiesTests()
         {
-            sut = new AppiumContext<WindowsDriver<WindowsElement>>().Browser;
+            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
         }
 
         #region Properties
