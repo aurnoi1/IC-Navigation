@@ -4,18 +4,11 @@ using IC.Navigation.CoreExtensions;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
 using OpenQA.Selenium.Interactions;
-using OpenQA.Selenium.Interactions.Internal;
-using OpenQA.Selenium.Remote;
-using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Dynamic;
 using System.IO;
-using System.Threading;
 using TechTalk.SpecFlow;
 
 namespace IC.Navigation.UITests.Specflow.Steps
@@ -45,11 +38,11 @@ namespace IC.Navigation.UITests.Specflow.Steps
                     new Actions(desktopDriver)
                         .MoveToElement(appiumContext.Desktop)
                         .Perform();
-                    
+
                     var screenshot = browser.RemoteDriver.GetScreenshot();
                     using var ms = new MemoryStream(screenshot.AsByteArray);
                     using var bmp = new Bitmap(ms);
-                    using var crop = TrimImage(bmp, 50);
+                    using var crop = TrimImage(bmp, 5);
                     var pagePath = $"{expectedImageName}.png";
                     crop.Save(pagePath, ImageFormat.Png);
                 });
@@ -67,14 +60,14 @@ namespace IC.Navigation.UITests.Specflow.Steps
 
         private Bitmap TrimImage(Bitmap image, int trimPixelCount)
         {
-            throw new NotImplementedException("Need to fix TrimImage rectangle.");
-            Rectangle boudingRectangle = new Rectangle(trimPixelCount, trimPixelCount,
+            Rectangle boudingRectangle = new Rectangle(
+                trimPixelCount,
+                trimPixelCount,
                 image.Width - trimPixelCount,
                 image.Height - trimPixelCount);
-
             Bitmap retVal = new Bitmap(boudingRectangle.Width, boudingRectangle.Height);
             Graphics graphic = Graphics.FromImage(retVal);
-            graphic.DrawImage(image, -boudingRectangle.X, -boudingRectangle.Y);
+            graphic.DrawImage(image, -boudingRectangle.X / 2, -boudingRectangle.Y / 2);
             return retVal;
         }
     }
