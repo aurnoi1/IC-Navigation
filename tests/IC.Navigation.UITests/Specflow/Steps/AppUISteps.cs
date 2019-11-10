@@ -1,15 +1,16 @@
-﻿using IC.Navigation.Interfaces;
+﻿using ApprovalTests;
+using ApprovalTests.Namers;
+using IC.Navigation.CoreExtensions;
+using IC.Navigation.Interfaces;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
-using OpenQA.Selenium.Appium.Windows;
-using System;
-using TechTalk.SpecFlow;
-using IC.Navigation.CoreExtensions;
-using System.Drawing;
-using System.IO;
-using ApprovalTests;
 using OpenQA.Selenium;
-using ApprovalTests.Namers;
+using OpenQA.Selenium.Appium.Windows;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading;
+using TechTalk.SpecFlow;
 
 namespace IC.Navigation.UITests.Specflow.Steps
 {
@@ -31,9 +32,11 @@ namespace IC.Navigation.UITests.Specflow.Steps
                 .Do(() =>
                 {
                     var screenshot = browser.RemoteDriver.GetScreenshot();
+                    using var ms = new MemoryStream(screenshot.AsByteArray);
+                    using var bmp = new Bitmap(ms);
+                    using var crop = TrimImage(bmp, 5);
                     var pagePath = $"{expectedImageName}.png";
-                    screenshot.SaveAsFile(pagePath, ScreenshotImageFormat.Png);
-                               
+                    bmp.Save(pagePath, ImageFormat.Png);
                 });
         }
 
@@ -45,6 +48,18 @@ namespace IC.Navigation.UITests.Specflow.Steps
             {
                 Approvals.VerifyFile(pagePath);
             }
+        }
+
+        private Bitmap TrimImage(Bitmap image, int trimPixelCount)
+        {
+            Bitmap retVal = new Bitmap(image.Width, image.Height);
+            Rectangle boudingRectangle = new Rectangle(0, 0, 
+                image.Width - trimPixelCount, 
+                image.Height - trimPixelCount);
+
+            Graphics graphic = Graphics.FromImage(retVal);
+            graphic.DrawImage(image, -boudingRectangle.X, -boudingRectangle.Y);
+            return retVal;
         }
     }
 }

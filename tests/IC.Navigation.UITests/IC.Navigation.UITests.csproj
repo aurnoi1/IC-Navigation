@@ -50,4 +50,8 @@
     <ItemGroup>
       <Folder Include="Specflow\Features\Approved\" />
     </ItemGroup>
+
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+      <Exec Command="MKDIR &quot;$(OutDir)Approved&quot;&#xD;&#xA;FOR /R &quot;$(ProjectDir)&quot; %25%25f IN (*.approved.*) DO XCOPY /Q /D /F /Y %25%25f &quot;$(OutDir)Approved&quot; %251&gt;nul" />
+    </Target>
 </Project>
