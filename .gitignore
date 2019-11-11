@@ -331,3 +331,4 @@ ASALocalRun/
 
 # Features.cs files from Specflow
 tests/IC.Navigation.UITests/Specflow/Features/*.cs
+/tests/IC.Navigation.UITests/**/*.received.*

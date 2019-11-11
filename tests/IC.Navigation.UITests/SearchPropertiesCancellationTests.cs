@@ -15,7 +15,7 @@ namespace IC.Navigation.UITests
     {
         public SearchPropertiesCancellationTests()
         {
-            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
+            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
         }
 
         #region Properties

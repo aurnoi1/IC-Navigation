@@ -13,11 +13,11 @@ namespace IC.Navigation.UITests.Specflow.Steps
     [Collection("UITests")]
     public class ControlSteps : IDisposable
     {
-        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> browser;
 
-        private ControlSteps(AppiumContext<WindowsDriver<WindowsElement>> appiumContext)
+        private ControlSteps(WindowsContext<WindowsDriver<WindowsElement>> appiumContext)
         {
-            this.sut = appiumContext.SUT;
+            browser = appiumContext.AppBrowser;
         }
 
         [Then(@"The control ""(.*)"" should be displayed in the current page")]
@@ -38,14 +38,14 @@ namespace IC.Navigation.UITests.Specflow.Steps
             var usageNameCol = table.Rows.Where(x => x.Keys.Single().Equals("usage_name"));
             foreach (var value in usageNameCol)
             {
-                var control = sut.FindElementByAliasesInLastINavigable(value.Values.FirstOrDefault());
+                var control = browser.FindElementByAliasesInLastINavigable(value.Values.FirstOrDefault());
                 ThenTheControlShouldBeDisplayed(control);
             }
         }
 
         public void Dispose()
         {
-            sut?.Dispose();
+            browser?.Dispose();
         }
     }
 }

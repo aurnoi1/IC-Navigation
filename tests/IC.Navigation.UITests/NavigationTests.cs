@@ -22,7 +22,7 @@ namespace IC.Navigation.UITests
     {
         public NavigationTests()
         {
-            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
+            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
             globalCts = new CancellationTokenSource(10.s());
             sut.GlobalCancellationToken = globalCts.Token;

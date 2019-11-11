@@ -1,3 +1,5 @@
+using ApprovalTests;
+using ApprovalTests.Reporters;
 using IC.Navigation.CoreExtensions;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
@@ -13,7 +15,7 @@ namespace IC.Navigation.UITests
     {
         public AppiumTests()
         {
-            sut = new AppiumContext<WindowsDriver<WindowsElement>>().SUT;
+            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
             cts = new CancellationTokenSource(TimeSpan.FromMinutes(1));
             ct = cts.Token;
         }
@@ -33,6 +35,12 @@ namespace IC.Navigation.UITests
         #region Methods
 
         #region Public
+
+        [Fact]
+        public void ApprovalTest_Should_Returns_Attribute_AutomationId()
+        {
+            Approvals.Verify(sut.PomMenu.UIBtnOpenBluePage.Get(ct).GetAttribute("AutomationId"));
+        }
 
         [Fact]
         public void ShouldFindBtnBlueView()
