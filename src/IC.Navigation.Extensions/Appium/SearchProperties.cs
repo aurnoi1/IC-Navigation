@@ -24,8 +24,16 @@ namespace IC.Navigation.Extensions.Appium
             string locator,
             string value,
             IFindsByFluentSelector<W> webDriver,
+            int index) : this(locator, value, webDriver, index, default)
+        {
+        }
+
+        public SearchProperties(
+            string locator,
+            string value,
+            IFindsByFluentSelector<W> webDriver,
             int index,
-            CancellationToken defaultCancellationToken = default)
+            CancellationToken defaultCancellationToken)
         {
             Locator = locator;
             Value = value;
@@ -45,12 +53,26 @@ namespace IC.Navigation.Extensions.Appium
             string locator,
             string value,
             IFindsByFluentSelector<W> webDriver,
-            CancellationToken defaultCancellationToken = default)
+            CancellationToken defaultCancellationToken)
         {
             Locator = locator;
             Value = value;
             WebDriver = webDriver;
             DefaultCancellationToken = defaultCancellationToken;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SearchProperties"/> class.
+        /// </summary>
+        /// <param name="locator"></param>
+        /// <param name="value"></param>
+        /// <param name="webDriver"></param>
+        /// <param name="defaultCancellationToken"></param>
+        public SearchProperties(
+            string locator,
+            string value,
+            IFindsByFluentSelector<W> webDriver) : this(locator, value, webDriver, defaultCancellationToken: default)
+        {
         }
 
         /// <summary>
@@ -76,7 +98,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// The index of the WebElement in the collection of matching WebElements.
         /// </summary>
-        public int Index {get; set;}
+        public int Index { get; set; }
 
         #region Find Methods
 
