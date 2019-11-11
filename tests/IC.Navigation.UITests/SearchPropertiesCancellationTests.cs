@@ -11,18 +11,18 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class SearchPropertiesCancellationTests : IDisposable
+    public class SearchPropertiesCancellationTests : IDisposable, IClassFixture<TestsFixture>
     {
-        public SearchPropertiesCancellationTests()
+        public SearchPropertiesCancellationTests(TestsFixture testsFixture)
         {
-            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
+            appBrowser = testsFixture.AppBrowser;
         }
 
         #region Properties
 
         #region Private
 
-        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> appBrowser;
 
         #endregion Private
 
@@ -40,7 +40,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -58,7 +58,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -77,7 +77,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -98,7 +98,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -121,7 +121,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -142,7 +142,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -160,7 +160,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -179,7 +179,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -198,7 +198,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -219,7 +219,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -241,7 +241,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -262,7 +262,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -279,7 +279,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver);
+                appBrowser.RemoteDriver);
 
             // Act
             Func<WindowsElement> getWhen = () => titleMenuSearchProp.GetWhen("IsEnabled", "True");
@@ -296,7 +296,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -315,7 +315,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 longCts.Token);
 
             // Act
@@ -334,7 +334,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 expiredCts.Token);
 
             // Act
@@ -347,7 +347,7 @@ namespace IC.Navigation.UITests
 
         public void Dispose()
         {
-            sut?.Dispose();
+            appBrowser.RemoteDriver?.CloseApp();
         }
 
         #endregion Public

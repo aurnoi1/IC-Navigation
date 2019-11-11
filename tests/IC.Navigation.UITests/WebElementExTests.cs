@@ -10,11 +10,11 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class WebElementExTests : IDisposable
+    public class WebElementExTests : IClassFixture<TestsFixture>, IDisposable
     {
-        public WebElementExTests()
+        public WebElementExTests(TestsFixture testsFixture)
         {
-            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
+            appBrowser = testsFixture.AppBrowser;
             cts = new CancellationTokenSource(TimeSpan.FromSeconds(1));
             ct = cts.Token;
         }
@@ -23,7 +23,7 @@ namespace IC.Navigation.UITests
 
         #region Private
 
-        private IAppBrowser<WindowsDriver<WindowsElement>> sut;
+        private IAppBrowser<WindowsDriver<WindowsElement>> appBrowser;
         private readonly CancellationTokenSource cts;
         private readonly CancellationToken ct;
 
@@ -42,7 +42,7 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.PomMenu.UITitle
+            var actual = appBrowser.PomMenu.UITitle
                 .Get()
                 .ContinueWhen(ct, ("IsEnabled", "True"))
                 .Enabled;
@@ -58,7 +58,7 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.PomMenu.UITitle
+            var actual = appBrowser.PomMenu.UITitle
                 .Get()
                 .ContinueWhen(TimeSpan.FromSeconds(1), ("IsEnabled", "True"))
                 .Enabled;
@@ -74,7 +74,7 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.PomMenu.UITitle
+            var actual = appBrowser.PomMenu.UITitle
                 .Get()
                 .ContinueWhen(ct, new Dictionary<string, string>() { { "IsEnabled", "True" } })
                 .Enabled;
@@ -90,7 +90,7 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.PomMenu.UITitle
+            var actual = appBrowser.PomMenu.UITitle
                 .Get()
                 .ContinueWhen(TimeSpan.FromSeconds(1), new Dictionary<string, string>() { { "IsEnabled", "True" } })
                 .Enabled;
@@ -106,7 +106,7 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.PomMenu.UITitle
+            var actual = appBrowser.PomMenu.UITitle
                 .Get()
                 .ContinueWhen(ct, "IsEnabled", "True")
                 .Enabled;
@@ -122,7 +122,7 @@ namespace IC.Navigation.UITests
             var expected = true;
 
             // Act
-            var actual = sut.PomMenu.UITitle
+            var actual = appBrowser.PomMenu.UITitle
                 .Get()
                 .ContinueWhen(TimeSpan.FromSeconds(1), "IsEnabled", "True")
                 .Enabled;
@@ -135,7 +135,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_CT_Should_Throws_OperationCanceledException_When_AttribueName_Is_Invalid()
         {
             Assert.Throws<OperationCanceledException>(() =>
-                sut.PomMenu.UITitle.Get().ContinueWhen(ct, ("invalidAttribName", "True")));
+                appBrowser.PomMenu.UITitle.Get().ContinueWhen(ct, ("invalidAttribName", "True")));
         }
 
         [Fact]
@@ -145,7 +145,7 @@ namespace IC.Navigation.UITests
             {
                 ctsLocal.CancelAfter(TimeSpan.Zero);
                 Assert.Throws<OperationCanceledException>(() =>
-                    sut.PomMenu.UITitle.Get().ContinueWhen(ctsLocal.Token, ("IsEnabled", "False")));
+                    appBrowser.PomMenu.UITitle.Get().ContinueWhen(ctsLocal.Token, ("IsEnabled", "False")));
             }
         }
 
@@ -153,7 +153,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
         {
             Assert.Throws<TimeoutException>(() =>
-                sut.PomMenu.UITitle.Get()
+                appBrowser.PomMenu.UITitle.Get()
                 .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "False")));
         }
 
@@ -161,7 +161,7 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_Timeout_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                sut.PomMenu.UIBtnNotImplemented.Get()
+                appBrowser.PomMenu.UIBtnNotImplemented.Get()
                 .ContinueWhen(TimeSpan.Zero, ("IsEnabled", "True")));
         }
 
@@ -169,13 +169,12 @@ namespace IC.Navigation.UITests
         public void ContinueWhen_With_CT_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                sut.PomMenu.UIBtnNotImplemented.Get()
+                appBrowser.PomMenu.UIBtnNotImplemented.Get()
                 .ContinueWhen(ct, ("IsEnabled", "True")));
         }
 
         public void Dispose()
         {
-            sut?.Dispose();
             cts?.Dispose();
         }
 

@@ -84,7 +84,7 @@ namespace IC.Navigation.UITests
 
         public void Dispose()
         {
-            sut?.Dispose();
+            sut.RemoteDriver.CloseApp();
             cts?.Dispose();
         }
 

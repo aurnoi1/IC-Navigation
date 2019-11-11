@@ -15,18 +15,19 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class SearchPropertiesTests : IDisposable
+    public class SearchPropertiesTests : IDisposable, IClassFixture<TestsFixture>
     {
-        public SearchPropertiesTests()
+        public SearchPropertiesTests(TestsFixture testsFixture)
         {
-            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
+            appBrowser = testsFixture.AppBrowser;
+            appBrowser.RemoteDriver.LaunchApp();
         }
 
         #region Properties
 
         #region Private
 
-        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> appBrowser;
 
         #endregion Private
 
@@ -43,9 +44,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
-                title = sut.PomMenu.UITitle.Find(10.s(), ("IsEnabled", "True"));
+                title = appBrowser.PomMenu.UITitle.Find(10.s(), ("IsEnabled", "True"));
             });
 
             // Assert
@@ -59,9 +60,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            void actual() => sut.Last.Do(() =>
+            void actual() => appBrowser.Last.Do(() =>
             {
-                title = sut.PomMenu.UITitle.Find(3.s(), ("IsEnabled", "False"));
+                title = appBrowser.PomMenu.UITitle.Find(3.s(), ("IsEnabled", "False"));
             });
 
             // Assert
@@ -76,9 +77,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
-                title = sut.PomMenu.UITitle.Find(10.s());
+                title = appBrowser.PomMenu.UITitle.Find(10.s());
             });
 
             // Assert
@@ -89,13 +90,13 @@ namespace IC.Navigation.UITests
         public void Find_With_CT_Should_Throws_OperationCanceledException_When_CT_Is_Cancelled()
         {
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
                 using (var ctsLocal = new CancellationTokenSource(10.s()))
                 {
                     ctsLocal.CancelAfter(TimeSpan.Zero);
                     Assert.Throws<OperationCanceledException>(() =>
-                        sut.PomMenu.UIBtnNotImplemented.Find(ctsLocal.Token));
+                        appBrowser.PomMenu.UIBtnNotImplemented.Find(ctsLocal.Token));
                 }
             });
         }
@@ -105,17 +106,17 @@ namespace IC.Navigation.UITests
         {
             // Act
             Assert.Throws<TimeoutException>(() =>
-                        sut.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
+                        appBrowser.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
         }
 
         [Fact]
         public void Find_With_Timeout_Should_Throws_TimeoutException_On_Timeout()
         {
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
                 Assert.Throws<TimeoutException>(() =>
-                    sut.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
+                    appBrowser.PomMenu.UIBtnNotImplemented.Find(TimeSpan.Zero));
             });
         }
 
@@ -127,7 +128,7 @@ namespace IC.Navigation.UITests
             var titleMenuSearchProp = new SearchProperties<WindowsElement>(
                 WindowDriverLocators.AutomationId,
                 "TitleMenu",
-                sut.RemoteDriver,
+                appBrowser.RemoteDriver,
                 defaultTokenSource.Token);
 
             // Act
@@ -144,9 +145,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
-                title = sut.PomMenu.UITitle.Get();
+                title = appBrowser.PomMenu.UITitle.Get();
             });
 
             // Assert
@@ -160,9 +161,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.Get();
+                title = appBrowser.PomMenu.UIBtnNotImplemented.Get();
             });
 
             // Assert
@@ -179,10 +180,10 @@ namespace IC.Navigation.UITests
             var maxExpectedElapse = 500.ms();
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.PomMenu.UITitle.Get(timeout);
+                title = appBrowser.PomMenu.UITitle.Get(timeout);
                 stopwatch.Stop();
             });
 
@@ -202,12 +203,12 @@ namespace IC.Navigation.UITests
             var maxExpectedElapse = 500.ms();
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
                 stopwatch.Start();
                 using (var cts = new CancellationTokenSource())
                 {
-                    title = sut.PomMenu.UITitle.Get(cts.Token);
+                    title = appBrowser.PomMenu.UITitle.Get(cts.Token);
                 }
 
                 stopwatch.Stop();
@@ -226,11 +227,11 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
                 using (var cts = new CancellationTokenSource(3.s()))
                 {
-                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                    title = appBrowser.PomMenu.UITitle.GetWhen(cts.Token, ("IsEnabled", "True"), ("IsOffscreen", "False"));
                 }
             });
 
@@ -245,9 +246,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UITitle.GetWhen(3.s(), "IsEnabled", "True");
+                title = appBrowser.PomMenu.UITitle.GetWhen(3.s(), "IsEnabled", "True");
             });
 
             // Assert
@@ -264,9 +265,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UITitle.GetWhen(3.s(), expectedAttribsValues);
+                title = appBrowser.PomMenu.UITitle.GetWhen(3.s(), expectedAttribsValues);
             });
 
             // Assert
@@ -280,11 +281,11 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
                 using (var cts = new CancellationTokenSource(3.s()))
                 {
-                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "True");
+                    title = appBrowser.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "True");
                 }
             });
 
@@ -302,11 +303,11 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
                 using (var cts = new CancellationTokenSource(3.s()))
                 {
-                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, expectedAttribsValues);
+                    title = appBrowser.PomMenu.UITitle.GetWhen(cts.Token, expectedAttribsValues);
                 }
             });
 
@@ -321,9 +322,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UITitle.GetWhen(3.s(), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                title = appBrowser.PomMenu.UITitle.GetWhen(3.s(), ("IsEnabled", "True"), ("IsOffscreen", "False"));
             });
 
             // Assert
@@ -337,9 +338,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), ("IsEnabled", "True"), ("IsOffscreen", "False"));
+                title = appBrowser.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), ("IsEnabled", "True"), ("IsOffscreen", "False"));
             });
 
             // Assert
@@ -356,9 +357,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), expectedAttribsValues);
+                title = appBrowser.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), expectedAttribsValues);
             });
 
             // Assert
@@ -372,9 +373,9 @@ namespace IC.Navigation.UITests
             IWebElement title = default;
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
-                title = sut.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), "IsEnabled", "True");
+                title = appBrowser.PomMenu.UIBtnNotImplemented.GetWhen(3.s(), "IsEnabled", "True");
             });
 
             // Assert
@@ -392,10 +393,10 @@ namespace IC.Navigation.UITests
             var expectedMaxElapse = 500.ms();
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.PomMenu.UIBtnNotImplemented.Get(expectedTimeout);
+                title = appBrowser.PomMenu.UIBtnNotImplemented.Get(expectedTimeout);
                 stopwatch.Stop();
             });
 
@@ -416,12 +417,12 @@ namespace IC.Navigation.UITests
             var expectedMaxElapse = 500.ms();
 
             // Act
-            sut.Last.Do(() =>
+            appBrowser.Last.Do(() =>
             {
                 stopwatch.Start();
                 using (var cts = new CancellationTokenSource(expectedTimeout))
                 {
-                    title = sut.PomMenu.UIBtnNotImplemented.Get(cts.Token);
+                    title = appBrowser.PomMenu.UIBtnNotImplemented.Get(cts.Token);
                     stopwatch.Stop();
                 }
             });
@@ -443,10 +444,10 @@ namespace IC.Navigation.UITests
             var expectedMaxElapse = 500.ms();
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
                 stopwatch.Start();
-                title = sut.PomMenu.UITitle.GetWhen(expectedElapse, "IsEnabled", "InvalidValue");
+                title = appBrowser.PomMenu.UITitle.GetWhen(expectedElapse, "IsEnabled", "InvalidValue");
                 stopwatch.Stop();
                 actualElapse = stopwatch.Elapsed;
             });
@@ -468,12 +469,12 @@ namespace IC.Navigation.UITests
             var expectedMaxElapse = 500.ms();
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
                 using (CancellationTokenSource cts = new CancellationTokenSource(expectedElapse))
                 {
                     stopwatch.Start();
-                    title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
+                    title = appBrowser.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
                     stopwatch.Stop();
                     actualElapse = stopwatch.Elapsed;
                 }
@@ -498,14 +499,14 @@ namespace IC.Navigation.UITests
             var expectedMaxElapse = 500.ms();
 
             // Act
-            sut.PomMenu.Do(() =>
+            appBrowser.PomMenu.Do(() =>
             {
                 using (CancellationTokenSource cts = new CancellationTokenSource(expectedElapse))
                 {
                     using (var timer = new Timer((x) => cts.Cancel(), null, cancellationTimeoutMS, -1))
                     {
                         stopwatch.Start();
-                        title = sut.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
+                        title = appBrowser.PomMenu.UITitle.GetWhen(cts.Token, "IsEnabled", "InvalidValue");
                         stopwatch.Stop();
                         actualElapse = stopwatch.Elapsed;
                     }
@@ -520,7 +521,7 @@ namespace IC.Navigation.UITests
 
         public void Dispose()
         {
-            sut?.Dispose();
+            appBrowser.RemoteDriver.CloseApp();
         }
 
         #endregion Public

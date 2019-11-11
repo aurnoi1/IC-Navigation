@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace IC.Navigation.UITests.Specflow.Contexts
 {
-    public class WindowsContext<R> where R : WindowsDriver<WindowsElement>
+    public class WindowsContext<R> : IDisposable where R : WindowsDriver<WindowsElement>
     {
         private IAppBrowser<R> appBrowser;
         private IAppiumSession<R> desktopSession;
@@ -97,6 +97,12 @@ namespace IC.Navigation.UITests.Specflow.Contexts
             IAppiumConfig config = new DesktopAppiumConfig();
             IAppiumSession<R> session = new AppiumSession<R>(config);
             return session;
+        }
+
+        public void Dispose()
+        {
+            AppBrowser?.Dispose();
+            DesktopSession?.RemoteDriver?.Dispose();
         }
     }
 }

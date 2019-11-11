@@ -10,7 +10,7 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class BrowserTests
+    public class BrowserTests : IDisposable
     {
         public BrowserTests()
         {
@@ -39,10 +39,10 @@ namespace IC.Navigation.UITests
             using var cts = new CancellationTokenSource();
 
             // Act
-            using AppBrowser<WindowsDriver<WindowsElement>> facade = new AppBrowser<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
+            using AppBrowser<WindowsDriver<WindowsElement>> appBrowser = new AppBrowser<WindowsDriver<WindowsElement>>(appiumSession, cts.Token);
 
             // Assert
-            Assert.Equal(cts.Token, facade.GlobalCancellationToken);
+            Assert.Equal(cts.Token, appBrowser.GlobalCancellationToken);
         }
 
         [Fact]
@@ -51,9 +51,9 @@ namespace IC.Navigation.UITests
             var expected = typeof(PomMenu<WindowsDriver<WindowsElement>>);
             INavigable actual = null;
             using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
-            using (var sut = appContext.CreateAppBrowser())
+            using (var appBrowser = appContext.CreateAppBrowser())
             {
-                actual = sut.WaitForEntryPoints(cts.Token);
+                actual = appBrowser.WaitForEntryPoints(cts.Token);
             }
 
             Assert.Equal(expected, actual.GetType());
@@ -62,11 +62,9 @@ namespace IC.Navigation.UITests
         [Fact]
         public void WaitForEntryPoints_With_CToken_Should_Throw_OperationCanceledException_On_Timeout()
         {
-            using (var cts = new CancellationTokenSource(TimeSpan.Zero))
-            using (var sut = appContext.CreateAppBrowser())
-            {
-                Assert.Throws<OperationCanceledException>(() => sut.WaitForEntryPoints(cts.Token));
-            }
+            using var cts = new CancellationTokenSource(TimeSpan.Zero);
+            using var appBrowser = appContext.CreateAppBrowser();
+            Assert.Throws<OperationCanceledException>(() => appBrowser.WaitForEntryPoints(cts.Token));
         }
 
         [Fact]
@@ -74,9 +72,9 @@ namespace IC.Navigation.UITests
         {
             var expected = typeof(PomMenu<WindowsDriver<WindowsElement>>);
             INavigable actual = null;
-            using (var sut = appContext.CreateAppBrowser())
+            using (var appBrowser = appContext.CreateAppBrowser())
             {
-                actual = sut.WaitForEntryPoints(TimeSpan.FromSeconds(10));
+                actual = appBrowser.WaitForEntryPoints(TimeSpan.FromSeconds(10));
             }
 
             Assert.Equal(expected, actual.GetType());
@@ -85,10 +83,13 @@ namespace IC.Navigation.UITests
         [Fact]
         public void WaitForEntryPoints_With_Timeout_Should_Throw_TimeoutException_On_Timeout()
         {
-            using (var sut = appContext.CreateAppBrowser())
-            {
-                Assert.Throws<TimeoutException>(() => sut.WaitForEntryPoints(TimeSpan.Zero));
-            }
+            using var appBrowser = appContext.CreateAppBrowser();
+            Assert.Throws<TimeoutException>(() => appBrowser.WaitForEntryPoints(TimeSpan.Zero));
+        }
+
+        public void Dispose()
+        {
+            appContext.Dispose();
         }
 
         #endregion Public

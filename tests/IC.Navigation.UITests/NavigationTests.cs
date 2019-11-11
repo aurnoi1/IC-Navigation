@@ -18,21 +18,21 @@ using Xunit;
 namespace IC.Navigation.UITests
 {
     [Collection("UITests")]
-    public class NavigationTests : IDisposable
+    public class NavigationTests : IClassFixture<TestsFixture>, IDisposable
     {
-        public NavigationTests()
+        public NavigationTests(TestsFixture testsFixture)
         {
-            sut = new WindowsContext<WindowsDriver<WindowsElement>>().AppBrowser;
+            appBrowser = testsFixture.AppBrowser;
             fixture = new Fixture().Customize(new AutoMoqCustomization());
             globalCts = new CancellationTokenSource(10.s());
-            sut.GlobalCancellationToken = globalCts.Token;
+            appBrowser.GlobalCancellationToken = globalCts.Token;
         }
 
         #region Properties
 
         #region Private
 
-        private readonly IAppBrowser<WindowsDriver<WindowsElement>> sut;
+        private readonly IAppBrowser<WindowsDriver<WindowsElement>> appBrowser;
         private readonly IFixture fixture;
         private CancellationTokenSource globalCts;
 
@@ -48,29 +48,30 @@ namespace IC.Navigation.UITests
         public void FullExample()
         {
             // Set the GlobalCancellationToken used for the time of the Navigation session.
+
             using var cts = new CancellationTokenSource(30.s());
-            sut.GlobalCancellationToken = cts.Token;
-            sut.Last
-                .GoTo(sut.PomYellow)
+            appBrowser.GlobalCancellationToken = cts.Token;
+            appBrowser.Last
+                .GoTo(appBrowser.PomYellow)
                 .Do<PomMenu<WindowsDriver<WindowsElement>>>(() =>
                 {
                     // Add a timeout in concurence of GlobalCancellationToken;
-                    return sut.PomYellow.OpenMenuByMenuBtn(3.s());
+                    return appBrowser.PomYellow.OpenMenuByMenuBtn(3.s());
                 })
-                .GoTo(sut.PomBlue) // Force the path to PomBlue then PomYellow...
-                .GoTo(sut.PomYellow) //... to test PomYellow.ActionToOpenViewMenu().
-                .GoTo(sut.PomMenu) // Since last was PomBlue, PomYellow.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
+                .GoTo(appBrowser.PomBlue) // Force the path to PomBlue then PomYellow...
+                .GoTo(appBrowser.PomYellow) //... to test PomYellow.ActionToOpenViewMenu().
+                .GoTo(appBrowser.PomMenu) // Since last was PomBlue, PomYellow.OpenViewMenuByMenuBtn() will be called to go to ViewMenu.
                 .Do(() =>
                 {
-                    sut.PomMenu.EnterText("This is a test");
+                    appBrowser.PomMenu.EnterText("This is a test");
                 })
-                .GoTo(sut.PomBlue)
+                .GoTo(appBrowser.PomBlue)
                 .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
-                .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
-                .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
-                .GoTo(sut.EntryPoint); // The entry point.
+                .GoTo(appBrowser.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
+                .GoTo(appBrowser.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
+                .GoTo(appBrowser.EntryPoint); // The entry point.
 
-            Assert.True(sut.Historic.ElementAt(0).Exists());
+            Assert.True(appBrowser.Historic.ElementAt(0).Exists());
         }
 
         [Fact]
@@ -78,14 +79,14 @@ namespace IC.Navigation.UITests
         {
             using var testTimeout = new CancellationTokenSource(15.s());
             using var cts = new CancellationTokenSource(5.s());
-            sut.GlobalCancellationToken = cts.Token;
+            appBrowser.GlobalCancellationToken = cts.Token;
             Assert.Throws<OperationCanceledException>(() =>
             {
                 while (!testTimeout.IsCancellationRequested)
                 {
-                    sut.Last
-                    .GoTo(sut.PomYellow)
-                    .GoTo(sut.Previous);
+                    appBrowser.Last
+                    .GoTo(appBrowser.PomYellow)
+                    .GoTo(appBrowser.Previous);
                 }
             });
 
@@ -103,11 +104,11 @@ namespace IC.Navigation.UITests
                 Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableStatus>()))
                     .Callback<INavigable, INavigableStatus>((x, y) => callbackResults.Add((mock, x, y)));
 
-                sut.PomMenu.RegisterObserver(mock);
+                appBrowser.PomMenu.RegisterObserver(mock);
             }
 
             // Act
-            sut.PomMenu.Exists();
+            appBrowser.PomMenu.Exists();
 
             // Assert
             Assert.NotEmpty(callbackResults);
@@ -120,7 +121,7 @@ namespace IC.Navigation.UITests
             callbackResults.ForEach(r => Assert.Same(callbackResults[0].args, r.args));
 
             // Validate all observers received the same instance of ViewMenu on WaitForExists().
-            callbackResults.ForEach(r => Assert.Same(sut.PomMenu, r.observable));
+            callbackResults.ForEach(r => Assert.Same(appBrowser.PomMenu, r.observable));
         }
 
         [Fact]
@@ -134,14 +135,14 @@ namespace IC.Navigation.UITests
                 Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableStatus>()))
                     .Callback<INavigable, INavigableStatus>((x, y) => callbackResults.Add((mock, x, y)));
 
-                sut.PomMenu.RegisterObserver(mock);
+                appBrowser.PomMenu.RegisterObserver(mock);
             }
 
             var expected = observerMocks.ElementAt(2);
 
             // Act
-            sut.PomMenu.UnregisterObserver(expected);
-            sut.PomMenu.Exists();
+            appBrowser.PomMenu.UnregisterObserver(expected);
+            appBrowser.PomMenu.Exists();
             var registeredObservers = callbackResults.Select(x => x.observer).ToList();
 
             // Assert
@@ -158,22 +159,22 @@ namespace IC.Navigation.UITests
         public void Do_With_INavigable_Returned_Type_Should_Return_PomMenu()
         {
             using var cts = new CancellationTokenSource(10.s());
-            sut.GlobalCancellationToken = cts.Token;
-            sut.Last
-                .GoTo(sut.PomYellow)
+            appBrowser.GlobalCancellationToken = cts.Token;
+            appBrowser.Last
+                .GoTo(appBrowser.PomYellow)
                 .Do<INavigable>(() =>
                 {
                     // Return the PomMenu which implements INavigable.
-                    return sut.PomYellow.OpenMenuByMenuBtn(5.Seconds());
+                    return appBrowser.PomYellow.OpenMenuByMenuBtn(5.Seconds());
                 })
-                .GoTo(sut.PomRed);
+                .GoTo(appBrowser.PomRed);
         }
 
         [Fact]
         public void GetNavigable_Should_Returns_Same_Instance()
         {
-            var instance1 = sut.PomMenu;
-            var instance2 = sut.PomMenu;
+            var instance1 = appBrowser.PomMenu;
+            var instance2 = appBrowser.PomMenu;
             Assert.NotNull(instance1);
             Assert.Same(instance1, instance2);
         }
@@ -181,61 +182,61 @@ namespace IC.Navigation.UITests
         [Fact]
         public void ShouldFindBtnBlueViewByUsageNameInViewMenu()
         {
-            WindowsElement match = sut.FindElementByAliasesInLastINavigable("button to open the blue page");
+            WindowsElement match = appBrowser.FindElementByAliasesInLastINavigable("button to open the blue page");
             Assert.Equal("BtnOpenBlueView", match.GetAttribute("AutomationId"));
         }
 
         [Fact]
         public void ShouldFindMenuViewByNavigation()
         {
-            Assert.True(sut.PomMenu.Exists());
+            Assert.True(appBrowser.PomMenu.Exists());
         }
 
         [Fact]
         public void ShouldOpenViewMenuFromYellowViewByOpenViewMenuDirectly()
         {
             using var cts = new CancellationTokenSource(30.s());
-            sut.GlobalCancellationToken = cts.Token;
-            sut.Last
-                .GoTo(sut.PomYellow)
-                .Do<PomMenu<WindowsDriver<WindowsElement>>>(() => sut.PomYellow.OpenMenuByMenuBtn(5.s()));
+            appBrowser.GlobalCancellationToken = cts.Token;
+            appBrowser.Last
+                .GoTo(appBrowser.PomYellow)
+                .Do<PomMenu<WindowsDriver<WindowsElement>>>(() => appBrowser.PomYellow.OpenMenuByMenuBtn(5.s()));
 
-            Assert.True(sut.PomMenu.Exists());
+            Assert.True(appBrowser.PomMenu.Exists());
         }
 
         [Fact]
         public void ShouldEnterTextInMenuTextBoxByDo()
         {
             string expected = "Text enter by a DO action.";
-            sut.PomMenu.Do(() => sut.PomMenu.UITxtBoxImportantMessage.Get().SendKeys(expected));
-            Assert.Equal(expected, sut.PomMenu.UITxtBoxImportantMessage.Get().Text);
+            appBrowser.PomMenu.Do(() => appBrowser.PomMenu.UITxtBoxImportantMessage.Get().SendKeys(expected));
+            Assert.Equal(expected, appBrowser.PomMenu.UITxtBoxImportantMessage.Get().Text);
         }
 
         [Fact]
         public void ShouldGoToBlueView()
         {
-            sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.True(sut.PomBlue.Exists());
+            appBrowser.PomMenu.GoTo(appBrowser.PomBlue);
+            Assert.True(appBrowser.PomBlue.Exists());
         }
 
         [Fact]
         public void ShouldHaveViewMenuAsFirstInHistoric()
         {
-            sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.Equal(typeof(PomMenu<WindowsDriver<WindowsElement>>), sut.Historic.First().GetType());
+            appBrowser.PomMenu.GoTo(appBrowser.PomBlue);
+            Assert.Equal(typeof(PomMenu<WindowsDriver<WindowsElement>>), appBrowser.Historic.First().GetType());
         }
 
         [Fact]
         public void ShouldHaveViewBlueAsLastInHistoric()
         {
-            sut.PomMenu.GoTo(sut.PomBlue);
-            Assert.Equal(typeof(PomBlue<WindowsDriver<WindowsElement>>), sut.Historic.Last().GetType());
+            appBrowser.PomMenu.GoTo(appBrowser.PomBlue);
+            Assert.Equal(typeof(PomBlue<WindowsDriver<WindowsElement>>), appBrowser.Historic.Last().GetType());
         }
 
         public void Dispose()
         {
-            sut?.Dispose();
             globalCts?.Dispose();
+            appBrowser.RemoteDriver.CloseApp();
         }
 
         #endregion Public
