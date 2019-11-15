@@ -11,7 +11,7 @@ namespace IC.Navigation.Extensions.Appium
         private static readonly string timeoutExceptionMsg = "Timeout was reached before attributes match expected values.";
 
         /// <summary>
-        /// Continue operations on this WebElement once the attributes match their expected values.
+        /// Continue once the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="webElement">This WebElement.</param>
@@ -20,7 +20,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
-        public static T ContinueWhen<T>(
+        public static T Wait<T>(
             this T webElement,
             CancellationToken cancellationToken,
             string attributeName,
@@ -34,7 +34,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Continue operations on this WebElement once the attributes match their expected values.
+        /// Continue once the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="webElement">This WebElement.</param>
@@ -42,7 +42,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
-        public static T ContinueWhen<T>(
+        public static T Wait<T>(
             this T webElement,
             CancellationToken cancellationToken,
             params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
@@ -55,7 +55,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Continue operations on this WebElement once the attributes match their expected values.
+        /// Continue once the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="webElement">This WebElement.</param>
@@ -63,7 +63,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
-        public static T ContinueWhen<T>(
+        public static T Wait<T>(
             this T webElement,
             CancellationToken cancellationToken,
             Dictionary<string, string> expectedAttribsNamesValues) where T : IWebElement
@@ -76,7 +76,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Continue operations on this WebElement once the attributes match their expected values.
+        /// Continue once the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="webElement">This WebElement.</param>
@@ -85,7 +85,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="TimeoutException">Throw when timeout is reached before attributes match expected values.</exception>
-        public static T ContinueWhen<T>(
+        public static T Wait<T>(
             this T webElement,
             TimeSpan timeout,
             string attributeName,
@@ -99,7 +99,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Continue operations on this WebElement once the attributes match their expected values.
+        /// Continue once the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="webElement">This WebElement.</param>
@@ -107,7 +107,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="expectedAttribsNamesValues">The attributes names and expected values as Value Tuples.</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="TimeoutException">Throw when timeout is reached before attributes match expected values.</exception>
-        public static T ContinueWhen<T>(
+        public static T Wait<T>(
             this T webElement,
             TimeSpan timeout,
             params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues) where T : IWebElement
@@ -120,7 +120,7 @@ namespace IC.Navigation.Extensions.Appium
         }
 
         /// <summary>
-        /// Continue operations on this WebElement once the attributes match their expected values.
+        /// Continue once the attributes match their expected values.
         /// </summary>
         /// <typeparam name="T">The type of WebElement.</typeparam>
         /// <param name="webElement">This WebElement.</param>
@@ -128,7 +128,7 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="expectedAttribsNamesValues">The attributes names as keys and the expected values.</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="TimeoutException">Throw when timeout is reached before attributes match expected values.</exception>
-        public static T ContinueWhen<T>(
+        public static T Wait<T>(
             this T webElement,
             TimeSpan timeout,
             Dictionary<string, string> expectedAttribsNamesValues) where T : IWebElement
@@ -190,10 +190,8 @@ namespace IC.Navigation.Extensions.Appium
             TimeSpan timeout,
             Dictionary<string, string> expectedAttribsNamesValues) where T : IWebElement
         {
-            using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
-            {
-                return webElement.WaitUntil(cts.Token, expectedAttribsNamesValues);
-            }
+            using CancellationTokenSource cts = new CancellationTokenSource(timeout);
+            return webElement.WaitUntil(cts.Token, expectedAttribsNamesValues);
         }
 
         /// <summary>

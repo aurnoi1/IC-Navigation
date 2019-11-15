@@ -1,6 +1,5 @@
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
-using IC.Navigation.Extensions.Exceptions;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
@@ -252,97 +251,6 @@ namespace IC.Navigation.UITests
             Assert.True(expiredCts.IsCancellationRequested);
             Assert.False(longCts.IsCancellationRequested);
             Assert.False(longCts2.IsCancellationRequested);
-        }
-
-        [Fact]
-        public void GetWhen_With_DefaultCancellationToken_Should_Returns_Control_Matching()
-        {
-            // Arrange
-            using var longCts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            var titleMenuSearchProp = new SearchProperties<WindowsElement>(
-                WindowDriverLocators.AutomationId,
-                "TitleMenu",
-                sut.RemoteDriver,
-                longCts.Token);
-
-            // Act
-            var titleMenu = titleMenuSearchProp.GetWhen("IsEnabled", "True");
-
-            // Assert
-            Assert.NotNull(titleMenu);
-        }
-
-        [Fact]
-        public void GetWhen_With_DefaultCancellationToken_Should_Throws_UninitializedDefaultCancellationTokenException()
-        {
-            // Arrange
-            var titleMenuSearchProp = new SearchProperties<WindowsElement>(
-                WindowDriverLocators.AutomationId,
-                "TitleMenu",
-                sut.RemoteDriver);
-
-            // Act
-            Func<WindowsElement> getWhen = () => titleMenuSearchProp.GetWhen("IsEnabled", "True");
-
-            // Assert
-            Assert.Throws<UninitializedDefaultCancellationTokenException>(() => getWhen());
-        }
-
-        [Fact]
-        public void GetWhen_With_DefaultCancellationToken_Should_Returns_Null_On_DefaultCancellationToken_Cancelled()
-        {
-            // Arrange
-            using var expiredCts = new CancellationTokenSource(TimeSpan.Zero);
-            var titleMenuSearchProp = new SearchProperties<WindowsElement>(
-                WindowDriverLocators.AutomationId,
-                "TitleMenu",
-                sut.RemoteDriver,
-                expiredCts.Token);
-
-            // Act
-            var titleMenu = titleMenuSearchProp.GetWhen("IsEnabled", "True");
-
-            // Assert
-            Assert.Null(titleMenu);
-            Assert.True(expiredCts.IsCancellationRequested);
-        }
-
-        [Fact]
-        public void GetWhen_With_Timeout_And_DefaultCancellationToken_Should_Returns_Match()
-        {
-            // Arrange
-            using var longCts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            var titleMenuSearchProp = new SearchProperties<WindowsElement>(
-                WindowDriverLocators.AutomationId,
-                "TitleMenu",
-                sut.RemoteDriver,
-                longCts.Token);
-
-            // Act
-            var titleMenu = titleMenuSearchProp.GetWhen(TimeSpan.FromSeconds(5), "IsEnabled", "True");
-
-            // Assert
-            Assert.NotNull(titleMenu);
-            Assert.False(longCts.IsCancellationRequested);
-        }
-
-        [Fact]
-        public void GetWhen_With_Timeout_Should_Returns_Null_On_DefaultCancellationToken_Cancelled()
-        {
-            // Arrange
-            using var expiredCts = new CancellationTokenSource(TimeSpan.Zero);
-            var titleMenuSearchProp = new SearchProperties<WindowsElement>(
-                WindowDriverLocators.AutomationId,
-                "TitleMenu",
-                sut.RemoteDriver,
-                expiredCts.Token);
-
-            // Act
-            var titleMenu = titleMenuSearchProp.GetWhen(TimeSpan.FromSeconds(5), "IsEnabled", "True");
-
-            // Assert
-            Assert.Null(titleMenu);
-            Assert.True(expiredCts.IsCancellationRequested);
         }
 
         public void Dispose()
