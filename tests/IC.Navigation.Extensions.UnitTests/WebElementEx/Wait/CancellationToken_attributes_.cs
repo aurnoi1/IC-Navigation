@@ -13,13 +13,14 @@ namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
 {
     public class CancellationToken_attributes_
     {
-        [Theory, WebElementExValidData]
+        [Theory, AutoMoqData]
         public void When_attributes_match_expected_values_Then_returns_T_webElement(
             IWebElement sut,
-            CancellationToken cancellationToken,
             Dictionary<string, string> attributes)
         {
             // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+            var cancellationToken = cancellationTokenSource.Token;
             attributes.ToList().ForEach(p => Mock.Get(sut).Setup(x => x.GetAttribute(p.Key)).Returns(p.Value));
 
             // Act
@@ -30,21 +31,22 @@ namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
             cancellationToken.IsCancellationRequested.ShouldBeFalse();
         }
 
-        [Theory, WebElementExCancelledTokenData]
+        [Theory, AutoMoqData]
         public void When_cancellationToken_is_canceled_Then_throws_OperationCanceledException(
             IWebElement sut,
-            CancellationToken cancellationToken,
             Dictionary<string, string> attributes)
         {
             // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.Zero);
+            var expiredCancellationToken = cancellationTokenSource.Token;
             attributes.ToList().ForEach(p => Mock.Get(sut).Setup(x => x.GetAttribute(p.Key)).Returns(p.Value));
 
             // Act
-            Assert.Throws<OperationCanceledException>(() => sut.Wait(cancellationToken, attributes));
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(expiredCancellationToken, attributes));
 
             // Assert
             sut.ShouldNotBeNull();
-            cancellationToken.IsCancellationRequested.ShouldBeTrue();
+            expiredCancellationToken.IsCancellationRequested.ShouldBeTrue();
         }
     }
 }

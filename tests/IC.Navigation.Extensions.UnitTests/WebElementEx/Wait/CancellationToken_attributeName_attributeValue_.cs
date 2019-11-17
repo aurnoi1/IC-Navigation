@@ -11,14 +11,15 @@ namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
 {
     public class CancellationToken_attributeName_attributeValue_
     {
-        [Theory, WebElementExValidData]
+        [Theory, AutoMoqData]
         public void When_attribute_match_expected_value_Then_returns_T_webElement(
             IWebElement sut,
-            CancellationToken cancellationToken,
             string attributeName,
             string attributeValue)
         {
             // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+            var cancellationToken = cancellationTokenSource.Token;
             Mock.Get(sut).Setup(x => x.GetAttribute(attributeName)).Returns(attributeValue);
 
             // Act
@@ -29,32 +30,34 @@ namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
             cancellationToken.IsCancellationRequested.ShouldBeFalse();
         }
 
-        [Theory, WebElementExCancelledTokenData]
+        [Theory, AutoMoqData]
         public void When_cancellationToken_is_canceled_Then_throws_OperationCanceledException(
             IWebElement sut,
-            CancellationToken cancellationToken,
             string attributeName,
             string attributeValue)
         {
             // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.Zero);
+            var expiredCancellationToken = cancellationTokenSource.Token;
             Mock.Get(sut).Setup(x => x.GetAttribute(attributeName)).Returns(attributeValue);
 
             // Act
-            Assert.Throws<OperationCanceledException>(() => sut.Wait(cancellationToken, attributeName, attributeValue));
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(expiredCancellationToken, attributeName, attributeValue));
 
             // Assert
             sut.ShouldNotBeNull();
-            cancellationToken.IsCancellationRequested.ShouldBeTrue();
+            expiredCancellationToken.IsCancellationRequested.ShouldBeTrue();
         }
 
-        [Theory, WebElementExValidData]
+        [Theory, AutoMoqData]
         public void When_attribute_do_not_match_expected_value_Then_throws_OperationCanceledException(
             IWebElement sut,
-            CancellationToken cancellationToken,
             string attributeName,
             string attributeValue)
         {
             // Arrange
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+            var cancellationToken = cancellationTokenSource.Token;
             Mock.Get(sut).Setup(x => x.GetAttribute(attributeName)).Returns(attributeValue);
 
             // Act
