@@ -13,18 +13,11 @@ namespace IC.Navigation.Extensions.Appium
     {
         private const string timeoutExceptionMessage = "The timeout has been reached before the Element could be found.";
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SearchProperties"/> class.
-        /// </summary>
-        public SearchProperties()
-        {
-        }
-
         public SearchProperties(
             string locator,
             string value,
             IFindsByFluentSelector<W> webDriver,
-            int index) 
+            int index)
             : this(locator, value, webDriver, index, default)
         {
         }
@@ -82,7 +75,7 @@ namespace IC.Navigation.Extensions.Appium
         public string Locator { get; set; }
 
         /// <summary>
-        /// Value of the parameter.
+        /// Value of the Locator.
         /// </summary>
         public string Value { get; set; }
 
@@ -106,6 +99,15 @@ namespace IC.Navigation.Extensions.Appium
         /// <summary>
         /// Search the WebElement of type <typeparamref name="W"/> matching the SearchProperties.
         /// </summary>
+        /// The <see cref="DefaultCancellationToken"/> is mandatory when using this method.
+        /// <returns>The matching WebElement.</returns>
+        /// <exception cref="OperationCanceledException">Thrown when any CancellationToken is cancelled.</exception>
+        /// <exception cref="UninitializedDefaultCancellationTokenException">Thrown when no CancellationToken is initialized.</exception>
+        public W Find() => Find(cancellationTokens: null);
+
+        /// <summary>
+        /// Search the WebElement of type <typeparamref name="W"/> matching the SearchProperties.
+        /// </summary>
         /// <param name="cancellationTokens">The CancellationTokens used to stop waiting for the control to be found.
         /// They will be linked to the <see cref="DefaultCancellationToken"/> if defined.</param>
         /// <returns>The matching WebElement.</returns>
@@ -118,7 +120,7 @@ namespace IC.Navigation.Extensions.Appium
             linkedTokenSource.Token.ThrowIfCancellationRequested();
             return elmt;
         }
-        
+
         /// <summary>
         /// Search the WebElement of type <typeparamref name="W"/> matching the SearchProperties.
         /// </summary>
@@ -208,12 +210,16 @@ namespace IC.Navigation.Extensions.Appium
         /// </summary>
         /// <param name="cancellationTokens">The CancellationTokens to link.</param>
         /// <returns>The linked CancellationTokens.</returns>
+        /// <exception cref="UninitializedDefaultCancellationTokenException">Thrown when no CancellationToken is initialized.</exception>
         private CancellationToken[] LinkCancellationTokens(params CancellationToken[] cancellationTokens)
         {
             var linkedTokens = new List<CancellationToken>();
-            if (cancellationTokens.Length == 0 && DefaultCancellationToken == null)
+            if (cancellationTokens == null || cancellationTokens.Length == 0)
             {
-                throw new UninitializedDefaultCancellationTokenException();
+                if (DefaultCancellationToken == null || DefaultCancellationToken == CancellationToken.None)
+                {
+                    throw new UninitializedDefaultCancellationTokenException();
+                }
             }
 
             if (DefaultCancellationToken != CancellationToken.None)
@@ -221,7 +227,11 @@ namespace IC.Navigation.Extensions.Appium
                 linkedTokens.Add(DefaultCancellationToken);
             }
 
-            linkedTokens.AddRange(cancellationTokens);
+            if (cancellationTokens != null)
+            {
+                linkedTokens.AddRange(cancellationTokens);
+            }
+
             return linkedTokens.ToArray();
         }
 
