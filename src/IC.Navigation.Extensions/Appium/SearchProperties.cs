@@ -24,7 +24,8 @@ namespace IC.Navigation.Extensions.Appium
             string locator,
             string value,
             IFindsByFluentSelector<W> webDriver,
-            int index) : this(locator, value, webDriver, index, default)
+            int index) 
+            : this(locator, value, webDriver, index, default)
         {
         }
 
@@ -117,35 +118,7 @@ namespace IC.Navigation.Extensions.Appium
             linkedTokenSource.Token.ThrowIfCancellationRequested();
             return elmt;
         }
-
-        /// <summary>
-        /// Search the WebElement of type <typeparamref name="W"/> matching the SearchProperties.
-        /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for the control to be found
-        /// and to its attributes to match expected values.
-        /// This timeout will run in concurence of the <see cref="DefaultCancellationToken"/> if defined.</param>
-        /// <returns>The matching WebElement.</returns>
-        /// <exception cref="TimeoutException">Thrown when any timeout is reached before WebElement is found.</exception>
-        /// <exception cref="OperationCanceledException">Thrown when any timeout is reached before
-        /// the expected attributes match the expected values.
-        /// </exception>
-        public W Find(
-            TimeSpan timeout,
-            params (string attributeName, string expectedAttributeValue)[] expectedAttribsNamesValues)
-        {
-            using var cts = new CancellationTokenSource(timeout);
-            var linkedTokens = LinkCancellationTokens(cts.Token);
-            using var linkedTokenSource = CancellationTokenSource.CreateLinkedTokenSource(linkedTokens);
-            var webElement = Get(linkedTokenSource.Token);
-            if (linkedTokenSource.Token.IsCancellationRequested)
-            {
-                throw new TimeoutException(timeoutExceptionMessage);
-            }
-
-            webElement.Wait(linkedTokenSource.Token, expectedAttribsNamesValues);
-            return webElement;
-        }
-
+        
         /// <summary>
         /// Search the WebElement of type <typeparamref name="W"/> matching the SearchProperties.
         /// </summary>
