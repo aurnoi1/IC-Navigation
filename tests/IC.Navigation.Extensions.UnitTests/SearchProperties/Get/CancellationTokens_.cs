@@ -68,6 +68,28 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 // Assert
                 actual.ShouldBeNull();
             }
+
+            [Theory, AutoMoqData]
+            public void When_index_is_not_defined_Then_returns_first_WebElement(
+                IFindsByFluentSelector<IWebElement> webDriver,
+                [Frozen]IReadOnlyCollection<IWebElement> webElements,
+                string locator,
+                string value)
+            {
+                // Arrange
+                using var cancellationTokenSource1 = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+                using var cancellationTokenSource2 = new CancellationTokenSource(TimeSpan.FromMilliseconds(70));
+                var cancellationToken1 = cancellationTokenSource1.Token;
+                var cancellationToken2 = cancellationTokenSource2.Token;
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver);
+
+                // Act
+                var actual = sut.Get(cancellationToken1, cancellationToken2);
+
+                // Assert
+                actual.ShouldBe(webElements.First());
+            }
         }
 
         public class Given_a_defaultCancellationToken_And_3_webElements_with_same_locator_properties_
@@ -130,6 +152,30 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
 
                 // Assert
                 actual.ShouldBeNull();
+            }
+
+            [Theory, AutoMoqData]
+            public void When_index_is_not_defined_Then_returns_first_WebElement(
+                IFindsByFluentSelector<IWebElement> webDriver,
+                [Frozen]IReadOnlyCollection<IWebElement> webElements,
+                string locator,
+                string value)
+            {
+                // Arrange
+                using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
+                using var cancellationTokenSource1 = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+                using var cancellationTokenSource2 = new CancellationTokenSource(TimeSpan.FromMilliseconds(70));
+                var cancellationToken1 = cancellationTokenSource1.Token;
+                var cancellationToken2 = cancellationTokenSource2.Token;
+                var defaultCancellationToken = defaultCancellationTokenSource.Token;
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, defaultCancellationToken);
+
+                // Act
+                var actual = sut.Get(cancellationToken1, cancellationToken2);
+
+                // Assert
+                actual.ShouldBe(webElements.First());
             }
         }
     }
