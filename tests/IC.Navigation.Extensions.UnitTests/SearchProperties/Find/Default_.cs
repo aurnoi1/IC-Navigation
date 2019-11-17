@@ -21,9 +21,7 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
         {
             [Theory]
             [InlineAutoMoqData(0)]
-            [InlineAutoMoqData(1)]
-            [InlineAutoMoqData(2)]
-            public void When_index_is_between_0_and_2_Then_returns_webElement_at_matching_index(
+            public void When_try_to_find_Then_throws_UninitializedDefaultCancellationTokenException(
                 int index,
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
@@ -49,9 +47,7 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
         {
             [Theory]
             [InlineAutoMoqData(0)]
-            [InlineAutoMoqData(1)]
-            [InlineAutoMoqData(2)]
-            public void When_index_is_between_0_and_2_Then_returns_webElement_at_matching_index(
+            public void When_try_to_find_Then_throws_OperationCanceledException(
                 int index,
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
@@ -153,6 +149,27 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
 
                 // Act, Assert
                 Assert.Throws<OperationCanceledException>(() => sut.Find());
+            }
+
+
+            [Theory, AutoMoqData]
+            public void When_index_is_not_defined_Then_returns_first_WebElement(
+                IFindsByFluentSelector<IWebElement> webDriver,
+                [Frozen]IReadOnlyCollection<IWebElement> webElements,
+                string locator,
+                string value)
+            {
+                // Arrange
+                using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
+                var defaultCancellationToken = defaultCancellationTokenSource.Token;
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, defaultCancellationToken);
+
+                // Act
+                var actual = sut.Find();
+
+                // Assert
+                actual.ShouldBe(webElements.First());
             }
         }
     }

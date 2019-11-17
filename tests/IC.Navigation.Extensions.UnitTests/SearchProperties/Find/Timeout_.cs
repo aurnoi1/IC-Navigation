@@ -59,6 +59,25 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
                 // Assert
                 Assert.Throws<TimeoutException>(() => sut.Find(timeout));
             }
+
+            [Theory, AutoMoqData]
+            public void When_index_is_not_defined_Then_returns_first_WebElement(
+                IFindsByFluentSelector<IWebElement> webDriver,
+                [Frozen]IReadOnlyCollection<IWebElement> webElements,
+                string locator,
+                string value)
+            {
+                // Arrange
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver);
+                var timeout = 50.Milliseconds();
+
+                // Act
+                var actual = sut.Find(timeout);
+
+                // Assert
+                actual.ShouldBe(webElements.First());
+            }
         }
 
         public class Given_a_defaultCancelationToken_And_3_webElements_with_same_locator_properties_
@@ -107,6 +126,27 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
 
                 // Assert
                 Assert.Throws<TimeoutException>(() => sut.Find(timeout));
+            }
+
+            [Theory, AutoMoqData]
+            public void When_index_is_not_defined_Then_returns_first_WebElement(
+                IFindsByFluentSelector<IWebElement> webDriver,
+                [Frozen]IReadOnlyCollection<IWebElement> webElements,
+                string locator,
+                string value)
+            {
+                // Arrange
+                using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
+                var defaultCancellationToken = defaultCancellationTokenSource.Token;
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, defaultCancellationToken);
+                var timeout = 50.Milliseconds();
+
+                // Act
+                var actual = sut.Find(timeout);
+
+                // Assert
+                actual.ShouldBe(webElements.First());
             }
         }
     }
