@@ -12,7 +12,7 @@ using Xunit;
 
 namespace IC.Navigation.UnitTests
 {
-    public class INavigableExTests
+    public class NavigableExTests
     {
         [Fact]
         public void Exists_Should_Returns_True()

@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using IC.Navigation.Extensions.Appium;
+using IC.Navigation.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
@@ -10,9 +11,104 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Xunit;
+using Shouldly;
 
-namespace IC.Navigation.UnitTests
+namespace IC.Navigation.WebElementEx.UnitTests
 {
+    public class Wait_Given_cancellationToken_attributeName_attributeValue_
+    {
+        [Theory, WebElementExValidData]
+        public void When_attribute_match_expected_value_Then_returns_T_webElement(
+            IWebElement sut,
+            CancellationToken cancellationToken,
+            string attributeName,
+            string attributeValue)
+        {
+            // Arrange
+            Mock.Get(sut).Setup(x => x.GetAttribute(attributeName)).Returns(attributeValue);
+
+            // Act
+            var actual = sut.Wait(cancellationToken, attributeName, attributeValue);
+
+            // Assert
+            actual.ShouldBe(sut);
+            cancellationToken.IsCancellationRequested.ShouldBeFalse();
+        }
+
+        [Theory, WebElementExCancelledTokenData]
+        public void When_cancellationToken_is_canceled_Then_throws_OperationCanceledException(
+            IWebElement sut,
+            CancellationToken cancellationToken,
+            string attributeName,
+            string attributeValue)
+        {
+            // Arrange
+            Mock.Get(sut).Setup(x => x.GetAttribute(attributeName)).Returns(attributeValue);
+
+            // Act
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(cancellationToken, attributeName, attributeValue));
+
+            // Assert
+            sut.ShouldNotBeNull();
+            cancellationToken.IsCancellationRequested.ShouldBeTrue();
+        }
+
+        [Theory, WebElementExValidData]
+        public void When_attribute_do_not_match_expected_value_Then_throws_OperationCanceledException(
+            IWebElement sut,
+            CancellationToken cancellationToken,
+            string attributeName,
+            string attributeValue)
+        {
+            // Arrange
+            Mock.Get(sut).Setup(x => x.GetAttribute(attributeName)).Returns(attributeValue);
+
+            // Act
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(cancellationToken, ("invalidAttribName", "True")));
+
+            // Assert
+            sut.ShouldNotBeNull();
+            cancellationToken.IsCancellationRequested.ShouldBeTrue();
+        }
+    }
+
+    public class Wait_Given_cancellationToken_attributes_
+    {
+        [Theory, WebElementExValidData]
+        public void When_attributes_match_expected_values_Then_returns_T_webElement(
+            IWebElement sut,
+            CancellationToken cancellationToken,
+            Dictionary<string, string> attributes)
+        {
+            // Arrange
+            attributes.ToList().ForEach(p => Mock.Get(sut).Setup(x => x.GetAttribute(p.Key)).Returns(p.Value));
+
+            // Act
+            var actual = sut.Wait(cancellationToken, attributes);
+
+            // Assert
+            actual.ShouldBe(sut);
+            cancellationToken.IsCancellationRequested.ShouldBeFalse();
+        }
+
+        [Theory, WebElementExCancelledTokenData]
+        public void When_cancellationToken_is_canceled_Then_throws_OperationCanceledException(
+            IWebElement sut,
+            CancellationToken cancellationToken,
+            Dictionary<string, string> attributes)
+        {
+            // Arrange
+            attributes.ToList().ForEach(p => Mock.Get(sut).Setup(x => x.GetAttribute(p.Key)).Returns(p.Value));
+
+            // Act
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(cancellationToken, attributes));
+
+            // Assert
+            sut.ShouldNotBeNull();
+            cancellationToken.IsCancellationRequested.ShouldBeTrue();
+        }
+    }
+
     public class WebElementExTests : IDisposable
     {
         public WebElementExTests()
@@ -20,42 +116,28 @@ namespace IC.Navigation.UnitTests
             fixture = new Fixture().Customize(new AutoMoqCustomization());
             sut = fixture.Create<IWebElement>();
             cts = new CancellationTokenSource(500.Milliseconds());
-            ct = cts.Token;
+            cancellationTokenOf500ms = cts.Token;
+            expectedAttribsNamesValues = fixture.Create<(string name, string value)>();
         }
 
         private readonly IFixture fixture;
         private readonly IWebElement sut;
         private readonly CancellationTokenSource cts;
-        private readonly CancellationToken ct;
+        private readonly CancellationToken cancellationTokenOf500ms;
+        private readonly (string name, string value) expectedAttribsNamesValues;
 
         #region Wait Tests
-
-        [Fact]
-        public void Wait_With_One_Attribute_And_CancellationToken_Should_Returns_Element_When_Attribute_Match_Expected_Value()
-        {
-            // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
-
-            // Act
-            var actual = sut.Wait(ct, name, value);
-
-            // Assert
-            Assert.Equal(sut, actual);
-            Assert.False(ct.IsCancellationRequested);
-        }
 
         [Fact]
         public void Wait_With_One_Attribute_And_Timeout_Should_Returns_Element_When_Attribute_Match_Expected_Value()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             var stopwatch = Stopwatch.StartNew();
             TimeSpan timeout = 50.ms();
 
             // Act
-            var actual = sut.Wait(timeout, name, value);
+            var actual = sut.Wait(timeout, expectedAttribsNamesValues.name, expectedAttribsNamesValues.value);
 
             // Assert
             Assert.Equal(sut, actual);
@@ -82,64 +164,35 @@ namespace IC.Navigation.UnitTests
         public void Wait_With_Tuple_And_CancellationToken_Should_Returns_Element_When_Attribute_Match_Expected_Value()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             var stopwatch = Stopwatch.StartNew();
 
             // Act
-            var actual = sut.Wait(ct, (name, value));
+            var actual = sut.Wait(cancellationTokenOf500ms, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value));
             stopwatch.Stop();
 
             // Assert
             Assert.Equal(sut, actual);
-            Assert.False(ct.IsCancellationRequested);
+            Assert.False(cancellationTokenOf500ms.IsCancellationRequested);
         }
 
         [Fact]
         public void Wait_With_Tuple_And_Timeout_Should_Returns_Element_When_Attribute_Match_Expected_Value()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             var stopwatch = Stopwatch.StartNew();
             TimeSpan timeout = 50.ms();
 
             // Act
-            var actual = sut.Wait(timeout, (name, value));
+            var actual = sut.Wait(timeout, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value));
             stopwatch.Stop();
 
             // Assert
             Assert.Equal(sut, actual);
             Assert.True(stopwatch.ElapsedMilliseconds < timeout.Ticks);
-        }
-
-        [Fact]
-        public void Wait_With_Dic_And_CancellationToken_Should_Returns_Element_When_Attribute_Match_Expected_Value()
-        {
-            // Arrange
-            var attributes = CreateMockedAttributesDictionary();
-
-            // Act
-            var actual = sut.Wait(ct, attributes);
-
-            // Assert
-            Assert.Equal(sut, actual);
-            Assert.False(ct.IsCancellationRequested);
-        }
-
-        [Fact]
-        public void Wait_With_CancellationToken_Should_Throws_OperationCanceledException_When_AttribueName_Is_Invalid()
-        {
-            // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
-
-            // Act
-            Assert.Throws<OperationCanceledException>(() => sut.Wait(ct, ("invalidAttribName", "True")));
-
-            // Assert
-            Assert.NotNull(sut);
-            Assert.True(ct.IsCancellationRequested);
         }
 
         [Fact]
@@ -159,12 +212,12 @@ namespace IC.Navigation.UnitTests
         public void Wait_With_Tuple_CancellationToken_Should_Throws_OperationCanceledException_When_CancellationToken_Is_Cancelled()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             using var ctsLocal = new CancellationTokenSource(TimeSpan.Zero);
 
             // Assert
-            Assert.Throws<OperationCanceledException>(() => sut.Wait(ctsLocal.Token, (name, value)));
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(ctsLocal.Token, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value)));
             Assert.NotNull(sut);
         }
 
@@ -172,12 +225,12 @@ namespace IC.Navigation.UnitTests
         public void Wait_With_One_Attribute_And_CancellationToken_Should_Throws_OperationCanceledException_When_CancellationToken_Is_Cancelled()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             using var ctsLocal = new CancellationTokenSource(TimeSpan.Zero);
 
             // Assert
-            Assert.Throws<OperationCanceledException>(() => sut.Wait(ctsLocal.Token, name, value));
+            Assert.Throws<OperationCanceledException>(() => sut.Wait(ctsLocal.Token, expectedAttribsNamesValues.name, expectedAttribsNamesValues.value));
             Assert.NotNull(sut);
         }
 
@@ -185,11 +238,11 @@ namespace IC.Navigation.UnitTests
         public void Wait_With_One_Attribute_And_Timeout_Should_Throws_OperationCanceledException_When_CancellationToken_Is_Cancelled()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
 
             // Assert
-            Assert.Throws<TimeoutException>(() => sut.Wait(TimeSpan.Zero, name, value));
+            Assert.Throws<TimeoutException>(() => sut.Wait(TimeSpan.Zero, expectedAttribsNamesValues.name, expectedAttribsNamesValues.value));
             Assert.NotNull(sut);
         }
 
@@ -197,28 +250,26 @@ namespace IC.Navigation.UnitTests
         public void Wait_With_Timeout_Should_Throws_TimeoutException_When_Timeout_Is_Reached()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
 
             // Assert
-            Assert.Throws<TimeoutException>(() => sut.Wait(TimeSpan.Zero, (name, value)));
+            Assert.Throws<TimeoutException>(() => sut.Wait(TimeSpan.Zero, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value)));
             Assert.NotNull(sut);
         }
 
         [Fact]
         public void Wait_With_Timeout_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
-            var (name, value) = fixture.Create<(string name, string value)>();
             IWebElement sut = null;
-            Assert.Throws<ArgumentNullException>(() => sut.Wait(TimeSpan.Zero, (name, value)));
+            Assert.Throws<ArgumentNullException>(() => sut.Wait(TimeSpan.Zero, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value)));
         }
 
         [Fact]
         public void Wait_With_CancellationToken_Should_Throws_ArgumentNullException_When_WebElement_Is_Null()
         {
-            var (name, value) = fixture.Create<(string name, string value)>();
             IWebElement sut = null;
-            Assert.Throws<ArgumentNullException>(() => sut.Wait(ct, (name, value)));
+            Assert.Throws<ArgumentNullException>(() => sut.Wait(cancellationTokenOf500ms, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value)));
         }
 
         [Fact]
@@ -241,13 +292,13 @@ namespace IC.Navigation.UnitTests
         public void WaitUntil_With_Tuple_And_Timeout_Should_Returns_Expected_Value_Before_Timeout()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             var stopwatch = Stopwatch.StartNew();
             TimeSpan timeout = 50.ms();
 
             // Act
-            var actual = sut.WaitUntil(timeout, (name, value));
+            var actual = sut.WaitUntil(timeout, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value));
             stopwatch.Stop();
 
             // Assert
@@ -265,7 +316,7 @@ namespace IC.Navigation.UnitTests
             TimeSpan timeout = 500.ms();
 
             // Act
-            var actual = sut.WaitUntil(timeout, name, value);
+            var actual = sut.WaitUntil(timeout, expectedAttribsNamesValues.name, expectedAttribsNamesValues.value);
             stopwatch.Stop();
 
             // Assert
@@ -277,17 +328,17 @@ namespace IC.Navigation.UnitTests
         public void WaitUntil_With_Tuple_And_CancellationToken_Should_Returns_Expected_Value_Before_Cancellation()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             var stopwatch = Stopwatch.StartNew();
 
             // Act
-            var actual = sut.WaitUntil(ct, (name, value));
+            var actual = sut.WaitUntil(cancellationTokenOf500ms, (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value));
             stopwatch.Stop();
 
             // Assert
             Assert.True(actual);
-            Assert.False(ct.IsCancellationRequested);
+            Assert.False(cancellationTokenOf500ms.IsCancellationRequested);
         }
 
         [Fact]
@@ -317,40 +368,40 @@ namespace IC.Navigation.UnitTests
             var stopwatch = Stopwatch.StartNew();
 
             // Act
-            var actual = sut.WaitUntil(ct, attributes.ToArray());
+            var actual = sut.WaitUntil(cancellationTokenOf500ms, attributes.ToArray());
             stopwatch.Stop();
 
             // Assert
             Assert.True(actual);
-            Assert.False(ct.IsCancellationRequested);
+            Assert.False(cancellationTokenOf500ms.IsCancellationRequested);
         }
 
         [Fact]
         public void WaitUntil_With_One_Attribute_And_CancellationToken_Should_Returns_Expected_Value_Before_Cancellation()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
 
             // Act
-            var actual = sut.WaitUntil(ct, name, value);
+            var actual = sut.WaitUntil(cancellationTokenOf500ms, expectedAttribsNamesValues.name, expectedAttribsNamesValues.value);
 
             // Assert
             Assert.True(actual);
-            Assert.False(ct.IsCancellationRequested);
+            Assert.False(cancellationTokenOf500ms.IsCancellationRequested);
         }
 
         [Fact]
         public void WaitUntil_With_One_Attribute_And_Timeout_Should_Returns_Expected_Value_Before_Timeout()
         {
             // Arrange
-            var (name, value) = fixture.Create<(string name, string value)>();
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(value);
+
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(expectedAttribsNamesValues.value);
             var stopwatch = Stopwatch.StartNew();
             TimeSpan timeout = 50.ms();
 
             // Act
-            var actual = sut.WaitUntil(timeout, name, value);
+            var actual = sut.WaitUntil(timeout, expectedAttribsNamesValues.name, expectedAttribsNamesValues.value);
             stopwatch.Stop();
 
             // Assert
@@ -365,11 +416,11 @@ namespace IC.Navigation.UnitTests
             var attributes = CreateMockedAttributesDictionary();
 
             // Act
-            var actual = sut.WaitUntil(ct, attributes);
+            var actual = sut.WaitUntil(cancellationTokenOf500ms, attributes);
 
             // Assert
             Assert.True(actual);
-            Assert.False(ct.IsCancellationRequested);
+            Assert.False(cancellationTokenOf500ms.IsCancellationRequested);
         }
 
         [Fact]
@@ -410,7 +461,6 @@ namespace IC.Navigation.UnitTests
         {
             // Arrange
             Dictionary<string, string> attributes = null;
-
             TimeSpan timeout = 50.ms();
 
             // Act
@@ -446,7 +496,6 @@ namespace IC.Navigation.UnitTests
 
         private (string name, string value) CreateMockAttributesReturningValueAfterDelay(CancellationToken token)
         {
-            var (name, value) = fixture.Create<(string name, string value)>();
             static string retValueAfterDelay(CancellationToken cancellationToken, string value)
             {
                 if (!cancellationToken.IsCancellationRequested)
@@ -459,8 +508,8 @@ namespace IC.Navigation.UnitTests
                 }
             }
 
-            Mock.Get(sut).Setup(x => x.GetAttribute(name)).Returns(() => retValueAfterDelay(token, value));
-            return (name, value);
+            Mock.Get(sut).Setup(x => x.GetAttribute(expectedAttribsNamesValues.name)).Returns(() => retValueAfterDelay(token, expectedAttribsNamesValues.value));
+            return (expectedAttribsNamesValues.name, expectedAttribsNamesValues.value);
         }
 
         #endregion Private

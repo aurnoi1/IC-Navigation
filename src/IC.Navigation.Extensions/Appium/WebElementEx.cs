@@ -17,16 +17,16 @@ namespace IC.Navigation.Extensions.Appium
         /// <param name="webElement">This WebElement.</param>
         /// <param name="cancellationToken">The CancellationToken used to stop waiting for the attributes match their expected values.</param>
         /// <param name="attributeName">The attribute name (case sensitive).</param>
-        /// <param name="expectedAttributeValue">The expected attribute value (case sensitive).</param>
+        /// <param name="attributeValue">The expected attribute value (case sensitive).</param>
         /// <returns>This WebElement once its attributes match the expected values.</returns>
         /// <exception cref="OperationCanceledException">Throw when the task is cancelled.</exception>
         public static T Wait<T>(
             this T webElement,
             CancellationToken cancellationToken,
             string attributeName,
-            string expectedAttributeValue) where T : IWebElement
+            string attributeValue) where T : IWebElement
         {
-            if (webElement.WaitUntil(cancellationToken, attributeName, expectedAttributeValue))
+            if (webElement.WaitUntil(cancellationToken, attributeName, attributeValue))
                 return webElement;
 
             // WaitUntil() can only return false when the CancellationToken has been Cancelled.
