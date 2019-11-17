@@ -27,13 +27,13 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue
+                string value
                 )
             {
                 // Arrange
                 var expected = webElements.ElementAt(index);
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, index);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, index);
                 var timeout = 50.Milliseconds();
 
                 // Act
@@ -48,13 +48,13 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue)
+                string value)
             {
                 // Arrange
                 var timeout = 50.Milliseconds();
                 int indexOutOfRange = webElements.Count + 1;
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, indexOutOfRange);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, indexOutOfRange);
 
                 // Assert
                 Assert.Throws<TimeoutException>(() => sut.Find(timeout));
@@ -72,15 +72,15 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue
+                string value
                 )
             {
                 // Arrange
                 using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
                 var defaultCancellationToken = defaultCancellationTokenSource.Token;
                 var expected = webElements.ElementAt(index);
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, index, defaultCancellationToken);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, index, defaultCancellationToken);
                 var timeout = 50.Milliseconds();
 
                 // Act
@@ -95,15 +95,15 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue)
+                string value)
             {
                 // Arrange
                 using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
                 var defaultCancellationToken = defaultCancellationTokenSource.Token;
                 var timeout = 50.Milliseconds();
                 int indexOutOfRange = webElements.Count + 1;
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, indexOutOfRange, defaultCancellationToken);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, indexOutOfRange, defaultCancellationToken);
 
                 // Assert
                 Assert.Throws<TimeoutException>(() => sut.Find(timeout));

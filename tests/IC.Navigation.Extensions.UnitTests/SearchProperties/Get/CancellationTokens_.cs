@@ -27,7 +27,7 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue
+                string value
                 )
             {
                 // Arrange
@@ -36,8 +36,8 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 using var cancellationTokenSource2 = new CancellationTokenSource(TimeSpan.FromMilliseconds(70));
                 var cancellationToken1 = cancellationTokenSource1.Token;
                 var cancellationToken2 = cancellationTokenSource2.Token;
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, index);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, index);
 
                 // Act
                 var actual = sut.Get(cancellationToken1, cancellationToken2);
@@ -51,16 +51,16 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue)
+                string value)
             {
                 // Arrange
                 using var cancellationTokenSource1 = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
                 using var cancellationTokenSource2 = new CancellationTokenSource(TimeSpan.FromMilliseconds(70));
                 var cancellationToken1 = cancellationTokenSource1.Token;
                 var cancellationToken2 = cancellationTokenSource2.Token;
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
                 int indexOutOfRange = webElements.Count + 1;
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, indexOutOfRange);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, indexOutOfRange);
 
                 // Act
                 var actual = sut.Get(cancellationToken1, cancellationToken2);
@@ -81,7 +81,7 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue
+                string value
                 )
             {
                 // Arrange
@@ -92,10 +92,10 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 var cancellationToken2 = cancellationTokenSource2.Token;
                 var defaultCancellationToken = defaultCancellationTokenSource.Token;
                 var expected = webElements.ElementAt(index);
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
                 var sut = new SearchProperties<IWebElement>(
                     locator,
-                    locatorValue,
+                    value,
                     webDriver,
                     index,
                     defaultCancellationToken);
@@ -112,7 +112,7 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 IFindsByFluentSelector<IWebElement> webDriver,
                 [Frozen]IReadOnlyCollection<IWebElement> webElements,
                 string locator,
-                string locatorValue)
+                string value)
             {
                 // Arrange
                 using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
@@ -121,9 +121,9 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
                 var cancellationToken1 = cancellationTokenSource1.Token;
                 var cancellationToken2 = cancellationTokenSource2.Token;
                 var defaultCancellationToken = defaultCancellationTokenSource.Token;
-                Mock.Get(webDriver).Setup(x => x.FindElements(locator, locatorValue)).Returns(webElements);
+                Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
                 int indexOutOfRange = webElements.Count + 1;
-                var sut = new SearchProperties<IWebElement>(locator, locatorValue, webDriver, indexOutOfRange, defaultCancellationToken);
+                var sut = new SearchProperties<IWebElement>(locator, value, webDriver, indexOutOfRange, defaultCancellationToken);
 
                 // Act
                 var actual = sut.Get(cancellationToken1, cancellationToken2);
