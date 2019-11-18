@@ -1,4 +1,7 @@
-﻿using IC.Navigation.Extensions.Appium;
+﻿using AutoFixture;
+using AutoFixture.AutoMoq;
+using AutoFixture.Idioms;
+using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.Interfaces;
 using IC.Navigation.UnitTests.DataAttributes;
 using IC.TimeoutEx;
@@ -10,6 +13,18 @@ using Xunit;
 
 namespace IC.Navigation.Extensions.UnitTests.SearchProperties
 {
+    public class Idioms_
+    {
+        [Fact]
+        public void Constructors()
+        {
+            // Assert
+            var fixture = new Fixture().Customize(new AutoMoqCustomization());
+            var assertion = new GuardClauseAssertion(fixture);
+            assertion.Verify(typeof(SearchProperties<IWebElement>).GetConstructors());
+        }
+    }
+
     public class Locator_value_webDriver_index_
     {
         [Theory, AutoMoqData]

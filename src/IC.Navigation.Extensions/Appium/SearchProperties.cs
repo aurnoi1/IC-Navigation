@@ -13,29 +13,6 @@ namespace IC.Navigation.Extensions.Appium
     {
         private const string timeoutExceptionMessage = "The timeout has been reached before the Element could be found.";
 
-        public SearchProperties(
-            string locator,
-            string value,
-            IFindsByFluentSelector<W> webDriver,
-            int index)
-            : this(locator, value, webDriver, index, default)
-        {
-        }
-
-        public SearchProperties(
-            string locator,
-            string value,
-            IFindsByFluentSelector<W> webDriver,
-            int index,
-            CancellationToken defaultCancellationToken)
-        {
-            Locator = locator;
-            Value = value;
-            WebDriver = webDriver;
-            Index = index;
-            DefaultCancellationToken = defaultCancellationToken;
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SearchProperties"/> class.
         /// </summary>
@@ -48,11 +25,17 @@ namespace IC.Navigation.Extensions.Appium
             string value,
             IFindsByFluentSelector<W> webDriver,
             CancellationToken defaultCancellationToken)
+            : this(locator, value, webDriver, 0, defaultCancellationToken)
         {
-            Locator = locator;
-            Value = value;
-            WebDriver = webDriver;
-            DefaultCancellationToken = defaultCancellationToken;
+        }
+
+        public SearchProperties(
+            string locator,
+            string value,
+            IFindsByFluentSelector<W> webDriver,
+            int index)
+            : this(locator, value, webDriver, index, default)
+        {
         }
 
         /// <summary>
@@ -67,6 +50,20 @@ namespace IC.Navigation.Extensions.Appium
             string value,
             IFindsByFluentSelector<W> webDriver) : this(locator, value, webDriver, defaultCancellationToken: default)
         {
+        }
+
+        public SearchProperties(
+            string locator,
+            string value,
+            IFindsByFluentSelector<W> webDriver,
+            int index,
+            CancellationToken defaultCancellationToken)
+        {
+            Locator = locator ?? throw new ArgumentNullException(nameof(locator));
+            Value = value ?? throw new ArgumentNullException(nameof(value));
+            WebDriver = webDriver ?? throw new ArgumentNullException(nameof(webDriver));
+            Index = index;
+            DefaultCancellationToken = defaultCancellationToken;
         }
 
         /// <summary>
