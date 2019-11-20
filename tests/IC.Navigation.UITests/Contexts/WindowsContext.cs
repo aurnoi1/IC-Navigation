@@ -70,7 +70,7 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         public IAppBrowser<R> Start(CancellationToken ct)
         {
             var sut = CreateAppBrowser();
-            sut.WaitForEntryPoints(ct);
+            sut.PomMenu.UITitle.Find(ct);
             return sut;
         }
 

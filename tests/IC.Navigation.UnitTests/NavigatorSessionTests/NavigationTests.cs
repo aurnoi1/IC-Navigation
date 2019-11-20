@@ -16,14 +16,6 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
         {
         }
 
-        [Fact]
-        public void WaitForEntryPoints_Should_Throws_UninitializedGlobalCancellationTokenException()
-        {
-            var sut = new Mock<NavigatorSession>();
-            sut.CallBase = true; // Ensure to call default implementation of virtual members.
-            Assert.Throws<UninitializedGlobalCancellationTokenException>(() => sut.Object.WaitForEntryPoints());
-        }
-
 #pragma warning disable xUnit1026
 
         [Theory]

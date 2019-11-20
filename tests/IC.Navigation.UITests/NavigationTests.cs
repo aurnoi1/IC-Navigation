@@ -67,8 +67,7 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.PomBlue)
                 .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
                 .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
-                .GoTo(sut.PomRed)// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
-                .GoTo(sut.EntryPoint); // The entry point.
+                .GoTo(sut.PomRed);// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
 
             Assert.True(sut.Historic.ElementAt(0).Exists());
         }

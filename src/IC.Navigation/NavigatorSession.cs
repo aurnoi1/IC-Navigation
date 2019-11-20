@@ -49,18 +49,7 @@ namespace IC.Navigation
         /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
         /// </summary>
         public abstract CancellationToken GlobalCancellationToken { get; set; }
-
-        /// <summary>
-        /// The INavigables to be expected as entry points when the application start.
-        /// </summary>
-        public abstract HashSet<INavigable> EntryPoints { get; protected set; }
-
-        /// <summary>
-        /// The INavigable EntryPoint that is found at the beginning of the navigation.
-        /// Otherwise <c>null</c> if nothing found at the time.
-        /// </summary>
-        public virtual INavigable EntryPoint => Historic.FirstOrDefault();
-
+        
         /// <summary>
         /// Last known INavigable.
         /// </summary>
@@ -168,45 +157,6 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Wait for any EntryPoints to exists.
-        /// The amount of time to wait is defined by each INavigable.WaitForExists().
-        /// </summary>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
-        /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
-        /// <returns>The first INavigable found.</returns>
-        /// <exception cref="OperationCanceledException">Throw when the operation has been canceled.</exception>
-        /// <exception cref="EntryPointsNotFoundException">Throw when no EntryPoint has been found.</exception>
-        public virtual INavigable WaitForEntryPoints(CancellationToken cancellationToken = default)
-        {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-            return GetFirstINavigableExisting(EntryPoints.ToList(), localCancellationToken);
-        }
-
-        /// <summary>
-        /// Wait for any EntryPoints of the navigation to exists.
-        /// The amount of time to wait is defined by each INavigable.WaitForExists().
-        /// </summary>
-        /// <param name="timeout">The maximum amount of time to wait for any EntryPoints.</param>
-        /// <returns>The first INavigable found</returns>
-        /// <exception cref="TimeoutException">Throw when timeout is reached before any EntryPoint is found.</exception>
-        public INavigable WaitForEntryPoints(TimeSpan timeout)
-        {
-            using (var cts = new CancellationTokenSource(timeout))
-            {
-                try
-                {
-                    cts.Token.ThrowIfCancellationRequested();
-                    return GetFirstINavigableExisting(EntryPoints.ToList(), cts.Token);
-                }
-                catch (OperationCanceledException)
-                {
-                    throw new TimeoutException("The timeout has been reached.");
-                }
-            }
-        }
-
-        /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
@@ -221,9 +171,9 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
+            WaitUntilNavigableExists(origin, localCancellationToken);
             action.Invoke(localCancellationToken);
-            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
+            WaitUntilNavigableExists(origin, localCancellationToken);
             return origin;
         }
 
@@ -245,14 +195,14 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
+            WaitUntilNavigableExists(origin, localCancellationToken);
             INavigable retINavigable = function.Invoke(localCancellationToken);
             if (!typeof(T).IsAssignableFrom(retINavigable.GetType()))
             {
                 throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }
 
-            WaitUntilNavigableExists(retINavigable, "destination", localCancellationToken);
+            WaitUntilNavigableExists(retINavigable, localCancellationToken);
             return retINavigable;
         }
 
@@ -284,7 +234,7 @@ namespace IC.Navigation
             actionToOpen.Invoke(localCancellationToken);
             if (gotoDestination != null)
             {
-                WaitUntilNavigableExists(nextNavigable, "neighbor to open", localCancellationToken);
+                WaitUntilNavigableExists(nextNavigable, localCancellationToken);
                 return nextNavigable;
             }
             else
@@ -310,7 +260,7 @@ namespace IC.Navigation
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
             if (Graph == null) { throw new UninitializedGraphException(); }
-            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
+            WaitUntilNavigableExists(origin, localCancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -443,7 +393,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, "origin", localCancellationToken);
+            WaitUntilNavigableExists(origin, localCancellationToken);
             INavigable match = null;
             onActionAlternatives.AlternativateAction.Invoke(localCancellationToken);
             match = GetFirstINavigableExisting(onActionAlternatives.INavigables, localCancellationToken);
@@ -597,7 +547,7 @@ namespace IC.Navigation
 
             if (match == null)
             {
-                throw new EntryPointsNotFoundException(iNavigables);
+                throw new NavigableNotFoundException(iNavigables);
             }
 
             return match;
@@ -610,7 +560,7 @@ namespace IC.Navigation
             return exists ? navigable : null;
         }
 
-        private void WaitUntilNavigableExists(INavigable iNavigable, string definition, CancellationToken cancellationToken)
+        private void WaitUntilNavigableExists(INavigable iNavigable, CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {

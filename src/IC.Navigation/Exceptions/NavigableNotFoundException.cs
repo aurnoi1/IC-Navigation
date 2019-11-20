@@ -1,5 +1,6 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace IC.Navigation.Exceptions
 {
@@ -21,6 +22,11 @@ namespace IC.Navigation.Exceptions
 
         public NavigableNotFoundException(INavigable navigable)
             : base($"Could not find the Navigable \"{navigable.GetType().FullName}\".")
+        {
+        }
+
+        public NavigableNotFoundException(IEnumerable<INavigable> entryPointsTypes)
+            : base($"Could not find any navigable: {string.Join(",", entryPointsTypes.GetType().FullName)}.")
         {
         }
     }

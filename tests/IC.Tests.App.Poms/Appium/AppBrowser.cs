@@ -23,7 +23,6 @@ namespace IC.Tests.App.Poms.Appium
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             RemoteDriver = appiumSession.RemoteDriver;
-            EntryPoints = new HashSet<INavigable>() { PomMenu };
         }
 
         /// <summary>
@@ -36,7 +35,6 @@ namespace IC.Tests.App.Poms.Appium
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             RemoteDriver = appiumSession.RemoteDriver;
-            EntryPoints = new HashSet<INavigable>() { PomMenu };
             GlobalCancellationToken = globalCancellationToken;
         }
 
@@ -79,10 +77,6 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         public override IGraph Graph { get; }
 
-        /// <summary>
-        /// The INavigables to be expected as entry points when the application start.
-        /// </summary>
-        public override HashSet<INavigable> EntryPoints { get; protected set; }
 
         #endregion Public
 

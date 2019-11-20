@@ -45,52 +45,6 @@ namespace IC.Navigation.UITests
             Assert.Equal(cts.Token, facade.GlobalCancellationToken);
         }
 
-        [Fact]
-        public void WaitForEntryPoints_With_CToken_Should_Returns_Found_EntryPoint()
-        {
-            var expected = typeof(PomMenu<WindowsDriver<WindowsElement>>);
-            INavigable actual = null;
-            using (var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10)))
-            using (var sut = appContext.CreateAppBrowser())
-            {
-                actual = sut.WaitForEntryPoints(cts.Token);
-            }
-
-            Assert.Equal(expected, actual.GetType());
-        }
-
-        [Fact]
-        public void WaitForEntryPoints_With_CToken_Should_Throw_OperationCanceledException_On_Timeout()
-        {
-            using (var cts = new CancellationTokenSource(TimeSpan.Zero))
-            using (var sut = appContext.CreateAppBrowser())
-            {
-                Assert.Throws<OperationCanceledException>(() => sut.WaitForEntryPoints(cts.Token));
-            }
-        }
-
-        [Fact]
-        public void WaitForEntryPoints_With_Timeout_Should_Returns_Found_EntryPoint()
-        {
-            var expected = typeof(PomMenu<WindowsDriver<WindowsElement>>);
-            INavigable actual = null;
-            using (var sut = appContext.CreateAppBrowser())
-            {
-                actual = sut.WaitForEntryPoints(TimeSpan.FromSeconds(10));
-            }
-
-            Assert.Equal(expected, actual.GetType());
-        }
-
-        [Fact]
-        public void WaitForEntryPoints_With_Timeout_Should_Throw_TimeoutException_On_Timeout()
-        {
-            using (var sut = appContext.CreateAppBrowser())
-            {
-                Assert.Throws<TimeoutException>(() => sut.WaitForEntryPoints(TimeSpan.Zero));
-            }
-        }
-
         #endregion Public
 
         #endregion Methods
