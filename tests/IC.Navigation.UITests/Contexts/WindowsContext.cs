@@ -5,6 +5,7 @@ using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.Threading;
+using IC.Navigation.CoreExtensions;
 
 namespace IC.Navigation.UITests.Specflow.Contexts
 {
@@ -70,7 +71,7 @@ namespace IC.Navigation.UITests.Specflow.Contexts
         public IAppBrowser<R> Start(CancellationToken ct)
         {
             var sut = CreateAppBrowser();
-            sut.PomMenu.UITitle.Find(ct);
+            sut.PomMenu.WaitForExist(ct);
             return sut;
         }
 

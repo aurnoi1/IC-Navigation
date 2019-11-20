@@ -27,7 +27,7 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
-        /// <param name="origin">The INvagable set as origin.</param>
+        /// <param name="origin">The origin.</param>
         /// <param name="action">The action to execute.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
@@ -37,7 +37,7 @@ namespace IC.Navigation.Interfaces
         /// Executes the Function passed in parameter.
         /// </summary>
         /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
-        /// <param name="origin">The INvagable set as origin.</param>
+        /// <param name="origin">The origin.</param>
         /// <param name="function">The Function to execute with a declared returned Type.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The INavigable returns by the Function.</returns>
@@ -73,13 +73,13 @@ namespace IC.Navigation.Interfaces
         /// The next INavigable can be a consecutive or rebased to the current INavigable.
         /// </summary>
         /// <param name="actionToOpenInavigable">A Dictionary of UI actions to step to the next Navigable.</param>
-        /// <param name="nextNavigable">The next INavigable.</param>
+        /// <param name="destination">The next INavigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The next consecutive or the rebased INavigable.</returns>
         /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
         INavigable StepToNext(
             Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable,
-            INavigable nextNavigable,
+            INavigable destination,
             CancellationToken cancellationToken);
 
         /// <summary>
@@ -115,5 +115,12 @@ namespace IC.Navigation.Interfaces
             IOnActionAlternatives onActionAlternatives,
             INavigable waypoint,
             CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Wait until the navigable exists.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        void WaitForExist(INavigable origin, CancellationToken cancellationToken);
     }
 }

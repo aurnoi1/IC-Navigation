@@ -15,11 +15,11 @@ namespace IC.Navigation.UnitTests
     public class NavigableExTests
     {
         [Fact]
-        public void Exists_Should_Returns_True()
+        public void Exist_Should_Returns_True()
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exists).Returns(true);
+            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(true);
 
             // Act
             var actual = sut.Exists();
@@ -29,11 +29,11 @@ namespace IC.Navigation.UnitTests
         }
 
         [Fact]
-        public void Exists_Should_Returns_False()
+        public void Exist_Should_Returns_False()
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exists).Returns(false);
+            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(false);
 
             // Act
             var actual = sut.Exists();

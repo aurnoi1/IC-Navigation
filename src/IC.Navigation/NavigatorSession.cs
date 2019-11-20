@@ -171,9 +171,9 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, localCancellationToken);
+            WaitForExist(origin, localCancellationToken);
             action.Invoke(localCancellationToken);
-            WaitUntilNavigableExists(origin, localCancellationToken);
+            WaitForExist(origin, localCancellationToken);
             return origin;
         }
 
@@ -195,14 +195,14 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, localCancellationToken);
+            WaitForExist(origin, localCancellationToken);
             INavigable retINavigable = function.Invoke(localCancellationToken);
             if (!typeof(T).IsAssignableFrom(retINavigable.GetType()))
             {
                 throw new UnexpectedNavigableException(typeof(T), retINavigable);
             }
 
-            WaitUntilNavigableExists(retINavigable, localCancellationToken);
+            WaitForExist(retINavigable, localCancellationToken);
             return retINavigable;
         }
 
@@ -234,7 +234,7 @@ namespace IC.Navigation
             actionToOpen.Invoke(localCancellationToken);
             if (gotoDestination != null)
             {
-                WaitUntilNavigableExists(nextNavigable, localCancellationToken);
+                WaitForExist(nextNavigable, localCancellationToken);
                 return nextNavigable;
             }
             else
@@ -260,7 +260,7 @@ namespace IC.Navigation
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
             if (Graph == null) { throw new UninitializedGraphException(); }
-            WaitUntilNavigableExists(origin, localCancellationToken);
+            WaitForExist(origin, localCancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -393,7 +393,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitUntilNavigableExists(origin, localCancellationToken);
+            WaitForExist(origin, localCancellationToken);
             INavigable match = null;
             onActionAlternatives.AlternativateAction.Invoke(localCancellationToken);
             match = GetFirstINavigableExisting(onActionAlternatives.INavigables, localCancellationToken);
@@ -407,7 +407,7 @@ namespace IC.Navigation
         /// <param name="status">The NavigableStatus.</param>
         public virtual void Update(INavigable navigable, INavigableStatus status)
         {
-            if (status.Exists)
+            if (status.Exist)
             {
                 SetLast(navigable, status);
             }
@@ -470,6 +470,22 @@ namespace IC.Navigation
                     obs.Update(historic);
                 }
             });
+        }
+
+        /// <summary>
+        /// Wait until the navigable exists.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        public void WaitForExist(INavigable origin, CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (origin.PublishStatus().Exist)
+                {
+                    return;
+                }
+            }
         }
 
         #endregion Public
@@ -556,19 +572,8 @@ namespace IC.Navigation
         private INavigable GetExistingNavigable(INavigable navigable, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested) return null;
-            bool exists = navigable.PublishStatus().Exists;
+            bool exists = navigable.PublishStatus().Exist;
             return exists ? navigable : null;
-        }
-
-        private void WaitUntilNavigableExists(INavigable iNavigable, CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
-            {
-                if (iNavigable.PublishStatus().Exists)
-                {
-                    return;
-                }
-            }
         }
 
         private List<Type> GetINavigableTypes(Assembly assembly)

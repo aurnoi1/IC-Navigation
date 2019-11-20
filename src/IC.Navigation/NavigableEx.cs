@@ -113,13 +113,27 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Get the <see cref="INavigableStatus.Exists"/> status of the Navigable./>.
+        /// Get the <see cref="INavigableStatus.Exist"/> status of the Navigable./>.
         /// </summary>
         /// <param name="origin">This Navigable instance.</param>
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
         public static bool Exists(this INavigable origin)
         {
-            return origin.PublishStatus().Exists;
+            return origin.PublishStatus().Exist;
         }
+
+        /// <summary>
+        /// Wait until the navigable exists.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <returns><c>true</c> if exists before the CancellationToken is canceled.
+        /// Otherwise <c>false</c>.</returns>
+        public static bool WaitForExist(this INavigable origin, CancellationToken cancellationToken)
+        {
+            origin.NavigatorSession.WaitForExist(origin, cancellationToken);
+            return !cancellationToken.IsCancellationRequested;
+        }
+
     }
 }

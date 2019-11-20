@@ -69,7 +69,8 @@ namespace IC.Navigation.UITests
                 .GoTo(sut.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
                 .GoTo(sut.PomRed);// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
 
-            Assert.True(sut.Historic.ElementAt(0).Exists());
+            // First page in historic was PomMenu.
+            Assert.Same(sut.PomMenu, sut.Historic.First());
         }
 
         [Fact]
@@ -115,10 +116,10 @@ namespace IC.Navigation.UITests
             var resultObs = callbackResults.Select(x => x.observer).ToList();
             Assert.Equal(observerMocks, resultObs);
 
-            // Validate all observers received the same INavigableEventArgs on WaitForExists().
+            // Validate all observers received the same INavigableEventArgs on WaitForExist().
             callbackResults.ForEach(r => Assert.Same(callbackResults[0].args, r.args));
 
-            // Validate all observers received the same instance of ViewMenu on WaitForExists().
+            // Validate all observers received the same instance of ViewMenu on WaitForExist().
             callbackResults.ForEach(r => Assert.Same(sut.PomMenu, r.observable));
         }
 

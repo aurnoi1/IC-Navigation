@@ -57,7 +57,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             bool isDisplayed = UILblTitle.Get() != null;
             NavigableStatus status = new NavigableStatus();
-            status.Exists = isDisplayed;
+            status.Exist = isDisplayed;
             NotifyObservers(status);
             return status;
         }
