@@ -119,7 +119,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
         public static bool Exists(this INavigable origin)
         {
-            return origin.PublishStatus().Exist;
+            return origin.PublishStatus().Exist.Value;
         }
 
         /// <summary>

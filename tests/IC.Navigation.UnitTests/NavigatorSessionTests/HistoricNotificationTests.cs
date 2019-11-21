@@ -19,7 +19,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             var observerMocks = fixture.CreateMany<IHistoricObserver>(5);
             INavigable navigable = fixture.Create<INavigable>();
             var status = fixture.Create<INavigableStatus>();
-            Mock.Get(status).Setup(x => x.Exist).Returns(true);
+            Mock.Get(status).Setup(x => x.Exist).Returns(new State<bool>(true));
             var sutMock = new Mock<NavigatorSession>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
@@ -57,7 +57,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             INavigable navigable = fixture.Create<INavigable>();
             List<INavigable> historic = new List<INavigable>() { navigable };
             var status = fixture.Create<INavigableStatus>();
-            Mock.Get(status).Setup(x => x.Exist).Returns(true);
+            Mock.Get(status).Setup(x => x.Exist).Returns(new State<bool>(true));
             var sutMock = new Mock<NavigatorSession>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;

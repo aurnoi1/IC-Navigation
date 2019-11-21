@@ -19,7 +19,7 @@ namespace IC.Navigation.UnitTests
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(true);
+            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(true));
 
             // Act
             var actual = sut.Exists();
@@ -33,7 +33,7 @@ namespace IC.Navigation.UnitTests
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(false);
+            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(false));
 
             // Act
             var actual = sut.Exists();

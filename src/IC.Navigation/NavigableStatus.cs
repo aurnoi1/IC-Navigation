@@ -7,11 +7,11 @@ namespace IC.Navigation
         /// <summary>
         /// The Exist status.
         /// </summary>
-        public bool Exist { get; set; }
+        public IState<bool> Exist { get; set; }
 
         /// <summary>
         /// The Ready status.
         /// </summary>
-        public bool Ready { get; set; }
+        public IState<bool> Ready { get; set; }
     }
 }

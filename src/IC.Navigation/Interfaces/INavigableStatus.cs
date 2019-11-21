@@ -3,10 +3,13 @@
     public interface INavigableStatus
     {
         /// <summary>
-        /// The Exist status of the Navigable.
+        /// The Exist state of the Navigable.
         /// </summary>
-        bool Exist { get; }
+        IState<bool> Exist { get; }
 
-        bool Ready { get; }
+        /// <summary>
+        /// The Ready state.
+        /// </summary>
+        IState<bool> Ready { get; }
     }
 }

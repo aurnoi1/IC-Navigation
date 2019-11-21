@@ -58,8 +58,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
             bool isDisplayed = UILblTitle.Get() != null;
             NavigableStatus status = new NavigableStatus
             {
-                Exist = isDisplayed,
-                Ready = isDisplayed
+                Exist = new State<bool>(isDisplayed),
+                Ready = new State<bool>(isDisplayed)
             };
 
             NotifyObservers(status);

@@ -52,7 +52,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             foreach (var node in expected)
             {
                 node.SetupGet(n => n.NavigatorSession).Returns(session.Object);
-                node.Setup(n => n.PublishStatus().Exist).Returns(true);
+                node.Setup(n => n.PublishStatus().Exist).Returns(new State<bool>(true));
             }
 
             var actual = sut.Object.GoTo(origin.Object, destination.Object, cts.Token);

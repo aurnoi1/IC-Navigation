@@ -19,7 +19,7 @@ namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
             Dictionary<string, string> attributes)
         {
             // Arrange
-            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
+            using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
             var cancellationToken = cancellationTokenSource.Token;
             attributes.ToList().ForEach(p => Mock.Get(sut).Setup(x => x.GetAttribute(p.Key)).Returns(p.Value));
 

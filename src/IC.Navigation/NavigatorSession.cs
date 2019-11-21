@@ -407,7 +407,7 @@ namespace IC.Navigation
         /// <param name="status">The NavigableStatus.</param>
         public virtual void Update(INavigable navigable, INavigableStatus status)
         {
-            if (status.Exist)
+            if (status.Exist.Value)
             {
                 SetLast(navigable, status);
             }
@@ -481,7 +481,7 @@ namespace IC.Navigation
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (origin.PublishStatus().Exist)
+                if (origin.PublishStatus().Exist.Value)
                 {
                     return;
                 }
@@ -572,7 +572,7 @@ namespace IC.Navigation
         private INavigable GetExistingNavigable(INavigable navigable, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested) return null;
-            bool exists = navigable.PublishStatus().Exist;
+            bool exists = navigable.PublishStatus().Exist.Value;
             return exists ? navigable : null;
         }
 
