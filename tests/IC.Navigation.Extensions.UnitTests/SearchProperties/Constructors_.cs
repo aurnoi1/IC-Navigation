@@ -16,7 +16,7 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties
     public class Idioms_
     {
         [Fact]
-        public void Constructors()
+        public void Verify()
         {
             // Assert
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
