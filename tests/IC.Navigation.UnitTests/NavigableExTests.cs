@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using IC.Navigation.CoreExtensions;
+using IC.Navigation.Enums;
 using IC.Navigation.Interfaces;
 using IC.TimeoutEx;
 using Moq;
@@ -19,7 +20,7 @@ namespace IC.Navigation.UnitTests
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(true));
+            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(StatesNames.Exist, true));
 
             // Act
             var actual = sut.Exists();
@@ -33,7 +34,7 @@ namespace IC.Navigation.UnitTests
         {
             // Arrange
             var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(false));
+            Mock.Get(sut).Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(StatesNames.Exist, false));
 
             // Act
             var actual = sut.Exists();

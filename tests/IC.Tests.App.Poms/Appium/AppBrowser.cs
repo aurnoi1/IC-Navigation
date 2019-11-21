@@ -77,7 +77,6 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         public override IGraph Graph { get; }
 
-
         #endregion Public
 
         #endregion Properties
@@ -85,6 +84,16 @@ namespace IC.Tests.App.Poms.Appium
         #region Methods
 
         #region Public
+
+        /// <summary>
+        /// Update the observer with this Navigable's State.
+        /// </summary>
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="state">The State.</param>
+        public override void Update<T>(INavigable navigable, IState<T> state)
+        {
+            // Add a logger here if wanted.
+        }
 
         /// <summary>
         /// Dispose this Instance.

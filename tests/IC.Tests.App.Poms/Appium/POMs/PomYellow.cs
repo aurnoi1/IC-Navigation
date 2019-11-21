@@ -1,4 +1,5 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Enums;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
@@ -48,15 +49,36 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// </summary>
         public override INavigableStatus PublishStatus()
         {
-            bool isDisplayed = UITitle.Get() != null;
+            bool isDisplayed = PublishState<bool>(StatesNames.Exist).Value;
             NavigableStatus status = new NavigableStatus
             {
-                Exist = new State<bool>(isDisplayed),
-                Ready = new State<bool>(isDisplayed)
+                Exist = new State<bool>(StatesNames.Exist, isDisplayed),
+                Ready = new State<bool>(StatesNames.Ready, isDisplayed)
             };
 
             NotifyObservers(status);
             return status;
+        }
+
+        /// <summary>
+        /// Notify observers of a specific State's value.
+        /// </summary>
+        /// <typeparam name="T">The State's value type.</typeparam>
+        /// <param name="stateName">The state name.</param>
+        /// <returns>The State.</returns>
+        public override IState<T> PublishState<T>(StatesNames stateName)
+        {
+            bool isDisplayed = (UITitle.Get() != null);
+            var genericIsDisplayed = (T)Convert.ChangeType(isDisplayed, typeof(T));
+            State<T> state = stateName switch
+            {
+                StatesNames.Exist => new State<T>(StatesNames.Exist, genericIsDisplayed),
+                StatesNames.Ready => new State<T>(StatesNames.Ready, genericIsDisplayed),
+                _ => throw new ArgumentException($"Undefined {nameof(StatesNames)}: {stateName}."),
+            };
+
+            NotifyObservers(state);
+            return state;
         }
 
         /// <summary>

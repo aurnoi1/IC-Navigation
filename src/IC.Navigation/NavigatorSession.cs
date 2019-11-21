@@ -49,7 +49,7 @@ namespace IC.Navigation
         /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
         /// </summary>
         public abstract CancellationToken GlobalCancellationToken { get; set; }
-        
+
         /// <summary>
         /// Last known INavigable.
         /// </summary>
@@ -412,6 +412,14 @@ namespace IC.Navigation
                 SetLast(navigable, status);
             }
         }
+
+
+        /// <summary>
+        /// Update the observer with this Navigable's State.
+        /// </summary>
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="state">The State.</param>
+        public abstract void Update<T>(INavigable navigable, IState<T> state);
 
         /// <summary>
         /// Publish the historic.

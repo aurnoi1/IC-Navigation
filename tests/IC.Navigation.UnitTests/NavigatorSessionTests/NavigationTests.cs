@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Exceptions;
+﻿using IC.Navigation.Enums;
+using IC.Navigation.Exceptions;
 using IC.Navigation.Interfaces;
 using IC.Navigation.UnitTests.Collections;
 using Moq;
@@ -52,7 +53,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             foreach (var node in expected)
             {
                 node.SetupGet(n => n.NavigatorSession).Returns(session.Object);
-                node.Setup(n => n.PublishStatus().Exist).Returns(new State<bool>(true));
+                node.Setup(n => n.PublishStatus().Exist).Returns(new State<bool>(StatesNames.Exist, true));
             }
 
             var actual = sut.Object.GoTo(origin.Object, destination.Object, cts.Token);
