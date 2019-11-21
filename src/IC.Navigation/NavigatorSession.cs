@@ -403,13 +403,12 @@ namespace IC.Navigation
         /// <summary>
         /// Update the observer with this Navigable.
         /// </summary>
-        /// <param name="navigable">The Navigable.</param>
         /// <param name="status">The NavigableStatus.</param>
-        public virtual void Update(INavigable navigable, INavigableStatus status)
+        public virtual void Update(INavigableStatus status)
         {
             if (status.Exist.Value)
             {
-                SetLast(navigable, status);
+                SetLast(status);
             }
         }
 
@@ -533,11 +532,11 @@ namespace IC.Navigation
         /// <param name="navigable">The INavigable.</param>
         /// <param name="status">The NavigableStatus of the last INavigable.</param>
         /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
-        private void SetLast(INavigable navigable, INavigableStatus status)
+        private void SetLast(INavigableStatus status)
         {
-            if (Last == null || !Equals(navigable, Last))
+            if (Last == null || !Equals(status.Navigable, Last))
             {
-                Last = navigable;
+                Last = status.Navigable;
                 PublishHistoric(Historic);
             }
         }

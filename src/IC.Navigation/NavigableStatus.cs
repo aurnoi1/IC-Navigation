@@ -13,5 +13,15 @@ namespace IC.Navigation
         /// The Ready status.
         /// </summary>
         public IState<bool> Ready { get; set; }
+
+        /// <summary>
+        /// The Navigable observed.
+        /// </summary>
+        public INavigable Navigable { get; set; }
+
+        public NavigableStatus(INavigable navigable)
+        {
+            Navigable = navigable;
+        }
     }
 }

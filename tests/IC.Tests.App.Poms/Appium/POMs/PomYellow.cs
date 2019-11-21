@@ -50,7 +50,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public override INavigableStatus PublishStatus()
         {
             bool isDisplayed = PublishState<bool>(StatesNames.Exist).Value;
-            NavigableStatus status = new NavigableStatus
+            NavigableStatus status = new NavigableStatus(this)
             {
                 Exist = new State<bool>(StatesNames.Exist, isDisplayed),
                 Ready = new State<bool>(StatesNames.Ready, isDisplayed)

@@ -97,11 +97,11 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var observerMocks = fixture.CreateMany<INavigableObserver>();
-            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableStatus args)>();
+            var callbackResults = new List<(INavigableObserver observer, INavigableStatus args)>();
             foreach (var mock in observerMocks)
             {
-                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableStatus>()))
-                    .Callback<INavigable, INavigableStatus>((x, y) => callbackResults.Add((mock, x, y)));
+                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigableStatus>()))
+                    .Callback<INavigableStatus>((x) => callbackResults.Add((mock, x)));
 
                 sut.PomMenu.RegisterObserver(mock);
             }
@@ -120,7 +120,7 @@ namespace IC.Navigation.UITests
             callbackResults.ForEach(r => Assert.Same(callbackResults[0].args, r.args));
 
             // Validate all observers received the same instance of ViewMenu on WaitForExist().
-            callbackResults.ForEach(r => Assert.Same(sut.PomMenu, r.observable));
+            callbackResults.ForEach(r => Assert.Same(sut.PomMenu, r.args.Navigable));
         }
 
         [Fact]
@@ -128,11 +128,11 @@ namespace IC.Navigation.UITests
         {
             // Arrange
             var observerMocks = fixture.CreateMany<INavigableObserver>(5);
-            var callbackResults = new List<(INavigableObserver observer, INavigable observable, INavigableStatus args)>();
+            var callbackResults = new List<INavigableObserver>();
             foreach (var mock in observerMocks)
             {
-                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigable>(), It.IsAny<INavigableStatus>()))
-                    .Callback<INavigable, INavigableStatus>((x, y) => callbackResults.Add((mock, x, y)));
+                Mock.Get(mock).Setup(x => x.Update(It.IsAny<INavigableStatus>()))
+                    .Callback(() => callbackResults.Add(mock));
 
                 sut.PomMenu.RegisterObserver(mock);
             }
@@ -142,7 +142,7 @@ namespace IC.Navigation.UITests
             // Act
             sut.PomMenu.UnregisterObserver(expected);
             sut.PomMenu.Exists();
-            var registeredObservers = callbackResults.Select(x => x.observer).ToList();
+            var registeredObservers = callbackResults.Select(x => x).ToList();
 
             // Assert
             Assert.NotEmpty(registeredObservers);

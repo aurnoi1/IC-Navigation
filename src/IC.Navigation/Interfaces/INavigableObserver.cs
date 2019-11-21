@@ -8,9 +8,8 @@
         /// <summary>
         /// Update the observer with this Navigable's status.
         /// </summary>
-        /// <param name="navigable">The Navigable.</param>
         /// <param name="status">The NavigableStatus.</param>
-        void Update(INavigable navigable, INavigableStatus status);
+        void Update(INavigableStatus status);
 
         /// <summary>
         /// Update the observer with this Navigable's State.

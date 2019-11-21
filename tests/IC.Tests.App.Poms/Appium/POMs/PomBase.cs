@@ -92,7 +92,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 }
                 else
                 {
-                    obs.Update(this, status);
+                    obs.Update(status);
                 }
             });
         }
