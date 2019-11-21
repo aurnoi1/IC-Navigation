@@ -6,5 +6,7 @@
         /// The Exist status of the Navigable.
         /// </summary>
         bool Exist { get; }
+
+        bool Ready { get; }
     }
 }

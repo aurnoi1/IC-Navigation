@@ -56,8 +56,12 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public override INavigableStatus PublishStatus()
         {
             bool isDisplayed = UILblTitle.Get() != null;
-            NavigableStatus status = new NavigableStatus();
-            status.Exist = isDisplayed;
+            NavigableStatus status = new NavigableStatus
+            {
+                Exist = isDisplayed,
+                Ready = isDisplayed
+            };
+
             NotifyObservers(status);
             return status;
         }
