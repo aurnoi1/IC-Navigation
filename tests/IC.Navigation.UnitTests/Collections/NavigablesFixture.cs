@@ -19,7 +19,7 @@ namespace IC.Navigation.UnitTests.Collections
             Mock<INavigable> n5 = new Mock<INavigable>();
             Mock<HashSet<INavigable>> nodes = new Mock<HashSet<INavigable>>();
 
-            n1.Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(StatesNames.Exist, true));
+            n1.Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(n1.Object, StatesNames.Exist, true));
             n1.Setup(x => x.GetActionToNext())                             
                 .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {

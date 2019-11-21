@@ -21,8 +21,11 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             INavigable navigable = fixture.Freeze<INavigable>();
             var status = fixture.Freeze<INavigableStatus>();
             Mock.Get(status).Setup(x => x.Navigable).Returns(navigable);
-            Mock.Get(status).Setup(x => x.Ready).Returns(new State<bool>(StatesNames.Ready, true));
-            Mock.Get(status).Setup(x => x.Exist).Returns(new State<bool>(StatesNames.Exist, true));
+            Mock.Get(status).Setup(x => x.Ready)
+                .Returns(new State<bool>(navigable, StatesNames.Ready, true));
+
+            Mock.Get(status).Setup(x => x.Exist)
+                .Returns(new State<bool>(navigable, StatesNames.Exist, true));
             var sutMock = new Mock<NavigatorSession>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
@@ -60,8 +63,12 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             List<INavigable> historic = new List<INavigable>() { navigable };
             var status = fixture.Freeze<INavigableStatus>();
             Mock.Get(status).Setup(x => x.Navigable).Returns(navigable);
-            Mock.Get(status).Setup(x => x.Ready).Returns(new State<bool>(StatesNames.Ready, true));
-            Mock.Get(status).Setup(x => x.Exist).Returns(new State<bool>(StatesNames.Exist, true));
+            Mock.Get(status).Setup(x => x.Ready)
+                .Returns(new State<bool>(navigable, StatesNames.Ready, true));
+
+            Mock.Get(status).Setup(x => x.Exist)
+                .Returns(new State<bool>(navigable, StatesNames.Exist, true));
+
             var sutMock = new Mock<NavigatorSession>
             {
                 CallBase = true

@@ -59,8 +59,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
             bool isDisplayed = PublishState<bool>(StatesNames.Exist).Value;
             NavigableStatus status = new NavigableStatus(this)
             {
-                Exist = new State<bool>(StatesNames.Exist, isDisplayed),
-                Ready = new State<bool>(StatesNames.Ready, isDisplayed)
+                Exist = new State<bool>(this, StatesNames.Exist, isDisplayed),
+                Ready = new State<bool>(this, StatesNames.Ready, isDisplayed)
             };
 
             NotifyObservers(status);
@@ -79,8 +79,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
             var genericIsDisplayed = (T)Convert.ChangeType(isDisplayed, typeof(T));
             State<T> state = stateName switch
             {
-                StatesNames.Exist => new State<T>(StatesNames.Exist, genericIsDisplayed),
-                StatesNames.Ready => new State<T>(StatesNames.Ready, genericIsDisplayed),
+                StatesNames.Exist => new State<T>(this, StatesNames.Exist, genericIsDisplayed),
+                StatesNames.Ready => new State<T>(this, StatesNames.Ready, genericIsDisplayed),
                 _ => throw new ArgumentException($"Undefined {nameof(StatesNames)}: {stateName}."),
             };
 
