@@ -171,7 +171,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitForExist(origin, localCancellationToken);
+            WaitForReady(origin, localCancellationToken);
             action.Invoke(localCancellationToken);
             WaitForExist(origin, localCancellationToken);
             return origin;
@@ -195,7 +195,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitForExist(origin, localCancellationToken);
+            WaitForReady(origin, localCancellationToken);
             INavigable retINavigable = function.Invoke(localCancellationToken);
             if (!typeof(T).IsAssignableFrom(retINavigable.GetType()))
             {
@@ -260,7 +260,7 @@ namespace IC.Navigation
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
             if (Graph == null) { throw new UninitializedGraphException(); }
-            WaitForExist(origin, localCancellationToken);
+            WaitForReady(origin, localCancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }

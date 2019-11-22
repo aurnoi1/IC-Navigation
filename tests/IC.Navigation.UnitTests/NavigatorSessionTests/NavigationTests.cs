@@ -55,6 +55,8 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
                 node.SetupGet(n => n.NavigatorSession).Returns(session.Object);
                 node.Setup(n => n.PublishStatus().Exist)
                     .Returns(new State<bool>(node.Object, StatesNames.Exist, true));
+                node.Setup(n => n.PublishStatus().Ready)
+                    .Returns(new State<bool>(node.Object, StatesNames.Ready, true));
             }
 
             var actual = sut.Object.GoTo(origin.Object, destination.Object, cts.Token);
