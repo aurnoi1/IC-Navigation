@@ -11,40 +11,10 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace IC.Navigation.UnitTests
+namespace IC.Navigation.UnitTests.NavigableExTests.NavigableExTests_TO_MOVE
 {
-    public class NavigableExTests
+    public class Default_
     {
-        [Fact]
-        public void Exist_Should_Returns_True()
-        {
-            // Arrange
-            var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exist)
-                .Returns(new State<bool>(sut, StatesNames.Exist, true));
-
-            // Act
-            var actual = sut.Exists();
-
-            // Assert
-            Assert.True(actual);
-        }
-
-        [Fact]
-        public void Exist_Should_Returns_False()
-        {
-            // Arrange
-            var sut = new Fixture().Customize(new AutoMoqCustomization()).Create<INavigable>();
-            Mock.Get(sut).Setup(x => x.PublishStatus().Exist)
-                .Returns(new State<bool>(sut, StatesNames.Exist, false));
-
-            // Act
-            var actual = sut.Exists();
-
-            // Assert
-            Assert.False(actual);
-        }
-
         private Action<CancellationToken> GetCancellableAction(CancellationToken testTimeoutToken)
         {
             void action(CancellationToken ct)
