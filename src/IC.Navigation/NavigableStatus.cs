@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Enums;
+using IC.Navigation.Interfaces;
 
 namespace IC.Navigation
 {
@@ -7,21 +8,23 @@ namespace IC.Navigation
         /// <summary>
         /// The Exist status.
         /// </summary>
-        public IState<bool> Exist { get; set; }
+        public IState<bool> Exist { get; private set; }
 
         /// <summary>
         /// The Ready status.
         /// </summary>
-        public IState<bool> Ready { get; set; }
+        public IState<bool> Ready { get; private set; }
 
         /// <summary>
         /// The Navigable observed.
         /// </summary>
-        public INavigable Navigable { get; set; }
+        public INavigable Navigable { get; private set; }
 
-        public NavigableStatus(INavigable navigable)
+        public NavigableStatus(INavigable navigable, bool exist, bool ready)
         {
             Navigable = navigable;
+            Exist = new State<bool>(navigable, StatesNames.Exist, exist);
+            Ready = new State<bool>(navigable, StatesNames.Ready, ready);
         }
     }
 }

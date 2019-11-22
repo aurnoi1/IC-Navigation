@@ -30,7 +30,13 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
         /// </summary>
-        public abstract INavigableStatus PublishStatus();
+        public INavigableStatus PublishStatus()
+        {
+            bool isDisplayed = PublishState<bool>(StatesNames.Exist).Value;
+            NavigableStatus status = new NavigableStatus(this, isDisplayed, isDisplayed);
+            NotifyObservers(status);
+            return status;
+        }
 
         /// <summary>
         /// Notify observers of a specific State's value.

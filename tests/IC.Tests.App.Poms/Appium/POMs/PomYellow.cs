@@ -45,22 +45,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Methods
 
         /// <summary>
-        /// Waits for the current INavigable to be fully loaded.
-        /// </summary>
-        public override INavigableStatus PublishStatus()
-        {
-            bool isDisplayed = PublishState<bool>(StatesNames.Exist).Value;
-            NavigableStatus status = new NavigableStatus(this)
-            {
-                Exist = new State<bool>(this, StatesNames.Exist, isDisplayed),
-                Ready = new State<bool>(this, StatesNames.Ready, isDisplayed)
-            };
-
-            NotifyObservers(status);
-            return status;
-        }
-
-        /// <summary>
         /// Notify observers of a specific State's value.
         /// </summary>
         /// <typeparam name="T">The State's value type.</typeparam>
