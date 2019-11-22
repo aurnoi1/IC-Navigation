@@ -122,5 +122,12 @@ namespace IC.Navigation.Interfaces
         /// <param name="origin">The origin.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         void WaitForExist(INavigable origin, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Wait until the navigable is ready.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        void WaitForReady(INavigable origin, CancellationToken cancellationToken);
     }
 }

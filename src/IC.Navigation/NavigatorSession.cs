@@ -495,6 +495,22 @@ namespace IC.Navigation
             }
         }
 
+        /// <summary>
+        /// Wait until the navigable is ready.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        public void WaitForReady(INavigable origin, CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (origin.PublishStatus().Ready.Value)
+                {
+                    return;
+                }
+            }
+        }
+
         #endregion Public
 
         #region Private

@@ -135,5 +135,18 @@ namespace IC.Navigation.CoreExtensions
             return !cancellationToken.IsCancellationRequested;
         }
 
+        /// <summary>
+        /// Wait until the navigable is ready.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <returns><c>true</c> if ready before the CancellationToken is canceled.
+        /// Otherwise <c>false</c>.</returns>
+        public static bool WaitForReady(this INavigable origin, CancellationToken cancellationToken)
+        {
+            origin.NavigatorSession.WaitForReady(origin, cancellationToken);
+            return !cancellationToken.IsCancellationRequested;
+        }
+
     }
 }
