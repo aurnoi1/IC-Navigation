@@ -1,5 +1,5 @@
 ﻿using IC.Navigation.Extensions.Appium;
-using IC.Navigation.UnitTests.DataAttributes;
+using IC.Navigation.Extensions.UnitTests.DataAttributes;
 using Moq;
 using OpenQA.Selenium;
 using Shouldly;

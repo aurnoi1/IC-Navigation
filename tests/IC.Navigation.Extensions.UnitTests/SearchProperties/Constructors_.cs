@@ -3,7 +3,7 @@ using AutoFixture.AutoMoq;
 using AutoFixture.Idioms;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.Interfaces;
-using IC.Navigation.UnitTests.DataAttributes;
+using IC.Navigation.Extensions.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
