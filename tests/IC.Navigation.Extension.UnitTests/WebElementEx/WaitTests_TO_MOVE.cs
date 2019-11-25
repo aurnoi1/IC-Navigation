@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using IC.Navigation.Extensions.Appium;
+using IC.Navigation.Extension.Appium;
 using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
+namespace IC.Navigation.Extension.UnitTests.WebElementEx.Wait
 {
     public class WaitTests_TO_MOVE : IDisposable
     {

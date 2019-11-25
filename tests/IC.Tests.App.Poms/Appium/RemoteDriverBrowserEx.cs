@@ -1,5 +1,5 @@
-﻿using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.Interfaces;
+﻿using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Windows;
 using System.Collections.Generic;

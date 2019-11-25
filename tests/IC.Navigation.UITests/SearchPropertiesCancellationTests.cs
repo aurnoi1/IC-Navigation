@@ -1,5 +1,5 @@
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.WindowsDriver;
+using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.Appium.WindowsDriver;
 using IC.Navigation.UITests.Specflow.Contexts;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium.Appium.Windows;

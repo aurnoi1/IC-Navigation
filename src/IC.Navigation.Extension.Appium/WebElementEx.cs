@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace IC.Navigation.Extensions.Appium
+namespace IC.Navigation.Extension.Appium
 {
     public static class WebElementEx
     {

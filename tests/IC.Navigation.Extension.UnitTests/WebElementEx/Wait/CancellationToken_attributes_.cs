@@ -1,5 +1,5 @@
-﻿using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.UnitTests.DataAttributes;
+﻿using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.UnitTests.DataAttributes;
 using Moq;
 using OpenQA.Selenium;
 using Shouldly;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
+namespace IC.Navigation.Extension.UnitTests.WebElementEx.Wait
 {
     public class CancellationToken_attributes_
     {

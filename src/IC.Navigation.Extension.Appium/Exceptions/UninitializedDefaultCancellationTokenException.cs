@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace IC.Navigation.Extensions.Exceptions
+namespace IC.Navigation.Extension.Appium.Exceptions
 {
     public class UninitializedDefaultCancellationTokenException : Exception
     {

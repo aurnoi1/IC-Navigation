@@ -1,6 +1,6 @@
 ﻿using AutoFixture.Xunit2;
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.UnitTests.DataAttributes;
+using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
+namespace IC.Navigation.Extension.UnitTests.SearchProperties.Get
 {
     public class CancellationTokens_
     {
@@ -32,8 +32,8 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Get
             {
                 // Arrange
                 var expected = webElements.ElementAt(index);
-                using var cancellationTokenSource1 = new CancellationTokenSource(TimeSpan.FromMilliseconds(50));
-                using var cancellationTokenSource2 = new CancellationTokenSource(TimeSpan.FromMilliseconds(70));
+                using var cancellationTokenSource1 = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
+                using var cancellationTokenSource2 = new CancellationTokenSource(TimeSpan.FromMilliseconds(130));
                 var cancellationToken1 = cancellationTokenSource1.Token;
                 var cancellationToken2 = cancellationTokenSource2.Token;
                 Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);

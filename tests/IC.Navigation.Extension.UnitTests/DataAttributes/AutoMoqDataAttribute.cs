@@ -4,7 +4,7 @@ using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
 
-namespace IC.Navigation.Extensions.UnitTests.DataAttributes
+namespace IC.Navigation.Extension.UnitTests.DataAttributes
 {
     public class AutoMoqDataAttribute : AutoDataAttribute
     {

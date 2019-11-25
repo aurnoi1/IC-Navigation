@@ -1,6 +1,6 @@
 ﻿using AutoFixture.Xunit2;
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.UnitTests.DataAttributes;
+using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading;
 using Xunit;
 
-namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
+namespace IC.Navigation.Extension.UnitTests.SearchProperties.Find
 {
     public class CancellationTokens_
     {

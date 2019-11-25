@@ -1,4 +1,4 @@
-﻿namespace IC.Navigation.Extensions.Appium.WindowsDriver
+﻿namespace IC.Navigation.Extension.Appium.WindowsDriver
 {
     public static class WindowDriverLocators
     {

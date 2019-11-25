@@ -1,9 +1,9 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Idioms;
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.Interfaces;
-using IC.Navigation.Extensions.UnitTests.DataAttributes;
+using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.Appium.Interfaces;
+using IC.Navigation.Extension.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
@@ -11,7 +11,7 @@ using Shouldly;
 using System.Threading;
 using Xunit;
 
-namespace IC.Navigation.Extensions.UnitTests.SearchProperties
+namespace IC.Navigation.Extension.UnitTests.SearchProperties
 {
     public class Idioms_
     {

@@ -4,7 +4,7 @@ using OpenQA.Selenium.Appium.Interfaces;
 using OpenQA.Selenium.Remote;
 using System;
 
-namespace IC.Navigation.Extensions.Appium.Interfaces
+namespace IC.Navigation.Extension.Appium.Interfaces
 {
     public interface IRemoteDriverBrowser<R> : INavigator, IDisposable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {

@@ -1,10 +1,10 @@
-﻿using IC.Navigation.Extensions.Exceptions;
+﻿using IC.Navigation.Extension.Appium.Exceptions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 using System;
 using System.Threading;
 
-namespace IC.Navigation.Extensions.Appium.Interfaces
+namespace IC.Navigation.Extension.Appium.Interfaces
 {
     public interface ISearchProperties<W> where W : IWebElement
     {

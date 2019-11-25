@@ -1,5 +1,5 @@
-﻿using IC.Navigation.Extensions.Appium.Interfaces;
-using IC.Navigation.Extensions.Exceptions;
+﻿using IC.Navigation.Extension.Appium.Exceptions;
+using IC.Navigation.Extension.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 using System;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace IC.Navigation.Extensions.Appium
+namespace IC.Navigation.Extension.Appium
 {
     public class SearchProperties<W> : ISearchProperties<W> where W : IWebElement
     {

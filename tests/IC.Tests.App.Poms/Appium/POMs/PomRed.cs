@@ -1,7 +1,7 @@
 ﻿using IC.Navigation;
 using IC.Navigation.Enums;
-using IC.Navigation.Extensions.Appium;
-using IC.Navigation.Extensions.Appium.WindowsDriver;
+using IC.Navigation.Extension.Appium;
+using IC.Navigation.Extension.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium;

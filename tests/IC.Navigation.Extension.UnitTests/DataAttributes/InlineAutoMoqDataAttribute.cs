@@ -2,7 +2,7 @@
 using Xunit;
 using Xunit.Sdk;
 
-namespace IC.Navigation.Extensions.UnitTests.DataAttributes
+namespace IC.Navigation.Extension.UnitTests.DataAttributes
 {
     public class InlineAutoMoqDataAttribute : CompositeDataAttribute
     {
