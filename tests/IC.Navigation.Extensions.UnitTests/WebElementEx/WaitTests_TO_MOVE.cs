@@ -1,7 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using IC.Navigation.Extensions.Appium;
-using IC.Navigation.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
@@ -11,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using Xunit;
-using Shouldly;
 
 namespace IC.Navigation.Extensions.UnitTests.WebElementEx.Wait
 {

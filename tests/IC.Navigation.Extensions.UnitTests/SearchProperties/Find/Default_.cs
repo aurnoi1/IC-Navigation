@@ -1,7 +1,7 @@
 ﻿using AutoFixture.Xunit2;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Exceptions;
-using IC.Navigation.UnitTests.DataAttributes;
+using IC.Navigation.Extensions.UnitTests.DataAttributes;
 using IC.TimeoutEx;
 using Moq;
 using OpenQA.Selenium;
@@ -150,7 +150,6 @@ namespace IC.Navigation.Extensions.UnitTests.SearchProperties.Find
                 // Act, Assert
                 Assert.Throws<OperationCanceledException>(() => sut.Find());
             }
-
 
             [Theory, AutoMoqData]
             public void When_index_is_not_defined_Then_returns_first_WebElement(

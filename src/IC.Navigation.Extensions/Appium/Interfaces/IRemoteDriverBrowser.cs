@@ -6,7 +6,7 @@ using System;
 
 namespace IC.Navigation.Extensions.Appium.Interfaces
 {
-    public interface IRemoteDriverBrowser<R> : INavigatorSession, IDisposable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
+    public interface IRemoteDriverBrowser<R> : INavigator, IDisposable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
         /// <summary>
         /// The RemoteDriver.

@@ -12,7 +12,7 @@ namespace IC.Navigation
     /// <summary>
     /// An abstract implementation of INavigator and ISession.
     /// </summary>
-    public abstract class NavigatorSession : INavigatorSession
+    public abstract class Navigator : INavigator
     {
         #region Fields
 
@@ -49,7 +49,7 @@ namespace IC.Navigation
         /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
         /// </summary>
         public abstract CancellationToken GlobalCancellationToken { get; set; }
-        
+
         /// <summary>
         /// Last known INavigable.
         /// </summary>
@@ -100,63 +100,6 @@ namespace IC.Navigation
         #region Public
 
         /// <summary>
-        /// Get the instance of INavigable from the Nodes.
-        /// </summary>
-        /// <typeparam name="T">The returned instance type.</typeparam>
-        /// <returns>The instance of the requested INavigable.</returns>
-        public virtual T GetNavigable<T>() where T : INavigable
-        {
-            Type type = typeof(T);
-            var match = Nodes.Where(n => n.GetType() == type).SingleOrDefault();
-            if (match != null)
-            {
-                return (T)match;
-            }
-            else
-            {
-                throw new UnregistredNodeException(type);
-            }
-        }
-
-        /// <summary>
-        /// Get the nodes formed by instances of INavigables from the specified assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly containing the INavigables.</param>
-        /// <returns>Intances of INavigables forming the nodes.</returns>
-        public virtual HashSet<INavigable> GetNodesByReflection(Assembly assembly)
-        {
-            var navigables = new HashSet<INavigable>();
-            var iNavigables = GetINavigableTypes(assembly);
-            foreach (var iNavigable in iNavigables)
-            {
-                var instance = Activator.CreateInstance(iNavigable, this) as INavigable;
-                navigables.Add(instance);
-            }
-
-            return navigables;
-        }
-
-        /// <summary>
-        /// Get the nodes formed by instances of INavigables from the specified assembly.
-        /// </summary>
-        /// <typeparam name="T">The generic type of the classes implementing INavigable.</typeparam>
-        /// <param name="assembly">The assembly containing the INavigables.</param>
-        /// <returns>Intances of INavigables forming the nodes.</returns>
-        public virtual HashSet<INavigable> GetNodesByReflection<T>(Assembly assembly)
-        {
-            var navigables = new HashSet<INavigable>();
-            var iNavigables = GetINavigableTypes(assembly);
-            foreach (var iNavigable in iNavigables)
-            {
-                var t = iNavigable.MakeGenericType(typeof(T));
-                var instance = Activator.CreateInstance(t, this) as INavigable;
-                navigables.Add(instance);
-            }
-
-            return navigables;
-        }
-
-        /// <summary>
         /// Executes the UI action passed in parameter.
         /// </summary>
         /// <param name="origin">The INvagable set as origin.</param>
@@ -171,7 +114,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitForExist(origin, localCancellationToken);
+            WaitForReady(origin, localCancellationToken);
             action.Invoke(localCancellationToken);
             WaitForExist(origin, localCancellationToken);
             return origin;
@@ -195,7 +138,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            WaitForExist(origin, localCancellationToken);
+            WaitForReady(origin, localCancellationToken);
             INavigable retINavigable = function.Invoke(localCancellationToken);
             if (!typeof(T).IsAssignableFrom(retINavigable.GetType()))
             {
@@ -260,7 +203,7 @@ namespace IC.Navigation
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
             if (Graph == null) { throw new UninitializedGraphException(); }
-            WaitForExist(origin, localCancellationToken);
+            WaitForReady(origin, localCancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -403,15 +346,21 @@ namespace IC.Navigation
         /// <summary>
         /// Update the observer with this Navigable.
         /// </summary>
-        /// <param name="navigable">The Navigable.</param>
         /// <param name="status">The NavigableStatus.</param>
-        public virtual void Update(INavigable navigable, INavigableStatus status)
+        public virtual void Update(INavigableStatus status)
         {
-            if (status.Exist)
+            if (status.Exist.Value)
             {
-                SetLast(navigable, status);
+                SetLast(status);
             }
         }
+
+        /// <summary>
+        /// Update the observer with this Navigable's State.
+        /// </summary>
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="state">The State.</param>
+        public abstract void Update<T>(INavigable navigable, IState<T> state);
 
         /// <summary>
         /// Publish the historic.
@@ -481,7 +430,23 @@ namespace IC.Navigation
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (origin.PublishStatus().Exist)
+                if (origin.PublishStatus().Exist.Value)
+                {
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Wait until the navigable is ready.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        public void WaitForReady(INavigable origin, CancellationToken cancellationToken)
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                if (origin.PublishStatus().Ready.Value)
                 {
                     return;
                 }
@@ -525,11 +490,11 @@ namespace IC.Navigation
         /// <param name="navigable">The INavigable.</param>
         /// <param name="status">The NavigableStatus of the last INavigable.</param>
         /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
-        private void SetLast(INavigable navigable, INavigableStatus status)
+        private void SetLast(INavigableStatus status)
         {
-            if (Last == null || !Equals(navigable, Last))
+            if (Last == null || !Equals(status.Navigable, Last))
             {
-                Last = navigable;
+                Last = status.Navigable;
                 PublishHistoric(Historic);
             }
         }
@@ -572,19 +537,8 @@ namespace IC.Navigation
         private INavigable GetExistingNavigable(INavigable navigable, CancellationToken cancellationToken)
         {
             if (cancellationToken.IsCancellationRequested) return null;
-            bool exists = navigable.PublishStatus().Exist;
+            bool exists = navigable.PublishStatus().Exist.Value;
             return exists ? navigable : null;
-        }
-
-        private List<Type> GetINavigableTypes(Assembly assembly)
-        {
-            return assembly.GetTypes()
-                .Where(x =>
-                    typeof(INavigable).IsAssignableFrom(x)
-                    && !x.IsInterface
-                    && x.IsPublic
-                    && !x.IsAbstract
-                ).ToList();
         }
 
         #endregion Private

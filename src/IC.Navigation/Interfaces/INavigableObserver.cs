@@ -6,10 +6,16 @@
     public interface INavigableObserver
     {
         /// <summary>
-        /// Update the observer with this Navigable.
+        /// Update the observer with this Navigable's status.
+        /// </summary>
+        /// <param name="status">The NavigableStatus.</param>
+        void Update(INavigableStatus status);
+
+        /// <summary>
+        /// Update the observer with this Navigable's State.
         /// </summary>
         /// <param name="navigable">The Navigable.</param>
-        /// <param name="status">The NavigableStatus.</param>
-        void Update(INavigable navigable, INavigableStatus status);
+        /// <param name="state">The State.</param>
+        void Update<T>(INavigable navigable, IState<T> state);
     }
 }

@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Enums;
+using IC.Navigation.Interfaces;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -18,8 +19,8 @@ namespace IC.Navigation.UnitTests.Collections
             Mock<INavigable> n5 = new Mock<INavigable>();
             Mock<HashSet<INavigable>> nodes = new Mock<HashSet<INavigable>>();
 
-            n1.Setup(x => x.PublishStatus().Exist).Returns(true);
-            n1.Setup(x => x.GetActionToNext())
+            n1.Setup(x => x.PublishStatus().Exist).Returns(new State<bool>(n1.Object, StatesNames.Exist, true));
+            n1.Setup(x => x.GetActionToNext())                             
                 .Returns(new Dictionary<INavigable, Action<CancellationToken>>()
                 {
                     { n2.Object, action.Object },

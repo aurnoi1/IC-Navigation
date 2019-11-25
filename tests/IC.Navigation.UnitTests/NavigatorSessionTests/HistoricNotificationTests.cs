@@ -1,5 +1,6 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
+using IC.Navigation.Enums;
 using IC.Navigation.Interfaces;
 using Moq;
 using System;
@@ -17,10 +18,15 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var observerMocks = fixture.CreateMany<IHistoricObserver>(5);
-            INavigable navigable = fixture.Create<INavigable>();
-            var status = fixture.Create<INavigableStatus>();
-            Mock.Get(status).Setup(x => x.Exist).Returns(true);
-            var sutMock = new Mock<NavigatorSession>();
+            INavigable navigable = fixture.Freeze<INavigable>();
+            var status = fixture.Freeze<INavigableStatus>();
+            Mock.Get(status).Setup(x => x.Navigable).Returns(navigable);
+            Mock.Get(status).Setup(x => x.Ready)
+                .Returns(new State<bool>(navigable, StatesNames.Ready, true));
+
+            Mock.Get(status).Setup(x => x.Exist)
+                .Returns(new State<bool>(navigable, StatesNames.Exist, true));
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
 
@@ -35,7 +41,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             }
 
             // Act
-            sut.Update(navigable, status);
+            sut.Update(status);
 
             // Assert
             // Validate all observers received the same Historic.
@@ -53,17 +59,25 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            var observerMocks = fixture.CreateMany<IHistoricObserver>(5);
-            INavigable navigable = fixture.Create<INavigable>();
+            INavigable navigable = fixture.Freeze<INavigable>();
             List<INavigable> historic = new List<INavigable>() { navigable };
-            var status = fixture.Create<INavigableStatus>();
-            Mock.Get(status).Setup(x => x.Exist).Returns(true);
-            var sutMock = new Mock<NavigatorSession>();
-            sutMock.CallBase = true;
+            var status = fixture.Freeze<INavigableStatus>();
+            Mock.Get(status).Setup(x => x.Navigable).Returns(navigable);
+            Mock.Get(status).Setup(x => x.Ready)
+                .Returns(new State<bool>(navigable, StatesNames.Ready, true));
+
+            Mock.Get(status).Setup(x => x.Exist)
+                .Returns(new State<bool>(navigable, StatesNames.Exist, true));
+
+            var sutMock = new Mock<Navigator>
+            {
+                CallBase = true
+            };
+
             var sut = sutMock.Object;
 
             // Act
-            sut.Update(navigable, status);
+            sut.Update(status);
 
             // Assert
             sutMock.Verify(x => x.NotifyHistoricObservers(historic), Times.Once());
@@ -75,7 +89,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var obs = fixture.Create<IHistoricObserver>();
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
 
@@ -92,7 +106,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var observerMocks = fixture.CreateMany<IHistoricObserver>(5);
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
             var navigable = fixture.Create<INavigable>();
@@ -113,7 +127,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             sut.UnregisterObserver(expectedRemoveObs);
 
             // Update to get the number of observer from callBackOnUpdate.
-            sut.Update(navigable, status);
+            sut.Update(status);
 
             // Assert
             Assert.DoesNotContain(expectedRemoveObs, callBackOnUpdate);
@@ -124,7 +138,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
             var historic = fixture.Create<List<INavigable>>();

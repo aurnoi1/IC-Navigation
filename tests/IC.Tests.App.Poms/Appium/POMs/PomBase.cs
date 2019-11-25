@@ -1,4 +1,6 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation;
+using IC.Navigation.Enums;
+using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
@@ -28,13 +30,27 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Waits for the current INavigable to be fully loaded.
         /// </summary>
-        abstract public INavigableStatus PublishStatus();
+        public INavigableStatus PublishStatus()
+        {
+            bool isDisplayed = PublishState<bool>(StatesNames.Exist).Value;
+            NavigableStatus status = new NavigableStatus(this, isDisplayed, isDisplayed);
+            NotifyObservers(status);
+            return status;
+        }
+
+        /// <summary>
+        /// Notify observers of a specific State's value.
+        /// </summary>
+        /// <typeparam name="T">The State's value type.</typeparam>
+        /// <param name="stateName">The state name.</param>
+        /// <returns>The State.</returns>
+        public abstract IState<T> PublishState<T>(StatesNames stateName);
 
         /// <summary>
         /// Gets a Dictionary of action to go to the next INavigable.
         /// </summary>
         /// <returns>A Dictionary of action to go to the next INavigable.</returns>
-        abstract public Dictionary<INavigable, Action<CancellationToken>> GetActionToNext();
+        public abstract Dictionary<INavigable, Action<CancellationToken>> GetActionToNext();
 
         /// <summary>
         /// Register the INavigableObserver as a WeakReference.
@@ -82,7 +98,27 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 }
                 else
                 {
-                    obs.Update(this, status);
+                    obs.Update(status);
+                }
+            });
+        }
+
+        /// <summary>
+        /// Notify all observers of the current state.
+        /// </summary>
+        /// <param name="state">The State.</param>
+        public void NotifyObservers<T>(IState<T> state)
+        {
+            observers.ForEach(x =>
+            {
+                x.TryGetTarget(out INavigableObserver obs);
+                if (obs == null)
+                {
+                    UnregisterObserver(obs);
+                }
+                else
+                {
+                    obs.Update(this, state);
                 }
             });
         }
@@ -90,6 +126,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// The navigation session.
         /// </summary>
-        INavigatorSession INavigable.NavigatorSession => session;
+        INavigator INavigable.Navigator => session;
     }
 }

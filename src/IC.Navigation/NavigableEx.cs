@@ -16,7 +16,7 @@ namespace IC.Navigation.CoreExtensions
         {
             using var infinitTokenSource = new CancellationTokenSource();
             void actionNotCancellable(CancellationToken ct) => action();
-            return origin.NavigatorSession.Do(origin, actionNotCancellable, infinitTokenSource.Token);
+            return origin.Navigator.Do(origin, actionNotCancellable, infinitTokenSource.Token);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace IC.Navigation.CoreExtensions
         {
             using var infinitTokenSource = new CancellationTokenSource();
             INavigable functionNotCancellable(CancellationToken ct) => function();
-            return origin.NavigatorSession.Do<T>(origin, functionNotCancellable, infinitTokenSource.Token);
+            return origin.Navigator.Do<T>(origin, functionNotCancellable, infinitTokenSource.Token);
         }
 
         /// <summary>
@@ -45,11 +45,11 @@ namespace IC.Navigation.CoreExtensions
         public static INavigable Do(this INavigable origin, Action<CancellationToken> action, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.NavigatorSession.GlobalCancellationToken,
+                origin.Navigator.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.NavigatorSession.Do(origin, action, linkedCts.Token);
+            return origin.Navigator.Do(origin, action, linkedCts.Token);
         }
 
         /// <summary>
@@ -66,11 +66,11 @@ namespace IC.Navigation.CoreExtensions
             CancellationToken cancellationToken = default) where T : INavigable
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.NavigatorSession.GlobalCancellationToken,
+                origin.Navigator.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.NavigatorSession.Do<T>(origin, function, linkedCts.Token);
+            return origin.Navigator.Do<T>(origin, function, linkedCts.Token);
         }
 
         /// <summary>
@@ -88,11 +88,11 @@ namespace IC.Navigation.CoreExtensions
                 CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.NavigatorSession.GlobalCancellationToken,
+                origin.Navigator.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.NavigatorSession.GoTo(origin, destination, linkedCts.Token);
+            return origin.Navigator.GoTo(origin, destination, linkedCts.Token);
         }
 
         /// <summary>
@@ -105,11 +105,11 @@ namespace IC.Navigation.CoreExtensions
         public static INavigable Back(this INavigable origin, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.NavigatorSession.GlobalCancellationToken,
+                origin.Navigator.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.NavigatorSession.Back(linkedCts.Token);
+            return origin.Navigator.Back(linkedCts.Token);
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace IC.Navigation.CoreExtensions
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
         public static bool Exists(this INavigable origin)
         {
-            return origin.PublishStatus().Exist;
+            return origin.PublishStatus().Exist.Value;
         }
 
         /// <summary>
@@ -131,7 +131,20 @@ namespace IC.Navigation.CoreExtensions
         /// Otherwise <c>false</c>.</returns>
         public static bool WaitForExist(this INavigable origin, CancellationToken cancellationToken)
         {
-            origin.NavigatorSession.WaitForExist(origin, cancellationToken);
+            origin.Navigator.WaitForExist(origin, cancellationToken);
+            return !cancellationToken.IsCancellationRequested;
+        }
+
+        /// <summary>
+        /// Wait until the navigable is ready.
+        /// </summary>
+        /// <param name="origin">The origin.</param>
+        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <returns><c>true</c> if ready before the CancellationToken is canceled.
+        /// Otherwise <c>false</c>.</returns>
+        public static bool WaitForReady(this INavigable origin, CancellationToken cancellationToken)
+        {
+            origin.Navigator.WaitForReady(origin, cancellationToken);
             return !cancellationToken.IsCancellationRequested;
         }
 

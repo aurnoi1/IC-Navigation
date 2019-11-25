@@ -1,4 +1,5 @@
 ﻿using IC.Navigation;
+using IC.Navigation.Enums;
 using IC.Navigation.Extensions.Appium;
 using IC.Navigation.Extensions.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
@@ -44,15 +45,24 @@ namespace IC.Tests.App.Poms.Appium.POMs
         #region Methods
 
         /// <summary>
-        /// Waits for the current INavigable to be fully loaded.
+        /// Notify observers of a specific State's value.
         /// </summary>
-        public override INavigableStatus PublishStatus()
+        /// <typeparam name="T">The State's value type.</typeparam>
+        /// <param name="stateName">The state name.</param>
+        /// <returns>The State.</returns>
+        public override IState<T> PublishState<T>(StatesNames stateName)
         {
-            bool isDisplayed = UITitle.Get() != null;
-            NavigableStatus status = new NavigableStatus();
-            status.Exist = isDisplayed;
-            NotifyObservers(status);
-            return status;
+            bool isDisplayed = (UITitle.Get() != null);
+            var genericIsDisplayed = (T)Convert.ChangeType(isDisplayed, typeof(T));
+            State<T> state = stateName switch
+            {
+                StatesNames.Exist => new State<T>(this, StatesNames.Exist, genericIsDisplayed),
+                StatesNames.Ready => new State<T>(this, StatesNames.Ready, genericIsDisplayed),
+                _ => throw new ArgumentException($"Undefined {nameof(StatesNames)}: {stateName}."),
+            };
+
+            NotifyObservers(state);
+            return state;
         }
 
         /// <summary>
