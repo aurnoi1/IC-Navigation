@@ -1,4 +1,14 @@
-﻿using IC.Navigation.Exceptions;
+﻿/*
+ * The Graph implementation is available 
+ * thanks to the work of Max Burstein:
+ * https://github.com/mburst/dijkstras-algorithm
+ * 
+ * No license is available but following issue #19
+ * Max Burstein (mburst) confirmed it could be used as 
+ * "any code you'd find on Stackoverflow or a similar websites"
+ */
+
+using IC.Navigation.Exceptions;
 using IC.Navigation.Interfaces;
 using System;
 using System.Collections.Generic;
