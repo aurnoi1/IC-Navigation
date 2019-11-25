@@ -31,8 +31,9 @@ namespace IC.Navigation.Interfaces
         /// <param name="navigable">The Navigable.</param>
         /// <param name="action">The action to execute.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
-        /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
-        /// <returns>The expected Navigable which is the same as origin and destination, before and after the action invocation.</returns>
+        /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
+        /// <returns>The expected Navigable which is the same as origin and destination, 
+        /// before and after the action invocation.</returns>
         INavigable Do(INavigable navigable, Action<CancellationToken> action, CancellationToken cancellationToken);
 
         /// <summary>
@@ -41,7 +42,8 @@ namespace IC.Navigation.Interfaces
         /// <typeparam name="T">The expected returned INavigable.</typeparam>
         /// <param name="navigable">The Navigable.</param>
         /// <param name="function">The Function to execute.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
         /// <returns>The Navigable returns by the Function.</returns>
         /// <exception cref="UnexpectedNavigableException">Thrown when the page after Function invocation
         /// does not implement the expected returned type.</exception>
@@ -70,6 +72,8 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The destination.</returns>
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
