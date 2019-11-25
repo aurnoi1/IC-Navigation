@@ -1,6 +1,7 @@
 ﻿using IC.Navigation.Interfaces;
 using System;
 using System.Threading;
+using IC.Navigation.Exceptions;
 
 namespace IC.Navigation.CoreExtensions
 {
@@ -9,68 +10,68 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Executes the action passed in parameter.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
-        /// <param name="action">The non-cancellable Action to execute.</param>
-        /// <returns>The current INavigable.</returns>
-        public static INavigable Do(this INavigable origin, Action action)
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="action">The action to execute.</param>m>
+        /// <returns>The current Navigable.</returns>
+        public static INavigable Do(this INavigable navigable, Action action)
         {
             using var infinitTokenSource = new CancellationTokenSource();
             void actionNotCancellable(CancellationToken ct) => action();
-            return origin.Navigator.Do(origin, actionNotCancellable, infinitTokenSource.Token);
+            return navigable.Navigator.Do(navigable, actionNotCancellable, infinitTokenSource.Token);
         }
 
         /// <summary>
         /// Executes the Function passed in parameter.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="navigable">The current Navigable.</param>
         /// <param name="function">The non-cancellable Function to execute.</param>
-        /// <returns>The expected INavigable returns by the Function.</returns>
+        /// <returns>The expected Navigable returns by the Function.</returns>
         public static INavigable Do<T>(
-            this INavigable origin,
+            this INavigable navigable,
             Func<INavigable> function) where T : INavigable
         {
             using var infinitTokenSource = new CancellationTokenSource();
             INavigable functionNotCancellable(CancellationToken ct) => function();
-            return origin.Navigator.Do<T>(origin, functionNotCancellable, infinitTokenSource.Token);
+            return navigable.Navigator.Do<T>(navigable, functionNotCancellable, infinitTokenSource.Token);
         }
 
         /// <summary>
         /// Executes the action passed in parameter.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="navigable">The current Navigable.</param>
         /// <param name="action">The Action to execute.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
-        /// <returns>The current INavigable.</returns>
-        public static INavigable Do(this INavigable origin, Action<CancellationToken> action, CancellationToken cancellationToken = default)
+        /// <returns>The current Navigable.</returns>
+        public static INavigable Do(this INavigable navigable, Action<CancellationToken> action, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.Navigator.GlobalCancellationToken,
+                navigable.Navigator.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.Navigator.Do(origin, action, linkedCts.Token);
+            return navigable.Navigator.Do(navigable, action, linkedCts.Token);
         }
 
         /// <summary>
         /// Executes the Function passed in parameter.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="navigable">The current Navigable.</param>
         /// <param name="function">The Function to execute.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
-        /// <returns>The expected INavigable returns by the Function.</returns>
+        /// <returns>The expected Navigable returns by the Function.</returns>
         public static INavigable Do<T>(
-            this INavigable origin,
+            this INavigable navigable,
             Func<CancellationToken, INavigable> function,
             CancellationToken cancellationToken = default) where T : INavigable
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                origin.Navigator.GlobalCancellationToken,
+                navigable.Navigator.GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            return origin.Navigator.Do<T>(origin, function, linkedCts.Token);
+            return navigable.Navigator.Do<T>(navigable, function, linkedCts.Token);
         }
 
         /// <summary>

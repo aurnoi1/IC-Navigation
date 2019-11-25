@@ -32,8 +32,7 @@ namespace IC.Navigation.Interfaces
         /// <param name="action">The action to execute.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
-        /// <returns>The expected Navigable which is the same as origin and destination, 
-        /// before and after the action invocation.</returns>
+        /// <returns>The current Navigable.</returns>
         INavigable Do(INavigable navigable, Action<CancellationToken> action, CancellationToken cancellationToken);
 
         /// <summary>
@@ -45,8 +44,6 @@ namespace IC.Navigation.Interfaces
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
         /// <returns>The Navigable returns by the Function.</returns>
-        /// <exception cref="UnexpectedNavigableException">Thrown when the page after Function invocation
-        /// does not implement the expected returned type.</exception>
         INavigable Do<T>(INavigable navigable, Func<CancellationToken, INavigable> function, CancellationToken cancellationToken) where T : INavigable;
 
         /// <summary>
