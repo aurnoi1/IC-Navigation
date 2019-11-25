@@ -18,13 +18,13 @@ namespace IC.Navigation
         public OnActionAlternatives(Action<CancellationToken> alternativeAction, List<INavigable> iNavigables)
         {
             AlternativateAction = alternativeAction;
-            INavigables = iNavigables;
+            Navigables = iNavigables;
         }
 
         /// <summary>
         /// The possible INavigables.
         /// </summary>
-        public List<INavigable> INavigables { get; private set; }
+        public List<INavigable> Navigables { get; private set; }
 
         /// <summary>
         /// The alternative action.

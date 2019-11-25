@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using IC.Navigation.Exceptions;
 
 namespace IC.Navigation.Interfaces
 {
@@ -10,12 +11,12 @@ namespace IC.Navigation.Interfaces
     public interface INavigator : ILog
     {
         /// <summary>
-        /// Get the Graph containing the INavigables.
+        /// Get the Graph containing the Navigables.
         /// </summary>
         IGraph Graph { get; }
 
         /// <summary>
-        /// The nodes of INavigables forming the Graph.
+        /// The Navigables forming the Graph.
         /// </summary>
         HashSet<INavigable> Nodes { get; }
 
@@ -25,39 +26,43 @@ namespace IC.Navigation.Interfaces
         CancellationToken GlobalCancellationToken { get; set; }
 
         /// <summary>
-        /// Executes the UI action passed in parameter.
+        /// Executes the action passed in parameter.
         /// </summary>
-        /// <param name="origin">The origin.</param>
+        /// <param name="navigable">The Navigable.</param>
         /// <param name="action">The action to execute.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The expected INavigable which is the same as origin and destination, before and after the UI action invocation.</returns>
-        INavigable Do(INavigable origin, Action<CancellationToken> action, CancellationToken cancellationToken);
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
+        /// <returns>The expected Navigable which is the same as origin and destination, before and after the action invocation.</returns>
+        INavigable Do(INavigable navigable, Action<CancellationToken> action, CancellationToken cancellationToken);
 
         /// <summary>
         /// Executes the Function passed in parameter.
         /// </summary>
-        /// <typeparam name="T">The expected returned type of the function that must implement INavigable.</typeparam>
-        /// <param name="origin">The origin.</param>
-        /// <param name="function">The Function to execute with a declared returned Type.</param>
+        /// <typeparam name="T">The expected returned INavigable.</typeparam>
+        /// <param name="navigable">The Navigable.</param>
+        /// <param name="function">The Function to execute.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The INavigable returns by the Function.</returns>
-        INavigable Do<T>(INavigable origin, Func<CancellationToken, INavigable> function, CancellationToken cancellationToken) where T : INavigable;
+        /// <returns>The Navigable returns by the Function.</returns>
+        /// <exception cref="UnexpectedNavigableException">Thrown when the page after Function invocation
+        /// does not implement the expected returned type.</exception>
+        INavigable Do<T>(INavigable navigable, Func<CancellationToken, INavigable> function, CancellationToken cancellationToken) where T : INavigable;
 
         /// <summary>
-        /// Get a INavigagble that exists from a List &gt;INavigable&lt; after the UI action is completed.
+        /// Get the Navigagble that exists after the OnActionAlternatives's action is completed.
         /// </summary>
-        /// <param name="origin">The origin.</param>
+        /// <param name="navigable">The Navigable.</param>
         /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        INavigable GetINavigableAfterAction(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
+        /// <returns>The matching Navigable, otherwise <c>null</c>.</returns>
+        INavigable GetNavigableAfterAction(INavigable navigable, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get the shortest path from the origin to the destination.
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
-        /// <returns>The List of INavigable from the origin to the destination.</returns>
+        /// <returns>The List of Navigable from the origin to the destination.</returns>
+        /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         List<INavigable> GetShortestPath(INavigable origin, INavigable destination);
 
         /// <summary>
@@ -66,48 +71,52 @@ namespace IC.Navigation.Interfaces
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
         /// <returns>The destination.</returns>
+        /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
+        /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
         INavigable GoTo(INavigable origin, INavigable destination, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Performs UI action to step to the next INavigable in the resolve path.
-        /// The next INavigable can be a consecutive or rebased to the current INavigable.
+        /// Performs action to step to the next Navigable in the resolve path.
+        /// The next Navigable can be a consecutive or rebased to the current Navigable.
         /// </summary>
-        /// <param name="actionToOpenInavigable">A Dictionary of UI actions to step to the next Navigable.</param>
-        /// <param name="destination">The next INavigable.</param>
+        /// <param name="actionToNextINavigable">A Dictionary of actions to step to the next Navigable.</param>
+        /// <param name="next">The next Navigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The next consecutive or the rebased INavigable.</returns>
-        /// <exception cref="Exception">The INavigable set as origin was not found."</exception>
+        /// <returns>If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
+        /// <returns>The next Navigable or <see cref="Last"/> if the final destination has been reached
+        /// in the action to next Navigable (in case of Resolve() for example).</returns>
+        /// <exception cref="UnregistredNeighborException">Throws when next Navigable is not registred in Nodes.</exception>
         INavigable StepToNext(
-            Dictionary<INavigable, Action<CancellationToken>> actionToOpenInavigable,
-            INavigable destination,
+            Dictionary<INavigable, Action<CancellationToken>> actionToNextINavigable,
+            INavigable next,
             CancellationToken cancellationToken);
 
         /// <summary>
-        /// Back to the previous INavigable.
+        /// Go Back to the previous Navigable from <see cref="ILog.Historic"/>.
         /// </summary>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The previous INavigable.</returns>
+        /// <returns>The previous Navigable.</returns>
         INavigable Back(CancellationToken cancellationToken);
 
         /// <summary>
-        /// Resolve a path when one Action leads to more than one page.
+        /// Resolve a path when one action leads to more than one Navigable.
         /// This method will search for the first match from OnActionAlternatives list.
         /// An exception will be raised if no path exists between them.
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
-        /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
+        /// <param name="onActionAlternatives">All the alternative Navigables that can be rebased.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
         INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Resolve a path when one Action leads to more than one INavigable.
+        /// Resolve a path when one action leads to more than one Navigable.
         /// This method will search for the first match from OnActionAlternatives list.
         /// An exception will be raised if no path exists between them.
         /// </summary>
         /// <param name="origin">The origin before Action invocation.</param>
-        /// <param name="onActionAlternatives">All the alternative INavigables that can be rebased.</param>
-        /// <param name="waypoint">An INavigable waypoint to cross before to reach the expected INavigable.</param>
+        /// <param name="onActionAlternatives">All the alternative Navigables that can be rebased.</param>
+        /// <param name="waypoint">An Navigable waypoint to cross before to reach the expected INavigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns>The destination.</returns>
         INavigable Resolve(
@@ -117,17 +126,17 @@ namespace IC.Navigation.Interfaces
             CancellationToken cancellationToken);
 
         /// <summary>
-        /// Wait until the navigable exists.
+        /// Wait until the Navigable exists.
         /// </summary>
-        /// <param name="origin">The origin.</param>
+        /// <param name="navigable">The Navigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        void WaitForExist(INavigable origin, CancellationToken cancellationToken);
+        void WaitForExist(INavigable navigable, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Wait until the navigable is ready.
+        /// Wait until the Navigable is ready.
         /// </summary>
-        /// <param name="origin">The origin.</param>
+        /// <param name="navigable">The Navigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        void WaitForReady(INavigable origin, CancellationToken cancellationToken);
+        void WaitForReady(INavigable navigable, CancellationToken cancellationToken);
     }
 }

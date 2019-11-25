@@ -5,14 +5,14 @@ using System.Threading;
 namespace IC.Navigation.Interfaces
 {
     /// <summary>
-    /// Alternative INavigables that are possible after an action.
+    /// Alternative Navigables that are possible after an action.
     /// </summary>
     public interface IOnActionAlternatives
     {
         /// <summary>
-        /// The possible INavigables.
+        /// The possible Navigables.
         /// </summary>
-        List<INavigable> INavigables { get; }
+        List<INavigable> Navigables { get; }
 
         /// <summary>
         /// The alternative action.
