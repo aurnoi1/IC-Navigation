@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28922.388
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation", "src\IC.Navigation\IC.Navigation.csproj", "{31733CEB-9CE3-49A5-AEAA-B9E7157CF49F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation.Extensions", "src\IC.Navigation.Extensions\IC.Navigation.Extensions.csproj", "{2FF10B9F-9E45-47CD-844D-715AC78103E6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation.Extension.Appium", "src\IC.Navigation.Extension.Appium\IC.Navigation.Extension.Appium.csproj", "{2FF10B9F-9E45-47CD-844D-715AC78103E6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation.UnitTests", "tests\IC.Navigation.UnitTests\IC.Navigation.UnitTests.csproj", "{E4E4EEBE-8AD7-49AC-A8B8-927AC1F7200B}"
 EndProject
@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.TimeoutEx", "src\IC.Time
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.TimeoutEx.UnitTests", "tests\IC.TimeoutEx.UnitTests\IC.TimeoutEx.UnitTests.csproj", "{AA2B0E68-1C1D-4357-921D-A1DD18E3B258}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IC.Navigation.Extensions.UnitTests", "tests\IC.Navigation.Extensions.UnitTests\IC.Navigation.Extensions.UnitTests.csproj", "{C8783CD8-E17F-461C-A4E5-BD9E68D57A05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation.Extension.UnitTests", "tests\IC.Navigation.Extension.UnitTests\IC.Navigation.Extension.UnitTests.csproj", "{C8783CD8-E17F-461C-A4E5-BD9E68D57A05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

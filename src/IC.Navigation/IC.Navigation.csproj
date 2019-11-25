@@ -6,13 +6,13 @@
       <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
       <Description>System to automate navigation mainly through user interfaces.</Description>
       <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
-      <PackageTags>IC.Navigation Test automation</PackageTags>
+      <PackageTags>IC.Navigation Test Automation</PackageTags>
       <PackageLicenseUrl></PackageLicenseUrl>
       <Version>1.0.0-beta903</Version>
       <Authors>Aurelien Noisette</Authors>
       <Company>Aurelien Noisette</Company>
       <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-      <PackageReleaseNotes>IC.Navigation:</PackageReleaseNotes>
+      <PackageReleaseNotes></PackageReleaseNotes>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
    </PropertyGroup>

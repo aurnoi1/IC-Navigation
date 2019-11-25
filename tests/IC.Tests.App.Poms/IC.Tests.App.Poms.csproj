@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\IC.Navigation.Extensions\IC.Navigation.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\IC.Navigation.Extension.Appium\IC.Navigation.Extension.Appium.csproj" />
     <ProjectReference Include="..\..\src\IC.Navigation\IC.Navigation.csproj" />
   </ItemGroup>
 

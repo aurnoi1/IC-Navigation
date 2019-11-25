@@ -28,6 +28,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\IC.Navigation.Extension.Appium\IC.Navigation.Extension.Appium.csproj" />
       <ProjectReference Include="..\..\src\IC.TimeoutEx\IC.TimeoutEx.csproj" />
       <ProjectReference Include="..\IC.Tests.App.Poms\IC.Tests.App.Poms.csproj" />
     </ItemGroup>

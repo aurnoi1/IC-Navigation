@@ -2,6 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>1.0.0-beta903</Version>
+    <Authors>Aurelien Noisette</Authors>
+    <Description>Provides extension methods to create timeout expressed in International System.</Description>
+    <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
+    <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
+    <PackageTags>Test Automation Timeout</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>

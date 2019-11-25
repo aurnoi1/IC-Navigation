@@ -5,15 +5,15 @@
         <LangVersion>8</LangVersion>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Copyright>@Copyright Aurelien Noisette 2019</Copyright>
-        <Description>Provide extension features for IC.Navigation.</Description>
+        <Description>Provide Appium extension features for IC.Navigation.</Description>
         <PackageProjectUrl>https://github.com/aurnoi1/IC-Navigation</PackageProjectUrl>
-        <PackageTags>IC.Navigation Test automation IC.Navigation.Extensions</PackageTags>
+        <PackageTags>IC.Navigation Test Automation IC.Navigation.Extension</PackageTags>
         <PackageLicenseUrl></PackageLicenseUrl>
         <Version>1.0.0-beta903</Version>
         <Authors>Aurelien Noisette</Authors>
         <Company>Aurelien Noisette</Company>
         <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-        <PackageReleaseNotes>IC.Navigation:
+        <PackageReleaseNotes>
 </PackageReleaseNotes>
     </PropertyGroup>
 
