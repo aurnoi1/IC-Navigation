@@ -13,8 +13,10 @@
         <Authors>Aurelien Noisette</Authors>
         <Company>Aurelien Noisette</Company>
         <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-        <PackageReleaseNotes>
-</PackageReleaseNotes>
+        <PackageReleaseNotes>v1.0.0-beta903:
+Major refactoring and breaking changes!
+- Renaming of IC.Navigation.Extensions to IC.Navigation.Extension.Appium.
+- Add implementation of SearchProperties instead to extend WebDriver. This allows more liberty when using when requesting for an element.</PackageReleaseNotes>
     </PropertyGroup>
 
     <ItemGroup>
