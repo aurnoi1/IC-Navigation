@@ -11,7 +11,7 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="alias">The expected alias.</param>
         /// <returns>The matching INavigable, otherwise <c>null</c>.</returns>
-        public static INavigable GetINavigableByUsageName(this INavigatorSession navigatorSession, string alias)
+        public static INavigable GetINavigableByUsageName(this INavigator navigatorSession, string alias)
         {
             INavigable iNavigable = null;
             foreach (var node in navigatorSession.Graph.Nodes)

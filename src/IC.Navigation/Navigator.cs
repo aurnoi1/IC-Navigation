@@ -12,7 +12,7 @@ namespace IC.Navigation
     /// <summary>
     /// An abstract implementation of INavigator and ISession.
     /// </summary>
-    public abstract class NavigatorSession : INavigatorSession
+    public abstract class Navigator : INavigator
     {
         #region Fields
 
@@ -98,63 +98,6 @@ namespace IC.Navigation
         #region Methods
 
         #region Public
-
-        /// <summary>
-        /// Get the instance of INavigable from the Nodes.
-        /// </summary>
-        /// <typeparam name="T">The returned instance type.</typeparam>
-        /// <returns>The instance of the requested INavigable.</returns>
-        public virtual T GetNavigable<T>() where T : INavigable
-        {
-            Type type = typeof(T);
-            var match = Nodes.Where(n => n.GetType() == type).SingleOrDefault();
-            if (match != null)
-            {
-                return (T)match;
-            }
-            else
-            {
-                throw new UnregistredNodeException(type);
-            }
-        }
-
-        /// <summary>
-        /// Get the nodes formed by instances of INavigables from the specified assembly.
-        /// </summary>
-        /// <param name="assembly">The assembly containing the INavigables.</param>
-        /// <returns>Intances of INavigables forming the nodes.</returns>
-        public virtual HashSet<INavigable> GetNodesByReflection(Assembly assembly)
-        {
-            var navigables = new HashSet<INavigable>();
-            var iNavigables = GetINavigableTypes(assembly);
-            foreach (var iNavigable in iNavigables)
-            {
-                var instance = Activator.CreateInstance(iNavigable, this) as INavigable;
-                navigables.Add(instance);
-            }
-
-            return navigables;
-        }
-
-        /// <summary>
-        /// Get the nodes formed by instances of INavigables from the specified assembly.
-        /// </summary>
-        /// <typeparam name="T">The generic type of the classes implementing INavigable.</typeparam>
-        /// <param name="assembly">The assembly containing the INavigables.</param>
-        /// <returns>Intances of INavigables forming the nodes.</returns>
-        public virtual HashSet<INavigable> GetNodesByReflection<T>(Assembly assembly)
-        {
-            var navigables = new HashSet<INavigable>();
-            var iNavigables = GetINavigableTypes(assembly);
-            foreach (var iNavigable in iNavigables)
-            {
-                var t = iNavigable.MakeGenericType(typeof(T));
-                var instance = Activator.CreateInstance(t, this) as INavigable;
-                navigables.Add(instance);
-            }
-
-            return navigables;
-        }
 
         /// <summary>
         /// Executes the UI action passed in parameter.
@@ -412,7 +355,6 @@ namespace IC.Navigation
             }
         }
 
-
         /// <summary>
         /// Update the observer with this Navigable's State.
         /// </summary>
@@ -597,17 +539,6 @@ namespace IC.Navigation
             if (cancellationToken.IsCancellationRequested) return null;
             bool exists = navigable.PublishStatus().Exist.Value;
             return exists ? navigable : null;
-        }
-
-        private List<Type> GetINavigableTypes(Assembly assembly)
-        {
-            return assembly.GetTypes()
-                .Where(x =>
-                    typeof(INavigable).IsAssignableFrom(x)
-                    && !x.IsInterface
-                    && x.IsPublic
-                    && !x.IsAbstract
-                ).ToList();
         }
 
         #endregion Private

@@ -26,7 +26,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
 
             Mock.Get(status).Setup(x => x.Exist)
                 .Returns(new State<bool>(navigable, StatesNames.Exist, true));
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
 
@@ -69,7 +69,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             Mock.Get(status).Setup(x => x.Exist)
                 .Returns(new State<bool>(navigable, StatesNames.Exist, true));
 
-            var sutMock = new Mock<NavigatorSession>
+            var sutMock = new Mock<Navigator>
             {
                 CallBase = true
             };
@@ -89,7 +89,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var obs = fixture.Create<IHistoricObserver>();
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
 
@@ -106,7 +106,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             var observerMocks = fixture.CreateMany<IHistoricObserver>(5);
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
             var navigable = fixture.Create<INavigable>();
@@ -138,7 +138,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
         {
             // Arrange
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
-            var sutMock = new Mock<NavigatorSession>();
+            var sutMock = new Mock<Navigator>();
             sutMock.CallBase = true;
             var sut = sutMock.Object;
             var historic = fixture.Create<List<INavigable>>();

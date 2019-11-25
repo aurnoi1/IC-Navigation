@@ -26,7 +26,7 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             var expectedToList = expected.Select(x => x.Object).ToList();
             Mock<IGraph> iGraph = new Mock<IGraph>();
             iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
-            var sut = new Mock<NavigatorSession>(); // Navigator is abstract so it need to be mocked.
+            var sut = new Mock<Navigator>(); // Navigator is abstract so it need to be mocked.
             sut.SetupGet(x => x.Graph).Returns(iGraph.Object); // Set mockedNavigator.Graph
             sut.CallBase = true; // Ensure to call default implementation of virtual members.
 
@@ -46,13 +46,13 @@ namespace IC.Navigation.UnitTests.NavigatorSessionTests
             var expectedToList = expected.Select(x => x.Object).ToList();
             Mock<IGraph> iGraph = new Mock<IGraph>();
             iGraph.Setup(g => g.GetShortestPath(origin.Object, destination.Object)).Returns(expectedToList);
-            var sut = new Mock<NavigatorSession>();
+            var sut = new Mock<Navigator>();
             sut.SetupGet(x => x.Graph).Returns(iGraph.Object);
             sut.CallBase = true;
-            Mock<INavigatorSession> session = new Mock<INavigatorSession>();
+            Mock<INavigator> session = new Mock<INavigator>();
             foreach (var node in expected)
             {
-                node.SetupGet(n => n.NavigatorSession).Returns(session.Object);
+                node.SetupGet(n => n.Navigator).Returns(session.Object);
                 node.Setup(n => n.PublishStatus().Exist)
                     .Returns(new State<bool>(node.Object, StatesNames.Exist, true));
                 node.Setup(n => n.PublishStatus().Ready)

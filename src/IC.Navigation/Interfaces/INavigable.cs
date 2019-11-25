@@ -13,7 +13,7 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// The navigation session.
         /// </summary>
-        INavigatorSession NavigatorSession { get; }
+        INavigator Navigator { get; }
 
         /// <summary>
         /// Notify observers of the current INavigable status.

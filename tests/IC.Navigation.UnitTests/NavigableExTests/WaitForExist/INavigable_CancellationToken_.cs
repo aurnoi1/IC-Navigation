@@ -22,7 +22,7 @@ namespace IC.Navigation.UnitTests.NavigableExTests.WaitForExist
                 var fixture = new Fixture().Customize(new AutoMoqCustomization());
                 using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromMilliseconds(1000));
                 var cancellationToken = cancellationTokenSource.Token;
-                Mock.Get(navigable).Setup(x => x.NavigatorSession.WaitForExist(navigable, cancellationToken)).Verifiable();
+                Mock.Get(navigable).Setup(x => x.Navigator.WaitForExist(navigable, cancellationToken)).Verifiable();
 
                 // Act
                 var actual = navigable.WaitForExist(cancellationToken);
@@ -41,7 +41,7 @@ namespace IC.Navigation.UnitTests.NavigableExTests.WaitForExist
                 var fixture = new Fixture().Customize(new AutoMoqCustomization());
                 using var cancellationTokenSource = new CancellationTokenSource(TimeSpan.Zero);
                 var cancellationToken = cancellationTokenSource.Token;
-                Mock.Get(navigable).Setup(x => x.NavigatorSession.WaitForExist(navigable, cancellationToken)).Verifiable();
+                Mock.Get(navigable).Setup(x => x.Navigator.WaitForExist(navigable, cancellationToken)).Verifiable();
 
                 // Act
                 var actual = navigable.WaitForExist(cancellationToken);

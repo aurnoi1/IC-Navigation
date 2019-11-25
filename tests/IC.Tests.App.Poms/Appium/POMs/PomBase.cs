@@ -126,6 +126,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// The navigation session.
         /// </summary>
-        INavigatorSession INavigable.NavigatorSession => session;
+        INavigator INavigable.Navigator => session;
     }
 }
