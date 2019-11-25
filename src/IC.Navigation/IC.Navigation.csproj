@@ -12,7 +12,12 @@
       <Authors>Aurelien Noisette</Authors>
       <Company>Aurelien Noisette</Company>
       <PackageLicenseExpression>BSD-3-Clause</PackageLicenseExpression>
-      <PackageReleaseNotes></PackageReleaseNotes>
+      <PackageReleaseNotes>v1.0.0-beta903:
+Major refactoring and breaking changes!
+- Move the setting's timeout responsibility to caller rather Navigable. Use CancellationToken to do so. This breaks previous released versions since the signatures and namespaces have changed.
+- Use pub/obs pattern with WearkReference to publish Navigable status. This allows a better separation between the Navigables and Navigator.
+- Remove interfaces (ex: INavigatorSession and IEntryPointManager) to reduce responsability of Navigator.
+- Add Ready state and use it to before action on the Navigable instead of Exist.</PackageReleaseNotes>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
    </PropertyGroup>
