@@ -17,6 +17,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         protected private readonly IAppBrowser<R> session;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
+        /// <summary>
+        /// The Navigator.
+        /// </summary>
+        public INavigator Navigator { get; set; }
+
         private PomBase()
         {
         }
@@ -24,6 +29,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public PomBase(IAppBrowser<R> session)
         {
             this.session = session;
+            Navigator = this.session;
             RegisterObserver(session);
         }
 
@@ -122,10 +128,5 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 }
             });
         }
-
-        /// <summary>
-        /// The navigation session.
-        /// </summary>
-        INavigator INavigable.Navigator => session;
     }
 }

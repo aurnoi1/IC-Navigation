@@ -11,9 +11,9 @@ namespace IC.Navigation.Interfaces
     public interface INavigable
     {
         /// <summary>
-        /// The navigation session.
+        /// The Navigator.
         /// </summary>
-        INavigator Navigator { get; }
+        INavigator Navigator { get; set; }
 
         /// <summary>
         /// Notify observers of the current INavigable status.
