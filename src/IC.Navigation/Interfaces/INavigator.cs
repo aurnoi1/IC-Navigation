@@ -65,7 +65,7 @@ namespace IC.Navigation.Interfaces
         List<INavigable> GetShortestPath(INavigable origin, INavigable destination);
 
         /// <summary>
-        /// Goto the destination from the origin, using the shortest way to go.
+        /// Go to the destination from the origin, using the shortest way.
         /// </summary>
         /// <param name="origin">The origin.</param>
         /// <param name="destination">The destination.</param>
@@ -93,9 +93,10 @@ namespace IC.Navigation.Interfaces
             CancellationToken cancellationToken);
 
         /// <summary>
-        /// Go Back to the previous Navigable from <see cref="ILog.Historic"/>.
+        /// Go back to the previous Navigable from <see cref="ILog.Historic"/>.
         /// </summary>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
+        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous Navigable.</returns>
         INavigable Back(CancellationToken cancellationToken);
 

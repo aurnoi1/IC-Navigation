@@ -12,7 +12,7 @@ namespace IC.Navigation.CoreExtensions
         /// </summary>
         /// <param name="navigable">The Navigable.</param>
         /// <param name="action">The action to execute.</param>m>
-        /// <returns>The current Navigable.</returns>
+        /// <returns>This Navigable.</returns>
         public static INavigable Do(this INavigable navigable, Action action)
         {
             using var infinitTokenSource = new CancellationTokenSource();
@@ -23,7 +23,7 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Executes the Function passed in parameter.
         /// </summary>
-        /// <param name="navigable">The current Navigable.</param>
+        /// <param name="navigable">This Navigable.</param>
         /// <param name="function">The non-cancellable Function to execute.</param>
         /// <returns>The expected Navigable returns by the Function.</returns>
         public static INavigable Do<T>(
@@ -38,11 +38,11 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Executes the action passed in parameter.
         /// </summary>
-        /// <param name="navigable">The current Navigable.</param>
+        /// <param name="navigable">This Navigable.</param>
         /// <param name="action">The Action to execute.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
-        /// <returns>The current Navigable.</returns>
+        /// <returns>This Navigable.</returns>
         public static INavigable Do(this INavigable navigable, Action<CancellationToken> action, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
@@ -56,7 +56,7 @@ namespace IC.Navigation.CoreExtensions
         /// <summary>
         /// Executes the Function passed in parameter.
         /// </summary>
-        /// <param name="navigable">The current Navigable.</param>
+        /// <param name="navigable">This Navigable.</param>
         /// <param name="function">The Function to execute.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
@@ -75,14 +75,15 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Find the shortest path of navigation to go to the destination INavigable,
-        /// then performs actions through other INavigables.
+        /// Go to the destination from the origin, using the shortest way.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="origin">This Navigable.</param>
         /// <param name="destination">The destination.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The destination.</returns>
+        /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
+        /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
         public static INavigable GoTo(
                 this INavigable origin,
                 INavigable destination,
@@ -97,12 +98,12 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Go to the previous INavigable.
+        /// Go back to the previous Navigable from <see cref="ILog.Historic"/>.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="origin">This Navigable.</param>
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
-        /// <returns>The previous INavigable.</returns>
+        /// <returns>The previous Navigable.</returns>
         public static INavigable Back(this INavigable origin, CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
@@ -114,9 +115,9 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Get the <see cref="INavigableStatus.Exist"/> status of the Navigable./>.
+        /// Get the <see cref="INavigableStatus.Exist"/> status of this Navigable./>.
         /// </summary>
-        /// <param name="origin">This Navigable instance.</param>
+        /// <param name="origin">This Navigable.</param>
         /// <returns><c>true</c> if exists, otherwise <c>false</c>.</returns>
         public static bool Exists(this INavigable origin)
         {
@@ -124,9 +125,9 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Wait until the navigable exists.
+        /// Wait until this navigable exists.
         /// </summary>
-        /// <param name="origin">The origin.</param>
+        /// <param name="origin">This Navigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns><c>true</c> if exists before the CancellationToken is canceled.
         /// Otherwise <c>false</c>.</returns>
@@ -137,9 +138,9 @@ namespace IC.Navigation.CoreExtensions
         }
 
         /// <summary>
-        /// Wait until the navigable is ready.
+        /// Wait until this navigable is ready.
         /// </summary>
-        /// <param name="origin">The origin.</param>
+        /// <param name="origin">This Navigable.</param>
         /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
         /// <returns><c>true</c> if ready before the CancellationToken is canceled.
         /// Otherwise <c>false</c>.</returns>
