@@ -31,21 +31,6 @@ namespace IC.Navigation
         #region Properties
 
         public abstract IMap Map { get; set; }
-        
-        /// <summary>
-        /// Get the Graph containing the Navigables.
-        /// </summary>
-        public abstract IGraph Graph { get; }
-
-        /// <summary>
-        /// The Navigables forming the Graph.
-        /// </summary>
-        public abstract HashSet<INavigable> Nodes { get; }
-
-        /// <summary>
-        /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
-        /// </summary>
-        public abstract CancellationToken GlobalCancellationToken { get; set; }
 
         #endregion Properties
 
@@ -152,7 +137,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            if (Graph == null) { throw new UninitializedGraphException(); }
+            if (Map.Graph == null) { throw new UninitializedGraphException(); }
             WaitForReady(origin, localCancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
@@ -209,10 +194,10 @@ namespace IC.Navigation
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         public virtual List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
-            if (Graph == null)
+            if (Map.Graph == null)
                 throw new UninitializedGraphException();
 
-            return Graph.GetShortestPath(origin, destination);
+            return Map.Graph.GetShortestPath(origin, destination);
         }
 
         /// <summary>
@@ -293,7 +278,6 @@ namespace IC.Navigation
             return match;
         }
 
-
         /// <summary>
         /// Wait until the navigable exists.
         /// </summary>
@@ -347,13 +331,13 @@ namespace IC.Navigation
                 return localToken;
             }
 
-            if (GlobalCancellationToken == null || GlobalCancellationToken == CancellationToken.None)
+            if (Map.GlobalCancellationToken == null || Map.GlobalCancellationToken == CancellationToken.None)
             {
                 throw new UninitializedGlobalCancellationTokenException();
             }
             else
             {
-                return GlobalCancellationToken;
+                return Map.GlobalCancellationToken;
             }
         }
 

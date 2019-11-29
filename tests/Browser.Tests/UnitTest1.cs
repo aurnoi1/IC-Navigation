@@ -55,12 +55,12 @@ namespace NavBrowser.Tests
             var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, globalCancellationToken);
 
             var nav = new Nav(map);
-            nav.Nodes.Should().BeEquivalentTo(map.Nodes);
-            nav.Graph.Should().NotBeNull();
-            nav.Graph.Nodes.Should().BeEquivalentTo(map.Nodes);
             var browser = new Browser(map, nav);
             browser.Navigator.WaitForExist(map.PomMenu, globalCancellationToken);
             browser.Navigator.GoTo(map.PomMenu, map.PomRed, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomRed, map.PomBlue, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomBlue, map.PomYellow, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
         }
     }
 }

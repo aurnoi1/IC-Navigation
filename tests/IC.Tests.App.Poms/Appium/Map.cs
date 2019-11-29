@@ -29,11 +29,13 @@ namespace IC.Tests.App.Poms.Appium
         /// The nodes of INavigables forming the Graph.
         /// </summary>
         public HashSet<INavigable> Nodes { get; }
+        public IGraph Graph { get; }
 
         public Map(R remoteDriver, CancellationToken globalCancellationToken)
         {
             RemoteDriver = remoteDriver;
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
+            Graph = new Graph(Nodes);
             GlobalCancellationToken = globalCancellationToken;
         }
 

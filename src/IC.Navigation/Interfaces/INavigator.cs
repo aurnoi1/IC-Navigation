@@ -13,21 +13,6 @@ namespace IC.Navigation.Interfaces
         IMap Map { get; set; }
 
         /// <summary>
-        /// Get the Graph containing the Navigables.
-        /// </summary>
-        IGraph Graph { get; }
-
-        /// <summary>
-        /// The Navigables forming the Graph.
-        /// </summary>
-        HashSet<INavigable> Nodes { get; }
-
-        /// <summary>
-        /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
-        /// </summary>
-        CancellationToken GlobalCancellationToken { get; set; }
-
-        /// <summary>
         /// Executes the action passed in parameter.
         /// </summary>
         /// <param name="navigable">The Navigable.</param>

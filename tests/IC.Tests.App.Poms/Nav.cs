@@ -16,10 +16,7 @@ namespace IC.Tests.App.Poms
         public Nav(IMap map)
         {
             Map = map;
-            Graph = new Graph(Nodes);
         }
-
-        public override IGraph Graph { get; }
 
         public override IMap Map { get; set; }
     }
