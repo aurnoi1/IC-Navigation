@@ -9,6 +9,8 @@ namespace IC.Navigation.Interfaces
         INavigator Navigator { get; }
         ILog Log { get; }
 
+        CancellationToken GlobalCancellationToken { get; }
+
         IBrowser Back(CancellationToken cancellationToken = default);
 
         IBrowser Do(Action action);

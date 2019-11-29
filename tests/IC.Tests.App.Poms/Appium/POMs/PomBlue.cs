@@ -15,7 +15,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public class PomBlue<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomBlue(Map<R> map, ILog log) : base(map, log)
+        public PomBlue(Map<R> map, ILog log, CancellationToken globalCancellationToken) : base(map, log, globalCancellationToken)
         {
         }
 

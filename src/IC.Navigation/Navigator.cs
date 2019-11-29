@@ -27,14 +27,16 @@ namespace IC.Navigation
 
         public IMap Map { get; private set; }
         public ILog Log { get; private set; }
+        public CancellationToken GlobalCancellationToken { get; private set; }
 
 
         #endregion Properties
 
-        public Navigator(IMap map, ILog log)
+        public Navigator(IMap map, ILog log, CancellationToken globalCancellationToken)
         {
             Map = map;
             Log = log;
+            GlobalCancellationToken = globalCancellationToken;
         }
 
         #region Methods
@@ -273,13 +275,13 @@ namespace IC.Navigation
                 return localToken;
             }
 
-            if (Map.GlobalCancellationToken == null || Map.GlobalCancellationToken == CancellationToken.None)
+            if (GlobalCancellationToken == null || GlobalCancellationToken == CancellationToken.None)
             {
                 throw new UninitializedGlobalCancellationTokenException();
             }
             else
             {
-                return Map.GlobalCancellationToken;
+                return GlobalCancellationToken;
             }
         }
 

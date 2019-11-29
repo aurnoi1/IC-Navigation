@@ -13,6 +13,8 @@ namespace IC.Navigation.Interfaces
         IMap Map { get;}
         ILog Log { get; }
 
+        CancellationToken GlobalCancellationToken { get; }
+
         /// <summary>
         /// Executes the action passed in parameter.
         /// </summary>

@@ -56,8 +56,8 @@ namespace NavBrowser.Tests
             var globalCancellationToken = globalCancellationTokenSource.Token;
             var log = new Log();
             var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, log, globalCancellationToken);
-            var nav = new Navigator(map, log);
-            var browser = new Browser(map, log, nav);
+            var nav = new Navigator(map, log, globalCancellationToken);
+            var browser = new Browser(map, log, nav, globalCancellationToken);
             browser.Navigator.WaitForExist(map.PomMenu, globalCancellationToken);
             browser.Navigator.GoTo(map.PomMenu, map.PomYellow, globalCancellationToken);
             browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
@@ -83,8 +83,8 @@ namespace NavBrowser.Tests
             var globalCancellationToken = globalCancellationTokenSource.Token;
             var log = new Log();
             var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, log, globalCancellationToken);
-            var nav = new Navigator(map, log);
-            var browser = new Browser(map, log, nav);
+            var nav = new Navigator(map, log, globalCancellationToken);
+            var browser = new Browser(map, log, nav, globalCancellationToken);
             browser.WaitForExist(map.PomMenu, globalCancellationToken);
             browser
                 .GoTo(map.PomYellow)

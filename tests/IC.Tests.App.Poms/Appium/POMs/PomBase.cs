@@ -17,15 +17,17 @@ namespace IC.Tests.App.Poms.Appium.POMs
         protected private readonly Map<R> map;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
         protected private readonly ILog log;
+        protected private readonly CancellationToken globalCancellationToken;
 
         private PomBase()
         {
         }
 
-        public PomBase(Map<R> map, ILog log)
+        public PomBase(Map<R> map, ILog log, CancellationToken globalCancellationToken)
         {
             this.map = map;
             this.log = log;
+            this.globalCancellationToken = globalCancellationToken;
             RegisterObserver(log);
         }
 

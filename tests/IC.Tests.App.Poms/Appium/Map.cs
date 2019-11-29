@@ -23,7 +23,7 @@ namespace IC.Tests.App.Poms.Appium
 
         public readonly R RemoteDriver;
 
-        public CancellationToken GlobalCancellationToken { get; set; }
+        private readonly CancellationToken globalCancellationToken;
 
         /// <summary>
         /// The nodes of INavigables forming the Graph.
@@ -43,7 +43,7 @@ namespace IC.Tests.App.Poms.Appium
             RemoteDriver = remoteDriver;
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
-            GlobalCancellationToken = globalCancellationToken;
+            this.globalCancellationToken = globalCancellationToken;
             AddDynamicPaths();
         }
 
@@ -88,7 +88,7 @@ namespace IC.Tests.App.Poms.Appium
             foreach (var iNavigable in iNavigables)
             {
                 var t = iNavigable.MakeGenericType(typeof(T));
-                var instance = Activator.CreateInstance(t, this, log) as INavigable;
+                var instance = Activator.CreateInstance(t, this, log, globalCancellationToken) as INavigable;
                 navigables.Add(instance);
             }
 

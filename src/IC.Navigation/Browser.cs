@@ -9,12 +9,14 @@ namespace IC.Navigation
         public IMap Map { get; }
         public INavigator Navigator { get; }
         public ILog Log { get; }
+        public CancellationToken GlobalCancellationToken { get; }
 
-        public Browser(IMap map, ILog log, INavigator navigator)
+        public Browser(IMap map, ILog log, INavigator navigator, CancellationToken globalCancellationToken)
         {
             Map = map;
             Log = log;
             Navigator = navigator;
+            GlobalCancellationToken = globalCancellationToken;
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace IC.Navigation
             CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                Map.GlobalCancellationToken,
+                GlobalCancellationToken,
                 cancellationToken);
 
             var last = Log.Last;
@@ -79,7 +81,7 @@ namespace IC.Navigation
             CancellationToken cancellationToken = default) where T : INavigable
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                Map.GlobalCancellationToken,
+                GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
@@ -102,7 +104,7 @@ namespace IC.Navigation
                 CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                Map.GlobalCancellationToken,
+                GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
@@ -120,7 +122,7 @@ namespace IC.Navigation
         public IBrowser Back(CancellationToken cancellationToken = default)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                Map.GlobalCancellationToken,
+                GlobalCancellationToken,
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();

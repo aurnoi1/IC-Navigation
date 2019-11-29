@@ -15,7 +15,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public class PomYellow<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomYellow(Map<R> map, ILog log) : base(map, log)
+        public PomYellow(Map<R> map, ILog log, CancellationToken globalCancellationToken) : base(map, log, globalCancellationToken)
         {
         }
 
@@ -90,7 +90,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
             {
                 localCts = new CancellationTokenSource(timeout);
                 using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                    map.GlobalCancellationToken,
+                    globalCancellationToken,
                     localCts.Token);
 
                 UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
