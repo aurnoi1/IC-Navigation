@@ -11,6 +11,7 @@ namespace IC.Navigation.Interfaces
     public interface INavigator
     {
         IMap Map { get;}
+        ILog Log { get; }
 
         /// <summary>
         /// Executes the action passed in parameter.

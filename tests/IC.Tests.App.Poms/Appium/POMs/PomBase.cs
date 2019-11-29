@@ -16,16 +16,17 @@ namespace IC.Tests.App.Poms.Appium.POMs
     {
         protected private readonly Map<R> map;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
-
+        protected private readonly ILog log;
 
         private PomBase()
         {
         }
 
-        public PomBase(Map<R> map)
+        public PomBase(Map<R> map, ILog log)
         {
             this.map = map;
-            RegisterObserver(map.Log);
+            this.log = log;
+            RegisterObserver(log);
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ namespace IC.Navigation.Interfaces
     {
         IMap Map { get; }
         INavigator Navigator { get; }
+        ILog Log { get; }
 
         IBrowser Back(CancellationToken cancellationToken = default);
 

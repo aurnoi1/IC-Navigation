@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     public class PomMenu<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
 
     {
-        public PomMenu(Map<R> map) : base(map)
+        public PomMenu(Map<R> map, ILog log) : base(map, log)
         {
         }
 

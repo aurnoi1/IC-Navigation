@@ -1,5 +1,4 @@
 ﻿using IC.Navigation;
-using IC.Navigation.Enums;
 using IC.Navigation.Exceptions;
 using IC.Navigation.Interfaces;
 using IC.Tests.App.Poms.Appium.Interfaces;
@@ -22,7 +21,7 @@ namespace IC.Tests.App.Poms.Appium
         public PomMenu<R> PomMenu => GetNavigable<PomMenu<R>>();
         public PomYellow<R> PomYellow => GetNavigable<PomYellow<R>>();
 
-        public R RemoteDriver { get; private set; }
+        public readonly R RemoteDriver;
 
         public CancellationToken GlobalCancellationToken { get; set; }
 
@@ -30,17 +29,17 @@ namespace IC.Tests.App.Poms.Appium
         /// The nodes of INavigables forming the Graph.
         /// </summary>
         public HashSet<INavigable> Nodes { get; }
+
         public HashSet<DynamicPath> DynamicPaths { get; set; }
 
         public IGraph Graph { get; }
 
-        public ILog Log { get; }
+        private readonly ILog log;
 
-        public Map(R remoteDriver, CancellationToken globalCancellationToken)
+        public Map(R remoteDriver, ILog log, CancellationToken globalCancellationToken)
         {
+            this.log = log;
             DynamicPaths = new HashSet<DynamicPath>();
-            
-            Log = new Log();
             RemoteDriver = remoteDriver;
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
@@ -48,16 +47,14 @@ namespace IC.Tests.App.Poms.Appium
             AddDynamicPaths();
         }
 
-
         #region private
 
         private void AddDynamicPaths()
         {
-            var alternatives = new HashSet<INavigable>() { PomRed, PomBlue, PomMenu};
+            var alternatives = new HashSet<INavigable>() { PomRed, PomBlue, PomMenu };
             var yellowPageOnBtnClick = new DynamicPath(PomYellow, alternatives);
             DynamicPaths.Add(yellowPageOnBtnClick);
         }
-
 
         /// <summary>
         /// Get the instance of INavigable from the Nodes.
@@ -91,7 +88,7 @@ namespace IC.Tests.App.Poms.Appium
             foreach (var iNavigable in iNavigables)
             {
                 var t = iNavigable.MakeGenericType(typeof(T));
-                var instance = Activator.CreateInstance(t, this) as INavigable;
+                var instance = Activator.CreateInstance(t, this, log) as INavigable;
                 navigables.Add(instance);
             }
 
@@ -108,7 +105,6 @@ namespace IC.Tests.App.Poms.Appium
                     && !x.IsAbstract
                 ).ToList();
         }
-
 
         #endregion private
     }

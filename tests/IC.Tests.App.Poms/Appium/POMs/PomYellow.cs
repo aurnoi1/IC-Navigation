@@ -15,7 +15,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public class PomYellow<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomYellow(Map<R> map) : base(map)
+        public PomYellow(Map<R> map, ILog log) : base(map, log)
         {
         }
 
@@ -112,7 +112,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The action to open the ViewMenu.</returns>
         private void ActionToOpenMenuPage(CancellationToken ct)
         {
-            if (map.Log.Previous == map.PomMenu)
+            if (log.Previous == map.PomMenu)
             {
                 UIBtnBack.Find(ct).Click();
             }

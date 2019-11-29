@@ -14,8 +14,6 @@ namespace IC.Navigation.Interfaces
 
         IGraph Graph { get; }
 
-        ILog Log {get;}
-
         CancellationToken GlobalCancellationToken { get; }
 
         HashSet<DynamicPath> DynamicPaths { get; }

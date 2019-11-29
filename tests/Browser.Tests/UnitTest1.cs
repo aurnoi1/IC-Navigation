@@ -54,9 +54,10 @@ namespace NavBrowser.Tests
         {
             using var globalCancellationTokenSource = new CancellationTokenSource(10.m());
             var globalCancellationToken = globalCancellationTokenSource.Token;
-            var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, globalCancellationToken);
-            var nav = new Navigator(map);
-            var browser = new Browser(map, nav);
+            var log = new Log();
+            var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, log, globalCancellationToken);
+            var nav = new Navigator(map, log);
+            var browser = new Browser(map, log, nav);
             browser.Navigator.WaitForExist(map.PomMenu, globalCancellationToken);
             browser.Navigator.GoTo(map.PomMenu, map.PomYellow, globalCancellationToken);
             browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
@@ -65,7 +66,7 @@ namespace NavBrowser.Tests
             browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
             browser.Navigator.GoTo(map.PomRed, map.PomYellow, globalCancellationToken);
             browser.Navigator.GoTo(map.PomYellow, map.PomYellow, globalCancellationToken);
-            browser.Navigator.GoTo(browser.Map.Log.Last, map.PomMenu, globalCancellationToken);
+            browser.Navigator.GoTo(browser.Log.Last, map.PomMenu, globalCancellationToken);
             browser.Navigator.GoTo(map.PomMenu, map.PomYellow, globalCancellationToken);
             browser.Navigator.Do<PomMenu<WindowsDriver<WindowsElement>>>(map.PomYellow, (x) => map.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(10)), globalCancellationToken);
             browser.Navigator.Back(globalCancellationToken);
@@ -80,9 +81,10 @@ namespace NavBrowser.Tests
             using var cts = new CancellationTokenSource(30.s());
             using var globalCancellationTokenSource = new CancellationTokenSource(10.m());
             var globalCancellationToken = globalCancellationTokenSource.Token;
-            var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, globalCancellationToken);
-            var nav = new Navigator(map);
-            var browser = new Browser(map, nav);
+            var log = new Log();
+            var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, log, globalCancellationToken);
+            var nav = new Navigator(map, log);
+            var browser = new Browser(map, log, nav);
             browser.WaitForExist(map.PomMenu, globalCancellationToken);
             browser
                 .GoTo(map.PomYellow)
@@ -100,11 +102,11 @@ namespace NavBrowser.Tests
                 })
                 .GoTo(map.PomBlue)
                 .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
-                .GoTo(map.Log.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
+                .GoTo(browser.Log.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
                 .GoTo(map.PomRed);// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
 
             // First page in historic was PomMenu.
-            Assert.Same(map.PomMenu, map.Log.Historic.First());
+            Assert.Same(map.PomMenu, browser.Log.Historic.First());
             map.RemoteDriver.Close();
         }
     }

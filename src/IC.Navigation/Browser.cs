@@ -9,10 +9,12 @@ namespace IC.Navigation
         public IMap Map { get; }
 
         public INavigator Navigator { get; }
+        public ILog Log { get; }
 
-        public Browser(IMap map, INavigator navigator)
+        public Browser(IMap map, ILog log, INavigator navigator)
         {
             Map = map;
+            Log = log;
             Navigator = navigator;
         }
 
@@ -24,7 +26,7 @@ namespace IC.Navigation
         public IBrowser Do(Action action)
         {
             using var infinitTokenSource = new CancellationTokenSource();
-            var last = Map.Log.Last;
+            var last = Log.Last;
             void actionNotCancellable(CancellationToken ct) => action();
             Navigator.Do(last, actionNotCancellable, infinitTokenSource.Token);
             return this;
@@ -39,7 +41,7 @@ namespace IC.Navigation
             Func<INavigable> function) where T : INavigable
         {
             using var infinitTokenSource = new CancellationTokenSource();
-            var last = Map.Log.Last;
+            var last = Log.Last;
             INavigable functionNotCancellable(CancellationToken ct) => function();
             Navigator.Do<T>(last, functionNotCancellable, infinitTokenSource.Token);
             return this;
@@ -60,7 +62,7 @@ namespace IC.Navigation
                 Map.GlobalCancellationToken,
                 cancellationToken);
 
-            var last = Map.Log.Last;
+            var last = Log.Last;
             linkedCts.Token.ThrowIfCancellationRequested();
             Navigator.Do(last, action, linkedCts.Token);
             return this;
@@ -82,7 +84,7 @@ namespace IC.Navigation
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            var last = Map.Log.Last;
+            var last = Log.Last;
             Navigator.Do<T>(last, function, linkedCts.Token);
             return this;
         }
@@ -105,7 +107,7 @@ namespace IC.Navigation
                 cancellationToken);
 
             linkedCts.Token.ThrowIfCancellationRequested();
-            var last = Map.Log.Last;
+            var last = Log.Last;
             Navigator.GoTo(last, destination, linkedCts.Token);
             return this;
         }

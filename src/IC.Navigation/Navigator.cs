@@ -26,12 +26,15 @@ namespace IC.Navigation
         #region Properties
 
         public IMap Map { get; private set; }
+        public ILog Log { get; private set; }
+
 
         #endregion Properties
 
-        public Navigator(IMap map)
+        public Navigator(IMap map, ILog log)
         {
             Map = map;
+            Log = log;
         }
 
         #region Methods
@@ -121,7 +124,7 @@ namespace IC.Navigation
             }
             else
             {
-                return Map.Log.Last; // in case Resolve() was executed in last Invoke, destination is already reached.
+                return Log.Last; // in case Resolve() was executed in last Invoke, destination is already reached.
             }
         }
 
@@ -187,7 +190,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            return GoTo(Map.Log.Last, Map.Log.Previous, localCancellationToken);
+            return GoTo(Log.Last, Log.Previous, localCancellationToken);
         }
 
         /// <summary>
