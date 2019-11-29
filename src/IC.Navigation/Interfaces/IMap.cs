@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace IC.Navigation.Interfaces
 {
-    public interface IMap : ILog
+    public interface IMap
     {
         /// <summary>
         /// The nodes of INavigables forming the Graph.
@@ -13,6 +13,8 @@ namespace IC.Navigation.Interfaces
         public HashSet<INavigable> Nodes { get; }
 
         public IGraph Graph { get; }
+
+        public ILog Log {get;}
 
         public CancellationToken GlobalCancellationToken { get; }
     }

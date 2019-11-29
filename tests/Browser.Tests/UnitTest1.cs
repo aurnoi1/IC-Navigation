@@ -60,7 +60,7 @@ namespace NavBrowser.Tests
             browser.Navigator.GoTo(map.PomMenu, map.PomRed, globalCancellationToken);
             browser.Navigator.GoTo(map.PomRed, map.PomBlue, globalCancellationToken);
             browser.Navigator.GoTo(map.PomBlue, map.PomYellow, globalCancellationToken);
-            browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
+            //browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
         }
     }
 }

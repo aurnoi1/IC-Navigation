@@ -116,7 +116,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The action to open the ViewMenu.</returns>
         private void ActionToOpenMenuPage(CancellationToken ct)
         {
-            if (map.Previous == map.PomMenu)
+            if (map.Log.Previous == map.PomMenu)
             {
                 UIBtnBack.Find(ct).Click();
             }

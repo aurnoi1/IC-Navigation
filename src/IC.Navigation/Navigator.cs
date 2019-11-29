@@ -116,7 +116,7 @@ namespace IC.Navigation
             }
             else
             {
-                return Map.Last; // in case Resolve() was executed in last Invoke, destination is already reached.
+                return Map.Log.Last; // in case Resolve() was executed in last Invoke, destination is already reached.
             }
         }
 
@@ -182,7 +182,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            return GoTo(Map.Last, Map.Previous, localCancellationToken);
+            return GoTo(Map.Log.Last, Map.Log.Previous, localCancellationToken);
         }
 
         /// <summary>

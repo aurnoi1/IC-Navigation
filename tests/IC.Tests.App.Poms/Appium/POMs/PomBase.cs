@@ -25,7 +25,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public PomBase(Map<R> map)
         {
             this.map = map;
-            RegisterObserver(map);
+            RegisterObserver(map.Log);
         }
 
         /// <summary>
