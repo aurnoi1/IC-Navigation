@@ -13,7 +13,6 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
-    [Aliases("yellow page")]
     public class PomYellow<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
         public PomYellow(Map<R> map) : base(map)
@@ -25,19 +24,16 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
-        [Aliases("title")] // explicitly same than other pages for test.
         public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleYellow", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
-        [Aliases("button to go back to the previous page")]
         public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnBack", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
-        [Aliases("button to open menu page")]
         public SearchProperties<IWebElement> UIBtnOpenMenuPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenMenuView", map.RemoteDriver);
 
         #endregion Controls

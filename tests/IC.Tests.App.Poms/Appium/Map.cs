@@ -2,6 +2,7 @@
 using IC.Navigation.Enums;
 using IC.Navigation.Exceptions;
 using IC.Navigation.Interfaces;
+using IC.Tests.App.Poms.Appium.Interfaces;
 using IC.Tests.App.Poms.Appium.POMs;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
@@ -14,7 +15,7 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium
 {
-    public class Map<R> : IMap where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
+    public class Map<R> : IMap, INavigables<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
         public PomRed<R> PomRed => GetNavigable<PomRed<R>>();
         public PomBlue<R> PomBlue => GetNavigable<PomBlue<R>>();

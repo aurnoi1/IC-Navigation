@@ -13,7 +13,6 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
-    [Aliases("blue page")]
     public class PomBlue<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
         public PomBlue(Map<R> map) : base(map)
@@ -25,7 +24,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find the title of this page.
         /// </summary>
-        [Aliases("title")]
         public SearchProperties<IWebElement> UILblTitle => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "TitleBlue",
@@ -34,7 +32,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
-        [Aliases("button to go back to the previous page")]
         public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "BtnBack",
@@ -43,7 +40,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find a control to open the yellow page.
         /// </summary>
-        [Aliases("button to open the yellow page")]
         public SearchProperties<IWebElement> BtnOpenYellowPage => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "BtnOpenYellowView",

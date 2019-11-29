@@ -13,7 +13,6 @@ using System.Threading;
 
 namespace IC.Tests.App.Poms.Appium.POMs
 {
-    [Aliases("menu page")]
     public class PomMenu<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
 
     {
@@ -26,13 +25,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
-        [Aliases("not implemented")]
         public SearchProperties<IWebElement> UIBtnNotImplemented => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "NotImplemented", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
-        [Aliases("title")] // explicitly same than other pages for test.
         public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "TitleMenu", 
@@ -41,25 +38,21 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find a control to open the BlueView.
         /// </summary>
-        [Aliases("button to open the blue page")]
         public SearchProperties<IWebElement> UIBtnOpenBluePage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenBlueView", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
-        [Aliases("button to open the red page")]
         public SearchProperties<IWebElement> UIBtnOpenRedPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenRedView", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
-        [Aliases("button to open the yellow page")]
         public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control where text can be enter.
         /// </summary>
-        [Aliases("box where enter text")]
         public SearchProperties<IWebElement> UITxtBoxImportantMessage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TxtBoxImportantMessage", map.RemoteDriver);
 
         #endregion Controls
