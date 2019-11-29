@@ -7,7 +7,6 @@ namespace IC.Navigation
     public class Browser : IBrowser
     {
         public IMap Map { get; }
-
         public INavigator Navigator { get; }
         public ILog Log { get; }
 
