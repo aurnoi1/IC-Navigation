@@ -10,7 +10,7 @@ namespace IC.Navigation.Interfaces
     /// </summary>
     public interface INavigator
     {
-        IMap Map { get; set; }
+        IMap Map { get;}
 
         /// <summary>
         /// Executes the action passed in parameter.

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using IC.Navigation;
 using IC.Tests.App.Poms;
 using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.POMs;
@@ -54,8 +55,7 @@ namespace NavBrowser.Tests
             using var globalCancellationTokenSource = new CancellationTokenSource(10.m());
             var globalCancellationToken = globalCancellationTokenSource.Token;
             var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, globalCancellationToken);
-
-            var nav = new Nav(map);
+            var nav = new Navigator(map);
             var browser = new Browser(map, nav);
             browser.Navigator.WaitForExist(map.PomMenu, globalCancellationToken);
             browser.Navigator.GoTo(map.PomMenu, map.PomYellow, globalCancellationToken);

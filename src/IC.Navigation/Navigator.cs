@@ -12,7 +12,7 @@ namespace IC.Navigation
     /// <summary>
     /// An abstract implementation of INavigator.
     /// </summary>
-    public abstract class Navigator : INavigator
+    public class Navigator : INavigator
     {
         #region Fields
 
@@ -25,9 +25,14 @@ namespace IC.Navigation
 
         #region Properties
 
-        public abstract IMap Map { get; set; }
+        public IMap Map { get; private set; }
 
         #endregion Properties
+
+        public Navigator(IMap map)
+        {
+            Map = map;
+        }
 
         #region Methods
 
@@ -41,7 +46,7 @@ namespace IC.Navigation
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
         /// <returns>The current Navigable.</returns>
-        public virtual INavigable Do(
+        public INavigable Do(
             INavigable navigable,
             Action<CancellationToken> action,
             CancellationToken cancellationToken = default)
@@ -64,7 +69,7 @@ namespace IC.Navigation
         /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
         /// <returns>The Navigable returns by the Function.</returns>
         /// does not implement the expected returned type.</exception>
-        public virtual INavigable Do<T>(
+        public INavigable Do<T>(
             INavigable navigable,
             Func<CancellationToken, INavigable> function,
             CancellationToken cancellationToken = default) where T : INavigable
@@ -88,7 +93,7 @@ namespace IC.Navigation
         /// <returns>The next Navigable or <see cref="Last"/> if the final destination has been reached
         /// in the action to next Navigable (in case of Resolve() for example).</returns>
         /// <exception cref="UnregistredNeighborException">Throws when next Navigable is not registred in Nodes.</exception>
-        public virtual INavigable StepToNext(
+        public INavigable StepToNext(
             INavigable currentNode,
             INavigable next,
             CancellationToken cancellationToken = default)
@@ -130,7 +135,7 @@ namespace IC.Navigation
         /// <returns>The destination.</returns>
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
-        public virtual INavigable GoTo(
+        public INavigable GoTo(
             INavigable origin,
             INavigable destination,
             CancellationToken cancellationToken = default)
@@ -178,7 +183,7 @@ namespace IC.Navigation
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous Navigable.</returns>
-        public virtual INavigable Back(CancellationToken cancellationToken = default)
+        public INavigable Back(CancellationToken cancellationToken = default)
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
@@ -192,7 +197,7 @@ namespace IC.Navigation
         /// <param name="destination">The destination.</param>
         /// <returns>The List of Navigable from the origin to the destination.</returns>
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
-        public virtual List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
+        public List<INavigable> GetShortestPath(INavigable origin, INavigable destination)
         {
             if (Map.Graph == null)
                 throw new UninitializedGraphException();
