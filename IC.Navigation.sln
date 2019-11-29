@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.TimeoutEx.UnitTests", "t
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IC.Navigation.Extension.UnitTests", "tests\IC.Navigation.Extension.UnitTests\IC.Navigation.Extension.UnitTests.csproj", "{C8783CD8-E17F-461C-A4E5-BD9E68D57A05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NavBrowser.Tests", "tests\Browser.Tests\NavBrowser.Tests.csproj", "{57DB52F6-75D7-41CB-B622-910E5CA215A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{C8783CD8-E17F-461C-A4E5-BD9E68D57A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8783CD8-E17F-461C-A4E5-BD9E68D57A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8783CD8-E17F-461C-A4E5-BD9E68D57A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57DB52F6-75D7-41CB-B622-910E5CA215A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57DB52F6-75D7-41CB-B622-910E5CA215A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57DB52F6-75D7-41CB-B622-910E5CA215A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57DB52F6-75D7-41CB-B622-910E5CA215A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{38E50D56-EE60-4BC9-926E-A8500BBE0C0A} = {3B5303DF-F5A2-42B4-AD79-0312DAEB699B}
 		{AA2B0E68-1C1D-4357-921D-A1DD18E3B258} = {E8AB87A3-40AE-4BC3-9D5B-D91A1EF20528}
 		{C8783CD8-E17F-461C-A4E5-BD9E68D57A05} = {E8AB87A3-40AE-4BC3-9D5B-D91A1EF20528}
+		{57DB52F6-75D7-41CB-B622-910E5CA215A3} = {E8AB87A3-40AE-4BC3-9D5B-D91A1EF20528}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F88DC7E-C038-4CE9-94D5-2CAF70FBC4FC}

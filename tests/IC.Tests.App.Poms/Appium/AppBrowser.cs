@@ -92,7 +92,7 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         /// <typeparam name="T">The returned instance type.</typeparam>
         /// <returns>The instance of the requested INavigable.</returns>
-        public virtual T GetNavigable<T>() where T : INavigable
+        public T GetNavigable<T>() where T : INavigable
         {
             Type type = typeof(T);
             var match = Nodes.Where(n => n.GetType() == type).SingleOrDefault();
@@ -112,7 +112,7 @@ namespace IC.Tests.App.Poms.Appium
         /// <typeparam name="T">The generic type of the classes implementing INavigable.</typeparam>
         /// <param name="assembly">The assembly containing the INavigables.</param>
         /// <returns>Intances of INavigables forming the nodes.</returns>
-        public virtual HashSet<INavigable> GetNodesByReflection<T>(Assembly assembly)
+        public HashSet<INavigable> GetNodesByReflection<T>(Assembly assembly)
         {
             var navigables = new HashSet<INavigable>();
             var iNavigables = GetINavigableTypes(assembly);
@@ -134,6 +134,7 @@ namespace IC.Tests.App.Poms.Appium
         public override void Update<T>(INavigable navigable, IState<T> state)
         {
             // Add a logger here if wanted.
+            throw new NotImplementedException();
         }
 
         /// <summary>
