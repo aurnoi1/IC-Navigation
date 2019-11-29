@@ -21,11 +21,6 @@ namespace IC.Navigation
         /// </summary>
         private INavigable gotoDestination;
 
-        /// <summary>
-        /// The WeakReferences to HistoricObservers.
-        /// </summary>
-        private readonly List<WeakReference<IHistoricObserver>> observers = new List<WeakReference<IHistoricObserver>>();
-
         #endregion Fields
 
         #region Properties
@@ -94,14 +89,13 @@ namespace IC.Navigation
         /// in the action to next Navigable (in case of Resolve() for example).</returns>
         /// <exception cref="UnregistredNeighborException">Throws when next Navigable is not registred in Nodes.</exception>
         public virtual INavigable StepToNext(
-            Dictionary<INavigable,
-            Action<CancellationToken>> actionToNextINavigable,
+            INavigable currentNode,
             INavigable next,
             CancellationToken cancellationToken = default)
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            var navigableAndAction = actionToNextINavigable.Where(x => x.Key == next).SingleOrDefault();
+            var navigableAndAction = currentNode.GetActionToNext().Where(x => x.Key == next).SingleOrDefault();
             if (navigableAndAction.Key == null)
             {
                 throw new UnregistredNeighborException(next, MethodBase.GetCurrentMethod().DeclaringType);
@@ -111,6 +105,12 @@ namespace IC.Navigation
             actionToOpen.Invoke(localCancellationToken);
             if (gotoDestination != null)
             {
+                var dynamicPath = Map.DynamicPaths.Where(x => x.Origin == currentNode).SingleOrDefault();
+                if (dynamicPath != null)
+                {
+                    Resolve(dynamicPath.Alternatives, next, localCancellationToken);
+                }
+
                 WaitForExist(next, localCancellationToken);
                 return next;
             }
@@ -156,7 +156,7 @@ namespace IC.Navigation
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    StepToNext(currentNode.GetActionToNext(), nextNode, localCancellationToken);
+                    StepToNext(currentNode, nextNode, localCancellationToken);
                 }
                 else
                 {
@@ -201,84 +201,6 @@ namespace IC.Navigation
         }
 
         /// <summary>
-        /// Resolve a path when one action leads to more than one Navigable.
-        /// This method will search for the first match from OnActionAlternatives list.
-        /// An exception will be raised if no path exists between them.
-        /// </summary>
-        /// <param name="origin">The origin before Action invocation.</param>
-        /// <param name="onActionAlternatives">All the alternative Navigables that can be rebased.</param>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
-        /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
-        /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(
-            INavigable origin,
-            IOnActionAlternatives onActionAlternatives,
-            CancellationToken cancellationToken = default)
-        {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-            var newOrigin = GetNavigableAfterAction(origin, onActionAlternatives, localCancellationToken);
-            return GoTo(newOrigin, gotoDestination, localCancellationToken);
-        }
-
-        /// <summary>
-        /// Resolve a path when one action leads to more than one Navigable.
-        /// This method will search for the first match from OnActionAlternatives list.
-        /// An exception will be raised if no path exists between them.
-        /// </summary>
-        /// <param name="origin">The origin before Action invocation.</param>
-        /// <param name="onActionAlternatives">All the alternative Navigables that can be rebased.</param>
-        /// <param name="waypoint">An Navigable waypoint to cross before to reach the expected INavigable.</param>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
-        /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
-        /// <returns>The destination.</returns>
-        public virtual INavigable Resolve(
-            INavigable origin,
-            IOnActionAlternatives onActionAlternatives,
-            INavigable waypoint,
-            CancellationToken cancellationToken = default)
-        {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-
-            // gotoDestination will be reset with the first call to GoTo().
-            var finalDestination = gotoDestination;
-            var navigableAfterAction = GetNavigableAfterAction(origin, onActionAlternatives, localCancellationToken);
-            if (navigableAfterAction == finalDestination)
-            {
-                return navigableAfterAction;
-            }
-            else
-            {
-                // Force to pass by waypoint.
-                GoTo(navigableAfterAction, waypoint, localCancellationToken);
-                return GoTo(waypoint, finalDestination, localCancellationToken);
-            }
-        }
-
-        /// <summary>
-        /// Get the Navigagble that exists after the OnActionAlternatives's action is completed.
-        /// </summary>
-        /// <param name="navigable">The Navigable.</param>
-        /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
-        /// If <c>None</c> or <c>null</c> then the GlobalCancellationToken will be used.</param>
-        /// <returns>The matching Navigable, otherwise <c>null</c>.</returns>
-        public virtual INavigable GetNavigableAfterAction(
-            INavigable navigable,
-            IOnActionAlternatives onActionAlternatives,
-            CancellationToken cancellationToken = default)
-        {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-            WaitForExist(navigable, localCancellationToken);
-            INavigable match = null;
-            onActionAlternatives.AlternativateAction.Invoke(localCancellationToken);
-            match = GetFirstINavigableExisting(onActionAlternatives.Navigables, localCancellationToken);
-            return match;
-        }
-
-        /// <summary>
         /// Wait until the navigable exists.
         /// </summary>
         /// <param name="navigable">The navigable.</param>
@@ -313,6 +235,18 @@ namespace IC.Navigation
         #endregion Public
 
         #region Private
+
+        /// <summary>
+        /// Resolve dynamic paths.
+        /// </summary>
+        /// <param name="alternatives">The alternatives.</param>
+        /// <param name="destination">The destination.</param>
+        /// <param name="cancellationToken">The cancellation token to interrupt navigation as soon as possible.</param>
+        private void Resolve(IEnumerable<INavigable> alternatives, INavigable destination, CancellationToken cancellationToken)
+        {
+            var alternative = GetFirstINavigableExisting(alternatives, cancellationToken);
+            GoTo(alternative, destination, cancellationToken);
+        }
 
         /// <summary>
         /// Select the CancellationToken to use for a task.

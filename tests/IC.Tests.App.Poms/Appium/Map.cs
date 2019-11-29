@@ -29,26 +29,33 @@ namespace IC.Tests.App.Poms.Appium
         /// The nodes of INavigables forming the Graph.
         /// </summary>
         public HashSet<INavigable> Nodes { get; }
+        public HashSet<DynamicPath> DynamicPaths { get; set; }
+
         public IGraph Graph { get; }
 
         public ILog Log { get; }
 
         public Map(R remoteDriver, CancellationToken globalCancellationToken)
         {
+            DynamicPaths = new HashSet<DynamicPath>();
+            
             Log = new Log();
             RemoteDriver = remoteDriver;
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             GlobalCancellationToken = globalCancellationToken;
-        }
-
-        public void Resolve(INavigable source, IOnActionAlternatives onActionAlternatives, CancellationToken ct)
-        {
-            throw new NotImplementedException();
+            AddDynamicPaths();
         }
 
 
         #region private
+
+        private void AddDynamicPaths()
+        {
+            var alternatives = new HashSet<INavigable>() { PomRed, PomBlue, PomMenu};
+            var yellowPageOnBtnClick = new DynamicPath(PomYellow, alternatives);
+            DynamicPaths.Add(yellowPageOnBtnClick);
+        }
 
 
         /// <summary>

@@ -1,7 +1,7 @@
-﻿using System;
+﻿using IC.Navigation.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Threading;
-using IC.Navigation.Exceptions;
 
 namespace IC.Navigation.Interfaces
 {
@@ -32,15 +32,6 @@ namespace IC.Navigation.Interfaces
         /// If <c>None</c>then the GlobalCancellationToken will be used.</param>
         /// <returns>The Navigable returns by the Function.</returns>
         INavigable Do<T>(INavigable navigable, Func<CancellationToken, INavigable> function, CancellationToken cancellationToken) where T : INavigable;
-
-        /// <summary>
-        /// Get the Navigagble that exists after the OnActionAlternatives's action is completed.
-        /// </summary>
-        /// <param name="navigable">The Navigable.</param>
-        /// <param name="onActionAlternatives">The OnActionAlternatives.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The matching Navigable, otherwise <c>null</c>.</returns>
-        INavigable GetNavigableAfterAction(INavigable navigable, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get the shortest path from the origin to the destination.
@@ -75,7 +66,7 @@ namespace IC.Navigation.Interfaces
         /// in the action to next Navigable (in case of Resolve() for example).</returns>
         /// <exception cref="UnregistredNeighborException">Throws when next Navigable is not registred in Nodes.</exception>
         INavigable StepToNext(
-            Dictionary<INavigable, Action<CancellationToken>> actionToNextINavigable,
+            INavigable origin,
             INavigable next,
             CancellationToken cancellationToken);
 
@@ -86,33 +77,6 @@ namespace IC.Navigation.Interfaces
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous Navigable.</returns>
         INavigable Back(CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Resolve a path when one action leads to more than one Navigable.
-        /// This method will search for the first match from OnActionAlternatives list.
-        /// An exception will be raised if no path exists between them.
-        /// </summary>
-        /// <param name="origin">The origin before Action invocation.</param>
-        /// <param name="onActionAlternatives">All the alternative Navigables that can be rebased.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The destination.</returns>
-        INavigable Resolve(INavigable origin, IOnActionAlternatives onActionAlternatives, CancellationToken cancellationToken);
-
-        /// <summary>
-        /// Resolve a path when one action leads to more than one Navigable.
-        /// This method will search for the first match from OnActionAlternatives list.
-        /// An exception will be raised if no path exists between them.
-        /// </summary>
-        /// <param name="origin">The origin before Action invocation.</param>
-        /// <param name="onActionAlternatives">All the alternative Navigables that can be rebased.</param>
-        /// <param name="waypoint">An Navigable waypoint to cross before to reach the expected INavigable.</param>
-        /// <param name="cancellationToken">The CancellationToken to interrupt the task as soon as possible.</param>
-        /// <returns>The destination.</returns>
-        INavigable Resolve(
-            INavigable origin,
-            IOnActionAlternatives onActionAlternatives,
-            INavigable waypoint,
-            CancellationToken cancellationToken);
 
         /// <summary>
         /// Wait until the Navigable exists.

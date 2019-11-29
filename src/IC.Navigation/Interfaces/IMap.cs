@@ -10,12 +10,14 @@ namespace IC.Navigation.Interfaces
         /// <summary>
         /// The nodes of INavigables forming the Graph.
         /// </summary>
-        public HashSet<INavigable> Nodes { get; }
+        HashSet<INavigable> Nodes { get; }
 
-        public IGraph Graph { get; }
+        IGraph Graph { get; }
 
-        public ILog Log {get;}
+        ILog Log {get;}
 
-        public CancellationToken GlobalCancellationToken { get; }
+        CancellationToken GlobalCancellationToken { get; }
+
+        HashSet<DynamicPath> DynamicPaths { get; }
     }
 }

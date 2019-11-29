@@ -76,8 +76,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 { map.PomMenu, (ct) => ActionToOpenMenuPage(ct) }, // Resolve two actions opening the same page.
 
                 // Resolve one action can open many pages (3 when counting ViewMenu).
-                { map.PomBlue, (ct) => ResolveBackBtnClick(this, ct) },
-                { map.PomRed, (ct) => ResolveBackBtnClick(this, ct) },
+                { map.PomBlue, (ct) => UIBtnBack.Find(ct).Click() },
+                { map.PomRed, (ct) => UIBtnBack.Find(ct).Click() },
             };
         }
 
@@ -126,26 +126,26 @@ namespace IC.Tests.App.Poms.Appium.POMs
             }
         }
 
-        /// <summary>
-        /// Resolve the navigation when the UIBackBtn is clicked.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
-        private void ResolveBackBtnClick(INavigable source, CancellationToken ct)
-        {
-            List<INavigable> alternatives = new List<INavigable>()
-            {
-                map.PomBlue,
-                map.PomRed,
-                map.PomMenu
-            };
+        ///// <summary>
+        ///// Resolve the navigation when the UIBackBtn is clicked.
+        ///// </summary>
+        ///// <param name="source">The source.</param>
+        ///// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
+        //private void ResolveBackBtnClick(INavigable source, CancellationToken ct)
+        //{
+        //    List<INavigable> alternatives = new List<INavigable>()
+        //    {
+        //        map.PomBlue,
+        //        map.PomRed,
+        //        map.PomMenu
+        //    };
 
-            IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-                (x) => UIBtnBack.Find(x).Click(),
-                alternatives);
+        //    IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
+        //        (x) => UIBtnBack.Find(x).Click(),
+        //        alternatives);
 
-            map.Resolve(source, onActionAlternatives, ct);
-        }
+        //    map.Resolve(source, onActionAlternatives, ct);
+        //}
 
         #endregion Private
 

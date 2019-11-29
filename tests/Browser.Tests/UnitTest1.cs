@@ -1,6 +1,7 @@
 using FluentAssertions;
 using IC.Tests.App.Poms;
 using IC.Tests.App.Poms.Appium;
+using IC.Tests.App.Poms.Appium.POMs;
 using IC.TimeoutEx;
 using OpenQA.Selenium.Appium;
 using OpenQA.Selenium.Appium.Windows;
@@ -50,17 +51,24 @@ namespace NavBrowser.Tests
         [Fact]
         public void Test1()
         {
-            using var globalCancellationTokenSource = new CancellationTokenSource(10.s());
+            using var globalCancellationTokenSource = new CancellationTokenSource(10.m());
             var globalCancellationToken = globalCancellationTokenSource.Token;
             var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, globalCancellationToken);
 
             var nav = new Nav(map);
             var browser = new Browser(map, nav);
             browser.Navigator.WaitForExist(map.PomMenu, globalCancellationToken);
-            browser.Navigator.GoTo(map.PomMenu, map.PomRed, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomMenu, map.PomYellow, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
             browser.Navigator.GoTo(map.PomRed, map.PomBlue, globalCancellationToken);
             browser.Navigator.GoTo(map.PomBlue, map.PomYellow, globalCancellationToken);
-            //browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomYellow, map.PomRed, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomRed, map.PomYellow, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomYellow, map.PomYellow, globalCancellationToken);
+            browser.Navigator.GoTo(browser.Map.Log.Last, map.PomMenu, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomMenu, map.PomYellow, globalCancellationToken);
+            browser.Navigator.Do<PomMenu<WindowsDriver<WindowsElement>>>(map.PomYellow, (x) => map.PomYellow.OpenMenuByMenuBtn(TimeSpan.FromSeconds(10)), globalCancellationToken);
+            browser.Navigator.Back(globalCancellationToken);
         }
     }
 }
