@@ -50,14 +50,17 @@ namespace NavBrowser.Tests
         [Fact]
         public void Test1()
         {
-            var map = new Map<WindowsDriver<WindowsElement>>();
             using var globalCancellationTokenSource = new CancellationTokenSource(10.s());
             var globalCancellationToken = globalCancellationTokenSource.Token;
-            var nav = new Nav(map, globalCancellationToken);
+            var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, globalCancellationToken);
+
+            var nav = new Nav(map);
             nav.Nodes.Should().BeEquivalentTo(map.Nodes);
             nav.Graph.Should().NotBeNull();
             nav.Graph.Nodes.Should().BeEquivalentTo(map.Nodes);
-            //var browser = new Browser(map);
+            var browser = new Browser(map, nav);
+            browser.Navigator.WaitForExist(map.PomMenu, globalCancellationToken);
+            browser.Navigator.GoTo(map.PomMenu, map.PomRed, globalCancellationToken);
         }
     }
 }

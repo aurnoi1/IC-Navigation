@@ -8,8 +8,10 @@ namespace IC.Navigation.Interfaces
     /// <summary>
     /// Defines a Navigator to navigate through Graph.
     /// </summary>
-    public interface INavigator : ILog
+    public interface INavigator
     {
+        IMap Map { get; set; }
+
         /// <summary>
         /// Get the Graph containing the Navigables.
         /// </summary>

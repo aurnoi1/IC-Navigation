@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("yellow page")]
     public class PomYellow<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomYellow(IAppBrowser<R> session) : base(session)
+        public PomYellow(Map<R> map) : base(map)
         {
         }
 
@@ -26,19 +26,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleYellow", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleYellow", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnBack", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnBack", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to open menu page")]
-        public SearchProperties<IWebElement> UIBtnOpenMenuPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenMenuView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenMenuPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenMenuView", map.RemoteDriver);
 
         #endregion Controls
 
@@ -73,11 +73,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => ActionToOpenMenuPage(ct) }, // Resolve two actions opening the same page.
+                { map.PomMenu, (ct) => ActionToOpenMenuPage(ct) }, // Resolve two actions opening the same page.
 
                 // Resolve one action can open many pages (3 when counting ViewMenu).
-                { session.PomBlue, (ct) => ResolveBackBtnClick(this, ct) },
-                { session.PomRed, (ct) => ResolveBackBtnClick(this, ct) },
+                { map.PomBlue, (ct) => ResolveBackBtnClick(this, ct) },
+                { map.PomRed, (ct) => ResolveBackBtnClick(this, ct) },
             };
         }
 
@@ -94,11 +94,11 @@ namespace IC.Tests.App.Poms.Appium.POMs
             {
                 localCts = new CancellationTokenSource(timeout);
                 using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                    session.GlobalCancellationToken,
+                    map.GlobalCancellationToken,
                     localCts.Token);
 
                 UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
-                return session.PomMenu;
+                return map.PomMenu;
             }
             catch (Exception)
             {
@@ -116,7 +116,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The action to open the ViewMenu.</returns>
         private void ActionToOpenMenuPage(CancellationToken ct)
         {
-            if (session.Previous == session.PomMenu)
+            if (map.Previous == map.PomMenu)
             {
                 UIBtnBack.Find(ct).Click();
             }
@@ -135,16 +135,16 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             List<INavigable> alternatives = new List<INavigable>()
             {
-                session.PomBlue,
-                session.PomRed,
-                session.PomMenu
+                map.PomBlue,
+                map.PomRed,
+                map.PomMenu
             };
 
             IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
                 (x) => UIBtnBack.Find(x).Click(),
                 alternatives);
 
-            session.Resolve(source, onActionAlternatives, ct);
+            map.Resolve(source, onActionAlternatives, ct);
         }
 
         #endregion Private

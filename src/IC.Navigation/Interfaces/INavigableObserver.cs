@@ -14,8 +14,7 @@
         /// <summary>
         /// Update the observer with this Navigable's State.
         /// </summary>
-        /// <param name="navigable">The Navigable.</param>
         /// <param name="state">The State.</param>
-        void Update<T>(INavigable navigable, IState<T> state);
+        void Update<T>(IState<T> state);
     }
 }

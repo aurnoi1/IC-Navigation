@@ -14,23 +14,18 @@ namespace IC.Tests.App.Poms.Appium.POMs
 {
     public abstract class PomBase<R> : INavigable where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        protected private readonly IAppBrowser<R> session;
+        protected private readonly Map<R> map;
         private readonly List<WeakReference<INavigableObserver>> observers = new List<WeakReference<INavigableObserver>>();
 
-        /// <summary>
-        /// The Navigator.
-        /// </summary>
-        public INavigator Navigator { get; set; }
 
         private PomBase()
         {
         }
 
-        public PomBase(IAppBrowser<R> session)
+        public PomBase(Map<R> map)
         {
-            this.session = session;
-            Navigator = this.session;
-            RegisterObserver(session);
+            this.map = map;
+            RegisterObserver(map);
         }
 
         /// <summary>
@@ -124,7 +119,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 }
                 else
                 {
-                    obs.Update(this, state);
+                    obs.Update(state);
                 }
             });
         }

@@ -30,11 +30,8 @@ namespace IC.Navigation
 
         #region Properties
 
-        /// <summary>
-        /// Lock to queue historic entries.
-        /// </summary>
-        private readonly object historicLock = new object();
-
+        public abstract IMap Map { get; set; }
+        
         /// <summary>
         /// Get the Graph containing the Navigables.
         /// </summary>
@@ -49,49 +46,6 @@ namespace IC.Navigation
         /// The Cancellation Token used to interrupt all the running navigation tasks as soon as possible.
         /// </summary>
         public abstract CancellationToken GlobalCancellationToken { get; set; }
-
-        /// <summary>
-        /// Last known Navigable.
-        /// </summary>
-        public virtual INavigable Last
-        {
-            get
-            {
-                lock (historicLock)
-                {
-                    return Historic.LastOrDefault();
-                }
-            }
-
-            private set
-            {
-                lock (historicLock)
-                {
-                    if (value != null && value != Historic.LastOrDefault())
-                    {
-                        Historic.Add(value);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Previous existing Navigable before the last known Navigable.
-        /// </summary>
-        public virtual INavigable Previous
-        {
-            get
-            {
-                lock (historicLock)
-                {
-                    return Historic.Count > 1 ? Historic[Historic.Count - 2] : null;
-                }
-            }
-        }
-
-        /// The historic of previsous existing Navigables.
-        /// </summary>
-        public virtual List<INavigable> Historic { get; private set; } = new List<INavigable>();
 
         #endregion Properties
 
@@ -177,7 +131,7 @@ namespace IC.Navigation
             }
             else
             {
-                return Last; // in case Resolve() was executed in last Invoke, destination is already reached.
+                return Map.Last; // in case Resolve() was executed in last Invoke, destination is already reached.
             }
         }
 
@@ -243,7 +197,7 @@ namespace IC.Navigation
         {
             CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
             localCancellationToken.ThrowIfCancellationRequested();
-            return GoTo(Last, Previous, localCancellationToken);
+            return GoTo(Map.Last, Map.Previous, localCancellationToken);
         }
 
         /// <summary>
@@ -339,83 +293,6 @@ namespace IC.Navigation
             return match;
         }
 
-        /// <summary>
-        /// Update the observer with this Navigable.
-        /// </summary>
-        /// <param name="status">The NavigableStatus.</param>
-        public virtual void Update(INavigableStatus status)
-        {
-            if (status.Exist.Value)
-            {
-                SetLast(status);
-            }
-        }
-
-        /// <summary>
-        /// Update the observer with this Navigable's State.
-        /// </summary>
-        /// <param name="navigable">The Navigable.</param>
-        /// <param name="state">The State.</param>
-        public abstract void Update<T>(INavigable navigable, IState<T> state);
-
-        /// <summary>
-        /// Publish the historic.
-        /// </summary>
-        /// <param name="historic">The historic to publish.</param>
-        public virtual void PublishHistoric(List<INavigable> historic)
-        {
-            NotifyHistoricObservers(historic);
-        }
-
-        /// <summary>
-        /// Register HistoricObserver as WeakReference.
-        /// </summary>
-        /// <param name="observer">The HistoricObserver.</param>
-        /// <returns>The WeakReference to the HistoricObserver.</returns>
-        public virtual WeakReference<IHistoricObserver> RegisterObserver(IHistoricObserver observer)
-        {
-            var weakObserver = new WeakReference<IHistoricObserver>(observer);
-            observers.Add(weakObserver);
-            return weakObserver;
-        }
-
-        /// <summary>
-        /// Unregister an HistoricObserver.
-        /// </summary>
-        /// <param name="observer">The HistoricObserver to unregister.</param>
-        public virtual void UnregisterObserver(IHistoricObserver observer)
-        {
-            var obs = observers.Where(x =>
-            {
-                x.TryGetTarget(out IHistoricObserver target);
-                return target.Equals(observer);
-            }).SingleOrDefault();
-
-            if (obs != null)
-            {
-                observers.Remove(obs);
-            }
-        }
-
-        /// <summary>
-        /// Notify HistoricObservers of an update on historic.
-        /// </summary>
-        /// <param name="historic">The updated historic</param>
-        public virtual void NotifyHistoricObservers(List<INavigable> historic)
-        {
-            observers.ForEach(x =>
-            {
-                x.TryGetTarget(out IHistoricObserver obs);
-                if (obs == null)
-                {
-                    UnregisterObserver(obs);
-                }
-                else
-                {
-                    obs.Update(historic);
-                }
-            });
-        }
 
         /// <summary>
         /// Wait until the navigable exists.
@@ -477,21 +354,6 @@ namespace IC.Navigation
             else
             {
                 return GlobalCancellationToken;
-            }
-        }
-
-        /// <summary>
-        /// Set the last known INavigable is exists.
-        /// </summary>
-        /// <param name="navigable">The INavigable.</param>
-        /// <param name="status">The NavigableStatus of the last INavigable.</param>
-        /// <returns><c>true</c> if the INavigable exists, otherwise <c>false</c>.</returns>
-        private void SetLast(INavigableStatus status)
-        {
-            if (Last == null || !Equals(status.Navigable, Last))
-            {
-                Last = status.Navigable;
-                PublishHistoric(Historic);
             }
         }
 

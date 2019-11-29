@@ -11,9 +11,10 @@ namespace IC.Tests.App.Poms.Appium
 
         public INavigator Navigator { get; }
 
-        public Browser(IMap map)
+        public Browser(IMap map, INavigator navigator)
         {
             Map = map;
+            Navigator = navigator;
         }
     }
 }

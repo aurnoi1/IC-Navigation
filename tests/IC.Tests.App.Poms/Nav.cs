@@ -13,24 +13,14 @@ namespace IC.Tests.App.Poms
 {
     public class Nav : Navigator
     {
-        private readonly IMap map;
-        public Nav(IMap map, CancellationToken globalCancellationToken)
+        public Nav(IMap map)
         {
-            this.map = map;
+            Map = map;
             Graph = new Graph(Nodes);
-            GlobalCancellationToken = globalCancellationToken;
         }
 
         public override IGraph Graph { get; }
 
-        public override HashSet<INavigable> Nodes => map.Nodes;
-
-        public override CancellationToken GlobalCancellationToken { get; set; }
-
-        public override void Update<T>(INavigable navigable, IState<T> state)
-        {
-            // Add a logger here if wanted.
-            throw new NotImplementedException();
-        }
+        public override IMap Map { get; set; }
     }
 }

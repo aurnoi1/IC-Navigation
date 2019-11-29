@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("red page")]
     public class PomRed<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomRed(IAppBrowser<R> session) : base(session)
+        public PomRed(Map<R> map) : base(map)
         {
         }
 
@@ -26,19 +26,19 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleRed", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleRed", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
         [Aliases("button to go back to the previous page")]
-        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnBack", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnBack", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the yellow page.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", map.RemoteDriver);
 
         #endregion Controls
 
@@ -71,8 +71,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => UIBtnBack.Find(ct).Click() },
-                { session.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
+                { map.PomMenu, (ct) => UIBtnBack.Find(ct).Click() },
+                { map.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
             };
         }
     }

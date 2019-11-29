@@ -16,7 +16,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     [Aliases("blue page")]
     public class PomBlue<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
     {
-        public PomBlue(IAppBrowser<R> session) : base(session)
+        public PomBlue(Map<R> map) : base(map)
         {
         }
 
@@ -29,7 +29,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public SearchProperties<IWebElement> UILblTitle => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "TitleBlue",
-            session.RemoteDriver);
+            map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
@@ -38,7 +38,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public SearchProperties<IWebElement> UIBtnBack => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "BtnBack",
-            session.RemoteDriver);
+            map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the yellow page.
@@ -47,7 +47,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         public SearchProperties<IWebElement> BtnOpenYellowPage => new SearchProperties<IWebElement>(
             WindowDriverLocators.AutomationId,
             "BtnOpenYellowView",
-            session.RemoteDriver);
+            map.RemoteDriver);
 
         #endregion Controls
 
@@ -80,8 +80,8 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomMenu, (ct) => UIBtnBack.Find(ct).Click() },
-                { session.PomYellow, (ct) => BtnOpenYellowPage.Find(ct).Click() },
+                { map.PomMenu, (ct) => UIBtnBack.Find(ct).Click() },
+                { map.PomYellow, (ct) => BtnOpenYellowPage.Find(ct).Click() },
             };
         }
     }

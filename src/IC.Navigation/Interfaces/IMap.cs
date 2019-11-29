@@ -4,7 +4,7 @@ using System.Text;
 
 namespace IC.Navigation.Interfaces
 {
-    public interface IMap
+    public interface IMap : ILog
     {
         /// <summary>
         /// The nodes of INavigables forming the Graph.

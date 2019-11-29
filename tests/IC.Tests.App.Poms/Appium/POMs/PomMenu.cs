@@ -17,7 +17,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
     public class PomMenu<R> : PomBase<R> where R : IHasSessionId, IFindsByFluentSelector<IWebElement>
 
     {
-        public PomMenu(IAppBrowser<R> session) : base(session)
+        public PomMenu(Map<R> map) : base(map)
         {
         }
 
@@ -27,37 +27,40 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// WDSearchProperties to find a control NOT IMPLEMENTED only use for negative test.
         /// </summary>
         [Aliases("not implemented")]
-        public SearchProperties<IWebElement> UIBtnNotImplemented => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "NotImplemented", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnNotImplemented => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "NotImplemented", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find the tile of this page.
         /// </summary>
         [Aliases("title")] // explicitly same than other pages for test.
-        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TitleMenu", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITitle => new SearchProperties<IWebElement>(
+            WindowDriverLocators.AutomationId,
+            "TitleMenu", 
+            map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the BlueView.
         /// </summary>
         [Aliases("button to open the blue page")]
-        public SearchProperties<IWebElement> UIBtnOpenBluePage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenBlueView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenBluePage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenBlueView", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the red page")]
-        public SearchProperties<IWebElement> UIBtnOpenRedPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenRedView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenRedPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenRedView", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control to open the RedView.
         /// </summary>
         [Aliases("button to open the yellow page")]
-        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", session.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenYellowPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenYellowView", map.RemoteDriver);
 
         /// <summary>
         /// WDSearchProperties to find a control where text can be enter.
         /// </summary>
         [Aliases("box where enter text")]
-        public SearchProperties<IWebElement> UITxtBoxImportantMessage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TxtBoxImportantMessage", session.RemoteDriver);
+        public SearchProperties<IWebElement> UITxtBoxImportantMessage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "TxtBoxImportantMessage", map.RemoteDriver);
 
         #endregion Controls
 
@@ -90,9 +93,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
         {
             return new Dictionary<INavigable, Action<CancellationToken>>()
             {
-                { session.PomBlue, (ct) => UIBtnOpenBluePage.Find(ct).Click() },
-                { session.PomRed, (ct) => UIBtnOpenRedPage.Find(ct).Click() },
-                { session.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
+                { map.PomBlue, (ct) => UIBtnOpenBluePage.Find(ct).Click() },
+                { map.PomRed, (ct) => UIBtnOpenRedPage.Find(ct).Click() },
+                { map.PomYellow, (ct) => UIBtnOpenYellowPage.Find(ct).Click() },
             };
         }
 
