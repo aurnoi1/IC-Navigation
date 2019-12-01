@@ -87,27 +87,15 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// Open the Menu page by clicking on UIBtnOpenMenuPage.
         /// </summary>
-        /// <param name="timeout">The timeout to interrupt the task as soon as possible in concurrence
-        /// of <see cref="AppBrowser.GlobalCancellationToken"/>.</param>
+        /// <param name="timeout">The timeout to interrupt the task as soon as possible
+        /// in concurrence of globalCancellationToken.</param>
         /// <returns>The PomMenu.</returns>
         public PomMenu<R> OpenMenuByMenuBtn(TimeSpan timeout)
         {
-            CancellationTokenSource localCts = default;
-            try
-            {
-                localCts = new CancellationTokenSource(timeout);
-                using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-                    globalCancellationToken,
-                    localCts.Token);
-
-                UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
-                return map.PomMenu;
-            }
-            catch (Exception)
-            {
-                localCts?.Dispose();
-                throw;
-            }
+            using CancellationTokenSource localCts = new CancellationTokenSource(timeout);
+            using var linkedCts = LinkCancellationTokenSourceToGlobal(localCts);
+            UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
+            return map.PomMenu;
         }
 
         #region Private
