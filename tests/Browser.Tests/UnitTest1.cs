@@ -1,10 +1,9 @@
-using FluentAssertions;
 using IC.Navigation;
-using IC.Tests.App.Poms;
 using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.POMs;
 using IC.TimeoutEx;
 using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Service;
 using OpenQA.Selenium.Appium.Windows;
 using System;
 using System.IO;
@@ -14,7 +13,7 @@ using Xunit;
 
 namespace NavBrowser.Tests
 {
-    public class UnitTest1
+    public class UnitTest1 : IDisposable
     {
         public Uri Uri { get => new Uri("http://localhost:4723/wd/hub"); }
 
@@ -49,6 +48,13 @@ namespace NavBrowser.Tests
             return path;
         }
 
+        private AppiumLocalService service;
+
+        public UnitTest1()
+        {
+            //StartAppiumService();
+        }
+
         [Fact]
         public void Test1()
         {
@@ -73,6 +79,11 @@ namespace NavBrowser.Tests
             map.RemoteDriver.Close();
         }
 
+        private void StartAppiumService()
+        {
+            service = AppiumLocalService.BuildDefaultService();
+            service.Start();
+        }
 
         [Fact]
         public void FullExample()
@@ -108,6 +119,11 @@ namespace NavBrowser.Tests
             // First page in historic was PomMenu.
             Assert.Same(map.PomMenu, browser.Log.Historic.First());
             map.RemoteDriver.Close();
+        }
+
+        public void Dispose()
+        {
+            //service.Dispose();
         }
     }
 }

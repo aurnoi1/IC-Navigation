@@ -126,5 +126,10 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 }
             });
         }
+
+        public virtual HashSet<DynamicNeighbor> GetDynamicNeighbors()
+        {
+            return new HashSet<DynamicNeighbor>();
+        }
     }
 }

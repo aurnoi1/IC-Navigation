@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace IC.Navigation
 {
-    public class DynamicPath
+    public class DynamicNeighbor
     {
         public INavigable Origin { get; }
         public HashSet<INavigable> Alternatives { get; }
 
-        public DynamicPath(INavigable origin, HashSet<INavigable> alternatives)
+        public DynamicNeighbor(INavigable origin, HashSet<INavigable> alternatives)
         {
             Origin = origin;
             Alternatives = alternatives;

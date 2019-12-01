@@ -54,5 +54,10 @@ namespace IC.Navigation.Interfaces
         /// </summary>
         /// <param name="state">The State.</param>
         void NotifyObservers<T>(IState<T> state);
+
+        /// <summary>
+        /// Add DynamicPaths to Map.
+        /// </summary>
+        HashSet<DynamicNeighbor> GetDynamicNeighbors();
     }
 }

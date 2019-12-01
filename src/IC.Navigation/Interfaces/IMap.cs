@@ -14,6 +14,6 @@ namespace IC.Navigation.Interfaces
 
         IGraph Graph { get; }
 
-        HashSet<DynamicPath> DynamicPaths { get; }
+        HashSet<DynamicNeighbor> DynamicNeighbors { get; }
     }
 }

@@ -20,7 +20,7 @@ Major refactoring and breaking changes!
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Appium.WebDriver" Version="4.0.0.6-beta" />
+        <PackageReference Include="Appium.WebDriver" Version="4.1.1" />
     </ItemGroup>
 
     <ItemGroup>

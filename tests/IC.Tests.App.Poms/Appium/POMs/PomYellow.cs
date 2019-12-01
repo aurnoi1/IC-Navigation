@@ -3,7 +3,6 @@ using IC.Navigation.Enums;
 using IC.Navigation.Extension.Appium;
 using IC.Navigation.Extension.Appium.WindowsDriver;
 using IC.Navigation.Interfaces;
-using IC.Tests.App.Poms.Appium.Interfaces;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Appium.Interfaces;
 using OpenQA.Selenium.Remote;
@@ -77,6 +76,14 @@ namespace IC.Tests.App.Poms.Appium.POMs
             };
         }
 
+        public override HashSet<DynamicNeighbor> GetDynamicNeighbors()
+        {
+            var dynamicPaths = new HashSet<DynamicNeighbor>();
+            var alternatives = new HashSet<INavigable>() { map.PomRed, map.PomBlue, map.PomMenu };
+            dynamicPaths.Add(new DynamicNeighbor(this, alternatives));
+            return dynamicPaths;
+        }
+
         /// <summary>
         /// Open the Menu page by clicking on UIBtnOpenMenuPage.
         /// </summary>
@@ -121,27 +128,6 @@ namespace IC.Tests.App.Poms.Appium.POMs
                 UIBtnOpenMenuPage.Find(ct).Click();
             }
         }
-
-        ///// <summary>
-        ///// Resolve the navigation when the UIBackBtn is clicked.
-        ///// </summary>
-        ///// <param name="source">The source.</param>
-        ///// <param name="ct">The CancellationToken to interrupt the task as soon as possible.</param>
-        //private void ResolveBackBtnClick(INavigable source, CancellationToken ct)
-        //{
-        //    List<INavigable> alternatives = new List<INavigable>()
-        //    {
-        //        map.PomBlue,
-        //        map.PomRed,
-        //        map.PomMenu
-        //    };
-
-        //    IOnActionAlternatives onActionAlternatives = new OnActionAlternatives(
-        //        (x) => UIBtnBack.Find(x).Click(),
-        //        alternatives);
-
-        //    map.Resolve(source, onActionAlternatives, ct);
-        //}
 
         #endregion Private
 

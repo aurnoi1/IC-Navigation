@@ -115,7 +115,7 @@ namespace IC.Navigation
             actionToOpen.Invoke(localCancellationToken);
             if (gotoDestination != null)
             {
-                var dynamicPath = Map.DynamicPaths.Where(x => x.Origin == currentNode).SingleOrDefault();
+                var dynamicPath = Map.DynamicNeighbors.Where(x => x.Origin == currentNode).SingleOrDefault();
                 if (dynamicPath != null)
                 {
                     Resolve(dynamicPath.Alternatives, next, localCancellationToken);

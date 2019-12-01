@@ -30,7 +30,7 @@ namespace IC.Tests.App.Poms.Appium
         /// </summary>
         public HashSet<INavigable> Nodes { get; }
 
-        public HashSet<DynamicPath> DynamicPaths { get; set; }
+        public HashSet<DynamicNeighbor> DynamicNeighbors { get; private set; }
 
         public IGraph Graph { get; }
 
@@ -38,22 +38,26 @@ namespace IC.Tests.App.Poms.Appium
 
         public Map(R remoteDriver, ILog log, CancellationToken globalCancellationToken)
         {
+            DynamicNeighbors = new HashSet<DynamicNeighbor>();
             this.log = log;
-            DynamicPaths = new HashSet<DynamicPath>();
             RemoteDriver = remoteDriver;
             Nodes = GetNodesByReflection<R>(Assembly.GetExecutingAssembly());
             Graph = new Graph(Nodes);
             this.globalCancellationToken = globalCancellationToken;
-            AddDynamicPaths();
+            AddDynamicNeighbors();
         }
 
         #region private
 
-        private void AddDynamicPaths()
+        private void AddDynamicNeighbors()
         {
-            var alternatives = new HashSet<INavigable>() { PomRed, PomBlue, PomMenu };
-            var yellowPageOnBtnClick = new DynamicPath(PomYellow, alternatives);
-            DynamicPaths.Add(yellowPageOnBtnClick);
+            foreach (var page in Nodes)
+            {
+                foreach (var dynamicNeighbor in page.GetDynamicNeighbors())
+                {
+                    DynamicNeighbors.Add(dynamicNeighbor);
+                }
+            }
         }
 
         /// <summary>
