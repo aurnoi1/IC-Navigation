@@ -1,3 +1,4 @@
+using FluentAssertions;
 using IC.Navigation;
 using IC.Tests.App.Poms.Appium;
 using IC.Tests.App.Poms.Appium.POMs;
@@ -89,19 +90,20 @@ namespace NavBrowser.Tests
         public void FullExample()
         {
             // Set the GlobalCancellationToken used for the time of the Navigation session.
-            using var cts = new CancellationTokenSource(30.s());
-            using var globalCancellationTokenSource = new CancellationTokenSource(10.m());
+            using var globalCancellationTokenSource = new CancellationTokenSource(1.m());
             var globalCancellationToken = globalCancellationTokenSource.Token;
             var log = new Log();
             var map = new Map<WindowsDriver<WindowsElement>>(WinDriver, log, globalCancellationToken);
-            var nav = new Navigator(map, log);
-            var browser = new Browser(map, log, nav, globalCancellationToken);
-            browser.WaitForExist(map.PomMenu, globalCancellationToken);
+            var navigator = new Navigator(map, log);
+            var browser = new Browser(map, log, navigator, globalCancellationToken);
+            browser.WaitForExist(map.PomMenu); // Use GlobalCancellationToken.
+            browser.WaitForReady(map.PomMenu, 3.s()); // Use timeout in concurrence of GlobalCancellationToken.
             browser
                 .GoTo(map.PomYellow)
                 .Do<PomMenu<WindowsDriver<WindowsElement>>>(() =>
                 {
-                    // Add a timeout in concurence of GlobalCancellationToken;
+                    // Add a timeout in concurence of GlobalCancellationToken
+                    // Since the same token was injected to Map and Browser.
                     return map.PomYellow.OpenMenuByMenuBtn(3.s());
                 })
                 .GoTo(map.PomBlue) // Force the path to PomBlue then PomYellow...
@@ -111,13 +113,21 @@ namespace NavBrowser.Tests
                 {
                     map.PomMenu.EnterText("This is a test");
                 })
-                .GoTo(map.PomBlue)
-                .Back() // ViewBlue. Becarefull with Domain feature and Back() since Previous may change.
+                .Do((linkedTokens) => // Add a timeout (3s) that will run in concurrence of GlobalCancellationToken.
+                {
+                    // Keep in mind that Do() will consume the linkedTokens to wait for the page to be ready,
+                    // and ensures its existance once all actions have been invoked.
+                    // So use a specific CancellationToken if you need more precision in the action cancellation.
+                    map.PomMenu.UITitle.Get(linkedTokens).Should().NotBeNull();
+                }, 3.s())
+                .GoTo(map.PomBlue, 5.s()) // Add a timeout that will run in concurrence of GlobalCancellationToken.
+                .Back() // ViewBlue.
                 .GoTo(browser.Log.Historic.ElementAt(1)) // The second element of historic is ViewYellow.
-                .GoTo(map.PomRed);// Auto resolution of path to red with ViewYellowFeat.ResolveBackBtnClick().
+                .GoTo(map.PomRed);// Auto resolution of path to red via PomYellow.GetDynamicNeighbors().
 
             // First page in historic was PomMenu.
-            Assert.Same(map.PomMenu, browser.Log.Historic.First());
+            browser.Log.Historic.First().Should().Be(map.PomMenu);
+            browser.Log.Historic.Last().Should().Be(map.PomRed);
             map.RemoteDriver.Close();
         }
 
