@@ -10,10 +10,8 @@ namespace IC.Navigation.Interfaces
     /// </summary>
     public interface INavigator
     {
-        IMap Map { get;}
+        IMap Map { get; }
         ILog Log { get; }
-
-        CancellationToken GlobalCancellationToken { get; }
 
         /// <summary>
         /// Executes the action passed in parameter.

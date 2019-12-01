@@ -1,4 +1,5 @@
-﻿using IC.Navigation.Interfaces;
+﻿using IC.Navigation.Exceptions;
+using IC.Navigation.Interfaces;
 using System;
 using System.Threading;
 
@@ -9,42 +10,41 @@ namespace IC.Navigation
         public IMap Map { get; }
         public INavigator Navigator { get; }
         public ILog Log { get; }
-        public CancellationToken GlobalCancellationToken { get; }
+        public CancellationToken GlobalCancellationToken { get; private set; }
 
         public Browser(IMap map, ILog log, INavigator navigator, CancellationToken globalCancellationToken)
         {
             Map = map;
             Log = log;
             Navigator = navigator;
-            GlobalCancellationToken = globalCancellationToken;
+            GlobalCancellationToken = CheckCancellationToken(globalCancellationToken);
         }
 
         /// <summary>
         /// Executes the action passed in parameter on the last Navigable.
+        /// GlobalCancellationToken will be used to interrupt the task as soon as possible.
         /// </summary>
         /// <param name="action">The action to execute.</param>m>
         /// <returns>This Browser.</returns>
         public IBrowser Do(Action action)
         {
-            using var infinitTokenSource = new CancellationTokenSource();
             var last = Log.Last;
-            void actionNotCancellable(CancellationToken ct) => action();
-            Navigator.Do(last, actionNotCancellable, infinitTokenSource.Token);
+            void CreateAction(CancellationToken ct) => action();
+            Navigator.Do(last, CreateAction, GlobalCancellationToken);
             return this;
         }
 
         /// <summary>
         /// Executes the Function passed in parameter on the last Navigable.
+        /// GlobalCancellationToken will be used to interrupt the task as soon as possible.
         /// </summary>
-        /// <param name="function">The non-cancellable Function to execute.</param>
+        /// <param name="function">The Function to execute.</param>
         /// <returns>This Browser.</returns>
-        public IBrowser Do<T>(
-            Func<INavigable> function) where T : INavigable
+        public IBrowser Do<T>(Func<INavigable> function) where T : INavigable
         {
-            using var infinitTokenSource = new CancellationTokenSource();
             var last = Log.Last;
-            INavigable functionNotCancellable(CancellationToken ct) => function();
-            Navigator.Do<T>(last, functionNotCancellable, infinitTokenSource.Token);
+            INavigable CreateFunction(CancellationToken ct) => function();
+            Navigator.Do<T>(last, CreateFunction, GlobalCancellationToken);
             return this;
         }
 
@@ -52,12 +52,12 @@ namespace IC.Navigation
         /// Executes the action passed in parameter on the last Navigable.
         /// </summary>
         /// <param name="action">The Action to execute.</param>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// <param name="cancellationToken">A CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
         /// <returns>This Browser.</returns>
         public IBrowser Do(
             Action<CancellationToken> action,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
                 GlobalCancellationToken,
@@ -73,12 +73,12 @@ namespace IC.Navigation
         /// Executes the Function passed in parameter on the last Navigable.
         /// </summary>
         /// <param name="function">The Function to execute.</param>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// <param name="cancellationToken">A CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used otherwise will run in concurrence of it.</param>
         /// <returns>This Browser.</returns>
         public IBrowser Do<T>(
             Func<CancellationToken, INavigable> function,
-            CancellationToken cancellationToken = default) where T : INavigable
+            CancellationToken cancellationToken) where T : INavigable
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
                 GlobalCancellationToken,
@@ -92,16 +92,27 @@ namespace IC.Navigation
 
         /// <summary>
         /// Go to the destination from the last Navigable, using the shortest way.
+        /// GlobalCancellationToken will be used to interrupt the task as soon as possible.
         /// </summary>
         /// <param name="destination">The destination.</param>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// <returns>This Browser.</returns>
+        /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
+        /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
+        public IBrowser GoTo(INavigable destination) => GoTo(destination, GlobalCancellationToken);
+
+
+        /// <summary>
+        /// Go to the destination from the last Navigable, using the shortest way.
+        /// </summary>
+        /// <param name="destination">The destination.</param>
+        /// <param name="cancellationToken">A CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>This Browser.</returns>
         /// <exception cref="UninitializedGraphException">Thrown when the Graph is unitialized.</exception>
         /// <exception cref="PathNotFoundException">Thrown when no path was found between the origin and the destination.</exception>
         public IBrowser GoTo(
                 INavigable destination,
-                CancellationToken cancellationToken = default)
+                CancellationToken cancellationToken)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
                 GlobalCancellationToken,
@@ -115,11 +126,18 @@ namespace IC.Navigation
 
         /// <summary>
         /// Go back to the previous Navigable from <see cref="ILog.Historic"/>.
+        /// GlobalCancellationToken will be used to interrupt the task as soon as possible.
         /// </summary>
-        /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
+        /// <returns>The previous Navigable.</returns>
+        public IBrowser Back() => Back(GlobalCancellationToken);
+
+        /// <summary>
+        /// Go back to the previous Navigable from <see cref="ILog.Historic"/>.
+        /// </summary>
+        /// <param name="cancellationToken">A CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous Navigable.</returns>
-        public IBrowser Back(CancellationToken cancellationToken = default)
+        public IBrowser Back(CancellationToken cancellationToken)
         {
             using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
                 GlobalCancellationToken,
@@ -139,6 +157,14 @@ namespace IC.Navigation
         {
             return navigable.PublishStatus().Exist.Value;
         }
+
+        /// <summary>
+        /// Wait until this navigable exists.
+        /// GlobalCancellationToken will be used to interrupt the task as soon as possible.
+        /// </summary>
+        /// <param name="navigable">the Navigable.</param>
+        /// Otherwise <c>false</c>.</returns>
+        public bool WaitForExist(INavigable navigable) => WaitForExist(navigable, GlobalCancellationToken);
 
         /// <summary>
         /// Wait until this navigable exists.
@@ -164,6 +190,16 @@ namespace IC.Navigation
         {
             Navigator.WaitForReady(navigable, cancellationToken);
             return !cancellationToken.IsCancellationRequested;
+        }
+
+        private CancellationToken CheckCancellationToken(CancellationToken globalCancellationToken)
+        {
+            if (globalCancellationToken == null || globalCancellationToken == CancellationToken.None)
+            {
+                throw new UninitializedGlobalCancellationTokenException();
+            }
+
+            return globalCancellationToken;
         }
     }
 }

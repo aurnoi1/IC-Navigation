@@ -27,16 +27,13 @@ namespace IC.Navigation
 
         public IMap Map { get; private set; }
         public ILog Log { get; private set; }
-        public CancellationToken GlobalCancellationToken { get; private set; }
-
 
         #endregion Properties
 
-        public Navigator(IMap map, ILog log, CancellationToken globalCancellationToken)
+        public Navigator(IMap map, ILog log)
         {
             Map = map;
             Log = log;
-            GlobalCancellationToken = globalCancellationToken;
         }
 
         #region Methods
@@ -54,13 +51,12 @@ namespace IC.Navigation
         public INavigable Do(
             INavigable navigable,
             Action<CancellationToken> action,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-            WaitForReady(navigable, localCancellationToken);
-            action.Invoke(localCancellationToken);
-            WaitForExist(navigable, localCancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            WaitForReady(navigable, cancellationToken);
+            action.Invoke(cancellationToken);
+            WaitForExist(navigable, cancellationToken);
             return navigable;
         }
 
@@ -77,13 +73,12 @@ namespace IC.Navigation
         public INavigable Do<T>(
             INavigable navigable,
             Func<CancellationToken, INavigable> function,
-            CancellationToken cancellationToken = default) where T : INavigable
+            CancellationToken cancellationToken) where T : INavigable
         {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-            WaitForReady(navigable, localCancellationToken);
-            INavigable retINavigable = function.Invoke(localCancellationToken);
-            WaitForExist(retINavigable, localCancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            WaitForReady(navigable, cancellationToken);
+            INavigable retINavigable = function.Invoke(cancellationToken);
+            WaitForExist(retINavigable, cancellationToken);
             return retINavigable;
         }
 
@@ -101,10 +96,9 @@ namespace IC.Navigation
         public INavigable StepToNext(
             INavigable currentNode,
             INavigable next,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             var navigableAndAction = currentNode.GetActionToNext().Where(x => x.Key == next).SingleOrDefault();
             if (navigableAndAction.Key == null)
             {
@@ -112,16 +106,16 @@ namespace IC.Navigation
             }
 
             var actionToOpen = navigableAndAction.Value;
-            actionToOpen.Invoke(localCancellationToken);
+            actionToOpen.Invoke(cancellationToken);
             if (gotoDestination != null)
             {
                 var dynamicPath = Map.DynamicNeighbors.Where(x => x.Origin == currentNode).SingleOrDefault();
                 if (dynamicPath != null)
                 {
-                    Resolve(dynamicPath.Alternatives, next, localCancellationToken);
+                    Resolve(dynamicPath.Alternatives, next, cancellationToken);
                 }
 
-                WaitForExist(next, localCancellationToken);
+                WaitForExist(next, cancellationToken);
                 return next;
             }
             else
@@ -143,12 +137,11 @@ namespace IC.Navigation
         public INavigable GoTo(
             INavigable origin,
             INavigable destination,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
             if (Map.Graph == null) { throw new UninitializedGraphException(); }
-            WaitForReady(origin, localCancellationToken);
+            WaitForReady(origin, cancellationToken);
 
             // Avoid calculing the shortest path for the same destination than origin.
             if (origin.ToString() == destination.ToString()) { return destination; }
@@ -159,14 +152,14 @@ namespace IC.Navigation
                 throw new PathNotFoundException(origin, destination);
             }
 
-            gotoDestination = gotoDestination ?? destination;
+            gotoDestination ??= destination;
             for (int i = 0; i < shortestPath.Count - 1; i++)
             {
                 if (gotoDestination != null) // Destination may be already reached via Resolve.
                 {
                     var currentNode = shortestPath[i];
                     var nextNode = shortestPath[i + 1];
-                    StepToNext(currentNode, nextNode, localCancellationToken);
+                    StepToNext(currentNode, nextNode, cancellationToken);
                 }
                 else
                 {
@@ -188,11 +181,10 @@ namespace IC.Navigation
         /// <param name="cancellationToken">An optional CancellationToken to interrupt the task as soon as possible.
         /// If <c>None</c> then the GlobalCancellationToken will be used.</param>
         /// <returns>The previous Navigable.</returns>
-        public INavigable Back(CancellationToken cancellationToken = default)
+        public INavigable Back(CancellationToken cancellationToken)
         {
-            CancellationToken localCancellationToken = SelectCancellationToken(cancellationToken);
-            localCancellationToken.ThrowIfCancellationRequested();
-            return GoTo(Log.Last, Log.Previous, localCancellationToken);
+            cancellationToken.ThrowIfCancellationRequested();
+            return GoTo(Log.Last, Log.Previous, cancellationToken);
         }
 
         /// <summary>
@@ -256,33 +248,6 @@ namespace IC.Navigation
         {
             var alternative = GetFirstINavigableExisting(alternatives, cancellationToken);
             GoTo(alternative, destination, cancellationToken);
-        }
-
-        /// <summary>
-        /// Select the CancellationToken to use for a task.
-        /// If the local token is not <c>None</c> or <c>null</c> it will we used,
-        /// otherwise the GlobalCancellationToken will be used.
-        /// </summary>
-        /// <param name="localToken"></param>
-        /// <returns></returns>
-        /// <remarks>The localToken may contains the GlobalCancellationToken if its source has been linked.</remarks>
-        /// <exception cref="UninitializedGlobalCancellationTokenException">Thrown when the GlobalCancellationToken is unitialized.</exception>
-        private CancellationToken SelectCancellationToken(CancellationToken localToken)
-        {
-            localToken.ThrowIfCancellationRequested();
-            if (localToken != null && localToken != CancellationToken.None)
-            {
-                return localToken;
-            }
-
-            if (GlobalCancellationToken == null || GlobalCancellationToken == CancellationToken.None)
-            {
-                throw new UninitializedGlobalCancellationTokenException();
-            }
-            else
-            {
-                return GlobalCancellationToken;
-            }
         }
 
         private INavigable GetFirstINavigableExisting(IEnumerable<INavigable> iNavigables, CancellationToken cancellationToken)
