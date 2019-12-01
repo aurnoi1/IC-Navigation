@@ -132,8 +132,9 @@ namespace IC.Tests.App.Poms.Appium.POMs
             return new HashSet<DynamicNeighbor>();
         }
 
-        private protected CancellationTokenSource LinkCancellationTokenSourceToGlobal(CancellationTokenSource localCts)
+        private protected CancellationTokenSource LinkCancellationTokenSourceToGlobal(TimeSpan timeout)
         {
+            using CancellationTokenSource localCts = new CancellationTokenSource(timeout);
             var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
                 globalCancellationToken,
                 localCts.Token);

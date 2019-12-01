@@ -33,7 +33,10 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <summary>
         /// WDSearchProperties to find a control to open the previous page.
         /// </summary>
-        public SearchProperties<IWebElement> UIBtnOpenMenuPage => new SearchProperties<IWebElement>(WindowDriverLocators.AutomationId, "BtnOpenMenuView", map.RemoteDriver);
+        public SearchProperties<IWebElement> UIBtnOpenMenuPage => new SearchProperties<IWebElement>(
+            WindowDriverLocators.AutomationId, 
+            "BtnOpenMenuView", 
+            map.RemoteDriver);
 
         #endregion Controls
 
@@ -92,8 +95,7 @@ namespace IC.Tests.App.Poms.Appium.POMs
         /// <returns>The PomMenu.</returns>
         public PomMenu<R> OpenMenuByMenuBtn(TimeSpan timeout)
         {
-            using CancellationTokenSource localCts = new CancellationTokenSource(timeout);
-            using var linkedCts = LinkCancellationTokenSourceToGlobal(localCts);
+            using var linkedCts = LinkCancellationTokenSourceToGlobal(timeout);
             UIBtnOpenMenuPage.Find(linkedCts.Token).Click();
             return map.PomMenu;
         }
