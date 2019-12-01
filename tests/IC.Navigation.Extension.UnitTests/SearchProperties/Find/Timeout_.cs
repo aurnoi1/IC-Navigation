@@ -95,7 +95,7 @@ namespace IC.Navigation.Extension.UnitTests.SearchProperties.Find
                 )
             {
                 // Arrange
-                using var defaultCancellationTokenSource = new CancellationTokenSource(50.Milliseconds());
+                using var defaultCancellationTokenSource = new CancellationTokenSource(100.Milliseconds());
                 var defaultCancellationToken = defaultCancellationTokenSource.Token;
                 var expected = webElements.ElementAt(index);
                 Mock.Get(webDriver).Setup(x => x.FindElements(locator, value)).Returns(webElements);
